@@ -1,0 +1,59 @@
++----- Colour Usage ---------------------------------------------------------+
+
+What you may not have known is that colour can be used just about ~FCanywhere~RS
+you can think of!  If can be used in tells, shouts, emotes, mails, posts to
+the board, profiles, you name it!  What you may be wondering though is how you
+get to use all these colours... Well, here is how...
+
+Each colour has a code associated with it, and each of these codes starts with
+a ~.  You can combine different codes so that you get different effects on the
+colours, for instance, you may use the code for red text, with the code for
+bold text and a code for green background (no one said it was not going to
+clash!).  All you have to do is include these codes in whatever text you are
+writing, be it normal chat, a message to the board, an mail, or whatever.
+
+The codes for the text colour are:
+
+    ~~FK - black,         ~~FR - red,       ~~FG - green,
+    ~~FY - yellow,        ~~FB - blue,      ~~FM - magenta,
+    ~~FC - cyan,          ~~FW - white
+
+The codes for the background colour are:
+
+    ~~BK - black,         ~~BR - red,       ~~BG - green,
+    ~~BY - yellow,        ~~BB - blue,      ~~BM - magenta,
+    ~~BC - cyan,          ~~BW - white
+
+The codes for other text effects are:
+
+    ~~OL - bold,          ~~LI - blinking,  ~~RV - reverse
+
+    (note that on some terminals blinking text may just be bold)
+
+To reset to normal text the code is:    ~~RS
+
+If you are using colour in a tell, say, shout, etc, then you do not need to
+use the reset code at the end of the text, but you do need to use the reset
+code if you are using colour in an mail, message post, suggestion, etc.
+
+Example of how to use the colour codes...
+
+For this example let use assume you are just saying something.  You would type
+the text in like:
+
+    say ~~FBHi!~~RS  I can ~~FCnow~~RS talk in ~~FRdifferent~~RS ~~BBcolours~~RS!!!!!
+
+which would result in: (you can only see this is you have colour on)
+
+    say ~FBHi!~RS  I can ~FCnow~RS talk in ~FRdifferent~RS ~BBcolours~RS!!!!!
+
+Mixing the codes would have an effect something like this:
+
+    say Th~~FGis~~RS is j~~LIust~~RS to ~~BY~~FB~~OLsho~~BGw ~~FRyou~~RS.
+
+    say Th~FGis~RS is j~LIust~RS to ~BY~FB~OLsho~BGw ~FRyou~RS.
+
+It may seem a little confusing at first, but if you play around with them for
+long enough you soon get the hang of talking in many colours...
+
++----------------------------------------------------------------------------+

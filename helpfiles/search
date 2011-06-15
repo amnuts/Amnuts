@@ -1,0 +1,9 @@
+~OLCommand :~RS search
+~OLUsage   :~RS search <word> [<word>...]
+
+This will search for the words in the word list in all of the message
+boards that you could possibly see. i.e., it wont show you anything from
+boards that are in rooms fixed to private if you do not have access to
+those rooms. The word search is done on an OR basis, ie if any of the
+words are in a given message it will be shown as opposed to all of the
+words having to be there.

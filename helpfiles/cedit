@@ -1,0 +1,4 @@
+~OLCommand :~RS cedit
+~OLUsage   :~RS cedit
+
+Clears your EDIT review buffer.

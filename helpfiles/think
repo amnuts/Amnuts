@@ -1,0 +1,5 @@
+~OLCommand :~RS think
+~OLUsage   :~RS think [<text>]
+
+Displays the text enclosed in think bubbles to the room you are currently
+in. For example: Andy thinks . o O ( therefor I am )

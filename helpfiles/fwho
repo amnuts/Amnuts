@@ -1,0 +1,5 @@
+~OLCommand :~RS fwho
+~OLUsage   :~RS fwho
+
+This shows a full list of the people on your "friends" list who are
+currently logged on, including descriptions, rooms they are in, etc.

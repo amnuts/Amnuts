@@ -1,0 +1,6 @@
+~OLCommand :~RS bbcast
+~OLUsage   :~RS bbcast <text>
+
+The text will be broadcast throughout the talker with an audible beep,
+forcing any that are ignoring to listen to it. The name of the person
+using this command is not given.

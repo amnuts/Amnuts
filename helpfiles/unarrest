@@ -1,0 +1,8 @@
+~OLCommand :~RS unarrest
+~OLUsage   :~RS unarrest <user>
+
+Resets the user's level to what it was before they were arrested and moves
+them out of the jail to the main room (ie, the room you start off in).
+The user does not have to be online to be unarrested. The unarrest is
+level based, in that is an ARCH arrested someone then only an ARCH or
+higher can unarrest them. The arresting level is displayed in the ustat.

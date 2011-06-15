@@ -1,0 +1,253 @@
+3.0.0a (Jan 96)
+------
+Initial alpha release.
+
+
+3.0.0  (March 96)
+-----
+1. Added revclr command
+
+2. Added last_login_len element in user structure for examine command
+   and saving this in the user data files makes these files incompatible with 
+   the alpha version. Tough titties.
+
+3. Various bug fixes
+
+
+3.1.0 (April 96)
+-----
+1. Added cloning facilities and all associated commands - clone, destroy,
+   clsay, clhear, allclones, myclones. A new field was added to the config
+   file called "max_clones"
+
+2. Added "from" command which like its unix equivalent shows who you've got
+   mail from but not the actual message.
+
+3. Added "rstat" command which gets statistics for a remote system. This 
+   required the addition of the RSTAT netlink command.
+
+4. Added a swearing prevention measure which involves the "swban" command
+   and the "ban_swearing" field in the config file. This is for all would be
+   big brothers out there :)
+
+5. Upgraded the wizshout command.
+
+6. Rewrote the search command so that now its actually of some use.
+
+7. Added an "afk" command. This is an omission I meant to put in nuts 2 but  
+   never got round to it.
+
+8. Moved the mapfile and newsfile into the datafiles directory and the names
+   of the banfiles are now stored in macros.
+
+9. The usual bug fixes and minor code changes.
+
+
+3.1.1  (April)
+-----
+
+1. You can now specify which room message board to read with the "read" 
+   command.
+
+2. Entering "version" at the login prompt gives the software version.
+
+3. Bug fixes and other minor "look and feel" alterations.
+
+
+3.1.2  (May)
+-----
+
+1. Added "crash_recovery" option to config file. Read the about_config doc for
+   further information.
+
+2. Replaced bcopy() call with memcpy() call as bcopy is an old Berkeley
+   function which might not be found in all systems (I know of 1 site which
+   didn't have it) whereas memcpy is an ISO standard function.
+
+3. '/' is now a shortcut for .tell and '#' for shout.
+
+4. Remote users can now create clones.
+
+5. Some major bug fixes and some minor changes and additions.
+
+
+3.2.0 (July)
+-----
+
+1. Added the cls, colour, ignshout, igntell, suicide, delete and reboot 
+   commands and whatever extra fields were required to the user structure.
+
+2. The names of the following commands names were changed:
+    clsay -> csay,  clhear -> chear, listen -> ignall
+
+3. Colour has been added to the talker which the "colour" command toggles on
+   and off for each user.
+
+4. The editor has been upgraded and comes up with a "Save, redo or abort" 
+   prompt when the message has been entered.
+
+5. The name of a config file can now be optionally entered on the command 
+   line else the talker will use the default "config" one.
+
+6. The crash_recovery config file option has become crash_action and now
+   takes different arguments.
+
+7. The colour_def and time_out_afks options have been added to the config file
+   whilst the dos_newline option has been removed since the output strings are
+   parsed anyway for colour commands so the \r is added automatically.
+
+8. The clone, destroy and move commands can now optionally have the room left
+   out whereupon they will assume you mean the current room you are in. The
+   "here" option for move has been made redundant and has been removed.
+
+9. The talker now passes its version number along with its verification string
+   on the netlink and also when verifiying another talker it passes the link
+   type along with the verify ok string eg: "VERIFY OK OUT". This only is of
+   use when the server you are connecting to will not allow users from your
+   site to cross over ie: OUTgoing only.
+
+10. Bug fixes and other minor code changes.
+
+
+3.2.1 (July)
+-----
+
+1. Added allow_caps_in_name field to config file which allows you to decide
+   whther your users can have caps in their names or not eg ImBeCiLE or
+   Imbecile
+
+2. I've changed some of the shortcuts to those most requested by lots of users
+   that I've spoken to. Don't blame me if you think they suck, blame them :)
+
+   > is now short for .tell and < for .pemote
+   ! is now short for .shout and # for .semote
+
+3. The command "lban" has been renamed to "listbans" because it looks nicer :)
+
+4. Bug fixes, minor code changes and more colour added.
+
+
+3.3.0 (September)
+-----
+
+1. Added revtell command and associated extra bits in user structure.
+
+2. Added recount command for recounting the number of messages on the
+   boards if the files have been edited manually.
+
+3. Added "lock" and message to display while away options to afk command.
+
+4. Added room option to public and private commands.
+
+6. Abbreviation of user names in commands is now allowed.
+
+7. Colour commands can now be displayed literally if a '/' is put before
+   the '~'. I used a forward slash instead of a backward one as when the
+   backward one was put inside sprintf statements before the '~' the compiler 
+   complained as it thought it was an unknown literal. This facility won't
+   work across a netlink if linked to an earlier version of the talker.
+
+8. Message board and mail headers now display day and month as words.
+
+9. Swear words are now stored as lower case instead of upper case since it
+   looks nicer :) Trivial reason for changing it but what the hell...
+
+10. Added "swear" option to listbans.
+
+11. Added timed countdown option to reboot and shutdown commands.
+
+12. Other bug and omission fixes and minor code changes.
+
+
+3.3.1 (October)
+-----
+
+1.
+Talker now stores the users local port number (visible in .site and the syslog
+and following the SIGN ON: for wizes and above) so manual authentication can be 
+done on user id. I put it in the .people command too at first but it looked a 
+mess so I took it out again. See README for details.
+
+2.
+The talker now passes across the users level on a netlink so the use of 
+rem_user_maxlevel has been changed. This used to apply to remote users who had 
+a local account , it now only applies to those who *don't* have a local account
+(users with local accounts have their level set to that of the local account 
+regardless) and rem_user_deflevel is only used to backwards compatability with
+older version servers that don't pass the user level.
+
+3.
+Improved the viewlog command so that you can now specify the number of lines
+from the end to start reading it from. This saves paging though days or weeks
+worth of log to see what happened recently.
+
+4.
+Bug fixes and minor changes.
+
+
+3.3.2 (November)
+-----
+
+1.
+Added a history type feature whereby if you just type a dot '.' by itself
+then the talker will repeat your last command or speech.
+
+2.
+Added ~UL "colour" command which is for underlining.
+
+3. 
+Added login count to .people command.
+
+4. 
+Added site to examine output if user is wiz or above.
+
+5. 
+Improved help_commands() function so it prints out commands by level.
+
+6. 
+The write_wiz() function has been renamed to write_level() and an extra
+formal parameter has been added. charecho() has been renamed to 
+toggle_charecho().
+
+7.
+Added charecho_def to config file as a default for a new users charmode_echo
+flag.
+
+8. 
+Altered some of the command levels in .h file and increased MAX_LINES to 15.
+
+9. 
+Amendments and bug fixes including removing a large lump of code from 
+create_clone() that shouldn't have been there.
+
+
+3.3.3 (November)
+-----
+
+1.
+You now get a + indicator in the prompt if you are invisible. This indicates
+your *local* invisible state, it won't work on a remote site.
+
+2.
+Added time_out_maxlevel option to config file.
+
+3.
+Changed config file "logging" option to "system_logging" and it now takes
+ON and OFF as parameters rather than YES or NO. This is for consistency.
+
+4.
+The minlogin command now boots off any logged on users below the set level.
+
+5.
+Added has_room_access() function to replace some duplicated code.
+
+6.
+Swapped the positions of the help and home commands so that .h is now short
+for .help. This may cause slight confusion if people try to do .h on a 
+remote site to go home as they will be told that they are already on it.
+
+7.
+Bug fixes and general code amendments.
+
+
+*** THE END ***

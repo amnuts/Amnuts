@@ -1,0 +1,9 @@
+~OLCommand :~RS demote
+~OLUsage   :~RS demote <user> [<level>]
+
+Will demote a user to the next level down in the ranks list. You cannot
+demote below the lowest level, and you cannot demote anyone of the same
+or higher level as you. You can also demote a user even if they are not
+logged on. If the <level> option is used then the user will be demoted
+directly to that given level, rather than the level below what they
+currently are.

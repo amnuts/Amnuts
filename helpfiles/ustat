@@ -1,0 +1,5 @@
+~OLCommand :~RS ustat
+~OLUsage   :~RS ustat [<user>]
+
+Shows the attributes and details of the user. If you omit the user ustat
+defaults to you.

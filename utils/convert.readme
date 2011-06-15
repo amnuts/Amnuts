@@ -1,0 +1,29 @@
+Readme files for convert.pl
+---------------------------
+
+To start the program you can either use:
+
+   perl convert.pl
+
+or, because it's setup as a script you can just run is by:
+
+   convert.pl    (or try ./convert.pl if that doesn't work)
+
+If you use the latter method, then you have to make sure that the first
+line in the convert.pl points to where your perl executable is.
+ie;   !#/<yourdir>/perl
+
+
+This program is used to convert STANDARD NUTS 3.3.3 userfiles (*.D) to
+Amnuts 1.4.2 userfiles (*.D).  Standard meaning the files have not had
+anything extra added to them by the coders of the talker.
+It will list all the user names as they are being converted, but will NOT
+backup the files first - so make sure you do this before you run the
+program.
+
+Although I have checked this program and run it a few times, I will not be
+held responsible for any bad effects this causes to the running of your
+talker.
+
+
+Andrew Collington, December 1997

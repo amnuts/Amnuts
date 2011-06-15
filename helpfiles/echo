@@ -1,0 +1,6 @@
+~OLCommand :~RS echo
+~OLUsage   :~RS echo <text>
+~OLAliases :~RS +
+
+This command allows you to echo whatever you write as the text into the
+room without other users seeing who said it.

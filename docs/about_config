@@ -1,0 +1,231 @@
++------------------------------------------------------------------------------+
+ CONFIG - CONFIG - CONFIG - CONFIG - CONFIG - CONFIG - CONFIG - CONFIG - CONFIG
+              Information about the config used in Amnuts
++------------------------------------------------------------------------------+
+
+The file is divided into 4 sections, the INIT section which sets up a load
+of system parameters, the ROOMS section which sets up the room names, their
+links and any netlink connections, the topics section which you can use 
+to autoload room topics and the SITES section which defines the site and
+service names of any other talkers you may wish to connect to via the
+rooms. The sections can be in any order but the order I have laid them out
+in seems the most logical (to me at any rate). Comments can be placed in the
+file and as per the unix standard they begin with a hash '#'.
+
+The INIT section
+----------------
+
+Here is a brief rundown of what the parameters mean, see the config file 
+itself for examples:
+
+verification - this is the string the talker will pass when it initially
+   connects to other talkers. Its a security feature which (hopefully) prevents
+   someone simply telneting to the talkers link port and masquerading as
+   another talker. The remote site will disconnect if it doesn't have your site
+   listed in the SITES section or if the verification string is incorrect.
+
+mainport - the main port number where users telnet to.
+
+wizport  - the wizport that superusers can log in on. This port is unaffected
+   by the max_users variable.
+
+linkport - the port which the talker uses to link to other talkers.
+
+max_users - the maximum number of users that can log in on the main port.
+
+max_clones - the maximum number of clones one user can have at any one time.
+
+heartbeat - the time interval in secs on which the event functions are called.
+
+login_idle_time - the time in secs which a user can idle at the login prompt
+   before being booted off.
+
+user_idle_time  - the time in secs which a user can idle once logged on before
+   being booted off. He will get a warning 1 minute beforehand.
+
+ban_swearing - If YES then any speech, shouts or emotes said by a user that
+   contains a word in the *swear_words[] array will not be displayed.
+
+auto_connect - If YES then talker will try to connect to configured remote 
+   sites when booted.
+
+system_logging - If ON then talker will write to the system log.
+
+ignore_sigterm - If YES then SIGTERM will be noted but ignored.
+
+minlogin_level - Minimum user level that can currently log in. If set to NONE
+   then anyone can log in, if set to NEW then anyone can log in but new 
+   accounts can't be created, if set to USER then newbies can't log in, etc.
+   This overrides wizport_level if needs be.
+
+mesg_life - Lifetime in days of messages on the boards.
+
+mesg_check_time - Time at which the boards are checked each day to delete any
+   expired messages.
+
+min_private - Minimum number of users in a room before it can be made private.
+
+ignore_mp_level - User level at which min_private can be overridden.
+
+rem_user_maxlevel - Maximum user level that users who have arrived via a 
+   netlink from another talker can have on this talker - ie if they are a god
+   on their own system and this is set to wiz then they will only be a wiz on
+   here, though if they are only of USER level on their own system they will
+   still only be user level here.
+
+rem_user_deflevel - Default level of remote users who do not have an account
+   on the local system. Setting this to anything other than NEW or USER would
+   be a seriously bad move on your part.
+
+wizport_level - Minimum level of user who can log in via the wizport.
+
+gatecrash_level - Minimum level of user who can enter a private room without an
+   invite. This does not apply to FIXED private rooms however since these are
+   probably to be used as wiz rooms so any user of WIZ and above can enter
+   a fixed private room.
+
+crash_action - This defines what the talker should do if a segmentation fault
+   or buss error occurs. If NONE then it does nothing and just crashes, if
+   IGNORE it jumps back to the start of the main loop in main() and if REBOOT
+   the talker will reboot itself.
+
+prompt_def - If ON then new users will have their prompt default to ON else
+   prompt is OFF.
+
+colour_def - This is either ON or OFF and defines whether colour will be
+   enabled for new users. Bear in mind that the colour codes used are only
+   compatible with terminals that support ANSI colour. If the user is on
+   an incompatible type of terminal (eg an hpterm, wyse50 etc) then generally
+   all he'll get is a screen full of garbage therefor its best if the default 
+   is OFF as he can always switch colour on using the .colour toggle command.
+
+charecho_def - Either ON or OFF. Defines whether characters will be echoed 
+   back to a user if their client is operating in character mode.
+
+passwordecho_def - If ON then talker will echo passwords at login.
+
+time_out_afks - Either YES or NO. If yes then even users who are afk will get
+   timed out if they idle for too long.
+
+time_out_maxlevel - Maximum level of user which can be timed out.
+
+auto_purge - YES or NO.  If YES then user files will be checked for
+   purging every time the talker is booted up and the user files will also 
+   be purged on the purge date, else they will only be purged when a user
+   specifically uses the 'purge' command.
+
+allow_recaps - YES or NO.  If YES then a user can change the case of any
+   letters in their name (such as UsEr).
+
+auto_promote - YES or NO.  If YES then new users can enter some information
+   on the talker to be promoted up to the next level automatically by the
+   talker.  This takes away the need for wizzes to be present to make
+   newbies USER level.
+
+personal_rooms - YES or NO.  If yes then users can have access to any of
+   the personal room commands.  Personal rooms will also be processed when
+   the talker boots up.  If it's set to NO then the personal rooms will not
+   be processed at all and the user cannot user any of the personal room
+   commands.
+
+startup_room_parse - YES or NO.  If yes then any personal rooms that have
+   been saved will be loaded into memory at startup.  If no then it will
+   only load the personal room when the user goes to it.
+
+random_motds - YES or NO.  If yes then it will load a random MOTD from the
+  directories, else it will only use the MOTD with the filename motd1.
+
+resolve_ip - OFF, AUTO or MANUAL.  If OFF then the IP address will not be
+  resolved in any way.  If AUTO then the gethostbyaddr() function will be
+  used.  If MANUAL then a function written by tref will be used.
+
+flood_protect - ON or OFF.  If ON then anyone caught flooding the ports
+  will be auto-banned.  Else anyone can log onto the port up to and above
+  the limit set with LOGIN_FLOOD_CNT.
+
+boot_off_min - YES or NO.  If YES then when the minlogin command is used it
+  will log out anyone below the level given, else no action will be taken
+  other than to stop anyone logging in with a level less than the level
+  given.
+
+
+The ROOMS section
+-----------------
+
+Here is where the rooms and layout of the talker get defined. The format for
+one line of the section is as follows:
+
+<map name> <mnemonic> <name> <links> [<access> [<network parameters>]]
+
+eg:
+general hw hallway   of,gd,lg,to    PUB  CONNECT testsite
+
+The map is stored in the datafiles directory with the extension .map
+The mnemonic is just a convenient shorthand for the room and saves having to
+enter the entire room name for each of the links. In the links part the links
+to other rooms are defined by using their mnemonics and separating them with
+commas. There must be NO SPACES between the commas and the mnemonics.
+   For the access the values can be PRIV, PUB, BOTH or nothing. If the value
+is PRIV then the room is fixed to private, if PUB then its fixed to public and
+if its BOTH then it is set to public but is not fixed. In fact you only need
+to enter BOTH if there is a network parameter part following, else you can
+leave it blank.
+   For the network parameters there are 2 options if you choose to use them.
+ACCEPT means that the room will be used as a link to another talker if the
+connection is initiated REMOTELY ie if another talker tries to connect to
+yours the room it gets linked to will be the first free room that has the ACCEPT
+parameter set. CONNECT <service name> means that the talker will attempt to
+make its own connection to the service (talker) specified and will use this
+room as the link point.
+
+
+The TOPICS section
+------------------
+
+This is where you can default room topics on boot-up.  This is an optional
+extra and does not need to be used.  The format is as follows:
+
+<room name>  <topic>
+
+eg
+wizroom  This is a room for wizzes only!
+
+The topics can contain colour codes if you like.
+
+
+The SITES section
+-----------------
+
+This is where service names get qualified. The format of the lines is as
+follows:
+
+<service name>  <site name>  <port>  <verification>  [<link type>]
+
+eg
+freds_talker  chatsite.easylife.ac.uk  1234  fred123  IN   
+
+Site name can be either a name or a number.
+
+Most of this is self explanatory except for the link type. This can either
+be IN, OUT or ALL (though ALL is redundant since this is the default). This
+means the link will either allow only INcoming users, ie only people from the
+remote site can traverse it, local users cannot, OUTgoing users , ie only
+local users can traverse it or ALL which means its 2 way.
+
+This section as well as being a list of sites you may like to connect to
+yourself it also acts as a list of sites that you would possibly like to
+connect to your system. In the latter case, the port number becomes redundant
+so just enter any value, it makes no difference, I tend to use the value
+666, myself but then I'm strange that way :)  If a talker from any site
+that is not in the list tries to connect it will be immediately rejected.
+Even if a talker from a valid site connects it still has to supply a valid
+verification. If 2 or more services connect from the same site and they have
+different verifications then the talker will go down the list until it finds
+a matching site-verification pair so getting the correct service name in 
+the process. If they have the same verification then confusion could result.
+For an outgoing connect the talker reads the CONNECT <service> part of the
+rooms section, looks up the service name in the sites section and makes
+a connection to the port number at the site, passing the verification code
+once it does connect.
+
++------------------------------------------------------------------------------+

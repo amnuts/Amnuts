@@ -1,0 +1,6 @@
+~OLCommand :~RS destroy
+~OLUsage   :~RS destroy [<room>] [<user>]
+
+This will destroy a clone in a given room, or if omitted, the room you
+are currently in. If you have the required privileges, then you can
+destroy another users clone by giving the optional <user> argument.

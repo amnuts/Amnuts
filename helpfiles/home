@@ -1,0 +1,7 @@
+~OLCommand :~RS home
+~OLUsage   :~RS home
+
+If you are on a remote site this will bring you back to your home site
+without you having to wander back to the gateway. You will be placed in
+the room on your home site that is linked to the remote service which
+you were just on.

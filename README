@@ -1,0 +1,46 @@
++-----------------------------------------------------------------------------+
+ README - README - README - README - README - README - README - README - README
+   Introductory information for the Unix talker code Amnuts
++-----------------------------------------------------------------------------+
+
+Welcome to the Amnuts talker code, version 2.3.0!  Or, if you have already
+used Amnuts, then welcome back!  This is the latest version of Amnuts and MANY
+things have changed.
+
+Amnuts development slowed down for a (long) while, but thanks to two people
+in particular, it managed to get back on track.  These people go by the handles
+'Ardant' and 'Uzume'.  Ardant supplied a CVS repository and bug tracking
+software for Amnuts, and Uzume and worked tirelessly in updating Amnuts and
+making it more stable.  Many thanks to both of them.
+
+Because of the CVS and Bugzilla, a new website was set up for the development
+of the Amnuts talker code.  This can be found at:
+
+   http://www.amnuts.net/
+
+Instructions can be found there on how to use CVS and Bugzilla.  If you find
+any bugs with this version of Amnuts then it would be appreciated if you use
+Bugzilla to report them.  From the CVS repository you can download the latest
+files.
+
+The Amnuts code can be found, as always, at:
+
+   http://amnuts.talker.com/
+
+or can now also be access via:
+
+   http://www.amnuts.org/
+
+Please read the 'IMPORTANT' file, and the 'amnuts_changes' in the DOCs
+directory for more information on what changes have been made since
+version 2.2.1 (the previous release to this one) because there have been a
+LOT of them!  Even if you are a previous Amnuts user, programmer, owner,
+whatever - you should STILL READ THE FILES! :)
+
+Thanks for using Amnuts!  Enjoy!
+
+
+                                                              Andrew Collington
+                                                    The Amnuts Development Team
+                                                                   August, 2003
++-----------------------------------------------------------------------------+

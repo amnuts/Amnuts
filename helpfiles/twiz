@@ -1,0 +1,7 @@
+~OLCommand :~RS twiz
+~OLUsage   :~RS twiz [<level>] <text>
+
+This command allows the Wiz to tell to various Wiz levels though they
+can only specifically tell to levels equal or less that of their own.
+If no level is specified it defaults to WIZ which means all the Wiz
+levels can hear it. Example of tell to all ARCHs: .twiz arch hiya!

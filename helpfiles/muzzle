@@ -1,0 +1,8 @@
+~OLCommand :~RS muzzle
+~OLUsage   :~RS muzzle <user>
+
+Muzzles a user which prevents them speaking, shouting, emoting and
+mailing other people. The muzzle levels are based upon the user level
+of whoever muzzled the user. If an ARCH muzzles a user, for instance,
+the user can be unmuzzled by any ARCH or GOD, if however he is muzzled
+by a GOD then only another GOD can unmuzzle him.

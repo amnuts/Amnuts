@@ -1,0 +1,4 @@
+~OLCommand :~RS autopromo
+~OLUsage   :~RS autopromo
+
+This toggle the status of the auto-promote function on and off.

@@ -1,0 +1,45 @@
+
+*** README for triple three (3.3.3 :) ***
+
+Read the DOCS/diffs file for update information.
+
+Welcome to NUTS if you're a first time user. Hopefully you'll find it a
+simple system to use thanks to the helpfiles and the documentation , if not
+then please feel free to email me at the address at the end of this file.
+Before I continue though I must stress that I WILL NOT SORT OUT BUGS OF YOUR
+OWN MAKING OR WRITE CODE FOR YOU! If you write your own code or alter my
+code and fuck it up thats your problem, I have my own projects to do and I
+am *not* interested in sorting out yours. I've had one too many emails from
+people asking me to sort out the mess they've made and I'm getting rather sick 
+of it. However, despite me putting this request in the 3.3.1 docs some people 
+have seen fit to ignore it so heres an added incentive: mail me about your cock
+ups and not only will I not reply to the mail but I will keep a note of your 
+email address and I will not reply to *any* mails you send me even if its about
+problems with *my* code. Its your choice. 
+
+I know I've said this before but this time I really mean it. This is the final
+version of NUTS 3. I have ideas in mind for a version 4 but thats years away
+so in the meantime this is it :) And to prove I mean it this is the first
+version of NUTS for a long long time without a backdoor in it as I'm sure 101
+hackers will test and find out to be true :)
+
+Unfortunately I still haven't found out what the colour reset code for
+SCO consoles and strict ansi terminals is so if you're using one of these 
+things may look messy. No one mailed me the code and the SCO terminfo 
+translation tools proved less than helpful so theres not much I can do. Sorry.
+
+Now go and read the DOCS/compiling file for info on how to get started if 
+you're new to NUTS and all the other files there will be usefull in time also.
+
+Neil Robertson - November 1996
+
+email: neil@ogham.demon.co.uk
+home page     : http://www.ogham.demon.co.uk/neil.html
+NUTS home page: http://www.ogham.demon.co.uk/nuts.html
+
+NB: If anyone is also interested in MUDs I've written a MUD system called 
+    Ogham - ftp.ccs.neu.edu:/pub/mud/servers/misc/ogham/ogham262.tar.gz
+    Its not as complex as perhaps LPmuds or Dikumuds are but if you know C and 
+    want to set up a low to medium complexity mud then this is just what you 
+    need :) 
+    

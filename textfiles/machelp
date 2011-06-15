@@ -1,0 +1,34 @@
++----- Macro Usage ----------------------------------------------------------+
+
+Macros are an easy way to type out something that you might use very often.
+Currently you have 10 macros that you can use, and they can be displayed by
+using the "macros" command.
+
+This documentation assumes you are in SAY mode.
+
+~FCHow to enter a macro
+To set a macros you have to first chose which 'slot' it has to go into.  A
+'slot' is represented by a number and an = sign, for example 1=
+Once you have done this then you can enter whatever you want to have as the
+macro into that slot.  And to do that you would type:
+
+    .<slot number>=<whatever you want to have as the macro>
+
+And example of this would be:
+
+    ~FG.1= Hello and welcome to the talker!  How are you?
+
+When the macro is used you would then say "Hello and welcome to the talker!
+How are you?".  But the macro does not have to be restricted to just things to
+say, as you can also enter commands, or abbreviations into the slot.
+
+For example:  ~FG.1=;smiles~RS happily would result in: ~FG<name> smiles happily
+
+To remove a macro from your list all you have to do is enter a blank macro.
+For example, to remove the macro from slot 1 you would type:  ~FG.1=
+
+~FCHow to use a macro
+You use a macro simply by entering it's slot number.  So to use slot 1 you
+would type: ~FG.1
+
++----------------------------------------------------------------------------+

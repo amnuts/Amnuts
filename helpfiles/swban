@@ -1,0 +1,9 @@
+~OLCommand :~RS swban
+~OLUsage   :~RS swban
+
+This toggles a ban on swearing on and off or to a minimum level. If the
+swear ban is off, then the user can say anything. If the swear ban is
+set to minimum, then any swear words that the user says will be blanked
+out with whatever word is hard coded into the talker code. If the swear
+ban is set to off then the user will not be able to say anything if it
+has a swear word in it.

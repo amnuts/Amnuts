@@ -1,0 +1,7 @@
+~OLCommand :~RS accreq
+~OLUsage   :~RS accreq <email> [<text>]
+
+This command is for new users who wish to gain a full account on the
+talker. <email> is your email address and <text> is a comment where you
+can add any relevant information that might be useful in granting your
+account request.

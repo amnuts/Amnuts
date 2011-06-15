@@ -1,0 +1,7 @@
+~OLCommand :~RS set pager
+~OLUsage   :~RS set pager <lines>
+
+This attribute is used to set your pager length. It can be set to a
+number between 15 and 99. Default page length is 23. The pager effects
+any files viewed, such as textfiles, helpfiles, and any other text the
+talker supplies.

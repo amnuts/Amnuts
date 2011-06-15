@@ -1,0 +1,5 @@
+~OLCommand :~RS retire
+~OLUsage   :~RS retire <user>
+
+This allows you to retire a staff member from "active wiz duty", in that
+it removes their name from the wizlist.

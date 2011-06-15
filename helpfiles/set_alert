@@ -1,0 +1,7 @@
+~OLCommand :~RS set alert
+~OLUsage   :~RS set alert
+
+This attribute is a toggle, meaning that if it is off, using this turns
+it on, if it is on, using this turns it off, and it will indicate as such.
+This particular toggle will turn on or off whether or not you are alerted
+when one of your friends in your friends list logs into the talker.

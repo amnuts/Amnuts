@@ -1,0 +1,9 @@
+~OLCommand :~RS set room
+~OLUsage   :~RS set room
+
+This attribute is a toggle, meaning that if it is off, using this turns
+it on, if it is on, using this turns it off, and it will indicate as such.
+This setting changes where you will enter upon login. Default is the main
+room. You can change to the room you left from if so desired, provided
+that the room you left is public. If the room you left from when you
+login is now private, you will be sent to the main room by default.

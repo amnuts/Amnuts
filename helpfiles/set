@@ -1,0 +1,11 @@
+~OLCommand :~RS set
+~OLUsage   :~RS set [<attribute> [<property>]]
+
+Allows you to set certain attributes that will be shown when someone
+uses the "ustat" command on you. By omitting the <attribute> you will
+display the current settings of your attributes, and also a description
+of what the attributes mean. Some attributes are a toggle between on
+and off, and others require you entering a <property>. Use ".set show"
+to show what attributes you are able to change via the set command. You
+can also see detailed info by using ".help set show" for the list of
+other help files for the set command.

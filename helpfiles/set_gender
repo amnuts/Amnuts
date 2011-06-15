@@ -1,0 +1,5 @@
+~OLCommand :~RS set gender
+~OLUsage   :~RS set gender m|f|n
+
+This attribute is used to set your gender, to "m" (male), "f" (female)
+or "n" (neuter).

@@ -1,0 +1,48 @@
++------------------------------------------------------------------------------+
+ LOOKUPS - LOOKUPS - LOOKUPS - LOOKUPS - LOOKUPS - LOOKUPS - LOOKUPS - LOOKUPS
+                      Information about Auth lookups
++------------------------------------------------------------------------------+
+
+This version gives you the remote port number of the user connected to the 
+talker via the .site and .examine commands and is also stored in the syslog
+as well as following the SIGN ON: when seen by wizzes and above.
+The reason I have done this is so manual user identity lookups can be done on 
+a site if you so desire (automatic lookups means lots of extra code) to 
+supposedly verify a users real identity though bear in mind that fake auth 
+daemons can be easily written (about 2 hours work I'd say for an experienced 
+tcp/ip C programmer starting from scratch).
+To do a manual lookup telnet to port 113 on the users site (if you get a 
+connection refused message they don't have an auth daemon running) and enter 
+the following:
+
+<their local port number>,<talkers port number>
+
+So for instance if they're logging in on the talkers main port on 7000 and
+their site is sad.hackers.org and local port is 1234 enter:
+
+1234,7000
+
+You should see something like the following:
+
+$ telnet sad.hackers.org 113
+Trying sad.hackers.org...
+Connected to sad.hackers.org.
+Escape character is '^]'.
+1234,7000                                <--- Your input
+1234 , 7000 : USERID : UNIX : weenie     <--- The reply
+Connection closed by foreign host.
+
+As you can see the final field is the user id but if you see this...
+
+1234 , 7000 : ERROR : NO-USER
+
+then something is wrong. Bear in mind that this will only work while the user
+is logged onto the talker so if you wish to do it do it quick! Also YOU MUST 
+TELNET FROM THE SAME MACHINE THAT THE TALKER IS RUNNING ON. There ends the 
+lesson on manual auth lookups. If you're wondering whether I'll put automatic
+lookups in future NUTS releases (assuming there'll be any) the answer is no
+as the majority of sites do not have auth daemons in the first place eg a
+windows PC is very unlikely to have one :) so the effort would not be worth
+it , besides doing the lookup could hang the talker if there's net lag.
+
++------------------------------------------------------------------------------+

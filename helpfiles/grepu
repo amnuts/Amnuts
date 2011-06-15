@@ -1,0 +1,11 @@
+~OLCommand :~RS grepu
+~OLUsage   :~RS grepu <pattern>
+
+This command allows you to search for a user whose name has the <pattern>
+in it. The pattern can have the wildcards ?, for a single letter match,
+or * for multiple letter matches. For example:
+
+.grepu an?? will match Andy, Andi, Anne and so on.
+.grepu an* will match Andy, Anne, Another, Anthony and so on.
+
+You cannot have the wildcards placed together, such as ?*, *? or **.

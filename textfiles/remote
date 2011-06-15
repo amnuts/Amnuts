@@ -1,0 +1,26 @@
++----- Remote Talkers -------------------------------------------------------+
+
+A new and exciting feature of any talker based on NUTS 3 (and above) code
+(Neil Robertson, 1996) is that it can be linked up with other talkers that use
+the same code.  In this way you will be able to just 'walk' onto another
+talker if it is linked up.
+If you see a room with a * next to its name then this indicates that it is a
+remote talker linked up.  And you can simply walk onto that talker using the
+"go" command.  This saves you having to quit one talker, find the address for
+the other talker and then log onto it.
+Once you are on the remote talker you will be using the commands of that
+talker, which might mean you no longer have certain command that are found on
+this talker, or the commands on the remote talker act in a different way.
+To get back to the talker you started from, your home talker, you simply use
+the "home" command.
+So how do you know if there are remote users on the talker that you are on?
+When using "who" may see a @ next to the persons name, this indicates that 
+they are remote users.
+You can smail a remote user on another talker (providing it is link to the
+talker you are on) by smailing to their name @ their talker, for example,
+smail andy@another_talker.
+When you are on a remote system it may take a little while to get adjusted to
+the way that talker works and the commands it uses, but it is worth it in the
+end.
+
++----------------------------------------------------------------------------+

@@ -1,0 +1,4 @@
+~OLCommand :~RS memcount
+~OLUsage   :~RS memcount
+
+Allows you to see how much memory the talker objects are currently using.

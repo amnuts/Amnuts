@@ -1,0 +1,10 @@
+~OLCommand :~RS arrest
+~OLUsage   :~RS arrest <user>
+
+Sends the given user to jail (if there is an allocated jail room) and
+sets their level to JAILED. If the users logs off and then back on they
+will remain JAILED and be sent automatically to jail room. If no jail
+room is allocated then they will remain in the main room, although be
+JAILED. The user does not have to be online to be arrested. The arrest
+is level based, in that if an ARCH arrests someone then only an ARCH or
+higher can unarrest them. The arresting level is displayed in the ustat.

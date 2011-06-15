@@ -1,0 +1,10 @@
+~OLCommand :~RS verify
+~OLUsage   :~RS verify <word>
+
+This will allow you verify that you have been sent an email from the
+talker. You will be sent this when you set your email address using
+the "set" command (providing you specify a correct email address).
+Once you get the email you will have a verification code which you must
+supply before you can have local mail forwarded to your email address.
+Use the "set" command to turn on or off auto-forwarding. Use the "fmail"
+command to manually forward select local mail.

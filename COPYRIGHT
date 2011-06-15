@@ -1,0 +1,74 @@
++-----------------------------------------------------------------------------+
+     COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT
+       Copyright information for Amnuts
++-----------------------------------------------------------------------------+
+
+Preamble
+--------
+
+On 2002-07-18, Neil Robertson announced in the USENET message
+with ID 1027006837.1806.0.nnrp-07.c2de0bc0@news.demon.co.uk
+posted to newgroups alt.talkers, alt.talkers.nuts, and
+alt.talkers.programming that he was now allowing all versions
+of his NUTS codes to optionally be distributed under the General
+Public License. For reference this mesage can be accessed at the URL:
+http://groups.google.com/groups?selm=1027006837.1806.0.nnrp-07.c2de0bc0%40news.demon.co.uk
+For further information on NUTS licensing see the file docs/nuts_copyright.
+
+
+Copyright Information for Amnuts code
+-------------------------------------
+
+Amnuts 2.3.0 A Unix Talk Server via Telnet
+Copyright (C) 1996-1996  Neil Robertson (Boltar) [NUTS]
+Copyright (C) 1997-2003  Andrew Collington (Andy) [Amnuts]
+Copyright (C) 1999-1999  Gordon Chiu (Ardant) [ident-daemon]
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+Optionally, you can also redistribute it and/or modify it under the
+terms of the original Amnuts license as detailed later in this file.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Optional Original Copyright for Amnuts code
+-------------------------------------------
+
+The Amnuts code and files contain within the distribution are supplied
+as freeware and not public domain.  I retain the copyright for all files
+included with exception of: the ASCII picture files and any unmodified
+documentation written by Neil Robertson.  I will take legal action against
+anyone/company who is found selling the code for their own commercial
+advantage, though if anyone wishes to run a pay-to-use talker using the
+Amnuts code then they are welcome.  If you wish to distribute the original
+Amnuts code to anyone else this must be done with my express permission.
+
+You are free to modify the Amnuts code anyway you wish to suit your
+own needs and distribute that.  You must not alter the .version, or the
+version prompt when logging in so much that it does not refer to the code
+being based on Amnuts or that the code isn't 100% original.  You must
+also leave the credits from Neil and myself in the code (viewed by '.help
+credits'), and also the header information at the top of the source code.
+
+Although every care has been taken to produce a bug-free talker system,
+this distribution is supplied as-is and I cannot be held responsible
+for damages incurred through any use of the Amnuts code or any other
+associated files.  This copyright pertains to ANY version of Amnuts,
+documents, or web site.  If you have any problems with this copyright
+notice then you should not use the code at all.
+
+Andrew Collington
+September, 2001
+
++-----------------------------------------------------------------------------+

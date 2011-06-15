@@ -1,0 +1,7 @@
+~OLCommand :~RS smail
+~OLUsage   :~RS smail <user>[@<service>] [<text>]
+
+Allows you to send mail to a user (possibly a remote talker via a netlink
+service if your talker is currently connected to it). If you omit the
+text then you will be put into the line editor and allowed to enter you
+message that way. This is recommended if you have a lot you want to write.

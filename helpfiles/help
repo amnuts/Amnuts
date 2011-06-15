@@ -1,0 +1,6 @@
+~OLCommand :~RS help
+~OLUsage   :~RS help [<command>|commands|credits|nuts]
+
+This command will display the helpfile for any command given. If you
+specify "commands" or omit the command then a list of all the commands
+you have use of will be listed. You can also view various credits.

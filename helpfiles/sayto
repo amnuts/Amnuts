@@ -1,0 +1,7 @@
+~OLCommand :~RS sayto
+~OLUsage   :~RS sayto <user> <text>
+~OLAliases :~RS -
+
+This is used to direct speech to someone in the same room as yourself.
+The text will be seen by anyone in the room, though it will be displayed
+such as: "(<user>) Andy says: ..."

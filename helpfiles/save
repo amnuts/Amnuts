@@ -1,0 +1,4 @@
+~OLCommand :~RS save
+~OLUsage   :~RS save
+
+This will save the userfiles of everyone who is currently logged on.

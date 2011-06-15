@@ -1,0 +1,11 @@
+~OLCommand :~RS afk
+~OLUsage   :~RS afk [lock] [<text>]
+
+This command allows you to set yourself to "Away From Keyboard" which
+shows up when people "look" at the room and you will pronounced AFK if
+they try to tell you or semote something to you. Just press return to
+reset unless you have specified the "lock" option which will lock your
+session and prevent someone using it while you away from the terminal.
+Enter your talker password and press return to unlock it. You can leave
+an optional message when you go afk which will be sent to anyone trying
+to tell or semote to you.

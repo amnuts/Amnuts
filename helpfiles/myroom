@@ -1,0 +1,8 @@
+~OLCommand :~RS myroom
+~OLUsage   :~RS myroom [-d]
+
+This command allows you to move into your own personal room. If your
+room does not exist then it will create one for you automatically. You
+may set your own room description, topic and also have your own personal
+message board. If the "-d" option is used then your room will be deleted.
+The personal rooms function must be active to use this command.

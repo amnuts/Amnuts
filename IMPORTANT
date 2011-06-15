@@ -1,0 +1,54 @@
++-----------------------------------------------------------------------------+
+    IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT
+        Information for the running of a talker based on Amnuts
++-----------------------------------------------------------------------------+
+
+If you are installing this Amnuts version as a fresh talker, with no prior
+datafiles, then this document may be of interest to you.  I would advise that
+you read it, and the documents it points you to.  However, if you are going to 
+upgrade your existing talker, or are going to use this code as your base and 
+add bits from your existing talker, then it is vital you read this document and 
+the others before you make any changes.
+
+First off, support is only given through the websites, and not through private 
+email.  You can gain support through the main Amnuts website 
+(http://amnuts.talker.com/ or http://www.amnuts.org/), or if you are looking
+to submit bugs or get the latest updated files, then you can gain that through
+the developer's site (http://www.amnuts.net/).
+
+The main difference you will notice about this code and any of the previous
+releases is that Amnuts now comes in many different files.  This means that if
+you make changes to any one of the .c files then you don't have to recompile
+everything again - just that one file.  This means, however, that if you're a
+previous Amnuts programmer you may have to reacquaint yourself with the code,
+because all the functions are now in different places.  If you check out the
+prototypes.h file (in the includes directory) you'll notice all of the
+functions listed under whatever file they're located in.
+
+Compiling is now different.  You'll have to compile using the Makefile.
+More information can be found in the 'compiling' document, found in the 'docs'
+directory.  You should read the compiling document, and then have a look at the
+Makefile and familiarize yourself with it.
+
+The ident deamon needs to be run separately.  This is because it's a separate 
+program to the talker, compiled as its own executable.
+
+Remember to login initially with the username 'test' and the password 'test'.
+You should then create a user file for yourself (by logging in or using the 
+create command) and use the test character to promote yourself to the highest
+rank.  Then DELETE the test account so no one else can use it.  Alternatively,
+of course, you could login with Test, change the password, and then use the 
+name changing command. :)
+
+The *MOST* important thing to remember though is; RTFM!!  Read the
+documents supplied with the distribution, look at the code, try something
+out.. Only then if that fails should you go asking questions on boards and
+such.  It also helps if you give an example of what you've tried too.
+Bug reports I'm still up to receiving, but even then, don't be upset if
+you don't get a thorough response.
+
+
+                                                              Andrew Collington
+                                                    The Amnuts Development Team
+                                                                   August, 2003
++-----------------------------------------------------------------------------+

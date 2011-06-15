@@ -1,0 +1,4 @@
+~OLCommand :~RS set age
+~OLUsage   :~RS set age <age>
+
+This allows you to set your age for others to see with the .ustat command.

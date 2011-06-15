@@ -1,0 +1,27 @@
+Okay, the infamous TODO list...
+
+Get the ident code working properly (different host binaries)
+
+Add the pager code
+	- fix the 1-extra line bug
+
+New smail method - make sure to retro read the old smail version and convert
+	- failing that, write a perl script to do it which people will have to run
+
+New message board method - like smail
+
+Add new command 'stopcommand' (or whatever) to stop a command being used by
+anyone.
+
+Add a boxing feature using grab_len and center_string to box (and align) over multiple lines
+
+Move commands fully into linked list.
+	- save soundex codes in the linked list structure
+	- save status (on/off) of command
+	- save normal level of command
+	- save temp level of the command
+	- possibly save function pointer
+	- look into saving command states during reboot
+
+Use function pointers for commands ;)
+

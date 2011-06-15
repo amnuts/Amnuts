@@ -1,0 +1,5 @@
+~OLCommand :~RS say
+~OLUsage   :~RS say <text>
+
+This command is only needed when in COMMAND mode, since in SPEECH mode
+everything you type that is not a command is interpreted as speech.

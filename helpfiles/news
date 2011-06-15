@@ -1,0 +1,4 @@
+~OLCommand :~RS news
+~OLUsage   :~RS news
+
+Allows you to read the news file (if there is one).

@@ -1,0 +1,7 @@
+~OLCommand :~RS outmsg
+~OLUsage   :~RS outmsg [<text>]
+
+This sets the message that is displayed following your name when you
+leave a room. i.e., if your name is Andy and you set it to "leaves fast"
+other people will see "Andy leaves fast" when you leave a room. If you
+omit the message it shows you your current message.

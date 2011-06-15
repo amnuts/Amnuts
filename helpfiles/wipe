@@ -1,0 +1,14 @@
+~OLCommand :~RS wipe
+~OLUsage   :~RS wipe <message>
+~OL        :~RS wipe to <to-message>
+~OL        :~RS wipe from <from-message> to <to-message>
+~OL        :~RS wipe all
+
+This command allows you to delete messages from the board of the room
+that you are in. You can delete specific single messages by supplying
+just a number, or from the first message to a given number. You can
+also delete from a certain message to another message, or you can delete
+all the board. If a given number to delete to is higher than the actual
+amount of message on the board, then all the messages will be deleted.
+If you are in your personal room (if this function is currently active)
+then you can wipe any message, regardless of who posted it.

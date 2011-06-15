@@ -1,0 +1,12 @@
+~OLCommand :~RS rmadmin
+~OLUsage   :~RS rmadmin -l|-m|-u <user>|-d <user>
+
+This command is to aid management of personal rooms for admins. If you
+use the "-l" option then it will list all personal rooms currently active
+on the talker with some information about each room. If the "-m" option
+is used then it will display the amount of memory the personal rooms is
+currently using. If the "-u" option is used together with a name of a
+user then it will unload that user's personal room from memory. If the
+"-d" option is used with a name, then it will unload that user's personal
+room from memory and delete all associated room files (message board,
+room description, etc.).

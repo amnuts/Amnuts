@@ -1,0 +1,50 @@
+*** COPYRIGHT ***
+
+From: neil@ogham.demon.co.uk
+Newsgroups: alt.talkers,alt.talkers.nuts,alt.talkers.programming
+Subject: Announcement: NUTS code is now GPL'd
+Date: Thu, 18 Jul 2002 15:40:37 GMT
+Message-ID: <1027006837.1806.0.nnrp-07.c2de0bc0@news.demon.co.uk>
+
+Ok , this is an official announcement so just imagine some portentious
+music and drums with a voice over of suitable gravitas.
+
+I've decided to GPL the entire NUTS code from the very first version to
+the very last. Since I can't be arsed to re-release all the code with a
+new copyright this post will have to suffice. Why anyone would want to
+use 10 year old badly written flaky code in their own I'm not sure but
+someone did and asked if he could GPL it so I thought what the hell,
+might as well GPL the whole lot.
+
+If there are any questions just email me.
+
+Neil Robertson
+
+neil@ogham.demon.co.uk
+
+
+Original Copyright for NUTS code:
+
+If you alter the code could you please leave the credits in the code
+(.help credits) and also don't change the version so much that it doesn't
+say NUTS anymore when a user does the .version command. I find it annoying
+that after I've spent months of time working on this software someone
+comes along, changes a few commands then pretends its all their own
+work. If you have a problem with any references to my name or the NUTS
+name being in your talker then don't use my software, its that simple,
+go write your own from scratch.
+
+This software is freeware, it is *NOT* public domain, I retain copyright,
+and since there is code in here that I have used in a commercial
+system I have written I will take legal action on anyone and their
+institution/employer who I find using it to their own commercial advantage
+by way of selling the code of either this or a modified version. I have
+no problems with anyone running a pay-to-use talker using NUTS however.
+
+You are perfectly free to modify the code to suit your needs and
+distribute modified versions *BUT* if you do could you please leave my
+name, the NUTS name and the code header in the code and also note the
+fact that the code isn't 100% original.
+
+Neil Robertson - September 1996
+

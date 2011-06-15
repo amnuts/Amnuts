@@ -1,0 +1,8 @@
+~OLCommand :~RS gcom
+~OLUsage   :~RS gcom <user> [<command>]
+
+This enables you to give usage of a command to the <user> given that they
+would not normally have. If the <command> option is not used then it
+will display any commands that the user has been given access to. This
+works as a toggle, so that if the <command> is not already listed for
+the user then they will gain access to it else the access will be removed.

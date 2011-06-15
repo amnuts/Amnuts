@@ -1,0 +1,8 @@
+~OLCommand :~RS friends
+~OLUsage   :~RS friends [<name>]
+
+This allows you to add people to or remove people from your friends list.
+If you do not use the <name> option then you will be shown anyone who
+is currently listed. If you use the <name> option and that person is
+not currently listed then their name will be added, else the name will
+be removed from the list.

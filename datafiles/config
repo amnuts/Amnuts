@@ -1,0 +1,87 @@
+# Main config file for Amnuts
+
+INIT:
+verification       amnutsabc
+mainport           2402
+wizport            2403
+linkport           2404
+max_users          50
+max_clones         5
+heartbeat          2
+login_idle_time    180
+user_idle_time     3600
+time_out_afks      YES
+ban_swearing       OFF
+auto_connect       YES
+ignore_sigterm     NO
+system_logging     ON
+colour_def         ON
+prompt_def         OFF
+charecho_def       OFF
+passwordecho_def   OFF
+minlogin_level     NONE
+mesg_life          10
+mesg_check_time    01:00
+min_private        2
+ignore_mp_level    ARCH
+rem_user_maxlevel  SUPER
+rem_user_deflevel  USER
+wizport_level      WIZ
+gatecrash_level    GOD
+time_out_maxlevel  WIZ
+crash_action       NONE
+auto_purge         NO
+allow_recaps       YES
+auto_promote       NO
+personal_rooms     YES
+startup_room_parse YES
+random_motds       YES
+resolve_ip         AUTO
+flood_protect      ON
+boot_off_min       YES
+default_warp       reception
+default_jail       cupboard
+default_bank       safe
+default_shoot      directors
+
+
+ROOMS:
+# format
+# map  label  name         links              netlink connections
+general re  reception      cp,s1,mo,cu        PUB
+general cp  car_park       re                 PUB
+general s1  store_room     re,mo,s2,wr,cra
+general mo  main_office    re,s1,li,cr,to,dr  PUB
+general s2  back_store     s1,to,cr
+general li  library        mo,cr,ac
+general cr  conference     li,mo,s2
+general to  toilets        mo,s2
+general dr  directors      mo,sa              PUB
+general sa  safe           dr                 PUB  ACCEPT
+general wr  wizroom        s1                 PRIV
+general cu  cupboard       re                 PRIV
+general ac  andys_computer li                 PRIV
+store   cra crate          s1,box
+store   box box            cra
+
+TOPICS:
+# format
+# room name     topic
+reception       ~OLWELCOME!~RS
+library         Ssshhhhhh....
+directors       Let the slaughter begin!
+andys_computer  Thanks for using Amnuts :)
+
+
+# Link to the 2nd talker. You may need to put the machine name rather than
+# localhost here when you're running the 2nd talker on the same machine, it
+# depends on how the /etc/hosts file is set up and also the resolver.
+# none of these are real talkers or sites!
+
+SITES:
+# format
+# link name    address               password
+talker1        localhost 5002        test123
+darkroom       foo.bar.com 3456      Bloggs456
+myplace        11.11.11.11 7401      NotReal
+

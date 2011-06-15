@@ -1,0 +1,8 @@
+~OLCommand :~RS rmail
+~OLUsage   :~RS rmail [new|<message>]
+
+If the option "new" is used then you will read only those messages that
+have been sent to you since you last checked your mailbox. If a message
+number is given then you will be shown only that message, otherwise any
+mail that you currently have in your mailbox. Message numbers can be
+checked using the "from" command.

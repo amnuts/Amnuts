@@ -1,0 +1,62 @@
++-----------------------------------------------------------------------------+
+  USERFILE - USERFILE - USERFILE - USERFILE - USERFILE - USERFILE - USERFILE
+    User file information for the Unix talker code Amnuts
++-----------------------------------------------------------------------------+
+
+Below is the userfile format for Amnuts.  All times are in seconds.
+
+format
+------
+
+version       <user format version>
+password      <encrypted password>
+promote_date  <date user was promoted - as a string>
+times         <last login time> <total login time> <time last on for>
+              <time mail was last read>
+levels        <user level> <user unarrest level> <arrest level>
+              <muzzle level> <retired>
+general       <accreq> <character mode echo> <command mode> <prompt>
+              <visibility> <monitor> <mail verified> <logon count>
+user_set      <gender> <age> <line wrap> <pager length> <hide email>
+              <colour on/off> <log into last room> <friend alert>
+              <autoforward smail> <show password> <show room descs>
+              <command list type> <icq number>
+user_ignores  <all> <tells> <shouts> <pics> <logons/offs> <wiztells>
+              <greets> <beeps>
+purging       <purge yes/no>
+last_site     <user's site> <logout room name>
+mail_verify   <email verification code>
+description   <user description>
+in_phrase     <room entrance phrase>
+out_phrase    <room exit phrase>
+email         <email address>
+homepage      <homepage address>
+recap_name    <recapped name>
+games         <hits> <misses> <died> <kills> <bullets> <hit points>
+              <money> <bank>
+
+
+
+example
+-------
+
+version       0.3
+password      NUKyNCCLvgLH.
+promote_date  on Friday 3rd September 1999 at 09:37pm
+times         937862914 30890 149 937861377
+levels        6 6 0 0 0
+general       -1 0 0 0 1 0 0 8
+user_set      0 0 0 23 1 1 0 1 0 0 1 0 #UNSET
+user_ignores  0 0 0 0 0 0 0 0
+purging       1
+last_site     localhost reception
+mail_verify   amnuts196
+description   should be nuked asap
+in_phrase     enters
+out_phrase    goes
+email         amnuts@talker.com
+homepage      #UNSET
+recap_name    ~OL~FCt~FRE~FGs~FYT
+games         0 0 0 0 6 10 507 1512
+
++------------------------------------------------------------------------------+

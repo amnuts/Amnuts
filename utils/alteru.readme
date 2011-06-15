@@ -1,0 +1,53 @@
+This is the readme file for the alteru program
+----------------------------------------------
+
+To start the program you can either use:
+
+   perl alteru.pl
+
+or, because it's setup as a script you can just run is by:
+
+   alteru.pl    (or try ./alteru.pl if that doesn't work)
+
+If you use the latter method, then you have to make sure that the first
+line in the alteru.pl points to where your perl executable is.
+ie;   !#/<yourdir>/perl
+
+It's designed to be run from the same directory as the talker code.
+
+
+Follow the onscreen prompts when you are asked for a line number or the
+content you want to add.  The content can be a number, letter, words, a
+string or words or multiple numbers.  for example:
+
+   Add the following : 0
+   Add the following : This is a new line
+   Add the following : 0 0 200 newbie
+
+If you press return, then the string "#UNSET" will be added.
+You can choose to add to an existing line, or append to the file.
+
+If you don't want to continue, select 'q' when prompted.
+
+You have the option of backing up the files before you alter them, and it
+will save it in a file with the date appended to it, in the form: mmddyy
+For example,  USERS111597
+which would mean the 11th November, 1997
+
+You can alter some variables at the top of the alteru.pl file if you want,
+but it's currently set up to look in the directory 'userfiles' for all the
+files with the extension '.D' with the backup file name 'USERS'.  The
+directory can be absoulte (starting with /) or relative to where the
+program is run from.
+
+
+Although I have checked this program and run it a few times, I will not be
+held responsible for any bad effects this causes to the running of your
+talker.
+
+
+Andrew Collington, December 1997
+
+
+
+

@@ -1,0 +1,8 @@
+~OLCommand :~RS resite
+~OLUsage   :~RS resite <user>|-a
+
+If you are running the ident daemon then this command will allow you
+to get the site of the given user again. This is useful if the ident
+daemon was not running at the time they logged in. If you use the -a
+option then it will get the sites of all the users logged on.
+

@@ -1,0 +1,7 @@
++----- ~FG~OLAdmin Files~RS ----------------------------------------------------------+
+
+There are currently no admin only files.  If you want to add any, then put
+them in the 'textfiles/adminfiles' directory and then alter this text file to
+show what files can be displayed.
+
++----------------------------------------------------------------------------+

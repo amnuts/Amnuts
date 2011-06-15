@@ -1,0 +1,8 @@
+~OLCommand :~RS xcom
+~OLUsage   :~RS xcom <user> [<command>]
+
+This enables you to remove usage of a command from the <user> given that
+they would normally have. If the <command> option is not used then it
+will display any commands that the user has been removed access from. This
+works as a toggle, so that if the <command> is not already listed for the
+user then they will lose access to it else the access will be given back.

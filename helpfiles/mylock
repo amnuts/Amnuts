@@ -1,0 +1,7 @@
+~OLCommand :~RS mylock
+~OLUsage   :~RS mylock
+
+This enables you to lock your personal room to anyone else, stopping
+them from entering. This works as a toggle, so that if you the room is
+locked then you would use this command to unlock it. The personal rooms
+function has to be active to use this command.

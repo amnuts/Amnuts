@@ -1,0 +1,6 @@
+~OLCommand :~RS myname
+~OLUsage   :~RS myname
+
+This enables you to rename your personal room so it has something other
+than "(~$)" as the name. The personal rooms function has to be active
+to use this command.

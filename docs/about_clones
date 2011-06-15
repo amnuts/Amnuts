@@ -1,0 +1,33 @@
++------------------------------------------------------------------------------+
+ CLONES - CLONES - CLONES - CLONES - CLONES - CLONES - CLONES - CLONES - CLONES
+              Information about the clones used in Amnuts
++------------------------------------------------------------------------------+
+
+Clones allow a user (who is of sufficient level to use clones) to be in two
+different rooms at once.  The clone will allow that user to listen in on the
+conversation or add to it by speaking or emoting, much as a normal user would.
+The clone commands are as follows:
+
+clone     : creates a clone in the current room or the name of the room you
+          : supply.
+
+switch    : switches you between your current object and one of your clone
+          : objects.
+
+chear     : clones send what they hear to their owner but this can be set to 
+          : return either all the conversation in their room, only that with
+          : swearing or nothing at all (just to be a presence there).
+
+csay      : makes a clone say something.
+
+cemote    : makes a clone emote something.
+
+myclones  : lets you see all the clones that you have created and what rooms
+            they are in.
+
+allclones : lets you see all the clones currently active on the talker.
+
+destroy   : destroys your clone, or a clone in the given room (or even the clone
+            of someone else if you have enough permissions to do this.)
+
++------------------------------------------------------------------------------+

@@ -1,0 +1,126 @@
++-----------------------------------------------------------------------------+
+       DIRECTORY STRUCTURE - DIRECTORY STRUCTURE - DIRECTORY STRUCTURE
+     Directory information for the Unix talker code Amnuts
++-----------------------------------------------------------------------------+
+
+The server has a fixed directory structure and expects certain files to be
+in certain directories which I shall describe below...
+
+
+datafiles
+---------
+
+This directory contains the config file which contains all the parameters
+necessary to boot the server and also the room description and message
+board files. These are in the form of <room name>.R and <room name>.B
+respectively.  It also expects to find the map files in this directory, of
+the form <map name>.map.
+
+Also the 2 ban files: sitebans and userbans are stored here which store
+banned sites and banned users.
+
+There is another directory in here, 'old_datafiles', just incase any of you
+wanted the old rooms and config files.
+
+
+helpfiles
+---------
+
+This contains all the help files. 'Nuff said really.
+
+
+userfiles
+---------
+
+The root of userfiles contains the .D files - the user information.
+There is also a sub-structure of directories which are as follows:
+
+   flagged   : List of flagged users (.U)
+   historys  : History of user events (.H)
+   mail      : User's mail files (.M)
+   macros    : Any macros the user has set (.MAC)
+   profiles  : Profiles is the user has made them (.P)
+   rooms     : Stores the user's room information (.R), rooms board
+               information (.B)
+   xgcoms    : Any commands the user has been restricted from using of
+               given access to (.C)
+   reminders : Stores reminder message and date (.REM)
+
+
+mailspool
+---------
+
+This is where mail to other linked talkers is temporarily spooled ready
+to be sent off or while it is being received.
+
+Outgoing mail filenames are in the format of: OUT_<from>_<to>@<service to>
+
+eg OUT_Bod_Andy@talker2
+
+Incoming ones are: IN_<to>_<from>@<service_from>
+
+eg IN_Andy_Bod@talker1
+
+
+pictfiles
+---------
+
+Contains ASCII pictures that are used on the talker with the commands
+"picture", "preview" and "ptell".  The pictures can contain colour codes
+if you want.
+
+
+miscfiles
+---------
+
+This contains any files that could not be classed into the other
+directories.  I suppose they could all have been put into 'datafiles', but
+I personally like to use that just for room data and talker configuration..
+But maybe that's just me?
+
+
+motds
+-----
+
+This contains the further directories:
+
+	- motd1
+	- motd2
+
+Each of those contain the pre- and post-login motds.  You can have as many
+as you like, providing you have AT LEAST ONE in there.  They are named
+consecutively, such as 'motd1', 'motd2', 'motd3', etc.  They MUST be called
+this.
+
+
+logfiles
+--------
+
+This contains the system logs and crash logs.  Each log file has the PID
+for that session and the date as an extension.
+
+
+dumpfiles
+---------
+
+This directory will only contain items if you use the 'dump' command on
+the talker.
+
+
+textfiles
+---------
+
+This contains the further directory:
+
+	- adminfiles
+
+This is where files for the 'files' and 'adminfiles' commands reside.
+
+reboot
+------
+
+This directory contains any temporary files created by the seamless reboot
+functions.
+
++------------------------------------------------------------------------------+
+

@@ -1,0 +1,7 @@
+~OLCommand :~RS people
+~OLUsage   :~RS people [key]
+
+This shows who is logged on and gives various stats for them. This will
+also show a user's logon site, port and various other stats. If the
+"key" option is used then information about the different login stages
+will be displayed.

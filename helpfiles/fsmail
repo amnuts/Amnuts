@@ -1,0 +1,6 @@
+~OLCommand :~RS fsmail
+~OLUsage   :~RS fsmail [<text>]
+
+This command allows you to send one mail message to all those people
+named on your friends listed. If you do not supply any text then you
+will be sent to the line editor.

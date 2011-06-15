@@ -1,0 +1,8 @@
+~OLCommand :~RS private
+~OLUsage   :~RS private [<room>]
+
+This will set the room you are currently in to a private status, providing
+it is not fixed and that there are enough users in it. If you are of
+high enough level to use the <room> option then you are able to change
+the status of the given room providing there are enough people in it or
+it is not fixed.

@@ -1,0 +1,4 @@
+~OLCommand :~RS forwarding
+~OLUsage   :~RS forwarding
+
+This will toggle the mail auto-forwarding function on or off.

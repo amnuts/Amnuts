@@ -1,0 +1,5 @@
+~OLCommand :~RS macros
+~OLUsage   :~RS macros
+
+Displays a list of all the macros you currently have. See "help files"
+for help on how to use macros.

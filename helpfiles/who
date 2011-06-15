@@ -1,0 +1,6 @@
+~OLCommand :~RS who
+~OLUsage   :~RS who
+~OLAliases :~RS @
+
+This shows a full list of people currently logged on to the talker,
+including descriptions, areas, etc.

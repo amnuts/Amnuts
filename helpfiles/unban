@@ -1,0 +1,5 @@
+~OLCommand :~RS unban
+~OLUsage   :~RS unban site <site> | user <user> | new <site>
+
+This will remove a site, user, or new users from site ban if the ban is
+currently set.

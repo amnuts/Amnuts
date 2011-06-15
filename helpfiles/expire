@@ -1,0 +1,7 @@
+~OLCommand :~RS expire
+~OLUsage   :~RS expire <user>
+
+This toggles the user expire on or off. If this is set off, then the
+files of the given users will not be deleted after a given amount of
+non-use. If set on then all the files will be deleted after the given
+period of non-use.

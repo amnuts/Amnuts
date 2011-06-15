@@ -1,0 +1,7 @@
+~OLCommand :~RS set wrap
+~OLUsage   :~RS set wrap
+
+This attribute is a toggle, meaning that if it is off, using this turns it
+on, if it is on, using this turns it off, and it will indicate as such.
+This will attempt to wrap all screen output to 80 columns if your client
+is unable to do so.

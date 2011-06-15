@@ -1,0 +1,12 @@
+~OLCommand :~RS dmail
+~OLUsage   :~RS dmail <message>
+~OL        :~RS dmail to <to-message>
+~OL        :~RS dmail from <from-message> to <to-message>
+~OL        :~RS dmail all
+
+This command allows you to delete messages from your mailbox. You
+can delete specific single messages by supplying just a number, or
+from the first message to a given number. You can also delete from a
+certain message to another message, or you can delete all your mail.
+If a given number to delete to is higher than the actual amount of mail
+in your mailbox, then all the mail will be deleted.

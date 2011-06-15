@@ -1,0 +1,5 @@
+~OLCommand :~RS ctopic
+~OLUsage   :~RS ctopic [all]
+
+Lets you clear the topic of the room you are in, or all the topics on
+the talker.

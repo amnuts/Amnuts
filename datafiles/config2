@@ -1,0 +1,63 @@
+# This is the 2nd config file for you to use with a copy of the talker
+# to get 2 talkers linked together. A lot of parameters are missing here
+# in the INIT section to demonstrate the fact that you can leave them as
+# the software defaults.
+
+INIT:
+verification       test123
+mainport           5000
+wizport            5001
+linkport           5002
+max_users          50
+max_clones         5
+heartbeat          2
+login_idle_time    180
+user_idle_time     3600
+time_out_afks      YES
+ban_swearing       OFF
+auto_connect       YES
+ignore_sigterm     NO
+system_logging     ON
+colour_def         ON
+prompt_def         OFF
+charecho_def       OFF
+passwordecho_def   OFF
+minlogin_level     NONE
+mesg_life          10
+mesg_check_time    01:00
+min_private        2
+ignore_mp_level    ARCH
+rem_user_maxlevel  SUPER
+rem_user_deflevel  USER
+wizport_level      WIZ
+gatecrash_level    GOD
+time_out_maxlevel  WIZ
+crash_action       NONE
+auto_purge         NO
+allow_recaps       YES
+auto_promote       NO
+personal_rooms     YES
+startup_room_parse YES
+random_motds       YES
+resolve_ip         AUTO
+flood_protect      ON
+boot_off_min       YES
+default_warp       hallway
+default_jail       jail
+default_bank       lounge
+default_shoot      corridor
+
+
+ROOMS:
+general dr drive    ha        PUB  CONNECT talker1
+general ha hallway  dr,co,wz  PUB
+general wz wizroom  ha        PRIV
+general co corridor ha,lg
+general lg lounge   co        BOTH ACCEPT
+general ja jail     wz        PRIV
+
+
+# Link back to talker 1
+SITES:
+talker1       localhost 2404         amnutsabc
+

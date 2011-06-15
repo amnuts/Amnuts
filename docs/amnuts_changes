@@ -1,0 +1,512 @@
++------------------------------------------------------------------------------+
+ CHANGES - CHANGES - CHANGES - CHANGES - CHANGES - CHANGES - CHANGES - CHANGES
+        Information on the changes between different version of Amnuts
++------------------------------------------------------------------------------+
+
+
+2.3.0
+-----
+
+Fixed array size bug in load_user_details.
+Fixed bug in (un)arresting
+Fixed bug in the change_user_name function
+Fixed bug in 'set recap' that allowed names longer than array size.
+Fixed the clone say and emote and a couple other bugs to do with clone say/emote in the emote and say functions
+Fixed the help commands paging bug
+Fixed bug in the samesite command
+Fixed bug that would allow you to see clones in the login 'who'
+Fixed the get_time function to be grammatically correct
+Fixed positioning errors in set_attributes function
+Fixed major bug in send_forward_email function
+Fixed major bug in validate_email function
+Fixed bug in copies_to function
+Fixed bugs in help_commands_level function
+Fixed bugs in help_commands_function function
+Fixed bug in more function
+Fixed bugs in the create_account function
+Fixed bug in main loop (clone destruction bug)
+Fixed bug in say_to function
+Fixed bug in user_gcom
+Fixed bugs in change_user_name function
+Fixed 'multi line' bug (can now paste in multiple lines of text)
+Fixed bugs in show_memory, dump_to_file and room_admin
+Fixed sockets to be better at non-blocking
+Fixed positioning bugs in wizlist and who
+Fixed bug in personal_rooms_store function
+Fixed bug in the wake function
+Fixed clone loophole in the disconnect_user function
+Fixed bug in set_command_level function
+Fixed loophole in the more() function that would allow reading of a directory as a file
+
+Added a Makefile and split up the code for easier compiling (thanks Silver), also tidied up the code a lot
+Added ArIdent, Ardant's ident daemon
+Added Ardant's universal pager
+Added Arny's seamless reboot, with a few major mods, and the new command 'sreboot'
+Added Soundex matching on commands
+Added functions 'retrieve_user', 'done_retrieve', 'vwrite_level', 'write_room_except_both', and 'vwrite_room_except_both'
+Added new command 'resite'
+Added new function 'grab_len'
+Added new command 'myname' to allow you to rename your personal room
+Added 'boot_off_min' to config file option so that when you alter the minlogin level people get disconnected or not
+Added new way of storing users you have given keys to, ignored, and more.  This has meant that the following functions have been added: setbit_flagged_user_entry, unsetbit_flagged_user_entry, create_flagged_user_entry, destruct_flagged_user_entry, destruct_all_flagged_users, load_flagged_users, and save_flagged_users.  Also added the defines: FLAG_ROOM_KEY, FLAG_IGNORE and FLAG_FRIEND.
+Added new commands: cash, donate, money, and bank
+Added function 'count_friends'
+Added defines UFILE_WORDS and UFILE_WORD_LEN
+Added define RECAP_NAME_LEN
+Added new command 'flagged' to see your flagged user list (with this came a new function show_flagged_users)
+Added new command 'spodlist', due to popular demand, based on the spodlist code in PG+ - by Silver (Richard Lawrence)
+Added lots of new functions for spodlist
+Added new room to the default config file, 'safe'
+Added two new functions 'vwrite_room_ignore' and 'write_room_ignore'
+Added new function do_write_syslog
+Added ERESYSLOG and ERRLOG definitions
+Added new review buffer functionality.  With this came several new functions and a new structure.
+Added two new defines; RECORD and NORECORD
+Added reverse_buffer variable to user structure.
+
+Updated config file to also use 'SEAMLESS' as a crash_action option
+Updated syslogs and last_command to have the filename logtype.YYYYMMDD - the YYYMMDD is that of boot-time, not current time
+Updated the viewlogs command to compensate for syslog name change
+Updated the output of the 'rooms' command - now uses '-l' as an option, rather than 'level'
+Updated the 'system' command (system_details function) to look different and now use the options '-n' (netlinks), '-m' (memory), '-r' (rooms), '-u' (users) - and of course the standard .system
+Updated the look of the version command
+Updated formatting of prototypes.h and netlinks.h (got rid of the args())
+Updated the center_string function to allow alignment on left, centre, and right.
+Updated the minlogin to take parameters -a/-n/<level>.  -a stops all login to the talker on the user port.  -n restores any minlogin (or stop all).  Now shows current level if no parameters are given
+Updated write_user to incorporate new pager system
+Updated help_commands_level and help_commands_function functions to use new pager system.  xcom'ed commands now show in red.
+Updated 'who' command to incorporate the personal room names
+Updated many functions to use the new 'retrieve_user' function (thereby giving the ability to use abbreviated names... commands updated include arrest, unarrest, expire, history, promote, demote, and more)
+Updated add_history function to take variable argument lengths (like the vwrite_ functions)
+Updated numerous personal_room_* functions to use the new 'flagged user' functionality
+Updated friends_* functions to use the new 'flagged user' functionality
+Updated ignuser functions to use the new 'flagged user' functionality
+Updated 'ignuser' command so you can now add users to your ignore list if they are offline, and you can abbreviate the names
+Updated 'friends' command so you can now abbreviate the names when adding to the list
+Updated 'preview' so that it now reads directly from the directory, rather than the pictlist file
+Updated the write_monitor function to compensate for x/gcom and commands real minimum use level
+Updated list_users_struct (see changed notes) to include 'retired' variable
+Updated user struct to include retired variable (saves in user file)
+Updated the wizlist command to include retired wiz output to anyone >= WIZ level
+Updated the move command so now it includes monitor output
+Updated write_syslog function so you can now write to multiple system logs by sending, for example, write_syslog(SYSLOG|ERRLOG,1,"This is a test\n");
+Updated the logging and viewlog commands to compensate for new ERRLOG
+Updated all tell review buffer functions (review_tell, review_afk, review_edit, clear_tell, clear_afk, etc, etc)
+Updated vwrite_level and write_level functions to take additional (NO)RECORD option
+Updated 'set' function to include ability to reverse output of the buffers.
+
+Changed 'cal_days' variable to 'num_of_days' and 'cal_day_names' variable to 'short_day_name'
+Changed 'month' variable to 'full_month_name' and 'day' variable to 'full_day_name'
+Changed the talker_name global variable to the TALKER_NAME prototype.
+Changed 'center_string' function to 'align_string'
+Changed user_dir_struct to list_users_struct
+Changed in_retire_list function to is_retired
+
+Removed the memcount command and show_memory function
+Removed amsys->pid due to conflicts with the sreboot
+Removed case statements in misc_ops for the help_level_* functions
+Removed the hwrap_lev, hwrap_id, hwrap_same, and hwrap_func variables from the user struct
+Removed function 'get_friends'
+Removed MAX_FRIENDS and MAX_IGNORES defines
+Removed 'friend' and 'ignoreuser' arrays from the user structure
+Removed the 'friends' directory and references to that in the code
+Removed the wiz_list_struct structure
+Removed the add_wiz_node and remo_wiz_node functions
+Removed the 'retired' option from the viewsys command
+Removed all tell buffers (tell, edit, afk) and variables from the user structure
+Removed RETIRE_LIST prototype
+
+From this point on, Amnuts was moved into a CVS repository.  All diffs can be viewed there.  (See README file for more information.)
+
+2.2.1
+-----
+
+Fixed calls to non-existent array level_name in netlinks.c
+Fixed conflict with the 'OUT' label in load_user_details when compiling with -DNETLINKS switch
+Fixed bug in the output of text to a room by a clone
+
+2.2.0
+-----
+
+Removed the sys_errlist and replaced it with the more compatible strerror
+Fixed error in show_version()
+Fixed bug in set_attributes()
+Updated write_syslog() so that it takes variable length parameters, taking away the need to sprintf to a text variable before sending it to the syslog.  The position of the passed variables has been changed because of this.
+Change all occurences for the old write_syslog to the new format.  This had the result of optimising out about 170 lines of code.
+Fixed call to non-existant function get_ip_address within the accept_server_connections function (in netlinks.c) which would appear if anyone compiled in the Netlinks code (surprised noone has told me about this before).
+Added the command 'wrules' to allow you to have a rules file for WIZ+.  This also included defining WIZRULESFILE in the amnuts212.h file.
+Fixed some grammer in misc_ops()  (cheers to Canuck for pointing it out)
+Tided up the output from the version command to get rid of the repeating 'max smail copies' (thank again to Canuck for pointing this out)
+Increased default WORD_LEN to 80
+Changed the 'set homepage' to 'set www' for easy of typing.
+Added the ability to view help commands for the 'set' command.  eg, '.help set_age', '.help set_email', etc.  Thanks go to Xan for writing the set_x range of helpfiles.
+Added the 'files' and 'adminfiles' commands.  Because of this, also defined SHOWFILES and TEXTFILES in the amnuts212.h file.  This was added because the functionality was taken out of the new .help system.
+Added the command 'dump' to dump certain information to files.  Added the directory 'dumpfiles' and defined it as DUMPFILE in the main .h file.
+Updated the output if the 'ignlist' command (show_ignlist function)
+Changed the login 'who' output so it's shorter (cheers Xan for this idea), though I've retained the normal output for anyone who doesn't like the new.  Added the function 'login_who' as a result of this.
+Added bit manipulation pre-processer macros, also changed the NETLOG and REQLOG defines around.
+Vastly improved the 'logging' command (logging() function) so that you can now turn on and off the system log, accreq log and netlink log seperately, or all on/off together.  This uses the bit manipulation above.  Also updated the functions write_syslog, parse_init_section and init_globals to reflect this change.  Also made a small change to the system_details function where it displayed the system_details.
+Changed the defines OFF, MIN and MAX to SBOFF, SBMIN and SBMAX to stop redefinition conflicts on certain systems.
+Added the new structure 'system_struct' and made the function 'create_system()'.  The function 'init_globals()' has been deleted.  All the system variables throughout the code have been updated to reference the system_struct.  Added a few new vars to the struct too.
+Updated the 'memory' command to display the system struct size.
+Added the wrapper functions vwrite_user, vwrite_room, vwrite_room_except.  These function have enabled me to optimise out over 700 more lines of redundant code!  These work the same was as the new write_syslog function.
+Added 'friend says' to the user's tell review buffer
+Cleaned up a number of functions as I was updating for the vwrite_ functions
+Made the system more friendly towards mixed case level names.
+Totally reworked the check_autopromote function to make it easier for you to add/change conditions for auto-promotions.
+Added the ability to have coloured recaps.. made sure this had GOOD integration.
+Added the command 'tpromote' - promotion for the current session only
+Added the option 'resolve_ip' to the config file so that you no longer have to use the -DRESOLVEIP switch.  Options are OFF, AUTO, MANUAL.  OFF is obvious - you only get IP addresses, AUTO uses gethostbyaddr() and MANUAL uses the resolve_ip() function.
+Updated the output in (un)arrest so that it takes into consideration what you rename the level names to.
+Added the new command 'cname' to allow you to change one user's name into something else.  Use does not need to be logged on at the time.
+Added port flooding protection, with auto-banning of a site if someone tries to flood the port.  The new define LOGIN_FLOOD_MAX and new functions login_port_flood() and auto_ban_site().
+Updated the function ban_site() so that it no longer attaches a '*' onto the site you're banning.
+The add_history() function now also writes to the SYSLOG to indicate history addition.
+Fixed it so that if you're in the editor and the talker is shutdown then you will come back with your own ignall status - not default to ignore all.
+Fixed bug in "set icq"
+Added the 'center_string' function.
+Added the ability to have multiple maps.  The map names are set in the config file and stored in the datafiles directory.  Remove obsolete 'MAPFILE' define.
+When idle for 30+ mins your status on the '.who' listing will now be shown as 'IDLE'
+Added swear checking for the functions sing_it and think_it (thanks Canuck for pointing this out)
+Created a new directory called 'logfiles' where, surprise, all the log files are now stored.  Removed lastcmdlogs directory/define.  All the syslogs now have the current PID attached to them.
+Added the 'fmail' command, so you can manually forward smails to your email account (thanks Matty for the idea)
+Now parse command abbreviations a different way (which works better).  This has lead to the creation of 2 new function; parse_command_string() and split_command_string().  Also modified the tell() function because of this new parsing.
+Added the new #define 'USERVER'.  This'll make it possible to update the user file format version without changing the Amnuts version number.
+Combined level_names and level_alias arrays into one structure called user_levels.  Updated the code to use it.  Also added define NUM_LEVELS.
+Updated the output of record_last_command so that it now also stores length of inpstr and word_count.  (though it will only report up to MAX_WORDS)
+Updated the login information so that it's all contained, neat and tidy.  (the login info being "Welcome, x! You were last logged in on..." and all that)
+Added a reminders function (new command 'reminder').  It integrates with the calendar - showing up if you have a reminder for that day.  Also shows up on the new login info message.  Auto removal of old reminders also worked in.
+Changed the enum types THINK and SING to THINKIT and SINGIT.
+Changed the way userfiles are loaded and saved.  It should lead to a more robust way of reading userfiles and cause less errors when reading in a screwed file.  I've kept the old way of loading a userfiles though, for those people upgrading from an old version.
+Added the new command 'fsmail' to enable you to smail all the people listed on your friends list.  Updated the send_mail function slightly as well.
+Added the functions process_input_string and split_command_string.  These enable better handling of abbreviation commands, such as ";grins", "; grins" and so on.  Stops the bug that enables people to do a blank shout, emote, etc.
+Updated all the docs, including those that people never read (ie, ANY of the ones in the docs/ directory!)
+
+
+2.1.1
+-----
+
+Fixed bug in wipe_messages() when deleting mail messages.  Removed 'DNL' define from the main header file.
+Fixed the wizlist display bug
+Added checks to see that there are positive motd1/2 counts before displaying them.
+Fixed auto purge_date time (as shown in .system) and also updated results output slightly to make more sense on the counts.
+Removed obsolete function 'has_unread_mail'
+Fixed small bug in function 'colour_com_count'
+Added better grammer output in 'check_messages' and 'check_reboot_shutdown'
+Fixed bug in the mutter function
+Added the 'ignbeeps' and 'beep' commands.  Also adapted the 'wake' function to take into consideration the ignbeep setting
+Added a few bounds checks
+Moved the commands into one big table (except the enum command values) to make it easier to add commands.  Also split into seperate .h file
+Slightly altered the help_command functions and the command structs to add the alias from the command_table
+Attempted to fix .quit bug
+Changed the personal rooms so that they are now viewed as "(<name>)" in the who listing when someone is in there.  eg, (andy)
+Fixed long_date bug (wouldn't display 12pm correctly)
+Added the function smiley_type() which is now called to parse :) ;) etc
+Added the command 'rmadmin' to give some admin control over rooms.  Also added the procedures 'personal_room_admin' and 'room_visitor_count'.  Also updated a few other functions so that they handle the new '(name)' correctly.  Update personal_room() so that it attempts to read an existing room description first before setting it to default.
+Added the ability to scroll back or redisplay pages when viewing text files (as well as the standard 'e' to exit and <return> to continue).  Also added percentage of file  looked at.
+Changed a little text in 'sos' command.
+Added random kill messages for the .kill command due to request.
+Fixed small problem in create_account function.
+Updated the text output for the '.last <user>' command, including better grammer.
+Updated validate_email so that you can now use '_' and '-' in your email address.
+Made it so that the talker will compile without netlink facilities unless otherwise specifically compiled in with the option '-DNETLINKS'.  Bit of a hack, but it works well and I have had so MANY people want netlinks taken out.  So here is the best of both worlds!  Also placed the netlink functions into their own .c file and the prototypes into their own .h file.  These are #included within the main .c file if needed.  ie, if compile with the -DNETLINKS option.
+Altered 'clean_files()' so that it only takes user name as a passed variable.
+Added the command "mykey".  The functions 'personal_room_key', 'personal_key_add', 'personal_key_remove' and 'has_room_key' were created for this command, and 'has_room_access' was updated to take the key into consideration.
+Fixed bug with "-d" option of the "myroom" command.
+Moved the colour codes into one table.
+Added the option 'random_motds' to the config file.  If this is YES then it'll pick a random motd from those stored in the correct directories.  If NO, then it'll just use motd1.
+A user will be correctly removed off the retire list if demoted below WIZ, nuked, suicided, etc.
+Added the command 'mybgone' to bounce people from a user's personal room.  The function 'personal_room_bgone' was added for this command.
+Changed the 'examine' command so that it will default to examining the user if not name was given.
+Added a check for ignoring users in picture_tell and wake.  Also reworked the position of the ignore use check in tell, pemote, and such like functions.
+Added the config option 'startup_room_parse' to allow personal rooms to be active, but not parsed and put into memory at startup.  (this is overridden by the 'personal_rooms' config option)
+Changed 'switch' command so that the room is optional.  If the user only has one clone then they will switch to that one.
+Updated the quick_call() function to do some more checks.
+Fixed a small glitch that would not allow a user to wipe their own message if they have a recapped name.
+Added the ability to have ~$ in message boards, smails, profiles (anything parsed by 'more()') to show the user's name. (eg: 'hi ~$' whould show 'hi Andy' if read by me).  Use ~~$ if you want to display just ~$.
+Attempt to cure time freeze problem that can occur with glibc207+ (thanks to Arny, and Cygnus, for this)
+Removed the function 'get_ip_address' and placed it within accept_connections().  In there I've also added a call to the new function 'resolve_ip()' (thanks to tref for this one) when using the compile option -DRESOLVEIP.  This is to attempt to fix the problem with some BSD users lagging when using gethostbyaddr().
+Added 'ipsite' to the user structure, and also updated the site command to display this for user's currently online.
+Added 'arrestby' to the user structure, and made the arrest command dependant on level, much like the muzzle command.  (ie, if an ARCH arrests someone, then only an ARCH or above can unarrest them).  Updated load_old_userfile() to compensate for this new addition which is a saved variable.  Also updated the arrest and unarrest commands.  Also updated the 'ustat' output to display the arrested level.
+The help commands can now be abbreviated.  So typing '.help mem' will show the helpfile for memcount.  If more than one command matches the given string (eg, 'rec' would match recountu and recaps) then they will be listed out.  If a user has not got access to that command (ie, their level is too low) then the command will not be listed.
+/** MANY thanks to Arny for his debugging and showing me where these bugs where and also for some fixes!
+The account_request() function now checks for a valid email format
+Fixed structure destruction bug in destroy_user_clones(), talker_shutdown(), main()
+**/
+
+
+2.1.0
+-----
+
+Added the option 'key' to the .people command to show what the logon stages are.
+Corrected some spelling mistakes in code, and lots in the docs (thanks Dmoney for pointing them all out!)
+Updated the purge command to use a command line now: -d, -s and -t (default, site and time)
+Added the procedure user_logged_on() to give a quick check to see if a user is currently logged on.
+Updated 'expire()' a little bit.
+Added MAX_GCOM, MAX_XCOMS as defines in the header, gcoms[] and xcoms[] to the user structure.
+Added procedures has_gcom() and has_xcom(), and updated exec_com() to call them.
+Added the commands 'xcom' and 'gcom', and the procedures get_xgcom(), set_xgcom(), user_xcom(), user_gcom()
+Added swear check for (b)bcast
+Fixed slight bug in create_clone so it now displays the clone's name properly recapped
+Moved the wiping of messages into one procedure 'wipe_messages' and updated 'dmail()', 'wipe_board()' and 'delete_suggestions()' to incorporate this.  Also added proper grammer to these procedures. All of this should fix some funny deletion counts that people used to get.
+Updated 'suggestions()' to check for a remote user (remote users shouldn't use this command), and also some cosmetic changes.
+Added the command 'sfrom' - does the equiv. of from/bfrom but for suggestions.  Added the procedure 'suggestions_from()'.
+Fixed it so that if a user is invis and logged on then they won't show up in the '.last' list to any user under their level
+Added am/pm indicator for long date instead of 24-hour clock (as shown on mail messages, board, etc)
+Updated the procedure 'login()' so that motd2 is displayed until the user presses return to continue.
+Added bounds checking when entering an email or homepage with the .set command
+Added command 'rloadrm' to reload a room's description - added the procedure 'reload_room_description()' for this command
+Changed .cmdcount so that a user can only see the commands they have access to.
+Altered .setcmdlev so you can give abbreviated command names (as in xcom/gcom)
+Added a prompt when user does '.dmail all' so that they can decide to delete all their mail or not.
+Some cosemetic changes made
+Fixed a bug with the viewing of pictures
+Fixed the problem with 'censor_swear_words' in that it would only censor words all in lower case.  Now, with the addition of the 'istrstr' fuction it performs the censor without worrying about case.
+Fixed a bug in the quick call section of tell() that could cause a crash
+Added the ability to have users auto-promoted after they enter a desc, gender and use the accreq command.  I also added the ability to toggle the default setting (stored in the config file as 'auto_promote') with the command .autopromo
+Made the making of strings plural much better by now using pre-processor macros
+Made .grepu ignore case
+Converted the code more over to ANSI standard and added the prototype header file.  (thanks to 'Rudder' for the ANSI converted Amnuts 2.0.1 which I worked from).  And also fixed a couple conflictions along the way.
+Added a new structre called wiz_list_struct and the two procedures 'add_wiz_node' and 'rem_wiz_node'.  I found that if you have a lot of users (say, 700 or more) in total than doing a wizlist may produce slow results as it has to go through all the user list.  With just scrolling through the wiz_list_struct than the results are a lot faster (though at the cost of a little more memory).  Updated wiz_list() to use this new structure and also fixed the bug that would mean if only 4 wizzes are of a level (eg, 4 users of WIZ level) then it would display "[none listed]" on the .wizlist.  Now it'll display them as normal.
+Added the command 'sayto' and gave it the alias '-'.  This has meant that the alias for echo has now changed to '+'.  Also at this point have updated the command 'say' so that if a user puts :) ;) :( 8) etc at the end of their message, then it will say "User smiles:", "User winks:", "User frowns", etc.
+Have made it so that if a user is in a private room then they can still swear even if swearban is on.  (I changed this because I had soooo many people ask for it on my own talker that I took a guess that it might happen anywhere else)
+Users can now store their ICQ numbers (entered with the 'set' command)
+Added the commands 'friend', 'fsay' and 'femote' - you can add people to your friends list and have the talker alert you if they log on.  Also updated the 'set' command to include 'alert'
+Changed the name of the function 'find_user_directory' to 'find_user_listed' as it now just returns 1 or 0 - if the user is on the user linked list of not (respectively).  This change has come about because the directory structure has been changed once again to make it easier for people to code and also to cut out a few function calls.  All the .D files are now in USERFILES and the mail, profiles, etc are all in their own directories.
+Removed the 'verbose_mode' from the config file and the reading of it.
+Removed the procedure 'move_files' and any references to it as it has been made obsolete by storing the userfiles in one directory.  Also wrote a program to move all the userfiles if you are using a version previous to 2.1.0.
+Renamed the procedure (and calls to) 'change_user_directory' to 'user_list_level' to make it more obvious (though I guess that's open to conjecture ;)
+Added the command 'force' and the procedures to go with it.
+Change the procedure 'mail_count' to 'mail_sizes' and updated its input and return values.
+Changed the way mail files are saved slightly so that now the number of new mails and the size of the file is saved at the beginning of the mail file.  Have also changed the login and ustat, etc, to display how many new mails hte user has.  Also have updated the 'rmail' command so that a user can enter 'rmail new' and just read their new mail.
+Added the 'calendar' command, along with updating the header file for compenents of this command and adding the procedures is_leap, month_to_days, year_to_days, ymd_to_scalar, scalar_to_ymd, is_ymd_today and show_calendar.
+Added the command 'fwho' to list your friends who are logged on.
+Added the preprocessor macro 'PLTEXT_IS' to give better is/are gramatical text.  And also one called PLTEXT_WAS for better was/were grammer.
+Have added personal rooms (due to much asking for this feature).  This includes the command myroom, mylock, mypaint, visit.  has_room_access has been updated to take the personal room lock status into consideration.  The procedures/functions 'personal_room', 'personal_room_lock', 'personal_room_visit', 'personal_room_decorate', 'personal_room_store', 'is_personal_room', 'is_my_room', 'get_room_full' and 'destruct_room' have been added, as well as the defines PERSONAL_UNLOCKED and PERSONAL_LOCKED.  The room_struct has been updated to make it a doubly linked list and the function (for future updates).  The rooms and rnet command will not display the personal rooms, only the config set rooms.  The wipe command has also been updated so that users can wipe any messages in their own room.  I have made it so that any message boards in personal room are stored in the same directory as the personal room files (ie, USERFILES/USERROOMS).  The lock status and title and room desc are all saved.  If users want to remove their own rooms then they can use the '-d' option with the myroom command.
+When a user swaps session the site of their new session will be recorded in the syslog.
+Updated the check_directories function to check for the new structure.
+Added the option 'personal_rooms' to the config file so you can turn them on/off (as well as the commands) at boot time.
+Updated the commands 'promote' and 'demote' to take an optional <level> attribute to set a user directly to that level.  Also works without the <level> option.
+Now if you use an emote command (emote, semote, pemote, femote and cemote) with the string "'s" then it will space it correctly.  Eg, ";'s talker" will result in "Andy's talker" rather than "Andy 's talker".
+Updated the command memcount to show even more structures.
+Improved the 'last command' logs.  As a result, I added the new directory 'lastcmdlogs' and I changed the procedure name 'write_last_command' to 'record_last_command' and added the procedure 'dump_commands'.
+Updated all of the helpfiles and create a new set of rooms and a new map.
+Added the ability to have multiple MOTD files for pre- and post-login.  This has meant an extra directory, motds, has been created with the dirs motd1 and motd2 in it.  Each of the motd files HAS to be named such as 'motdn' where n is the next consequtive number.  motd files start from 1, ie, motd1, motd2, motd2, etc.
+Have updated the command 'recount' so that it can take the option 'motds' incase you manually update the motds.
+Changed the levels of some commands
+Stopped remote users from executing a few more certain commands that could cause a security problem (eg, shutdown, reboot, nuke, etc)
+Removed slight bug in parse_room_topics
+Made load_oldversion_user fuction compatible with file version from 2.0.1, 2.0.0 and 1.4.2.  It defaults to loading user files from version 1.4.2 if no other version number can be determined.
+
+
+2.0.1
+-----
+
+Fixed bug in netlink that showed a remote user without a user name (tested with a NUTS remote talker)
+Fixed a couple more bugs - one that would cause some level counts to reset, and one that would make the counts hugely over the limit.
+Added email validation for '.set email' to see if it's of the right kinda format
+Rearranged count_users() to be process_user() and count_users()
+A few cosmetic tidy-ups
+Fix total user counts when nuking/suiciding
+
+2.0.0
+-----
+
+Now store all the user's names and level in a dynamically linked list on
+start-up.  This allows quick scrolling through the users rather than reading a
+file, and it also means that the user's files can be split up into different
+directories (the directories having the same names as the talker levels).
+Commands are also stored in a linked list now.
+
+I kept a record of (almost) everything I changed for version 2.0.0, but as there
+is a lot of text I'm not even going to bother to format it nicely just yet. If
+you don't like it, then bite me ;)
+
+changed count_users() to use dynamic directory reading instead or reading a list.
+updated clean_files() to take a 'level' parameter.
+removed add_level_list() and clean_level_list() as they're now redundant.
+removed all instances (calls) to the above 2 procedures.
+updated show_version()
+added the procedures: find_user_directory(), in_user_directory(), add_user_level(), rem_user_level()
+removed the procedures: in_userlist(), clean_userlist(), add_userlist()
+changed all calls to open USERFILES to incorporate the level name
+added command line variables for when booting the talker, also allowing automatic setup of the directories and quiet boot up.
+added procedure: process_command_line(), setup_directory_structure()
+added procedure: move_files(), change_user_directory()
+added proper grammar (eg, '1 message' instead of '1 messages', or 'there is 1' rather than 'there are 1')
+added an ! to the prompt to show if ignoring anything (though doesn't represent what)
+changed toggle_colour() to display_colour
+added the command 'memcount'
+changed the "colour code display" character '%' to a '^' as this seemed to cause an obscure bug (though not harmful)
+improved '.last' to also display the last x users to log on, also added new structure to header file for this and the procedures record_last_login() and record_last_logout()
+added procedures count_lines, remove_top_bottom()
+added the ability to toggle on/off room descriptions (.set rdesc)
+changed procedure command_order() to parse_commands() and dynamically loaded memory for each command.  Stored the commands in a linked list (ordered).
+changed user variable hwrap_com to hwrap_id and added hwrap_same and hwrap_func
+reworked the help_commands() procedure so that: 1) it worked with the linked list and 2) fixed a little bug that might appear on some terminals that didn't handle the \r escape code correctly.
+added the options 'rdesc' and 'command' to the set command.
+added the int 'cmd_type' to the user structure and updated load_user_details and save_user_details procedures accordingly.
+Done a little re-arranging to misc_ops to make things in a better order.
+added the ability to change how the commands are listed - either the traditional method (ie, by level) or by function.
+made wizlist work with the user structure.
+added the ability to have a full swear ban, where it gives you a message saying you cannot swear, or a min swear ban where it will replace any of the swear words with a default string (see below).
+fixed it in say() so that you can no longer swear through a netlink or clone even if the swear_ban is on.
+added new swear_ban check to procedures say, shout, tell, emote, semote, pemote, echo, wizshout, wizemote, mutter, think_it, sing_it
+added the procedures: censor_swear_words, replace_string
+added a new #define's to the header file called 'swear_censor', 'OFF', 'MIN', and 'MAX'
+added new procedure 'minmax_check'
+changed 'ban_swearing' in the config file so that it reads either OFF, MIN or MAX (rather than YES or NO)
+updated 'swban' to incorporate the new levels of banning and renamed it 'toggle_swearban'
+purge procedure updated to use linked user directory list - reduced size of procedure
+added a version check for users so that you no longer have to nuke any old user structures as they load up properly and same as the new format.
+added procedure: load_oldversion_user
+add 'version' to user structure
+added 'talker_name' to the header file.
+completely rearranged code and made it more tidy
+changed sug_num to suggestion_count
+added command 'cmdcount' to show command statistics, also added show_command_counts procedure
+added procedure 'ordinal_text' to return the ordinal of an int.
+added procedure 'reset_user' to put all user attributes to a default value - including name.
+The above fixes a bug which could either be useful, or annoying - depending on how you looked at it.  The bug was as follows:
+  If a user entered a wizzes name at the login prompt, messed up the password and then done a 'who' then they could see any invis users.
+  Then, if that user logged in as a newbie the newbie character would possess the wizzes stats - login time, number, age, email, etc.  though NOT their level.
+added the #defines LOGIN_NAME, LOGIN_PASSWD, LOGIN_CONFIRM, LOGIN_PROMPT, LOGIN_ATTEMPTS and updated attempts() and login() to use them
+added user_page_pos and user_page_lev to user structure
+updated exec_com to incriment the number of times a command has been used.
+added crypt_salt to header file
+added command 'rcountu' and procedure 'recount_users' to re-read all of the users and check if they are listed or not.
+added 'date' variable to the user_dir_struct and user_struct and the command add_user_date_node
+updated connect_user to show if user is ignoring anything when they logon
+added 'recap' to the user structure and made changes through-out the code so that the recap name is show.
+removed allow_caps_in_name and anything associated with it as that option has now been made redundant by .set recap - instead has been replaced with 'allow_recaps' as a config option.
+added the command 'recaps' to toggle the allow_recap status
+fix bug in editor that would show the users name even when they were invis
+changed the command name 'plead' to 'sos'
+added verbose_boot to the config file and count_users()
+added recap to user structure, the set command, and used it throughout the code.
+removed the 'new_banned' procedure and integrated it with 'site_banned'.  Removed a big bug out of 'site_banned' that would cause a file pointer to remaing floating around if a match had been found.
+added the procedure 'pattern_match' to do recursive matching for a pattern in a string.
+updated the mutter() procedure to use write_room_except (thanks Squirt for pointing that one out)
+added the command 'setcmdlev' and the procedure 'set_command_level()' to go with it.
+added the command 'grepu' to search for user's names using pattern matching
+added 'default_shoot' to the header file.  Also added the command 'shoot' and 'reload', and the procedures 'shoot_user' and 'reload_gun'.  Updated the ustat to show fight stats.
+changed lmail option 'admin' to 'wizzes' as many people use ADMIN as a level name
+removed all LEVEL_LISTs from the header file, with exception of the RETIRE_LIST
+added the option 'retired' to the viewlog command
+tidied up code more - removing redundant calls, and unused variables.
+updated all of the help files.
+updated a few things in ban_site and ban_new procedures
+made cosmetic changes to some commands
+added the procedure 'check_directories' to make sure that the directory structure is correct
+updated 'samesite' so that it now works with wildcards * and ?
+
+sent out code for beta testing
+
+fixed bugs in del_user_ndoe and remove_command procedures that would cause bug if first node in list was removed
+fixed a small bug in the load_olduser_details procedure and made it compatible with Amnuts 1.4.2 user structures
+
+
+1.4.2
+-----
+
+Made it compatible with compiling under FreeBSD servers.
+Updated some docs and sorted out the version numbers which I screwed up in
+some places.
+Fixed some small bugs, and also fixed a hole in promote() that allowed you
+to promote a jailed user.
+Added some utilities to the distribution as standard.
+Tided up the code to remove any variables that were unused in any of the
+functions.
+
+1.4.1
+-----
+
+Added the ability to default room topics in the config file.
+Put back missing time_out_afks in config file.
+Changed the look of the helpfiles and show the level that the helpfile is
+for when the user types '.h <command>'.
+
+1.4.0
+-----
+
+The samesite command was majorly updated.  The greet command was also
+updated to use symbols (!"$%^ etc)
+The commands hangman and guess (part of hangman) were added.
+Cosmetic stuff changed.
+A number of bugs fixed.
+Double forking added the the autoforwarding of smail to stop zombie
+processes being spawned (or at least a large amount of them being
+spawned).  The smail forwarding functions have also been changed.
+Added the ability to default purge on/off at boot (from config file).
+A user can now choose to see their password when logging in.
+(probably more stuff that I cannot remember right now ;)
+
+1.3.0
+-----
+
+First proper release to those who asked for it...
+Differences between Amnuts and NUTS 3.3.3:
+These may not be 100%, but you get the general idea of things that have changed
+
+Display rules when logging in (if rules file exists)
+Can review what has been typed in the editor before saving
+Help commands are paged
+Selective wipe of boards and deleting of mail
+Users can wipe their own messages of the boards
+Can read specific mail and board messages
+Can set up more things in the user profile
+Can ban just new users from a site, allowing existing users from that site to still log in
+Can have smail autoforwarded to an email address
+Can ustat a person even if they are not logged on
+Decent name abbreviation parsing when talking to users logged on
+Can have macros
+Can have level specific rooms
+Purges user files automatically or manually when running.  purges can be turned on/off at bootup
+Level specific rooms can be viewed along with default rooms
+Room listing is paged
+Has a buffer for tells when in the line editor
+Has a buffer for tells when AFK
+Can use wild cards when banning new users from a site or full site ban
+Ignores are saved when logging out
+Send copies of mail to users on the talker or a remote talker
+Send one mail message to individual levels, admin or all users
+Can views users stats when they are not logged on
+General appearance changes
+Levels can have aliases (when listed in .who, etc)
+Can check users of the same site when they are logged on or not
+Abbreviations for commands shown on the command list, and also more added
+Be alerted when friend log on
+Screen wrap that works with colour codes (ie, doesn't chop one off half way through)
+Pager length can be altered
+Another level added as standard
+Keeps count of number of users logged on, of what level, overall, etc.
+
+New commands added:
+purge, history, expire, bbcast, show, ranks, wizlist,
+time, ctopic, copyto, nocopys, set, mutter, makevis,
+makeinvis, plead, ptell, preview, picture, greet, think,
+sing, ewiz, suggest, rsug, dsug, last, macros, rules,
+uninvite, lmail, arrest, unarrest, verify, addhistory,
+forwarding, revshout, cshout, ctells, monitor, call, uncall,
+ignlist, ignpics, ignwiz, igngreets, ignlogons, ignuser,
+create, bfrom, samesite, save, shackle, unshackle, join,
+cemote, revafk, cafk, revedit, cedit, listen, hangman, 
+guess, retire, unretire
+
+Command names changed:
+inphr is now inmsg
+outphr is now outmsg
+letmein is now knock
+status is now ustat
+rmst is now rooms
+rmsn is now rnet
+listbans is now lban
+wizshout is now twiz
+revclr is now cbuff
+delete is now nuke
+
+Commands that have altered how they work:
+help, read, wipe, ustat, version, rmail, dmail, from,
+rooms, ban, unban, viewlog, colour, bcast
+
++------------------------------------------------------------------------------+

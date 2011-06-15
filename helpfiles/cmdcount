@@ -1,0 +1,5 @@
+~OLCommand :~RS cmdcount
+~OLUsage   :~RS cmdcount
+
+This allows you to see what commands have been used, how many times and
+what percentage that is of the overall usage.

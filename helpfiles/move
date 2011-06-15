@@ -1,0 +1,7 @@
+~OLCommand :~RS move
+~OLUsage   :~RS move <user> [<room>]
+
+Moves a user directly to the chosen room. If the room is omitted the
+user is moved to the same room as whoever invoked the command (no matter
+if that room is fixed private or not). The user is not moved if he is
+already in the chosen room.

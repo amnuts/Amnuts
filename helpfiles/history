@@ -1,0 +1,5 @@
+~OLCommand :~RS history
+~OLUsage   :~RS history <user>
+
+This allows you to see the history list of the given user, detailing
+promotions, demotions, muzzles, etc.

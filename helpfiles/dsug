@@ -1,0 +1,12 @@
+~OLCommand :~RS dsug
+~OLUsage   :~RS dsug <message>
+~OL        :~RS dsug to <to-message>
+~OL        :~RS dsug from <from-message> to <to-message>
+~OL        :~RS dsug all
+
+This command allows you to delete suggestions from the suggestions board.
+You can delete specific single suggestions by supplying just a number,
+or from the first suggestion to a given number. You can also delete from
+a certain suggestion to another suggestion, or you can delete all the
+board. If a given number to delete to is higher than the actual amount
+of suggestions on the board, then all the suggestions will be deleted.

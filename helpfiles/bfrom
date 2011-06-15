@@ -1,0 +1,6 @@
+~OLCommand :~RS bfrom
+~OLUsage   :~RS bfrom [<room>]
+
+This shows you the people who posted to the <room> message board, without
+actually showing the content of the messages. If the <room> is omitted,
+it will default to the room you are currently in.

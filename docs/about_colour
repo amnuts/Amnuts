@@ -1,0 +1,83 @@
++------------------------------------------------------------------------------+
+   COLOUR - COLOR - COLOUR - COLOR - COLOUR - COLOR - COLOUR - COLOR - COLOUR
+            Information about colour and the embedded colour commands
++------------------------------------------------------------------------------+
+
+The colour within the talker as its shipped is set up to look good on a
+white text on black background type of terminal/xterm eg the Linux console.
+If you're using a black text on white background (ie a crap xterm) then the
+colour scheme may not look so good. Tough :) You'll have to change it yourself.
+
+Colour commands can be placed in any string in the program that is used
+eventually by write_user() and also in any file that is paged by the more()
+function (except MOTD1 as colours can't be used here in case the user's terminal
+doesn't support them). The commands get translated into ANSI codes by these 2 
+functions before the strings are sent out. Bear in mind that if you're on a 
+black and white or green screen terminal all you'll get is various shades of 
+grey/green instead of colours (if you get anything at all). All the commands 
+start with a ~ and are the following:
+
+~RS - reset terminal to default colour status
+~RV - reverse video
+~OL - bold
+~LI - blink/flash text (only the text flashes , not the background colour). 
+	This won't work on all terminals , some xterms simply set it to bold.
+~UL - underline text, this doesn't work on all terminals.
+
+~FK - set foreground colour to black
+~FR - foreground red
+~FG - green
+~FY - yellow (though it looks an orange-brown on some systems)
+~FB - blue
+~FM - magenta/purple
+~FC - cyan/bright blue
+~FW - white
+
+~BK - set background colour to black
+~BR - red
+~BG - green
+~BY - yellow
+~BB - blue
+~BM - magenta
+~BC - cyan
+~BW - white
+
+So if for instance you wanted some flashing magenta "hello" on a green
+background followed by a non-flashing blue "world" on a black background you 
+would do the following:
+
+write_user(user,"~FM~LI~BGhello ~RS~FBworld\n");
+
+Notice the use of the reset (RS) to reset the background to black and the text
+to non-flashing (assuming you're using a white text on black screen VDU). Also 
+note that an automatic reset is sent whenever a \0 or \n is encountered in a 
+string so the colours set to do not carry over to the next line.
+
+Colour commands can be used within the talker as a user as well as in the code
+so for instance you can embed them in anything you say or shout , in your
+description , board messages , mail etc ... so to use the above example as
+some mail you would enter...
+
+.smail fred ~FM~LI~BGhello ~RS~FBworld
+
+Please note however that the colour commands contribute to the length of
+the string so for instance if you put in lots of colour in your description
+you may find that it tells you that its too long even if it seems to you that
+the actual text is rather short. There is a way around this but its tricky to
+program and I can't be bothered to do it. Deal with it :)
+
+You can print out colour commands as themselves by prefixing them with an
+additional tilde symbol '~'. For example:
+
+write_user(user,"~~FMtest\n");
+
+This would print out '~FMtest' to the screen minus the extra tilde symbol
+('~').  The tilde symbol can also be used online in the talker commands.
+
+*** REMEMBER ***
+
+Not everyone's terminal supports ANSI colour codes. It'll either ignore
+them or will produce some very strange effects. Bear this in mind if you
+decide to set the user colour default to ON.
+
++------------------------------------------------------------------------------+

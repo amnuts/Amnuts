@@ -1,0 +1,6 @@
+~OLCommand :~RS set icq
+~OLUsage   :~RS set icq [<icq>]
+
+Use this attribute to set your ICQ User Identification Number to be shown
+to other users. Using this command without entering a number will clear
+the attribute.

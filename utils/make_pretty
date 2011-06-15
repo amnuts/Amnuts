@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# Make_Pretty
+# Written by Silver (15.12.97)
+# Updated by blimey (09.08.98)
+#
+# This batch file makes a backup of your src files (just in case)
+# and then formats every .c file nicely.
+#
+# You can change the flags that "indent" uses by editing the ident line
+# although the one here should suffice
+#
+
+if [ ! -e .indent.pro -a ! -e $HOME/.indent.pro ] ; then
+#  INDENT_OPTIONS="-bli0 -i2 -nbad -npsl -npcs -cli2"
+#  INDENT_OPTIONS="-bad -bap -bbo -bli4 -br -brs -cdb -ce -cli2 -lp -ncs -sc -sob -ss -ts4 -npcs -l96"
+#  INDENT_OPTIONS="-bad -bap -bbo -bli4 -br -brs -cdb -ce -cli2 -lp -ncs -sc -sob -ss -ts4 -npcs -248 -nip"
+#  INDENT_OPTIONS="-bad -bap -bbo -bli4 -br -brs -cdb -ce -cli2 -lp -ncs -sob -ts4 -npcs -nip -l124"
+  INDENT_OPTIONS="-i2 -bad -bap -bbo -bli0 -br -brs -cdb -ce -cli2 -lp -ncs -sob -ts4 -npcs -npsl -nip -l124" 
+fi
+
+echo "Make_Pretty 1.1"
+echo "A batch file written by Silver (15.12.1997)"
+echo ""
+echo "Backing up your code (just in case)"
+
+rm -f backup.tgz
+tar -cf - *.[ch] includes/*.[ch] | gzip -c > backup.tgz
+
+trap "rm -f mp_temp" SIGTERM SIGHUP
+for id in *.c
+do
+  echo "Tidying up c files '$id' ..."
+  indent $INDENT_OPTIONS $id -o mp_temp
+  mv mp_temp $id
+done
+
+for id in includes/*.h
+do
+  echo "Tidying up h files '$id' ..."
+  indent $INDENT_OPTIONS $id -o mp_temp
+  mv mp_temp $id
+done
+
+echo "Finished"
+echo " "
+echo "It is recommended you do a 'make install' now to check that the code"
+echo "still compiles fine. If in the unlikely event that it doesn't then"
+echo "you can restore the src files from the 'backup.tgz' file with"
+echo "the command 'gzip -dc backup.tgz | tar -xf -'"
+echo " "
+
+
+#
+#they say beauty is in the eye of the beholder.... heres mine..
+#  indent -kr -bad -bl -pcs -cs -di13 -i3 -nce -l75 -bli0 $id mp_temp
+#                                                ~phypor
+

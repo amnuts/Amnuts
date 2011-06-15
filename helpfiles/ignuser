@@ -1,0 +1,7 @@
+~OLCommand :~RS ignuser
+~OLUsage   :~RS ignuser [<user>]
+
+This allows you to ignore tells, pemotes, shouts, etc., from any one
+user. If you omit the <user> then you will be shown a list of all users
+you are currently ignoring. See "version" for the amount of users you
+can ignore.

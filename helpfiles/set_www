@@ -1,0 +1,6 @@
+~OLCommand :~RS set www
+~OLUsage   :~RS set www [<url>]
+
+Use this to enter your homepage address that is shown to other users
+with the "ustat" command. Using this attribute with no address will
+clear the current setting.

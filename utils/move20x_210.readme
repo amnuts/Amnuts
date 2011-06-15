@@ -1,0 +1,36 @@
+Readme file for the utility move20x_210.c
+-----------------------------------------
+
+This utility is ONLY for those that are using Amnuts version 2.0.0 and
+2.0.1.  It is used to move all the user files from the old directory
+structure to the new, as there have been a number of difference made in
+version 2.1.0.
+
+You should move the move20x_210.c file to the root of your talker files
+(where the .c and .h files of the talker reside) and compile it with:
+
+	gcc move20x_210.c -o moveit
+
+And then run the program with the command:
+
+	./moveit
+
+Should all go well then you will be given a run-down of how many of the
+different types of files were moved.  It should create the new directory
+structure and delete the old one.  If you do not wish for this to happen
+automatically, then you have no choice but to live with it ;)  If you are
+unhappy about this then you should backup your userfiles first with the
+commands:
+
+	tar -cvf users.tar userfiles/
+	gzip users.tar
+
+This utility WILL NOT CHANGE the userfiles at all - it simply moves the
+files around and creates/removes directories.
+
+I take no responsibility if this utility should go wrong - even though I
+have tried it out myself and it worked fine.
+
+
+Andrew Collington, November 1998
+amnuts@talker.com, http://amnuts.talker.com

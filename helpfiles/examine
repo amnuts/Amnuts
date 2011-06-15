@@ -1,0 +1,5 @@
+~OLCommand :~RS examine
+~OLUsage   :~RS examine <user>
+
+This commands shows you the users profile and various useful statistics
+relating to the users current or most recent login.

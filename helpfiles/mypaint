@@ -1,0 +1,5 @@
+~OLCommand :~RS mypaint
+~OLUsage   :~RS mypaint [<text>]
+
+With this you can set a new description for your personal room.
+The personal rooms function has to be active to use this command.

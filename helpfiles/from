@@ -1,0 +1,7 @@
+~OLCommand :~RS from
+~OLUsage   :~RS from
+
+This shows you the people who have sent you the mail that is in your
+mailbox without actually showing you the contents of the mail. If you
+have any new (unread) mail then you will be notified how many you have
+received.

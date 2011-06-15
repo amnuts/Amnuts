@@ -1,0 +1,5 @@
+~OLCommand :~RS wizlist
+~OLUsage   :~RS wizlist
+
+Displays a list of the current staff members and shows which, if any,
+are presently logged on.

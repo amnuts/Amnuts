@@ -1,0 +1,6 @@
+~OLCommand :~RS visit
+~OLUsage   :~RS visit <user>
+
+Allows you to move to another user's personal room, providing it already
+exists and is not locked. The personal rooms function must be active to
+use this command.

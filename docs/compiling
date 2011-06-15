@@ -1,0 +1,151 @@
++-----------------------------------------------------------------------------+
+     COMPILING - COMPILING - COMPILING - COMPILING - COMPILING - COMPILING
+               Compiling and running the Amnuts talker
++-----------------------------------------------------------------------------+
+
+Amnuts talkers use a Makefile to compile the code.  You should look at the
+Makefile and familiarize yourself with it.
+
+
+Quick start:
+
+The Makefile should be setup for most modern systems (I hope).  If you are
+compiling from scratch you need to type in the following at your command
+prompt, once you have uncompressed the files and gone into the src
+directory:
+
+make install
+
+If you are running on a BSD system, then use:
+
+gmake install
+
+This will create the talker and its dependencies for future compiles.  The
+talker binary will be in the top-level directory.
+
+
+Make commands:
+
+There are a number of different commands in the make file.  This should
+hopefully give you a quick overview of what they are--though it could help
+to understand if you read the Makefile.
+
+install
+
+	This will compile all files and fully install the talker.  This
+	option can be optional when typing 'make' (i.e., just type 'make' or
+	'make install')
+
+clean
+
+	This will remove any pre-compiled objects.  This is handy (and
+	recommended) to do before you make again if you have changed any
+	options in the Makefile.
+
+distclean
+
+	This will remove objects, backup files and any talker binary
+	(including the ident server.)
+
+
+Make options:
+
+There are a number of options that you can change in the Makefile, if you
+want.  These control what the talker binary will be called, permissions,
+compiling flags, etc.  This should give you a quick overview as to what
+they are:
+
+TALKER
+
+	The name of the talker binary when compiled.
+
+IDENTD
+
+	The name of the ident server binary when compiled.
+
+CC
+
+	What compiler you use.
+
+BINDIR
+
+	Where the binary file should be placed, relative to the Makefile.
+
+INCDIR
+
+	Where the include (.h) files are located, relative to the Makefile.
+
+OBJDIR
+
+	Where the object files will be stored when created, relative to the
+	Makefile.
+
+PERMS
+
+	Permissions of the created binary files.
+
+CFLAGS
+
+	Compiler flags that are used, such as warning flags.
+
+TALKERLIBS IDENTDLIBS
+
+	Additional libraries that need to be used, such as crypt, or gdb.
+
+TALKERCPPFLAGS IDENTDCPPFLAGS
+
+	Definitions that are used within the talker to determine whether
+	certain aspects of the code are compiled in.  The default of this
+	is -DGAMES.  This means that the 'game' code will be compiled in,
+	giving you and your users access to commands such as money, cash,
+	donate, hangman, reload, etc.
+
+	The possible options are: -DGAMES for the money/game commands, and
+	-DNETLINKS for the NUTS Netlinks functionality.  If you don't
+	want, or want, either of these (or both) then make the appropriate
+	changes in the Makefile.
+
+
+Adding files:
+
+Quite frankly, if you cannot follow the header format of the others files in
+the src directory, then you have no business adding new files of your own...
+:)  But if you have added a new file (or files) then to get them compiled in
+you must add them to the OBJECTS list in the Makefile, with the following
+format:
+
+                                $(OBJDIR)/spodlist.o \
+
+Then do a 'make' again.
+
+
+Previous compile instructions:
+
+These are kept in the document to show what used to be used for compilation.
+This will help you determine if you need to make any changes to the
+Makefile.
+
+Linux & AIX    : cc amnuts.c
+IRIX & OSF     : ditto above?
+HP-UX          : cc -Ae amnuts.c  (you need the ANSI compiler)
+SCO 3.2        : cc amnuts.c -lsocket -lcrypt_i  
+DYNIX 4        : cc amnuts.c -lsocket -lnsl
+Solaris        : cc -lsocket -lnsl amnuts.c  (not guaranteed to work)
+SunOS 4        : don't even bother unless you have gcc
+               : gcc -lsocket -lnsl amnuts.c   (IF you have gcc)
+FreeBSD        : cc -lcrypt amnuts.c
+RedHat Linux 5 : gcc -lcrypt amnuts.c
+
+
+Extras:
+
+Some people have experienced extreme lagging with BSD systems when a user
+logs on.  This is caused by the gethostbyaddr function.  If you find you
+are having this problem then you should change the option in the config
+file - you do not have to recompile with this version of the code.
+
+If you are using MD5 encryption on your system, then instead of compiling
+with the -lcrypt library you have to compile with -ldescrypt, as the
+system Amnuts was programmed on used DES encryption routines.
+
++------------------------------------------------------------------------------+

@@ -1,0 +1,9 @@
+~OLCommand :~RS samesite
+~OLUsage   :~RS samesite user|site [all]
+
+The will display the users with the same site as a give user or given
+site. If you omit the "all" option then it will only check those users
+currently logged on, else it will check through all the users. If you use
+the "user" option, then you will be prompted for a user name to check
+against, else if you use the "site" option you will be prompted for a
+site string. You can use a full or partial site string, but no wildcards.

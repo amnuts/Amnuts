@@ -1,0 +1,4 @@
+~OLCommand :~RS cshout
+~OLUsage   :~RS cshout
+
+Clears the shouts buffer.

@@ -1,0 +1,6 @@
+~OLCommand :~RS system
+~OLUsage   :~RS system -m|-n|-r|-u
+
+This shows various system parameters. If you use the -m option, then you
+will see memory information, -n you will see netlink information, -r will
+give you room information and -u will give you use related information.

@@ -1,0 +1,16 @@
+~OLCommand :~RS set email
+~OLUsage   :~RS set email [<email>]
+
+This setting takes your email address, and places it in your userfile for
+use in local mail to email autoforwarding (if system allows), and will
+show in the .ustat command depending on if you have also used ".set hide"
+to hide your email address from other users.
+
+Using this command alone will clear your email setting. Setting your
+email will send you a short form letter to the set email address,
+that will include a verification code to use with the .verify command.
+Your email address MUST be verified with this code to be able to use
+the forwarding if the talker allows.
+
+Your email address is kept hidden by default. See ".help set hide"
+for more details.

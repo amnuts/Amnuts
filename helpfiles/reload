@@ -1,0 +1,4 @@
+~OLCommand :~RS reload
+~OLUsage   :~RS reload
+
+Reloads the bullets of your gun--used in the fighting game.

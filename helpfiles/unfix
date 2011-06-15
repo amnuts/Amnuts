@@ -1,0 +1,6 @@
+~OLCommand :~RS unfix
+~OLUsage   :~RS unfix [<room>]
+
+This will unfix a rooms access so that it can then be set to public or
+private using the appropriate commands. If you omit the room, then you
+will unfix the access of the room you are currently in.

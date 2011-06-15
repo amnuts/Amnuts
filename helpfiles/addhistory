@@ -1,0 +1,4 @@
+~OLCommand :~RS addhistory
+~OLUsage   :~RS addhistory <user> <text>
+
+This allows you to add your own text to a user's history list.

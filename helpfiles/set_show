@@ -1,0 +1,11 @@
+~OLCommand :~RS set show
+~OLUsage   :~RS set show
+
+This will show you a quick menu of what attributes can be changed.
+Use ".help set <attribute>" to view help on these:
+
+gender      age         email       www
+hide        wrap        pager       colour
+room        autofwd     password    rdesc
+command     recap       icq         alert
+revbuff

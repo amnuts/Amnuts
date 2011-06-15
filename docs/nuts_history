@@ -1,0 +1,56 @@
+*** A potted history ***
+
+NUTS started out as a university project in 1992 for the final year of my
+degree course and it was the 2nd best option in my opinion from writing a MUD
+which the CS department decided "wasn't appropriate". So I came up with
+some specious title for a talker project along the lines of a "multiuser
+realtime networked conferencing system" or some such bullshit and they
+fell for it :) Having seen a number of other systems such as the complex
+EW-TOO by Simon Marsh (which to me seemed to be inhabiting some middle ground 
+between mud and talker), the very simple such as the talker built into Unaxcess
+(sp?) and the truly appalling (did someone say IRC?) I designed NUTS as being 
+a system that anyone would be able to master straight away the minute they 
+logged in. These days its somewhat more complex and probably sits alongside 
+EW-TOO in the talker stakes but hopefully its still just as easy to use for 
+first timers.
+
+These are the dates on which various nuts version were release as best I can
+remember or find out...
+
+Version      Date
+-------      ----
+
+Chat server  Winter 92  (Original project code - never released)
+1.0.0        Jan or Feb 93 (Project code with bug fixes and name change)
+1.0.1        ?
+1.0.2        ? (March/April maybe)
+1.0.3        May 93
+1.1.0        Oct 93
+1.2.0        Dec 93
+1.3.0        ?
+1.3.1        ?
+1.3.2        April 94
+1.3.3        May 94
+1.3.4        May 94
+
+2.0.0        June 94
+2.0.1        June 94
+2.0.2        July 94
+2.0.3        July 94
+2.1.0        Aug 94
+2.2.0        Nov 94
+2.2.1        Dec 94
+2.3.0        Jan 95
+
+3.0.0a       Feb 96 (alpha test release)
+3.0.0        March 96
+3.1.0        April 96
+3.1.1        April 96
+3.1.2        May 96
+3.2.0        July 96
+3.2.1        July 96 
+3.3.0        September 96
+3.3.1        October 96
+3.3.2        November 96
+3.3.3        November 96 (Final NUTS 3 version)
+

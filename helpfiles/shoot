@@ -1,0 +1,5 @@
+~OLCommand :~RS shoot
+~OLUsage   :~RS shoot <user>
+
+Attempts to shoot another user in the shooting game. This can only be
+done from a specific room (see ".rooms level" for the room).

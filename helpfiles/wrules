@@ -1,0 +1,5 @@
+~OLCommand :~RS wrules
+~OLUsage   :~RS wrules
+
+Displays a list of rules for the admin that are currently enforced on
+the talker.
