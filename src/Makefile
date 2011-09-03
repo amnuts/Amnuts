@@ -70,14 +70,16 @@ IDENTDOBJS      = \
 
 UNAME := $(shell uname)
 
-ifeq (,$(findstring Darwin, $UNAME))
-	TALKERLIBS     = -lcrypto
-else
-	ifeq (,$(findstring SunOS, $UNAME))
-		TALKERLIBS     = -lnsl -lsocket
-	else
-		TALKERLIBS     = -lcrypt
-	endif
+ifeq ($(UNAME), Darwin)
+        TALKERLIBS     = -lcrypto
+endif
+
+ifeq ($(UNAME), SunOS)
+        TALKERLIBS     = -lnsl -lsocket
+endif
+
+ifeq ($(UNAME), Linux)
+        TALKERLIBS     = -lcrypt
 endif
 
 #if you're using Solaris, comment the above and uncomment the below
@@ -131,7 +133,7 @@ $(IDENTD): $(IDENTDOBJS)
 
 $(TALKEROBJS): $(OBJDIR)/%.o: %.c
 	@echo "Compiling $< ..."
-	test -d $(OBJDIR) || mkdir $(OBJDIR)
+	@test -d $(OBJDIR) || mkdir $(OBJDIR)
 	$(CC) $(CFLAGS) $(TALKERCPPFLAGS) -c $< -o $@
 	@$(MAKEDEPEND) $(TALKERCPPFLAGS) $< | sed -e 's/#.*//' -e '/\\$$/N' -e 's/\\\n//g' -e 's/  */ /g' -e 's/^ //' -e 's/ $$//' -e '/^$$/d' -e 's!^[^:]*$*\.o *: *!$@: !' -e 'p' -e 's!^[^:]*$*\.o *: *$*\.c *!!' -e '/^$$/d' -e 's/$$/:/' > $(@:.o=.d)
 
