@@ -971,7 +971,7 @@ send_broadcast_mail(UR_OBJECT user, char *ptr, enum lvl_value lvl, int all)
                 cc);
       }
     }
-    fprintf(outfp, header);
+    fprintf(outfp, "%s", header);
     fputs(ptr, outfp);
     fputs("\n", outfp);
     fclose(outfp);

@@ -487,7 +487,7 @@ donate_cash(UR_OBJECT user)
   vwrite_user(u, "%s~RS donates $%d to you out of their own pocket.\n", name,
               cash);
   sprintf(text, "%s donates $%d.\n", user->name, cash);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
 }
 
 
@@ -623,7 +623,7 @@ global_money(UR_OBJECT user)
     vwrite_user(user, "You give $%d to %s~RS.\n", cash, u->recap);
     vwrite_user(u, "%s~RS kindly gives $%d.\n", name, cash);
     sprintf(text, "%s gives $%d.\n", user->name, cash);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     return;
   }
   /* take money from users */
@@ -655,7 +655,7 @@ global_money(UR_OBJECT user)
     vwrite_user(user, "You take $%d from %s~RS.\n", cash, u->recap);
     vwrite_user(u, "%s~RS takes $%d from you.\n", name, cash);
     sprintf(text, "%s takes $%d.\n", user->name, cash);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     return;
   }
   write_user(user, "Usage: money -l/-g/-t [<user> <amount>]\n");
