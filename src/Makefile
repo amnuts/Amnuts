@@ -43,7 +43,7 @@ IDENTDCPPFLAGS = -I$(INCDIR)
 #IDENTDCPPFLAGS = -I$(INCDIR) -DMANDNS
 
 # These are sort of gcc dependant; roll your own if you use another compiler
-CFLAGS         = -g -O2 -Wall -W
+CFLAGS         = -g -O2 -Wall -W -g
 #CFLAGS         = -g -O2 -Wall -W -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wpacked -Wnested-externs -Winline -Wlong-long
 #CFLAGS         = -g -O2 -Wall -W -pedantic -Wfloat-equal -Wtraditional -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn -Wpacked -Wpadded -Wredundant-decls -Wnested-externs -Wunreachable-code -Winline -Wlong-long
 #CFLAGS         = -Q -fprofile-arcs -ftest-coverage -ggdb3 -O2 -Wall -W
@@ -68,7 +68,18 @@ TALKEROBJS      = \
 IDENTDOBJS      = \
         $(OBJDIR)/ident.o \
 
-TALKERLIBS     = -lcrypt
+UNAME := $(shell uname)
+
+ifeq (,$(findstring Darwin, $UNAME))
+	TALKERLIBS     = -lcrypto
+else
+	ifeq (,$(findstring SunOS, $UNAME))
+		TALKERLIBS     = -lnsl -lsocket
+	else
+		TALKERLIBS     = -lcrypt
+	endif
+endif
+
 #if you're using Solaris, comment the above and uncomment the below
 #TALKERLIBS     = -lnsl -lsocket
 
@@ -120,6 +131,7 @@ $(IDENTD): $(IDENTDOBJS)
 
 $(TALKEROBJS): $(OBJDIR)/%.o: %.c
 	@echo "Compiling $< ..."
+	test -d $(OBJDIR) || mkdir $(OBJDIR)
 	$(CC) $(CFLAGS) $(TALKERCPPFLAGS) -c $< -o $@
 	@$(MAKEDEPEND) $(TALKERCPPFLAGS) $< | sed -e 's/#.*//' -e '/\\$$/N' -e 's/\\\n//g' -e 's/  */ /g' -e 's/^ //' -e 's/ $$//' -e '/^$$/d' -e 's!^[^:]*$*\.o *: *!$@: !' -e 'p' -e 's!^[^:]*$*\.o *: *$*\.c *!!' -e '/^$$/d' -e 's/$$/:/' > $(@:.o=.d)
 
