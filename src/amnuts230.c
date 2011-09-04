@@ -142,18 +142,18 @@ main(int argc, char **argv)
   }
 
   /* Run in background automatically. */
-  switch (fork()) {
-  case -1:
-    /* fork failure */
-    boot_exit(11);
-    break;
-  case 0:
-    /* child continues */
-    break;
-  default:
-    /* parent dies */
-    _exit(0);
-  }
+  // switch (fork()) {
+  // case -1:
+  //   /* fork failure */
+  //   boot_exit(11);
+  //   break;
+  // case 0:
+  //   /* child continues */
+  //   break;
+  // default:
+  //   /* parent dies */
+  //   _exit(0);
+  // }
   /* XXX: Add setsid() and redirect stdio to /dev/null somewhere */
 
 #ifdef NETLINKS
@@ -3589,9 +3589,6 @@ write_user(UR_OBJECT user, const char *str)
         }
         s += strlen(colour_codes[i].txt_code);
         continue;
-      }
-      if (s[1] == '~') {
-        ++s;
       }
     } else if (*s == '^') {
       /* See if its a ^ before a ~ , if so then we print colour command as text */
