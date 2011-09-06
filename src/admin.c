@@ -440,6 +440,7 @@ listbans(UR_OBJECT user)
       return;
     case 1:
       user->misc_op = 2;
+      break;
     }
     return;
   }
@@ -452,6 +453,7 @@ listbans(UR_OBJECT user)
       return;
     case 1:
       user->misc_op = 2;
+      break;
     }
     return;
   }
@@ -3383,7 +3385,7 @@ system_details(UR_OBJECT user)
   enum lvl_value lvl;
   int days, hours, mins, secs;
 
-  if (word_count < 2) {
+  if (word_count < 2 || !strcasecmp("-a", word[1])) {
     write_user(user,
                "\n+----------------------------------------------------------------------------+\n");
     sprintf(text, "System Details for %s (Amnuts version %s)", TALKER_NAME,
@@ -3498,24 +3500,26 @@ system_details(UR_OBJECT user)
                 "heartbeat", text, "resolving IP", rip[amsys->resolve_ip]);
     vwrite_user(user, "| %-17.17s : %-54.54s |\n",
                 "swear ban", minmax[amsys->ban_swearing]);
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
-    write_user(user,
-               "| For other options, see: system -m, -n, -r, -u                              |\n");
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n\n");
-    return;
+    if (word_count < 2) {
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n");
+		write_user(user,
+				   "| For other options, see: system -m, -n, -r, -u, -a                          |\n");
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n\n");
+		return;
+    }
   }
   /* user option */
-  if (!strcasecmp("-u", word[1])) {
+  if (!strcasecmp("-u", word[1]) || !strcasecmp("-a", word[1])) {
     uccount = 0;
     for (u = user_first; u; u = u->next) {
       if (u->type == CLONE_TYPE) {
         ++uccount;
       }
     }
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+	write_user(user,
+		   "+----------------------------------------------------------------------------+\n");
     write_user(user,
                "| ~OL~FCSystem Details - Users~RS                                                     |\n");
     write_user(user,
@@ -3575,14 +3579,16 @@ system_details(UR_OBJECT user)
                 "wizport min login level",
                 user_level[amsys->wizport_level].name);
 #endif
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n\n");
-    return;
+    if (!strcasecmp("-u", word[1])) {
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n\n");
+		return;
+    }
   }
   /* Netlinks Option */
-  if (!strcasecmp("-n", word[1])) {
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+  if (!strcasecmp("-n", word[1]) || !strcasecmp("-a", word[1])) {
+	write_user(user,
+			   "+----------------------------------------------------------------------------+\n");
     write_user(user,
                "| ~OL~FCSystem Details - Netlinks~RS                                                  |\n");
     write_user(user,
@@ -3607,30 +3613,35 @@ system_details(UR_OBJECT user)
         ++nlocount;
       }
     }
-    vwrite_user(user, "| %-21.21s: %5d          %-21.21s: %5d secs    |\n", "total netlinks", nlcount, "idle time out", amsys->net_idle_time);  /* XXX: Add amsys->keepalive_interval */
+    vwrite_user(user, "| %-21.21s: %5d %45s |\n",
+    			"total netlinks", nlcount, " ");
+    vwrite_user(user, "| %-21.21s: %5d secs     %-21.21s: %5d secs    |\n",
+    			"idle time out", amsys->net_idle_time,
+    			"keepalive interval", amsys->keepalive_interval);
     vwrite_user(user, "| %-21.21s: %5d          %-21.21s: %5d         |\n",
-                "accepting connects", rmnlicount, "live connects", nlupcount);
+                "accepting connects", rmnlicount,
+                "live connects", nlupcount);
     vwrite_user(user, "| %-21.21s: %5d          %-21.21s: %5d         |\n",
-                "incoming connections", nlicount, "outgoing connections",
-                nlocount);
+                "incoming connections", nlicount,
+                "outgoing connections", nlocount);
     vwrite_user(user, "| %-21.21s: %-13.13s  %-21.21s: %-13.13s |\n",
-                "remote user maxlevel",
-                user_level[amsys->rem_user_maxlevel].name,
-                "remote user deflevel",
-                user_level[amsys->rem_user_deflevel].name);
+                "remote user maxlevel", user_level[amsys->rem_user_maxlevel].name,
+                "remote user deflevel", user_level[amsys->rem_user_deflevel].name);
     vwrite_user(user, "| %-21.21s: %5d bytes    %-21.21s: %5d bytes   |\n",
-                "netlink structure", (int) (sizeof *nl), "total memory",
-                nlcount * (int) (sizeof *nl));
+                "netlink structure", (int) (sizeof *nl),
+                "total memory", nlcount * (int) (sizeof *nl));
 #else
     write_user(user,
                "| Netlinks are not currently compiled into the talker.                       |\n");
 #endif
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n\n");
-    return;
+	if (!strcasecmp("-n", word[1])) {
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n\n");
+		return;
+	}
   }
   /* Room Option */
-  if (!strcasecmp("-r", word[1])) {
+  if (!strcasecmp("-r", word[1]) || !strcasecmp("-a", word[1])) {
     rmcount = rmpcount = 0;
     for (rm = room_first; rm; rm = rm->next) {
       ++rmcount;
@@ -3638,8 +3649,8 @@ system_details(UR_OBJECT user)
         ++rmpcount;
       }
     }
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+	write_user(user,
+			   "+----------------------------------------------------------------------------+\n");
     write_user(user,
                "| ~OL~FCSystem Details - Rooms~RS                                                     |\n");
     write_user(user,
@@ -3659,12 +3670,14 @@ system_details(UR_OBJECT user)
     vwrite_user(user, "| %-16.16s: %7d bytes        %-20.20s: %7d bytes |\n",
                 "room structure", (int) (sizeof *rm), "total memory",
                 rmcount * (int) (sizeof *rm));
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n\n");
-    return;
+    if (!strcasecmp("-r", word[1])) {
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n\n");
+		return;
+    }
   }
   /* Memory Option */
-  if (!strcasecmp("-m", word[1])) {
+  if (!strcasecmp("-m", word[1]) || !strcasecmp("-a", word[1])) {
     ucount = 0;
     for (u = user_first; u; u = u->next) {
       ++ucount;
@@ -3696,8 +3709,8 @@ system_details(UR_OBJECT user)
     }
     tsize += nlcount * (sizeof *nl);
 #endif
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+	write_user(user,
+			   "+----------------------------------------------------------------------------+\n");
     write_user(user,
                "| ~OL~FCSystem Details - Memory Object Allocation~RS                                  |\n");
     write_user(user,
@@ -3737,11 +3750,18 @@ system_details(UR_OBJECT user)
     vwrite_user(user,
                 "| %-16.16s: %12.3f Mb             %8d total bytes         |\n",
                 "total", tsize / 1048576.0, tsize);
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n\n");
-    return;
+    if (!strcasecmp("-m", word[1])) {
+		write_user(user,
+				   "+----------------------------------------------------------------------------+\n\n");
+		return;
+    }
   }
-  write_user(user, "Usage: system [-m|-n|-r|-u]\n");
+  if (!strcasecmp("-a", word[1])) {
+	write_user(user,
+			   "+----------------------------------------------------------------------------+\n\n");
+  } else {
+	  write_user(user, "Usage: system [-m|-n|-r|-u|-a]\n");
+  }
 }
 
 

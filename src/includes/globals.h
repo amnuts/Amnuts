@@ -661,7 +661,6 @@ const char talker_signature[] =
   "|         email 'me@my.place' if you have any questions/comments           |\n"
   "+--------------------------------------------------------------------------+\n";
 
-
 struct last_login_struct last_login_info[LASTLOGON_NUM + 1] = { {"", "", 0} };
 
 UR_OBJECT user_first = NULL;

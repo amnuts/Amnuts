@@ -57,38 +57,38 @@ count_suggestions(void)
 int
 count_motds(int forcecnt)
 {
-  char filename[80];
-  DIR *dirp;
-  struct dirent *dp;
-  int i;
+	char filename[80];
+	DIR *dirp;
+	struct dirent *dp;
+	int i;
 
-  amsys->motd1_cnt = 0;
-  amsys->motd2_cnt = 0;
-  for (i = 1; i <= 2; ++i) {
-    /* open the directory file up */
-    sprintf(filename, "%s/motd%d", MOTDFILES, i);
-    dirp = opendir(filename);
-    if (!dirp) {
-      if (!forcecnt) {
-        fprintf(stderr, "Amnuts: Directory open failure in count_motds().\n");
-        boot_exit(20);
-      }
-      return 0;
-    }
-    /* count up the motd files */
-    for (dp = readdir(dirp); dp; dp = readdir(dirp)) {
-      if (!strncmp(dp->d_name, "motd", 4)) {
-	continue;
-      }
-      if (i == 1) {
-	++amsys->motd1_cnt;
-      } else {
-	++amsys->motd2_cnt;
-      }
-    }
-    closedir(dirp);
-  }
-  return 1;
+	amsys->motd1_cnt = 0;
+	amsys->motd2_cnt = 0;
+	for (i = 1; i <= 2; ++i) {
+		/* open the directory file up */
+		sprintf(filename, "%s/motd%d", MOTDFILES, i);
+		dirp = opendir(filename);
+		if (!dirp) {
+			if (!forcecnt) {
+				fprintf(stderr, "Amnuts: Directory open failure in count_motds().\n");
+				boot_exit(20);
+			}
+			return 0;
+		}
+		/* count up the motd files */
+		while ((dp = readdir(dirp)) != NULL) {
+			if (strncmp(dp->d_name, "motd", 4) != 0) {
+				continue;
+			}
+			if (i == 1) {
+				++amsys->motd1_cnt;
+			} else {
+				++amsys->motd2_cnt;
+			}
+		}
+		closedir(dirp);
+	}
+	return 1;
 }
 
 
@@ -158,6 +158,7 @@ check_messages(UR_OBJECT user, int chforce)
       write_syslog(SYSLOG, 1, "%s recounted the MOTDS.\n", user->name);
       return;
     }
+    break;
   }
   board_cnt = 0;
   old_cnt = 0;
@@ -262,6 +263,7 @@ check_messages(UR_OBJECT user, int chforce)
                 board_cnt, PLTEXT_S(board_cnt), bad_cnt);
     write_syslog(SYSLOG, 1, "%s forced a recount of the message boards.\n",
                  user->name);
+    break;
   }
 }
 
