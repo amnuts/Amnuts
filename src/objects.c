@@ -1043,7 +1043,7 @@ retrieve_user(UR_OBJECT user, const char *name)
     if (user) {
       write_user(user, text);
     }
-    write_syslog(SYSLOG, 1, text);
+    write_syslog(SYSLOG, 1, "%s", text);
     *text = '\0';
     retrieve_user_type = 0;
     return NULL;
