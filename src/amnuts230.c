@@ -3590,9 +3590,6 @@ write_user(UR_OBJECT user, const char *str)
         s += strlen(colour_codes[i].txt_code);
         continue;
       }
-      if (s[1] == '~') {
-        ++s;
-      }
     } else if (*s == '^') {
       /* See if its a ^ before a ~ , if so then we print colour command as text */
       if (s[1] == '~') {
@@ -6726,7 +6723,7 @@ help_commands_level(UR_OBJECT user)
       if (++cnt == 5) {
         strcat(text, temp1);
         strcat(text, "~RS");
-        write_user(user, align_string(0, 78, 1, "|", text));
+        write_user(user, align_string(0, 78, 1, "|", "%s", text));
         cnt = 0;
         highlight = 0;
         *text = '\0';
@@ -6739,7 +6736,7 @@ help_commands_level(UR_OBJECT user)
       }
     }
     if (cnt > 0 && cnt < 5)
-      write_user(user, align_string(0, 78, 1, "|", text));
+      write_user(user, align_string(0, 78, 1, "|", "%s", text));
   }
   /* count up total number of commands for user level */
   for (cmd = first_command; cmd; cmd = cmd->next) {
@@ -6811,7 +6808,7 @@ help_commands_function(UR_OBJECT user)
       if (++cnt == 5) {
         strcat(text, temp1);
         strcat(text, "~RS");
-        write_user(user, align_string(0, 78, 1, "|", text));
+        write_user(user, align_string(0, 78, 1, "|", "%s", text));
         cnt = 0;
         *text = '\0';
       } else {
@@ -6823,7 +6820,7 @@ help_commands_function(UR_OBJECT user)
       }
     }
     if (cnt > 0 && cnt < 5)
-      write_user(user, align_string(0, 78, 1, "|", text));
+      write_user(user, align_string(0, 78, 1, "|", "%s", text));
   }
   /* count up total number of commands for user level */
   for (cmd = first_command; cmd; cmd = cmd->next) {
@@ -7909,7 +7906,7 @@ account_request(UR_OBJECT user, char *inpstr)
   add_history(user->name, 1, "Made a request for an account.\n");
   /* permanent record of email address in user history file */
   sprintf(text, "Used email address \"%s\" in the request.\n", word[1]);
-  add_history(user->name, 1, text);
+  add_history(user->name, 1, "%s", text);
   /* check to see if user should be promoted yet */
   check_autopromote(user, 3);
 }

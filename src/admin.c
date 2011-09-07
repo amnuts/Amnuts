@@ -698,7 +698,7 @@ ban_user(UR_OBJECT user)
   write_user(user, "User banned.\n");
   write_syslog(SYSLOG, 1, "%s BANNED user %s.\n", user->name, word[2]);
   sprintf(text, "User name was ~FRbanned~RS by %s.\n", user->name);
-  add_history(word[2], 1, text);
+  add_history(word[2], 1, "%s", text);
   /* See if already on */
   u = get_user(word[2]);
   if (u) {
@@ -911,7 +911,7 @@ unban_user(UR_OBJECT user)
   vwrite_user(user, "User \"%s\" ban removed.\n", word[2]);
   write_syslog(SYSLOG, 1, "%s UNBANNED user %s.\n", user->name, word[2]);
   sprintf(text, "User name was ~FGunbanned~RS by %s.\n", user->name);
-  add_history(word[2], 0, text);
+  add_history(word[2], 0, "%s", text);
 }
 
 
@@ -1360,7 +1360,7 @@ check_autopromote(UR_OBJECT user, int attrib)
                 user_level[user->level].name);
     sprintf(text, "Was auto-promoted to level %s.\n",
             user_level[user->level].name);
-    add_history(user->name, 1, text);
+    add_history(user->name, 1, "%s", text);
     write_syslog(SYSLOG, 1, "%s was AUTO-PROMOTED to level %s.\n", user->name,
                  user_level[user->level].name);
     vwrite_level(WIZ, 1, NORECORD, NULL,
@@ -1441,7 +1441,7 @@ temporary_promote(UR_OBJECT user)
   write_syslog(SYSLOG, 1, "%s TEMPORARILY promote %s to %s.\n", user->name,
                u->name, user_level[u->level].name);
   sprintf(text, "Was temporarily to level %s.\n", user_level[u->level].name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
 }
 
 
@@ -1528,7 +1528,7 @@ promote(UR_OBJECT user)
                u->name, user_level[u->level].name);
   sprintf(text, "Was ~FGpromoted~RS by %s to level %s.\n", user->name,
           user_level[u->level].name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   if (!on) {
     u->socket = -2;
     strcpy(u->site, u->last_site);
@@ -1629,7 +1629,7 @@ demote(UR_OBJECT user)
                user_level[u->level].name);
   sprintf(text, "Was ~FRdemoted~RS by %s to level %s.\n", user->name,
           user_level[u->level].name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   if (!on) {
     u->socket = -2;
     strcpy(u->site, u->last_site);
@@ -1992,7 +1992,7 @@ change_pass(UR_OBJECT user)
     write_syslog(SYSLOG, 1, "%s changed %s's password.\n", user->name,
                  u->name);
     sprintf(text, "Forced password change by %s.\n", user->name);
-    add_history(u->name, 0, text);
+    add_history(u->name, 0, "%s", text);
     return;
   }
   u = create_user();
@@ -2024,7 +2024,7 @@ change_pass(UR_OBJECT user)
   cls(user);
   vwrite_user(user, "%s's password changed to \"%s\".\n", word[3], word[2]);
   sprintf(text, "Forced password change by %s.\n", user->name);
-  add_history(word[3], 0, text);
+  add_history(word[3], 0, "%s", text);
   write_syslog(SYSLOG, 1, "%s changed %s's password.\n", user->name, word[3]);
 }
 
@@ -2090,7 +2090,7 @@ kill_user(UR_OBJECT user)
                        victim->bw_recap);
   }
   sprintf(text, "~FRKilled~RS by %s.\n", user->name);
-  add_history(victim->name, 1, text);
+  add_history(victim->name, 1, "%s", text);
   disconnect_user(victim);
   write_monitor(user, NULL, 0);
   write_room(NULL,
@@ -2398,7 +2398,7 @@ user_expires(UR_OBJECT user)
                 "You have set it so %s will expire when a purge is run.\n",
                 u->name);
     sprintf(text, "%s enables expiration with purge.\n", user->name);
-    add_history(u->name, 0, text);
+    add_history(u->name, 0, "%s", text);
     write_syslog(SYSLOG, 1, "%s enabled expiration on %s.\n", user->name,
                  u->name);
   } else {
@@ -2407,7 +2407,7 @@ user_expires(UR_OBJECT user)
                 "You have set it so %s will no longer expire when a purge is run.\n",
                 u->name);
     sprintf(text, "%s disables expiration with purge.\n", user->name);
-    add_history(u->name, 0, text);
+    add_history(u->name, 0, "%s", text);
     write_syslog(SYSLOG, 1, "%s disabled expiration on %s.\n", user->name,
                  u->name);
   }
@@ -2502,7 +2502,7 @@ create_account(UR_OBJECT user)
     add_user_node(u->name, u->level);
     add_user_date_node(u->name, (long_date(1)));
     sprintf(text, "Was manually created by %s.\n", user->name);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     vwrite_user(user,
                 "You have created an account with the name \"~FC%s~RS\" and password \"~FG%s~RS\".\n",
                 u->name, word[2]);
@@ -3073,7 +3073,7 @@ manual_history(UR_OBJECT user, char *inpstr)
   }
   inpstr = remove_first(inpstr);
   sprintf(text, "%-*s : %s\n", USER_NAME_LEN, user->name, inpstr);
-  add_history(word[1], 1, text);
+  add_history(word[1], 1, "%s", text);
   vwrite_user(user, "You have added to %s's history list.\n", word[1]);
 }
 
@@ -3864,7 +3864,7 @@ retire_user(UR_OBJECT user)
   vwrite_user(user, "You retire %s from the wizlist.\n", u->name);
   write_syslog(SYSLOG, 1, "%s RETIRED %s\n", user->name, u->name);
   sprintf(text, "Was ~FRretired~RS by %s.\n", user->name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   sprintf(text,
           "You have been retired from the wizlist but still retain your level.\n");
   if (!on) {
@@ -3917,7 +3917,7 @@ unretire_user(UR_OBJECT user)
               u->name);
   write_syslog(SYSLOG, 1, "%s UNRETIRED %s\n", user->name, u->name);
   sprintf(text, "Was ~FGunretired~RS by %s.\n", user->name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   sprintf(text, "You have been unretired and put back on the wizlist.\n");
   if (!on) {
     send_mail(user, u->name, text, 0);
@@ -4350,7 +4350,7 @@ user_xcom(UR_OBJECT user)
                 word[2]);
     sprintf(text, "%s ~FGUNXCOM~RS'd the command \"%s\"\n", user->name,
             word[2]);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     write_syslog(SYSLOG, 1, "%s UNXCOM'd the command \"%s\" for %s\n",
                  user->name, word[2], u->name);
   } else {
@@ -4365,7 +4365,7 @@ user_xcom(UR_OBJECT user)
                 word[2]);
     sprintf(text, "%s ~FRXCOM~RS'd the command \"%s\"\n", user->name,
             word[2]);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     write_syslog(SYSLOG, 1, "%s XCOM'd the command \"%s\" for %s\n",
                  user->name, word[2], u->name);
   }
@@ -4472,7 +4472,7 @@ user_gcom(UR_OBJECT user)
                 word[2]);
     sprintf(text, "%s ~FRUNGCOM~RS'd the command \"%s\"\n", user->name,
             word[2]);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     write_syslog(SYSLOG, 1, "%s UNGCOM'd the command \"%s\" for %s\n",
                  user->name, word[2], u->name);
   } else {
@@ -4487,7 +4487,7 @@ user_gcom(UR_OBJECT user)
                 word[2]);
     sprintf(text, "%s ~FGGCOM~RS'd the command \"%s\"\n", user->name,
             word[2]);
-    add_history(u->name, 1, text);
+    add_history(u->name, 1, "%s", text);
     write_syslog(SYSLOG, 1, "%s GCOM'd the command \"%s\" for %s\n",
                  user->name, word[2], u->name);
   }
@@ -5179,7 +5179,7 @@ change_user_name(UR_OBJECT user)
   /* give results of name change */
   sprintf(text, "Had name changed from ~OL%s~RS by %s~RS.\n", oldname,
           (self ? "self" : user->recap));
-  add_history(newname, 1, text);
+  add_history(newname, 1, "%s", text);
   write_syslog(SYSLOG, 1, "%s CHANGED NAME of %s to %s.\n",
                (self ? oldname : user->name), oldname, newname);
   name = user->vis ? user->recap : invisname;
@@ -5261,7 +5261,7 @@ shackle(UR_OBJECT user)
               u->recap, u->room->name);
   sprintf(text, "~FRShackled~RS to the ~FB%s~RS room by ~FB~OL%s~RS.\n",
           u->room->name, user->name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   write_syslog(SYSLOG, 1, "%s SHACKLED %s to the room: %s\n", user->name,
                u->name, u->room->name);
 }
@@ -5300,7 +5300,7 @@ unshackle(UR_OBJECT user)
               u->recap, u->room->name);
   sprintf(text, "~FGUnshackled~RS from the ~FB%s~RS room by ~FB~OL%s~RS.\n",
           u->room->name, user->name);
-  add_history(u->name, 1, text);
+  add_history(u->name, 1, "%s", text);
   write_syslog(SYSLOG, 1, "%s UNSHACKLED %s from the room: %s\n", user->name,
                u->name, u->room->name);
 }
