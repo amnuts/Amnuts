@@ -123,6 +123,7 @@
 #define UFILE_WORD_LEN 255
 #define RECORD 1
 #define NORECORD 0
+#define LANGUAGE "en"
 
 
 /* netlink defines */
