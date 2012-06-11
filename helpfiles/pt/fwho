@@ -1,0 +1,5 @@
+~OLComando :~RS fwho
+~OLUso     :~RS fwho
+
+Este comando mostra-te uma lista das pessoas da tua lista de amigos que
+se encontrem logadas, incluindo descrições, salas em que estão, etc.

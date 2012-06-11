@@ -1,0 +1,6 @@
+~OLComando :~RS csay
+~OLUso     :~RS csay <sala> <texto>
+
+Fará com que os clones numa dada sala falem. Se vires algo mau a ser dito
+na sala em que o clone está, é uma alternativa ao "shout", "tell", ou
+ir à sala admoestar o infrator.

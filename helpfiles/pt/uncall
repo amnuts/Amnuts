@@ -1,0 +1,4 @@
+~OLComando :~RS uncall
+~OLUso     :~RS uncall
+
+Irá redefinir a quick call para um estado vazio.

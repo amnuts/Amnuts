@@ -1,0 +1,10 @@
+~OLComando :~RS set
+~OLUso     :~RS set [<atributo> [<propriedade>]]
+
+Permite-te definir certos atributos que serã vistos quando alguém usa o
+comando "ustat" em ti. Omitindo o <atributo> mostrará os dados que tens
+de momento, e também uma descrição do que significam os atributos. Alguns
+atributos são modificadores entre on e off, e outros requerem que insiras
+uma propriedade. Usa o ".set show" para mostrar todos os atributos que
+podes mudar por via do comando set. Também podes ver informação detalhada
+usando ".help set show" para veres a ajuda para os outros comandos do set. 

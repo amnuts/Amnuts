@@ -1,0 +1,6 @@
+~OLComando :~RS nuke
+~OLUso     :~RS nuke <utilizador>
+
+Permite-te pagar os ficheiros de um determinado utilizador. Pode ser
+utilizado caso um utilizador tenha sido banido, ou os seus ficheiros
+tenham ficado corrompidos.

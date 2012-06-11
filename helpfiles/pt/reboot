@@ -1,0 +1,5 @@
+~OLComando :~RS reboot
+~OLUso     :~RS reboot [<segundos>|cancel]
+
+Irá reiniciar o talker, imediatamete ou depois de <segundos> segundos.
+A opção "cancel" irá cancelar uma contagem decrescente.

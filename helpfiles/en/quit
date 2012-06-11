@@ -1,0 +1,4 @@
+~OLCommand :~RS quit
+~OLUsage   :~RS quit
+
+Quits your current session on the talker.

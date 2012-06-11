@@ -1,0 +1,8 @@
+~OLCommand :~RS bank
+~OLUsage   :~RS bank deposit <amount> | withdraw <amount> | balance
+
+This command allows you to view how much money you have in the bank.
+Using the deposit option allows you to put money into the bank (if you
+have any on your person), the withdraw option allows you to take out
+money from the bank (if you have some in there), and the balance option
+allows you to see how much you have in the bank.

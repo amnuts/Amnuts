@@ -1,0 +1,4 @@
+~OLCommand :~RS ignbeeps
+~OLUsage   :~RS ignbeeps
+
+This will allow you to ignore beeps. Acts as a toggle on or off.

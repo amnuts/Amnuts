@@ -1,0 +1,4 @@
+~OLComando :~RS ptell
+~OLUso     :~RS ptell <utilizador> <imagem>
+
+Permite-te mostrar uma imagem a um utilizador.

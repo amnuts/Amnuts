@@ -1,0 +1,4 @@
+~OLCommand :~RS rules
+~OLUsage   :~RS rules
+
+Displays a list of rules that are currently enforced on the talker.

@@ -1,0 +1,7 @@
+~OLCommand :~RS set rdesc
+~OLUsage   :~RS set rdesc
+
+This attribute is a toggle, meaning that if it is off, using this turns it
+on, if it is on, using this turns it off, and it will indicate as such.
+This setting will turn off room descriptions as you move from room to
+room, or when using the "look" command. Default setting is on.

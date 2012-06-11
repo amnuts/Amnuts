@@ -1,0 +1,5 @@
+~OLCommand :~RS ignlist
+~OLUsage   :~RS ignlist
+
+Shows a list of things you can ignore, and if you are currently ignoring
+them or not.

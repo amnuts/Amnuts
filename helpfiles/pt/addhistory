@@ -1,0 +1,5 @@
+~OLComando :~RS addhistory
+~OLUso     :~RS addhistory <utilizador> <texto>
+
+Este comando permite-te adicionar o teu próprio texto ao
+histórico de um utilizador.

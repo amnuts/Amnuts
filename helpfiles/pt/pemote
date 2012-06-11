@@ -1,0 +1,5 @@
+~OLComando :~RS pemote
+~OLUso     :~RS pemote <utilizador> <texto>
+~OLAtalhos :~RS < or /
+
+Permite-te enviar "emotes" privados para um dado utilizador.

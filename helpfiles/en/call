@@ -1,0 +1,12 @@
+~OLCommand :~RS call
+~OLUsage   :~RS call [<user>]
+~OLAliases :~RS ,
+
+Allows you to set up a quick way of telling a user a message. If you
+omit the user then you will be shown which user you have currently set
+to quick call.
+
+Quick call is used such as: ,hi there, how are ya?
+
+Which will send the "hi there, how are ya?" to whomever is set in the
+quick call.

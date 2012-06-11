@@ -1,0 +1,9 @@
+~OLCommand :~RS charecho
+~OLUsage   :~RS charecho
+
+This is a command that is only of use to people who use character
+mode clients. Some of these clients will not echo the characters input
+themselves even when told to do so; this command forces the talker to
+do it instead. The command is a toggle so using it will alternately
+flick the echoing on and off. If you switch echoing on even when your
+client is echoing you will see every character twice.

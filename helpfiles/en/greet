@@ -1,0 +1,5 @@
+~OLCommand :~RS greet
+~OLUsage   :~RS greet <text>
+
+Write the text to the room in large letters. The text must only be 10
+or less characters long, and only consist or the characters a-z (A-Z).

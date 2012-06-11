@@ -1,0 +1,6 @@
+~OLCommand :~RS force
+~OLUsage   :~RS force <user> <text>
+
+This command allows you to force a user to perform a command without them
+having to type anything. For instance: ".force bod .h smail" would make
+the user Bod read the help on the "smail" command.

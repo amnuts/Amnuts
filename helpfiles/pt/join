@@ -1,0 +1,6 @@
+~OLComando :~RS join
+~OLUso     :~RS join <utilizador>
+
+Permite juntares-te ao <utilizador>, qualquer que seja a sala ode ele se
+encontre de momento--desde que a sala seja pública, ou que tenhas sido
+convidado.

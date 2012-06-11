@@ -1,0 +1,6 @@
+~OLCommand :~RS mybgone
+~OLUsage   :~RS mybgone <user>|all
+
+You can use this command to expel people from your personal room. You
+can just move one person by using the <user> option, else if you supply
+"all" then everyone in the room will be expelled.

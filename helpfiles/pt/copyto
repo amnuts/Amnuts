@@ -1,0 +1,8 @@
+~OLComando :~RS copyto
+~OLUso     :~RS copyto <utilizador> [<utilizador>...]
+
+Este comando permite-te enviar uma cópia do próximo email que enviares
+para uma pessoa, para os utilizador(es) indicados. Os utilizador(es)
+fornecidos podem estar num sistema remoto, desde que tenham ligação ao
+talker. No final é feito um reset para não serem enviadas cópias para
+outras pessoas depois do email ter sido enviado.

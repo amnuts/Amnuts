@@ -1,0 +1,7 @@
+~OLComando :~RS show
+~OLUso     :~RS show <texto>
+~OLAtalhos :~RS '
+
+É usado para mostrar a uma pessoa o que escrever. O texto é precedido com
+"Type --> " e será mostrado para todos os utilizadores na sala onde te
+encontras.

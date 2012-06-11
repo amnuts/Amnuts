@@ -1,0 +1,5 @@
+~OLCommand :~RS ignwiz
+~OLUsage   :~RS ignwiz
+
+This will allow you to ignore all wiztells and wizemotes. Acts as a
+toggle on or off.

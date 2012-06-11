@@ -1,0 +1,8 @@
+~OLComando :~RS cname
+~OLUso     :~RS cname <nome-antigo> <nome-novo>
+
+Este comando permite-te mudar o nome de um utilizador para outro nome.
+Isto permite que os utilizadores mudem de nome se desejarem, sem terem de
+criar uma conta nova, ganhar o tempo de uso, refazer o profile, perder o
+mail, etc. O utilizador não precisa de estar ligado para usares este 
+comando, embora funcione mesmo que esteja.

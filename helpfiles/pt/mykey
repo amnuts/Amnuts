@@ -1,0 +1,10 @@
+~OLComando :~RS mykey
+~OLUso     :~RS mykey [<utilizador>]
+
+Este comando permite-te dar acesso a utilizadores específicos à tua sala
+pessoal, mesmo que a tenhas fechada. Se omitires o atributo <utilizador>,
+então irá listar todos os utilizadores a quem deste chave. O <utilizador>
+não tem de estar online para lhe dares a chave. Este comando também
+funciona como um modificador; assim, se deres uma chave a um utilizador,
+basta utilizar este comando com o nome de utilizador a seguir para lha
+retirar.

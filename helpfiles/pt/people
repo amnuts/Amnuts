@@ -1,0 +1,7 @@
+~OLComando :~RS people
+~OLUso     :~RS people [key]
+
+Mostra que está ligado e dá várias estatísticas para eles. Também 
+mostrará o site de logon de um utilizador, porto e outros dados. Se a
+opção "key" for usada, então será mostrada informação sobre os diferentes
+estádios de login.

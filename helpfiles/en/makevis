@@ -1,0 +1,4 @@
+~OLCommand :~RS makevis
+~OLUsage   :~RS makevis <user>
+
+Forces a user to become visible if they are invisible.

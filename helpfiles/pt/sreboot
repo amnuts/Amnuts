@@ -1,0 +1,6 @@
+~OLComando :~RS sreboot
+~OLUso     :~RS sreboot [<segundos>|cancel]
+
+Irá fazer um reboot transparente (não é perceptível) ao talker, ou
+imediatamente ou ao final de <segundos> segundos. A opção cancel irá
+terminar qualquer contagem decrescente.

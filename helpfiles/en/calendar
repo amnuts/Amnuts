@@ -1,0 +1,10 @@
+~OLCommand :~RS calendar
+~OLUsage   :~RS calendar [<month> [<year>]]
+
+This will display a calendar, highlighting (if you have colours turned
+on) the current date. If no options are used then it will display the
+calendar for the current month and year. If the <month> option is used
+then it will display the calendar for that month and the current year.
+Else it will display the calendar for which ever month and year you
+supply. <month> is a number between 1 and 12, <year> is a number between
+1 and 99, or 1800 and 3000.

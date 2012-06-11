@@ -1,0 +1,12 @@
+~OLComando :~RS dsug
+~OLUso     :~RS dsug <mensagem>
+~OL        :~RS dsug to <até-mensagem>
+~OL        :~RS dsug from <desde-mensagem> to <até-mensagem>
+~OL        :~RS dsug all
+
+Este comando permite-te apagar sugestões do quadro de sugestões. Podes
+apagar uma mensagem específica fornecendo apenas um número, ou desde a
+primeira sugestão até um dado número. Podes também apagar desde uma
+certa sugestão até outra, ou podes apagar todo o quadro. Se o número
+para apagar fornecido fôr maior do que a quantidade de sugestões na
+board, então todas as sugestões serão apagadas.

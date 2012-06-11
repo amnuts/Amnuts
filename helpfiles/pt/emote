@@ -1,0 +1,9 @@
+~OLComando :~RS emote
+~OLUso     :~RS emote <texto>
+~OLAtalhos :~RS ; ou : (apóstrofo: :' ou ;')
+
+Emotes permitem-te exprimir emoções. Um exemplo seria "Andy sente-se 
+triste". Se estivesses logado como Andy, o que escreverias seria ".emote
+snte-se triste" e o teu nome seria posto em prefixo. O resultado é visto
+na sala onde estás. Podes também usar um apóstrofo no final para produzir
+resultados do género "Andy's face breaks into a grin".

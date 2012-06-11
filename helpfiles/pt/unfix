@@ -1,0 +1,6 @@
+~OLComando :~RS unfix
+~OLUso     :~RS unfix [<sala>]
+
+Irá mudar o estado da sala para que ela possa ser posta em public ou
+private, usando os comandos apropriados. Se omitires a <sala>, então irás
+mudar o estado da sala onde te encontras.

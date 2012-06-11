@@ -1,0 +1,11 @@
+~OLComando :~RS tpromote
+~OLUso     :~RS tpromote <utilizador> [<nível>]
+
+Irá promover temporariamente o utilizador para o nível seguinte. Esta
+promoção durará apenas o tempo que o utilizador esteja ligado. Assim que
+se desligar, irá voltar ao seu nível normal. Não podes promover ninguém
+para um nível maior que o mais elevado, e não podes promover ninguém do
+mesmo nível que tu. Também podes fazer um tpromote a utilizador mesmp que
+esteja ligado. Se a opção <nível> for utilizada, então o utilizador será
+promovido directamente para aquele nível, em vez de ser promovido para o
+nível imediatamente superior.

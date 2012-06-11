@@ -1,0 +1,11 @@
+~OLComando :~RS dump
+~OLUso     :~RS dump -u|-r <nível>|-c|-m|-s
+
+Este comando permite-te escrever informação do talker directamente
+para ficheiros na conta onde o talker está a correr. Se usares a opção 
+-u, irá escrever todos os nomes dos utilizadores. Se usares a opção
+-r <nível> então irás escrever apenas os utilizadores com esse nível.
+Se usares a opção -c, irá escrever os últimos 16 comandos usados. -m
+escreve no ficheiro a memória que está a ser utilizada neste momento 
+pelo talker e o -s escreve a informação do sistema tais como o PID, 
+netlink, e o IP resolve status, entre outros.

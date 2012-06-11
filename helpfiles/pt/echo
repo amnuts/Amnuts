@@ -1,0 +1,7 @@
+~OLComando :~RS echo
+~OLUso     :~RS echo <texto>
+~OLAtalhos :~RS +
+
+Este comando permite-te dizer qualquer coisa que tu escrevas para uma
+sala, sem que os outros utilizadores saibam quem foi.
+

@@ -1,0 +1,6 @@
+~OLComando :~RS set www
+~OLUso     :~RS set www [<url>]
+
+Usa-o para preencheres o endereço da tua página pessoal, que irá ser
+visto por outros utilizadores através do comando "ustat". Usar este
+atributo sem parâmetro irá apagar o email previamente definido.

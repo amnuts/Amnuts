@@ -1,0 +1,9 @@
+~OLCommand :~RS minlogin
+~OLUsage   :~RS minlogin -a|-n|<level>
+
+This sets the minimum login level of a user that can log in. This directly
+affects the main port but only affects the wizport if it is set higher
+than the wizport login level. If set to -a all login attempts on the
+main port will be refused. If set to -n then anyone can log in and new
+users can be created. If set to <level> no new accounts can be created
+but users of level <level> and above can still log in.

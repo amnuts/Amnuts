@@ -1,0 +1,9 @@
+~OLCommand :~RS mykey
+~OLUsage   :~RS mykey [<user>]
+
+This command allows you to give specific users access to your personal
+room even though you may have it locked. If you omit the <user> attribute
+then it will list all users you have given keys to. The <user> does not
+have to be online for you to give them a key. This command also works
+like a toggle, in that if you have given a user a key you use this
+command again with their name to remove that key.

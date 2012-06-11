@@ -1,0 +1,6 @@
+~OLCommand :~RS viewlog
+~OLUsage   :~RS viewlog sys|net|req|err|<level> [<lines>]
+
+Shows various logs. If <lines> is specified then you will only view that
+amount of lines from the end of the log. In doing this, you do not have
+to page through the log.

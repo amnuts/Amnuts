@@ -1,0 +1,5 @@
+~OLCommand :~RS nocopys
+~OLUsage   :~RS nocopys
+
+Allows you to reset your "copies to" so that you will send out no copies
+on your next mail.

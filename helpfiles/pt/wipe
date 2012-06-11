@@ -1,0 +1,14 @@
+~OLComando :~RS wipe
+~OLUso     :~RS wipe <mensagem>
+~OL        :~RS wipe to <até-mensagem>
+~OL        :~RS wipe from <de-mensagem> to <até-mensagem>
+~OL        :~RS wipe all
+
+Este comando permite que apagues mensagem do quadro da sala onde te
+encontras. Podes apagar mensagens específicas, fornecendo apenas um
+número, ou desde a primeira mensagem até um número dado. Podes também
+apagar de uma determinada mensagem até outra mensagem, ou podes apagar
+o quadro todo. Se o número dado for maior que o número de mensagens
+no quadro, então todas as mensagens serão apagadas. Se estás na tua sala
+pessoal (se esta função estiver activada) podes apagar qualquer mensagem,
+qualquer que tenha sido a pessoa que a escreveu.

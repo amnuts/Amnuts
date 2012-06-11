@@ -1,0 +1,6 @@
+~OLComando :~RS colour
+~OLUso     :~RS colour
+
+Permite-te testar a configuração das cores no talker. Para isto, deves
+ter o "set colour" a ON. Se nenhuma cor aparecer, então é porque tens
+o "set colour" a OFF.

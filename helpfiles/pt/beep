@@ -1,0 +1,6 @@
+~OLComando :~RS beep
+~OLUso   :~RS beep <utilizador> [<texto>]
+
+Permite-te enviar uma mensagem com som (beep) a outro utilizador. Se não
+for escrita nenhuma mensagem, então será mostrada ao outro utilizador a 
+mensagem standard "beep".

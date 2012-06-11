@@ -1,0 +1,5 @@
+~OLCommand :~RS ban
+~OLUsage   :~RS ban site <site> | user <user> | new <site>
+
+This command will ban either a site, a user, or new users from a site
+from having access to the talker.

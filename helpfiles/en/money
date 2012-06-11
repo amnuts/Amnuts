@@ -1,0 +1,10 @@
+~OLCommand :~RS money
+~OLUsage   :~RS money -l
+~OL        :~RS money -g <user> <amount>
+~OL        :~RS money -t <user> <amount>
+
+This command allows you to manage money. Using the -l option shows you
+how much money all the only users have. The -g option allows you to give
+money to users (without money being donated from your account). The -t
+option allows you to take money from users (without money going into
+your own account).

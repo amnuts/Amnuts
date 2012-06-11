@@ -1,0 +1,9 @@
+~OLCommand :~RS rloadrm
+~OLUsage   :~RS rloadrm -a|<room>
+
+With this you can reload room descriptions should you need to. This
+command would generally be used if the room description file had been
+altered and you wanted to implement the changes (e.g., spelling mistakes
+corrected) without rebooting the talker. If the "-a" option is used then
+all room descriptions will be reloaded, else just the description for
+the room supplied. This will not effect personal rooms.

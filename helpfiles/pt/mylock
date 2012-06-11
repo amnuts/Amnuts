@@ -1,0 +1,8 @@
+~OLComando :~RS mylock
+~OLUso     :~RS mylock
+
+Permite-te bloquear a tua sala pessoal para as outras pessoas,
+impedindo-as de entrar. Funciona como um modificador, por isso, se a tua
+sala estiver bloqueada, basta-te usar este comando para a desbloqueares.
+A função de sala pessoal tem de estar activada para poderes usar este
+comando.

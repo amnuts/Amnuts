@@ -1,0 +1,7 @@
+~OLComando :~RS move
+~OLUso     :~RS move <utilizador> [<sala>]
+
+Move o utilizador directamente para a sala escolhida. Se a sala for
+omitida, o utilizador é movido para a sala onde a pessoa que invocou o
+comando está (mesmo que a sala seja privada). O utilizador não será 
+movido se já estiver nessa sala.

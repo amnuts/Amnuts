@@ -1,0 +1,7 @@
+~OLComando :~RS ewiz
+~OLUso     :~RS ewiz [<nível>] <texto>
+
+Este comando permite-lhe transmitir uma emoção aos vários níveis de WIZ
+existentes, logo que sejam de nível igual ou inferior ao seu. Se nenhum nível
+for especificado, é tido por omissão o mais baixo nível de WIZ, fazendo com que
+todos os WIZ's o vejam.

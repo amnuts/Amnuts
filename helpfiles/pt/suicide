@@ -1,0 +1,5 @@
+~OLComando :~RS suicide
+~OLUso     :~RS suicide <password>
+
+Permite que apagues a tua conta, apagando também o teu profile e qualquer
+email que tenhas.

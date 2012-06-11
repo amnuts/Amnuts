@@ -1,0 +1,5 @@
+~OLCommand :~RS site
+~OLUsage   :~RS site <user>
+
+This shows you the internet address from which the given user is logging
+in from.

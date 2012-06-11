@@ -1,0 +1,10 @@
+~OLComando :~RS lmail
+~OLUso     :~RS lmail <nível>|wizzes|all [<texto>]
+
+Este comando permite enviar um mail a todos os utilizadores de um 
+determinado nível. Permite também enviar um mail para todos os "wizzes" e
+também para todos os utilizadores que tenham uma conta. Se o <texto> for
+omitido, então será utilizado o modo editor para escrever a mensagem.
+Este comando deve ser usado apenas se houver um número reduzido de
+pessoas no talker, pois pode causar um lag no talker, se o mail estiver a
+ser enviado para um número elevado de pessoas.

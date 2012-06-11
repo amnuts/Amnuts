@@ -1,0 +1,9 @@
+~OLComando :~RS swban
+~OLUso     :~RS swban
+
+Modifica o estado de controlo de impropérios entre on, off e mínimo. Se
+estiver off, então o utilizador pode dizer o que quiser. Se estiver
+mínimo, então as palavras que sejam consideradas impropérios serão
+substituidas por qualquer palavra que esteja definida no código do
+talker. Se estiver on, então, se a frase contiver um impropério, a frase
+não irá aparecer.

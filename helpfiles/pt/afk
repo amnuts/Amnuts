@@ -1,0 +1,13 @@
+~OLComando :~RS afk
+~OLUso     :~RS afk [lock] [<texto>]
+
+Este comando permite-te pôr em "Away From Keyboard" (longe do teclado)
+e informa o resto das pessoas do teu estado quando fazem '.look' na
+sala onde estás, e serão informadas que estás AFK se te tentarem dizer
+algo ou se te fizerem um 'semote'. Carrega na tecla 'Enter' para
+voltares ao estado normal, a não ser que tenhas utilizado a opção 
+"lock", opção essa que irá bloquear a sessão e prevenir que alguém a
+use enquanto estiveres longe do terminal. Insere a tua password e
+carrega no 'Enter' para desbloquear. Podes deixar uma mensagem quando
+fores para AFK, e esta será vista por qualquer pessoa que te tente
+dizer algo ou fazer-te um 'semote'.

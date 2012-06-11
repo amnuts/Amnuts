@@ -1,0 +1,5 @@
+~OLCommand :~RS connect
+~OLUsage   :~RS connect <room>
+
+This command tries to make this room a gateway to another talker by
+bringing up a netlink. The link must be predefined in the config file.

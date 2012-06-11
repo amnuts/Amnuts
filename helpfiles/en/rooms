@@ -1,0 +1,6 @@
+~OLCommand :~RS rooms
+~OLUsage   :~RS rooms [-l]
+
+Displays a list of the rooms and their current topics. If the "-l" (ell)
+option is used then any rooms that require you to be of a certain level
+and above to enter will be displayed.

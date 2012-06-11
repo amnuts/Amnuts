@@ -1,0 +1,4 @@
+~OLCommand :~RS bring
+~OLUsage   :~RS bring <user>
+
+Moves a user from the room they are in to the room you are currently in.

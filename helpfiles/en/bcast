@@ -1,0 +1,6 @@
+~OLCommand :~RS bcast
+~OLUsage   :~RS bcast <text>
+
+The text will be broadcast throughout the talker, forcing any that are
+ignoring to listen to it. The name of the person using this command is
+not given.

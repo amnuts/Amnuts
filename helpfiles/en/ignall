@@ -1,0 +1,5 @@
+~OLCommand :~RS ignall
+~OLUsage   :~RS ignall
+
+This allows you to ignore all of the conversations, tells, shouts, etc.
+Acts as a toggle, so type it again to listen.

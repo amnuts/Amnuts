@@ -1,0 +1,5 @@
+~OLCommand :~RS set revbuff
+~OLUsage   :~RS set revbuff
+
+This attribute toggles (switches between two states) whether you see
+the review buffer in ascending or descending order by date.

@@ -1,0 +1,8 @@
+~OLComando :~RS myroom
+~OLUso     :~RS myroom [-d]
+
+Este comando permite-te mover para a tua sala pessoal. Se essa sala não
+existe, então será criada uma automaticamente. Podes fazer a tua própria
+descrição, tópico, e também ter a teu próprio quadro de mensagens. Se a
+opção -d fôr usada, a tua sala será apagada. As funções de sala pessoal
+têm de estar activadas para poderes usar este comando.

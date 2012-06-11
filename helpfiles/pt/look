@@ -1,0 +1,5 @@
+~OLComando :~RS look
+~OLUso     :~RS look
+
+Mostra a descrição da sala corrente, quem lá está, quantas mensagens tem
+o quadro e a quantas salas dá acesso.

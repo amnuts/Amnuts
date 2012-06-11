@@ -1,0 +1,7 @@
+~OLComando :~RS clearline
+~OLUso     :~RS clearline <linha>
+
+É possível apagar uma linha de um utilizador enquando estão no estado
+de login (como está mostrado em "people"). Isto é útil se aquela linha
+estiver encravada no estado de login durante muito tempo, ou quiseres
+apagar a linha rapidamente antes que o utilizador se ligue.

@@ -1,0 +1,5 @@
+~OLComando :~RS time
+~OLUso     :~RS time
+
+Mostra as horas do sistema onde o talker está a correr, e também o uptime
+do talker e o boot time do talker.

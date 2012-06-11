@@ -1,0 +1,7 @@
+~OLComando :~RS entpro
+~OLUso     :~RS entpro [<texto>]
+
+Este comando permite-te produzir uma descrição mais completa de ti, que
+será vista pelas outras pessoas quando usarem o comando "examine". Dado
+que podes escrever aquilo que te apetecer, é costume usá-lo para
+diversos fins.

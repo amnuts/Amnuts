@@ -1,0 +1,5 @@
+~OLComando :~RS fsay
+~OLUso     :~RS fsay <texto>
+
+Irá enviar o texto como se fosse um "tell" a todos os teus amigos, e 
+apenas esses, qualquer que seja a sala em que se encontrem.

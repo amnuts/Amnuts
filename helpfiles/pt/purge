@@ -1,0 +1,15 @@
+~OLComando :~RS purge
+~OLUso     :~RS purge -d
+~OL        :~RS purge -s <site>
+~OL        :~RS purge -t <dias>
+
+Dá-te um meio de fazer purge manualmente. Se a opção "-d" for usada, 
+então o purge ocorrerá nos tempos pré-definidos. Se a opção "-s" for
+usada, então será feito um "purge" a qualquer pessoa a qualquer pessoa 
+que se ligue do <site>. Se for usada a opção "-t", então qualquer pessoa
+que se tenha ligado há mais de <dias> dias, será eliminado.
+
+Se a opção auto_purge estiver activa, é efectuado um purge automatico quando o
+talker é iniciado, e depois periodicamente.
+
+CUIDADO: Com um purge o sistema poderá ficar temporariamente lento.

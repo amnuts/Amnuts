@@ -1,0 +1,6 @@
+~OLComando :~RS set icq
+~OLUso     :~RS set icq [<icq>]
+
+Usa este atributo para definires o teu Número de identificação do ICQ
+para ser mostrado a outros utilizadores. Usar este comando sem escrever
+o número, irá apagar o atributo.

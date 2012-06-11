@@ -1,0 +1,12 @@
+~OLComando :~RS call
+~OLUso     :~RS call [<utilizador>]
+~OLAtalhos :~RS ,
+
+Permite-te arranjar uma maneira rápida de enviar uma mensagem a um
+utilizador. Se omitires o <utilizador>, então mostrar-te-á que
+utilizador tens definido para o efeito.
+
+A "quick call" é usada da seguinte maneira: ,então, tá-se bem?
+
+A mensagem será enviada para quem quer que esteja definido para a
+tua "quick call".

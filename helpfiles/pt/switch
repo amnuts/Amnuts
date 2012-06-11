@@ -1,0 +1,8 @@
+~OLComando :~RS switch
+~OLUso     :~RS switch [<sala>]
+
+Permite que troques de lugar com um dos teus clones, numa dada sala.
+Poupa-te tempo, para não teres de destruir o clone, criar outro na sala
+onde estás, e ainda teres de te mover para a sala onde o antigo estava.
+Se tiveres apenas um clone activo, podes omitir a <sala> para trocares
+com o clone.

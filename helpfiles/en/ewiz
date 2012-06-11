@@ -1,0 +1,8 @@
+~OLCommand :~RS ewiz
+~OLUsage   :~RS ewiz [<level>] <text>
+
+This command allows one to emote to various staff levels though they
+can only specifically emote to levels equal or less that of their own.
+If no level is specified it defaults to lowest staff level which means
+all staff levels can hear it. Example of emoting to all staff of ARCH
+or above: .ewiz arch grins.

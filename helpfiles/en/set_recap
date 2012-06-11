@@ -1,0 +1,6 @@
+~OLCommand :~RS set recap
+~OLUsage   :~RS set recap <recap>
+
+Use this setting to change the way your name looks. For example, if
+your username is Doggiedog, and you would prefer it to be DoggieDog,
+use this command to change its appearance.

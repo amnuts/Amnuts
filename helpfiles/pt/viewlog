@@ -1,0 +1,6 @@
+~OLComando :~RS viewlog
+~OLUso     :~RS viewlog sys|net|req|err|<nível> [<linhas>]
+
+Mostra logs variados. Se forem especificadas as <linhas>, verás apenas as
+essa quantidade de linhas, a contar do final do log. Fazendo isto não
+tens de pecorrer as páginas do log.

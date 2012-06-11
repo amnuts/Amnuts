@@ -1,0 +1,5 @@
+~OLComando :~RS fsmail
+~OLUso     :~RS fsmail [<texto>]
+
+Este comando permite-te enviar um mail a todas as pessoas que estejam na
+tua lista de amigos. Se não prencheres o campo texto, aparecerá o editor.

@@ -1,0 +1,9 @@
+~OLCommand :~RS promote
+~OLUsage   :~RS promote <user> [<level>]
+
+Will promote a user to the next level up in the ranks list. You cannot
+promote above the highest level, and you cannot promote anyone of the
+same or higher level as you. You can also promote a user even if they
+are not logged on. If the <level> option is used then the user will be
+promoted directly to that given level, rather than the level above what
+they currently are.

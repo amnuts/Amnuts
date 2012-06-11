@@ -1,0 +1,7 @@
+~OLComando :~RS set pager
+~OLUso     :~RS set pager <linhas>
+
+Este atributo é usado par definir o tamanho do paginador. Pode ser
+definido entre 15 e 99. Por defeito é 23. Afecta quaisquer ficheiros que
+sejam visualizados, tais como ficheiros de texto, fiheiros de ajuda e
+outros texto que o talker forneça.

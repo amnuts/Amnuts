@@ -1,0 +1,7 @@
+~OLComando :~RS set autofwd
+~OLUso     :~RS set autofwd
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Este modificador
+indica se o teu mail está a ser redireccionado para o teu endereço de
+email.

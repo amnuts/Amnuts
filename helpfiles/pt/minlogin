@@ -1,0 +1,11 @@
+~OLComando :~RS minlogin
+~OLUso   :~RS minlogin -a|-n|<nível>
+
+Define o nível mínimo de login que um utilizador tem de ter para se
+ligar. Isto afecta directamente o porto principal, mas afecta apenas a 
+wizport se estiver com uma definição mais elevada que  o nível de login
+da wizport. Se definido para -a todas as tentativas de login na porta
+principal serão recusadas. Se definido para -n, então ninguém poderá
+ligar-se e novos utilizadores podem ser criados. Se definida para <nível>
+não poderão ser criadas novas contas, mas utilizadores de nível <nível>
+e acima poder-se-ão ligar.

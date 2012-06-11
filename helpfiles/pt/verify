@@ -1,0 +1,10 @@
+~OLComando :~RS verify
+~OLUso     :~RS verify <palavra>
+
+Permite-te verificar que foi enviado um email do talker. O email ser-te-á
+enviado quando preencheres o campo de email através do comando "set"
+(desde que tenhas especificado correctamente o teu email). Assim que
+receberes o email, vais estar lá um código de verificação que deves 
+submeter, para que o teu mail local seja redireccionado para o teu email.
+Usa o comando "set" para desligares o redirecionamento. Usa o comando
+"fmail" para redireccionares o mail local manualmente.

@@ -1,0 +1,6 @@
+~OLCommand :~RS fmail
+~OLUsage   :~RS fmail all|<message>
+
+This command allows you to manually forward all of, or specific messages
+from your local mail box to your email. You need to have your email
+entered and verified, though you do not need to have the auto-forward set.

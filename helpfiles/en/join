@@ -1,0 +1,5 @@
+~OLCommand :~RS join
+~OLUsage   :~RS join <user>
+
+Allows you to join <user> no matter what room they are currently
+in--providing the room is currently public, or you have been invited in.

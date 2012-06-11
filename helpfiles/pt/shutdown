@@ -1,0 +1,5 @@
+~OLComando :~RS shutdown
+~OLUso     :~RS shutdown [<segundos>|cancel]
+
+Irá desligar o talker, imediatamente ou depois de <segundos> segundos.
+A opção cancel irá cancelar qualquer contagem decrescente.

@@ -1,0 +1,6 @@
+~OLCommand :~RS files
+~OLUsage   :~RS files [<file>]
+
+This allows you to display certain files. To see what files are available
+to be viewed then omit the <file> name. Else include the <file> name to
+view that particular file.

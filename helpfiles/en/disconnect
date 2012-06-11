@@ -1,0 +1,4 @@
+~OLCommand :~RS disconnect
+~OLUsage   :~RS disconnect <room>
+
+Bring down the netlink in a room.

@@ -1,0 +1,6 @@
+~OLCommand :~RS recount
+~OLUsage   :~RS recount [motds]
+
+This allows the boards to be recounted in case they have been edited
+manually and the count has an error. If the "motds" option is used the
+pre- and post-login motds will be recounted.

@@ -1,0 +1,7 @@
+~OLComando :~RS help
+~OLUso     :~RS help [<comando>|commands|credits|nuts]
+
+Este comando irá mostrar o ficheiro de ajuda para qualquer comando dado.
+Se escreveres "commmands" ou omitires o <comando> então ir-te-á ser
+mostrada uma lista com  todos os comandos a que tens acesso. Também podes
+ver diversos créditos.

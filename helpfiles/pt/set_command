@@ -1,0 +1,8 @@
+~OLComando :~RS set command
+~OLUso     :~RS set command
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o.
+Este comando modifica o modo como vês o ficheiro de ajuda, podendo ser
+por níveis ou por funcionalidade. Experimenta ambos!
+

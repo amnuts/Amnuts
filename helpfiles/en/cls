@@ -1,0 +1,4 @@
+~OLCommand :~RS cls
+~OLUsage   :~RS cls
+
+Clears the screen of any text.

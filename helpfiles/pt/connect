@@ -1,0 +1,6 @@
+~OLComando :~RS connect
+~OLUso     :~RS connect <sala>
+
+Este comando faz com que a sala seja um gateway para outro talker, 
+criando um netlink. O link tem de ser definido no ficheiro de 
+configuração.

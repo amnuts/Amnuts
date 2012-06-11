@@ -1,0 +1,5 @@
+~OLCommand :~RS invite
+~OLUsage   :~RS invite <user>
+
+This will allow a user of your choice to be invited into a private room
+which you are currently in.

@@ -1,0 +1,7 @@
+~OLCommand :~RS go
+~OLUsage   :~RS go [<room>] | [<service>] [<password>]
+
+This command moves you to another room, providing that room is adjoined
+and is not set to private (unless you have been invited into that room).
+If you omit the room name you will be moved straight to the main room
+(i.e., that room which you start in).

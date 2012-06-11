@@ -1,0 +1,5 @@
+~OLCommand :~RS review
+~OLUsage   :~RS review
+
+This will show the last few lines of conversation, emoting and echoes
+that took place in the room which you are in.

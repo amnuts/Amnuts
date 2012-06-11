@@ -1,0 +1,5 @@
+~OLCommand :~RS knock
+~OLUsage   :~RS knock <room>
+
+This sends a message to people in a private room letting them know that
+you wish to enter. It is then up to them to invite you in.

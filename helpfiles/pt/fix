@@ -1,0 +1,7 @@
+~OLComando :~RS fix
+~OLUso     :~RS fix [<sala>]
+
+Irá fixar o estado de uma sala em public (pública) ou private (privada)
+para que não possa ser mudada usando os comandos "public" ou "private".
+Se for omitido o parâmetro <sala>, então irá ser fixado o acesso à sala
+onde te encontras neste momento.

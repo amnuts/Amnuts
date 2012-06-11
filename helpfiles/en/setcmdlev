@@ -1,0 +1,8 @@
+~OLCommand :~RS setcmdlev
+~OLUsage   :~RS setcmdlev <command> <level>|norm
+
+With this command you can alter the level of a command for the time that
+the talker is active. (i.e., if you reboot or shutdown the talker then
+the command will revert back to its normal level). If you give the option
+"norm" then you will revert the command back to its normal level. You
+can only alter the levels of commands you have access to.

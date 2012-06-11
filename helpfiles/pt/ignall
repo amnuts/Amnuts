@@ -1,0 +1,6 @@
+~OLComando :~RS ignall
+~OLUso     :~RS ignall
+
+Este comando permite-te ignorar todas as conversas, "tells", "shouts,",
+etc. Actua como um modificador, por isso executa-o outra vez para 
+deixares de ignorar.

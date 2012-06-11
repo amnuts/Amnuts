@@ -1,0 +1,16 @@
+~OLCommand :~RS purge
+~OLUsage   :~RS purge -d
+~OL        :~RS purge -s <site>
+~OL        :~RS purge -t <days>
+
+This gives you a manual way of purging user files. If the "-d" option is
+used then a purge will be conducted with the default time settings. If
+the "-s" option is used then anyone from the <site> supplied will be
+purged. If the "-t" option is used then anyone who last logged on more
+that <days> ago will be purged.
+
+A purge is automatically done when the talker is booted if the auto_purge
+option is active, and also every time the default non-use time period
+has expired (take taken from after boot-up time).
+
+CAUTION: With a purge the system may be temporarily lagged.

@@ -1,0 +1,5 @@
+~OLCommand :~RS listen
+~OLUsage   :~RS listen
+
+This command will allow you to hear the room conversation, shouts, etc,
+if you were previously ignoring.

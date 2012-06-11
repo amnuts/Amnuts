@@ -1,0 +1,5 @@
+~OLComando :~RS set age
+~OLUso     :~RS set age <idade>
+
+Permite que definas a tua idade para que outras a possam ver através do
+comando ".ustat".

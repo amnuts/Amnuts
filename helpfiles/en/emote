@@ -1,0 +1,9 @@
+~OLCommand :~RS emote
+~OLUsage   :~RS emote <text>
+~OLAliases :~RS ; or : (apostrophe: :' or ;')
+
+Emotes allow you to express emotions. A example would be "Andy feels sad".
+If you were logged in as Andy you would enter ".emote feels sad" and your
+user name will be prefixed to the front. The result is seen in the room
+you are currently in. You may also use a leading apostrophe to produce
+results such as: "Andy's face breaks into a grin".

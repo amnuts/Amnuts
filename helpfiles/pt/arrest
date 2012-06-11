@@ -1,0 +1,11 @@
+~OLComando :~RS arrest
+~OLUso     :~RS arrest <utilizador>
+
+Envia o <utilizador> para a cadeia (se existir uma sala para esse fim)
+e põe o seu nível em JAILED. Se o utilizador se desligar e depois
+voltar a ligar-se, vai continuar JAILED e será  automaticamente enviado
+para a cadeia. Se não houver nenhuma sala de cadeia, continuará na sala
+principal, com o nível, no entanto, em JAILED. O acto de prender é 
+baseado em níveis, logo se um ARCH prende alguém, então apenas um ARCH
+ou um nível mais elevado pode libertá-lo. O nível da pessoa que prendeu
+um utilizador é mostrado através do comando 'ustat'

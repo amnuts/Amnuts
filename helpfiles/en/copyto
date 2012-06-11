@@ -1,0 +1,7 @@
+~OLCommand :~RS copyto
+~OLUsage   :~RS copyto <user> [<user>...]
+
+This command allows you to send a copy of the next mail you send to
+someone to the user(s) given. The user(s) given can also be on a remote
+system, providing it has connection to the talker. This is reset to send
+out no copies after every mail sent.

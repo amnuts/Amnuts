@@ -1,0 +1,6 @@
+~OLCommand :~RS flagged
+~OLUsage   :~RS flagged
+
+This command allows you to see what users you have flagged, be it a
+user that you have given a key to, a user you are ignoring, or a user
+you have flagged as a friend.

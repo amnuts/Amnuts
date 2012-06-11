@@ -1,0 +1,5 @@
+~OLCommand :~RS ignlogons
+~OLUsage   :~RS ignlogons
+
+This will allow you to ignore all logons and logoffs. Acts as a toggle
+on or off.

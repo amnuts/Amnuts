@@ -1,0 +1,4 @@
+~OLComando :~RS netstat
+~OLUso     :~RS netstat
+
+Mostra o status corrente da ligação.

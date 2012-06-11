@@ -1,0 +1,5 @@
+~OLComando :~RS set revbuff
+~OLUso     :~RS set revbuff
+
+Este atributo modifica a forma como vês o review buffer (por ordem
+ascendente ou descendente de data).

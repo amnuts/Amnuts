@@ -1,0 +1,8 @@
+~OLCommand :~RS mode
+~OLUsage   :~RS mode
+
+This switches you between speech mode and command mode. In speech mode
+everything you type is interpreted as speech unless it is preceded by
+a dot. In command mode you get a standard command type or prompt and
+everything is treated as a command, to talk you must explicitly use the
+"say" command.

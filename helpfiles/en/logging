@@ -1,0 +1,8 @@
+~OLCommand :~RS logging
+~OLUsage   :~RS logging -l|-s|-r|-n|-e|-on|-off
+
+This allows you to toggle the logging functions. Using the -l option with
+list the status of the logging function. The -s, -r, -n, and -e options
+will toggle the system log, request log, netlinks log, and error log
+(respectively). The -on option will turn all logging on, and -off will
+turn everything off.

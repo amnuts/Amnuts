@@ -1,0 +1,9 @@
+~OLComando :~RS promote
+~OLUso     :~RS promote <utilizador> [<nível>]
+
+Promoverá um utilizador para o próximo nível na lista de ranks. Não podes
+promover acima do nível mais alto, nem podes promover ninguém do mesmo ou
+de nível mais alto do que tu. Podes também promover um utilizador mesmo
+que não esteja ligado. Se a opção <nível> fôr usada, então o utilizador
+será promovido directamente para aquele nível, em vez do ser promovido
+para o nível acima do qual ele estava.

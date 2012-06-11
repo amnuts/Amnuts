@@ -1,0 +1,9 @@
+~OLCommand :~RS cname
+~OLUsage   :~RS cname <old-user> <new-user>
+
+This command allows you to change the name of an existing user to another
+name. This will allow users to be able to change their name if they wish
+without creating a new account, gain their logon time back, redo their
+profile, lose their mail, etc. The user does not have to be logged on
+for you to be able to use the command on them, though it works even if
+they are.

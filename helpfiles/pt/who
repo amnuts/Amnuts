@@ -1,0 +1,6 @@
+~OLComando :~RS who
+~OLUso     :~RS who
+~OLAtalhos :~RS @
+
+Mostra a lista das pessoas ligadas ao talker, incluindo descrições,
+areas, etc.

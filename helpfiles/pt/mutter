@@ -1,0 +1,5 @@
+~OLComando :~RS mutter
+~OLUso     :~RS mutter <utilizador> <texto>
+
+Enviará o texto para todas as pessoas na sala, excepto para o
+<utilizador>.

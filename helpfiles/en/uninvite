@@ -1,0 +1,5 @@
+~OLCommand :~RS uninvite
+~OLUsage   :~RS uninvite <user>
+
+This will allow you to cancel the invitation for a user to join you in
+a private room. You can only uninvite a user you have previously invited.

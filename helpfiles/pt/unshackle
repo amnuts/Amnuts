@@ -1,0 +1,5 @@
+~OLComando :~RS unshackle
+~OLUso     :~RS unshackle <utilizador>
+
+Fará com que o utilizador deixe de estar retido na sala onde estava, se
+estiver retido.

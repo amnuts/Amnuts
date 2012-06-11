@@ -1,0 +1,5 @@
+~OLCommand :~RS last
+~OLUsage   :~RS last [<user>]
+
+Shows you when a user was last logged on. If the <user> option is omitted
+then a list of the last number of users to log on will be displayed.

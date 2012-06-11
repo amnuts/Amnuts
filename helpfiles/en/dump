@@ -1,0 +1,10 @@
+~OLCommand :~RS dump
+~OLUsage   :~RS dump -u|-r <level>|-c|-m|-s
+
+This command allows you to dump talker information directly to files on
+the talker shell account. If you use the -u option you will dump all the
+users names. If you use the -r <level> option then you will dump only
+the users with that level. If you use the -c option then you will dump
+the last 16 commands used. -m dumps the memory currently being used by
+the talker, and -s dumps system information such as PID, netlink and IP
+resolve status, and more.

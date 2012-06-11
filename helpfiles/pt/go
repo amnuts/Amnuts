@@ -1,0 +1,7 @@
+~OLComando :~RS go
+~OLUso     :~RS go [<sala>] | [<serviço>] [<password>]
+
+Este comando movete para outra sala, tendo que a sala estar ligada à 
+outra e não ser privada (a não ser que tenhas sido convidado). Se 
+omitires o nome da sala serás movido directamente para a sala principal
+(i.e., a sala onde começas).

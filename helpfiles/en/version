@@ -1,0 +1,5 @@
+~OLCommand :~RS version
+~OLUsage   :~RS version
+
+Shows the current talker version, and also information on various settings
+on the talker.

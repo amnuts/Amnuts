@@ -1,0 +1,5 @@
+~OLCommand :~RS unshackle
+~OLUsage   :~RS unshackle <user>
+
+This will allow a user to move out of the room that they are currently
+in if they are already shackled.

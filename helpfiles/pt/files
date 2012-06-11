@@ -1,0 +1,6 @@
+~OLComando :~RS files
+~OLUso     :~RS files [<ficheiro>]
+
+Permite mostrar determinados ficheiros. Para ver que ficheiros estão 
+disponíveis, omite o parâmetro <ficheiro>. Senão inclui-o para ver esse
+ficheiro em particular.

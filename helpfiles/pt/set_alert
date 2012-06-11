@@ -1,0 +1,7 @@
+~OLComando :~RS set alert
+~OLUso     :~RS set alert
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Este modificador em
+particular, caso esteja on, alertar-te-á para o facto de um dos teus
+amigos se ter ligado.

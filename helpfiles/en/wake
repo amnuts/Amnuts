@@ -1,0 +1,5 @@
+~OLCommand :~RS wake
+~OLUsage   :~RS wake <user>
+
+This sends a message and a beeping noise to the users terminal hopefully
+attracting their attention.

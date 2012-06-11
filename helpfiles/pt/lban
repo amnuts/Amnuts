@@ -1,0 +1,6 @@
+~OLComando :~RS lban
+~OLUso     :~RS lban sites|users|new|swears
+
+Irá listar todos os sites, ou todos os utilizadores, ou todos os novos
+utilizadores de um site correntemente banidos. Também lista as palavras
+banidas.

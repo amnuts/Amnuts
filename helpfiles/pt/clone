@@ -1,0 +1,6 @@
+~OLComando :~RS clone
+~OLUso     :~RS clone [<sala>]
+
+Clone irá criar um clone teu numa sala por ti especificada. Este clone
+pode ouvir a conversação que se passa naquela sala, e também podes
+falar através desse clone, ou trocar de lugar com ele.

@@ -1,0 +1,4 @@
+~OLCommand :~RS guess
+~OLUsage   :~RS guess <letter>
+
+Gives a letter as a guess for your current hangman game.

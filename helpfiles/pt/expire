@@ -1,0 +1,8 @@
+~OLComando :~RS expire
+~OLUso     :~RS expire <utilizador>
+
+Muda o estado de "expiração do utilizador" entre on e off. Se estiver off
+então os ficheiros referentes aos utilizadores não serã apagados ao final
+de um determinado tempo de não uso. Se estiver on, os ficheiros 
+referentes a um utilizador serão apagados ao final de um determinado 
+tempo de não uso.

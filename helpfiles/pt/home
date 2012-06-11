@@ -1,0 +1,7 @@
+~OLComando :~RS home
+~OLUso     :~RS home
+
+Se estás num site remoto, este comando ir-te-á levar de volta ao teu
+site original, sem teres de percorrer o caminho de volta para a gateway.
+Serás colocado na sala do teu site original que está ligado ao serviço
+remoto  onde estavas anteriormente.

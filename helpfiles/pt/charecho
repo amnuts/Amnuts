@@ -1,0 +1,10 @@
+~OLComando :~RS charecho
+~OLUso     :~RS charecho
+
+Este é um comando apenas para pessoas que usem clientes "character
+mode". Alguns destes clientes no irão mostrar os caracteres teclados
+pelo utilizador, mesmo quando configurados para isso; este comando
+obriga o talker a fazê-lo. O comando é um "toggle", pelo que usá-lo
+mudará o seu estado entre on e off. Se usares este comando, estando
+o teu cliente a mostrar correctamente os caracteres, verás as 
+mensagens em duplicado.

@@ -1,0 +1,6 @@
+~OLComando :~RS uninvite
+~OLUso     :~RS uninvite <utilizador>
+
+Irá cancelar o convite que fizeste a um utilizador para se juntar a ti
+numa sala privada. Só podes fazer uninvite a alguém que tenhas convidado
+previamente.

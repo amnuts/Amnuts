@@ -1,0 +1,9 @@
+~OLCommand :~RS lmail
+~OLUsage   :~RS lmail <level>|wizzes|all [<text>]
+
+This command allows mail to be sent to all the users of a specific level.
+It can also be used to send mail to all of the staff (wizzes) and also to
+all of the users who have an account. If the <text> is omitted then the
+line editor will be used to input the mail message. This command should
+only be used when there are a minimal amount of users on, as it may cause
+the talker to lag if the mail is being sent to a large amount of people.

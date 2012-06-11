@@ -1,0 +1,11 @@
+~OLComando :~RS desc
+~OLUso     :~RS desc [<texto>]
+
+This sets the message for your description, i.e., that which follows
+your name when other people view the room or use the "who" command,
+etc. If you omit the description it displays your current one.
+
+Define a mensagem para a tua descrição, i. e., aquela que está a 
+seguir ao nome quando outras pessoas vêem a sala ou usam o comando
+"who", etc. Se omitires a descrição, mostra-te a que tens neste
+momento.

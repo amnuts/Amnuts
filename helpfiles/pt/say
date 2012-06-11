@@ -1,0 +1,5 @@
+~OLComando :~RS say
+~OLUso     :~RS say <texto>
+
+Este comando é apenas necessário em modo COMMAND, visto que em modo
+SPEECH, tudo o que escreveres é interpretado como uma fala.

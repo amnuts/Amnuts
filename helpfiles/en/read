@@ -1,0 +1,8 @@
+~OLCommand :~RS read
+~OLUsage   :~RS read [<room>] [<message>]
+
+This displays the message board of the given room, providing you have
+access to that room (i.e., it is not fixed to private). If no room is
+given it defaults to your current room. If you use the <message> option,
+then you will read only that specific message number for the room given,
+or the room you are in if no room name is supplied.

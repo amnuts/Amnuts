@@ -1,0 +1,5 @@
+~OLComando :~RS rstat
+~OLUso     :~RS rstat <sala>
+
+Dá as estatísticas d o serviço ao qual a sala está ligada, desde que a
+sala tenha um netlink activo.

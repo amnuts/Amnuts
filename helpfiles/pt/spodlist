@@ -1,0 +1,10 @@
+~OLComando :~RS spodlist
+~OLUso     :~RS spodlist
+~OL        :~RS spodlist <utilizador>
+~OL        :~RS spodlist <rank>
+
+Este comando permite-te ver a tua posição, ou a posição de outro
+utilizador, na spod list. Se usares o comando sem opções, ser-te-á
+mostrada a tua posição na spod list. Se usares com a opção <rank>, 
+mostrar-te-á quem estiver nessa posição na spod list. Se usares a opção
+<user>, ser-te-á mostrada a posição daquele utilizador.

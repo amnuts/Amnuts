@@ -1,0 +1,9 @@
+~OLComando :~RS set room
+~OLUso     :~RS set room
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Esta definição muda
+o sítio onde entras depois de fazeres login. Por defeito é na sala
+principal. Podes mudar para a sala de onde saiste, desde que a sala de
+onde saíste seja pública. Se a sala de onde saiste se tornou privada,
+serás enviado para a sala principal, por defeito.

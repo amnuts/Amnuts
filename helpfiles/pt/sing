@@ -1,0 +1,5 @@
+~OLComando :~RS sing
+~OLUso     :~RS sing [<texto>]
+
+Mostra o texto entre notas musicais para a sala onde te encontras. Por
+exemplo: Andy sings o/~ lalala o/~

@@ -1,0 +1,5 @@
+~OLComando :~RS shoot
+~OLUso     :~RS shoot <utilizador>
+
+Tenta acertar em outro utilizador no jogo do tiro. Pode ser feito apenas
+numa sala específica (vê ".rooms level" para a sala).

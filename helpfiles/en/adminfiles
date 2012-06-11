@@ -1,0 +1,6 @@
+~OLCommand :~RS adminfiles
+~OLUsage   :~RS adminfiles [<file>]
+
+This allows you to display certain files that are for admin users only. To
+see what files are available to be viewed then omit the <file>. Else
+include the <file> to view that particular file.

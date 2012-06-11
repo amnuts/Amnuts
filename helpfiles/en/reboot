@@ -1,0 +1,5 @@
+~OLCommand :~RS reboot
+~OLUsage   :~RS reboot [<seconds>|cancel]
+
+This will reboot the talker, either immediately or after <seconds>
+seconds. The cancel option will cancel any timed reboot.

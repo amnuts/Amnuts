@@ -1,0 +1,4 @@
+~OLCommand :~RS ignshout
+~OLUsage   :~RS ignshout
+
+This allows you to ignore any shouts. Acts as a toggle on or off.

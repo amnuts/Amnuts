@@ -1,0 +1,5 @@
+~OLComando :~RS knock
+~OLUso     :~RS knock <sala>
+
+Isto envia uma mensagem para as pessoas numa sala privada, deixando-as
+saber que desejas entrar. Cabe então a elas convidarem-te ou não.

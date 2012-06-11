@@ -1,0 +1,6 @@
+~OLComando :~RS public
+~OLUso     :~RS public [<sala>]
+
+Irá modificar o status da sala para public, desde que a sala não esteja
+"fixed". Se fores de nível suficientemente alto para usar a opção <sala>,
+podes mudar qualquer sala para public, desde que não esteja "fixed".

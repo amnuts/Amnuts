@@ -1,0 +1,5 @@
+~OLCommand :~RS time
+~OLUsage   :~RS time
+
+Displays the current system time of where the talker is running from,
+and also the uptime of the talker and boot time of the talker.

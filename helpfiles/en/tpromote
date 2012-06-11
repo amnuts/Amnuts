@@ -1,0 +1,11 @@
+~OLCommand :~RS tpromote
+~OLUsage   :~RS tpromote <user> [<level>]
+
+Will promote a user temporarily to the next level up in the ranks
+list. This promotion will only last as long as the user is logged
+on. Once they log out they will be returned to their normal level. You
+cannot promote above the highest level, and you cannot promote anyone
+of the same or higher level as you. You can also tpromote a user even if
+they are logged on. If the <level> option is used then the user will be
+promoted directly to that given level, rather than the level above that
+which they currently are.

@@ -1,0 +1,6 @@
+~OLCommand :~RS fix
+~OLUsage   :~RS fix [<room>]
+
+This will fix a rooms access whether it is public or private so that it
+cannot be changed using the public or private commands. If you omit the
+<room> then you will fix the access of the room you are currently in.

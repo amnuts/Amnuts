@@ -1,0 +1,4 @@
+~OLComando :~RS kill
+~OLUso     :~RS kill <utilizador>
+
+Terminará a sessão de um dado utilizador do talker.

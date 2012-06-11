@@ -1,0 +1,7 @@
+~OLCommand :~RS entpro
+~OLUsage   :~RS entpro [<text>]
+
+This command allows you to enter a lengthy description (profile) of
+yourself that people will see when they use the "examine" command. Since
+you can write anything you like here people tend to use it for all sorts
+of things.

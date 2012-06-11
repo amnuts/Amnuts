@@ -1,0 +1,5 @@
+~OLCommand :~RS unretire
+~OLUsage   :~RS unretire <user>
+
+This command allows you to unretire a wiz, making their name show up
+again on the wizlist.

@@ -1,0 +1,5 @@
+~OLCommand :~RS cbuff
+~OLUsage   :~RS cbuff
+~OLAliases :~RS *
+
+Clears the conversation buffer of the room you are currently in.

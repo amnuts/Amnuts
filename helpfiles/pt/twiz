@@ -1,0 +1,7 @@
+~OLComando :~RS twiz
+~OLUso     :~RS twiz [<nível>] <texto>
+
+Este comando permite que os Wiz's executem um tell para os outros Wiz's,
+embora o possam fazer apenas para os níveis iguais ou inferiores aos
+deles. Se não for especificado nenhum <nível>, a mensagem será
+encaminhada para todos os Wiz's. Exempla para ARCHs: .twiz arch hiya!

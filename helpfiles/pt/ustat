@@ -1,0 +1,5 @@
+~OLComando :~RS ustat
+~OLUso     :~RS ustat [<utilizador>]
+
+Mostra-te os atributos e detalhes do utilizador. Se omitires o
+<utilizador>, dá-te os teus dados.

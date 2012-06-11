@@ -1,0 +1,5 @@
+~OLComando :~RS think
+~OLUso     :~RS think [<texto>]
+
+Mostra o texto entre bolhas de pensamento, para a sala onde te encontras.
+Por exemplo: Andy thinks . o O (logo existo)

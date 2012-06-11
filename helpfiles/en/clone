@@ -1,0 +1,6 @@
+~OLCommand :~RS clone
+~OLUsage   :~RS clone [<room>]
+
+Clone will create a clone of you in whichever room you specify. This
+clone can then listen in to the conversation in that room, and you can
+also talk through that clone or swap places with it.

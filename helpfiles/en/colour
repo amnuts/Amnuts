@@ -1,0 +1,6 @@
+~OLCommand :~RS colour
+~OLUsage   :~RS colour
+
+Allows you to test the current colour configurations of the talker. For
+this you must have "set colour" to be ON. If no colours show then you
+should "set colour" to be OFF.

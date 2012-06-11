@@ -1,0 +1,8 @@
+~OLComando :~RS search
+~OLUso     :~RS search <palavra> [<palavra>...]
+
+Irá procurar palavras na lista de palavras em toda os quadros de
+mensagens que podes ver, i.e. não mostrará nada que esteja numa sala
+privada, se não tiveres acesso a essa sala. A procura de palavras é feita
+numa base OU, i.e. se alguma das palavras estiver numa dada mensagem será
+mostrada, ao invés de terem de estar todas as palavras.

@@ -1,0 +1,5 @@
+~OLCommand :~RS fsay
+~OLUsage   :~RS fsay <text>
+
+This will send the text as normal speech to anyone on your "friends" list,
+and only those people, regardless of what room they are currently in.
