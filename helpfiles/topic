@@ -1,4 +1,0 @@
-~OLCommand :~RS topic
-~OLUsage   :~RS topic <text>
-
-You can set the topic of the room you are in to the text given.

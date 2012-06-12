@@ -1,5 +1,0 @@
-~OLCommand :~RS shout
-~OLUsage   :~RS shout <message>
-~OLAliases :~RS [
-
-This allows you to "shout" to the whole talker.

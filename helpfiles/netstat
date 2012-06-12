@@ -1,4 +1,0 @@
-~OLCommand :~RS netstat
-~OLUsage   :~RS netstat
-
-This shows the current net link status.

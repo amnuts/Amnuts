@@ -1,4 +1,0 @@
-~OLCommand :~RS makeinvis
-~OLUsage   :~RS makeinvis <user>
-
-Forces a user to become invisible if they are visible.
