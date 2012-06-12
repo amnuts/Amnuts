@@ -1642,7 +1642,7 @@ write_board(UR_OBJECT user, char *inpstr)
                  filename);
     return;
   }
-  name = user->vis ? user->bw_recap : invisname;
+  name = user->vis ? user->recap : invisname;
   /*
      The posting time (PT) is the time its written in machine readable form, this
      makes it easy for this program to check the age of each message and delete

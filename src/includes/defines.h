@@ -134,9 +134,9 @@
 
 /* user defines */
 #define USER_NAME_MIN 3         /* probably bad to allow extremely short names */
-#define USER_NAME_LEN 12
-#define RECAP_NAME_LEN USER_NAME_LEN*4
-#define USER_DESC_LEN 35
+#define USER_NAME_LEN 16
+#define RECAP_NAME_LEN (USER_NAME_LEN*4 + 3)
+#define USER_DESC_LEN (40 - USER_NAME_LEN)
 #define AFK_MESG_LEN 60
 #define PHRASE_LEN 40
 #define PASS_MIN 3              /* probably bad to allow extremely short passwords */

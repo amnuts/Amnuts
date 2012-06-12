@@ -4514,7 +4514,7 @@ login(UR_OBJECT user, char *inpstr)
       return;
     }
     echo_on(user);
-    strcpy(user->desc, "is a newbie needing a desc.");
+    strcpy(user->desc, "is a newbie");
     strcpy(user->in_phrase, "enters");
     strcpy(user->out_phrase, "goes");
     strcpy(user->date, (long_date(1)));
@@ -7471,7 +7471,7 @@ set_attributes(UR_OBJECT user)
       write_user(user, "Usage: set recap <name as you would like it>\n");
       return;
     }
-    if (strlen(word[2]) > RECAP_NAME_LEN) {
+    if (strlen(word[2]) > RECAP_NAME_LEN - 3) {
       write_user(user,
                  "The recapped name length is too long - try using fewer colour codes.\n");
       return;
@@ -7491,6 +7491,7 @@ set_attributes(UR_OBJECT user)
       return;
     }
     strcpy(user->recap, word[2]);
+    strcat(user->recap, "~RS"); /* user->recap is allways escaped with a reset to its colours... */
     strcpy(user->bw_recap, recname);
     vwrite_user(user,
                 "Your name will now appear as \"%s~RS\" on the \"who\", \"examine\", tells, etc.\n",
