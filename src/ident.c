@@ -60,20 +60,18 @@ main(int argc, char **argv)
   char inpstr[2000], authstr[2000];
   char buffer[1000], *miasma;
   char *next, *current;
-  int len, i;
+  int len, i, ret;
   int host_socket;
   fd_set readmask;
   pid_t ident_pid;
 
   printf("*** ArIdent Daemon Version 2.0.2\n*** Forking...\n");
-  switch (fork()) {
-  case -1:
-    exit(1);                    /* fork failure */
-  case 0:
-    break;                      /* child continues */
-  default:
-    _exit(0);                   /* parent dies */
-  }
+
+  /* not even think in turning this into a switch. Been there, done that. */
+  ret = (int) fork();
+  if (ret == -1) { exit(1);  }
+  if (ret !=  0) { _exit(0); }
+
   setsid();
   if (argc) {
     /* make it look pwetty */

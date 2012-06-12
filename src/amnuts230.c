@@ -375,7 +375,7 @@ main(int argc, char **argv)
          Deal with input chars. If the following if test succeeds we
          are dealing with a character mode client so call function.
        */
-      if (!iscntrl(inpstr[len - 1]) || user->buffpos) {
+      if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
         if (!get_charclient_line(user, inpstr, len)) {
           continue;
         }
@@ -413,7 +413,7 @@ main(int argc, char **argv)
          * misc op or the user is on a remote site
          */
         if (!user->misc_op) {
-          if (!strcmp(curstr, ".") && *user->inpstr_old) {
+          if ((!strcmp(curstr, ".")) && *user->inpstr_old) {
             strcpy(curstr, user->inpstr_old);
             vwrite_user(user, "%s\n", curstr);
           }
@@ -1509,10 +1509,10 @@ parse_init_section(void)
 
   case INITOPT_MESG_CHECK_TIME:
     /* mesg_check_time */
-    if (wrd[1][2] != ':' || strlen(wrd[1]) > 5 || !isdigit(wrd[1][0])
-        || !isdigit(wrd[1][1])
-        || !isdigit(wrd[1][3])
-        || !isdigit(wrd[1][4])) {
+    if (wrd[1][2] != ':' || strlen(wrd[1]) > 5 || !isdigit((int) wrd[1][0])
+        || !isdigit((int) wrd[1][1])
+        || !isdigit((int) wrd[1][3])
+        || !isdigit((int) wrd[1][4])) {
       fprintf(stderr, "Amnuts: %s has Invalid value on line %d.\n",
               *initopt, config_line);
       boot_exit(1);
@@ -2613,7 +2613,7 @@ load_user_details(UR_OBJECT user)
     str = s;
     for (wcnt = 0; wcnt < UFILE_WORDS; ++wcnt) {
       for (; *str; ++str) {
-        if (!isspace(*str)) {
+        if (!isspace((int) *str)) {
           break;
         }
       }
@@ -2823,10 +2823,9 @@ load_user_details(UR_OBJECT user)
       if (wcnt >= 2) {
         str = remove_first(s);
         *user->verify_code = '\0';
-        if (strcmp(str, "#UNSET")
-            /* These two are for backwards compatibility */
-            && strcmp(str, "#NONE")
-            && strcmp(str, "#EMAILSET")) {
+        /* Leave the three of them (backwards compatibility) */ 
+        /* And keep there the conditions to 0: who said that anything != 0 is true? Maybe in your OS, but not in all of them... */ 
+        if ((strcmp(str, "#UNSET") != 0) && (strcmp(str, "#NONE") != 0) && (strcmp(str, "#EMAILSET") != 0)) {
           strcpy(user->verify_code, str);
         }
       }
@@ -4515,7 +4514,7 @@ login(UR_OBJECT user, char *inpstr)
       return;
     }
     echo_on(user);
-    strcpy(user->desc, "is a newbie needing a desc.");
+    strcpy(user->desc, "is a newbie");
     strcpy(user->in_phrase, "enters");
     strcpy(user->out_phrase, "goes");
     strcpy(user->date, (long_date(1)));
@@ -7472,7 +7471,7 @@ set_attributes(UR_OBJECT user)
       write_user(user, "Usage: set recap <name as you would like it>\n");
       return;
     }
-    if (strlen(word[2]) > RECAP_NAME_LEN) {
+    if (strlen(word[2]) > RECAP_NAME_LEN - 3) {
       write_user(user,
                  "The recapped name length is too long - try using fewer colour codes.\n");
       return;
@@ -7492,6 +7491,7 @@ set_attributes(UR_OBJECT user)
       return;
     }
     strcpy(user->recap, word[2]);
+    strcat(user->recap, "~RS"); /* user->recap is allways escaped with a reset to its colours... */
     strcpy(user->bw_recap, recname);
     vwrite_user(user,
                 "Your name will now appear as \"%s~RS\" on the \"who\", \"examine\", tells, etc.\n",

@@ -221,7 +221,7 @@ reset_user(UR_OBJECT user)
   *user->icq = '\0';
   *user->recap = '\0';
   *user->bw_recap = '\0';
-  strcpy(user->desc, "is a newbie needing a desc.");
+  strcpy(user->desc, "is a newbie");
   strcpy(user->in_phrase, "enters");
   strcpy(user->out_phrase, "goes");
   *user->afk_mesg = '\0';

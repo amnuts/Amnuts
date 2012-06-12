@@ -2483,7 +2483,7 @@ create_account(UR_OBJECT user)
   if (!load_user_details(u)) {
     strcpy(u->pass, crypt(word[2], crypt_salt));
     strcpy(u->recap, u->name);
-    strcpy(u->desc, "is a newbie needing a desc.");
+    strcpy(u->desc, "is a newbie");
     strcpy(u->in_phrase, "wanders in.");
     strcpy(u->out_phrase, "wanders out");
     strcpy(u->last_site, "created_account");
