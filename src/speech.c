@@ -58,7 +58,7 @@ say(UR_OBJECT user, char *inpstr)
     type = "say";
   }
   if (user->type == CLONE_TYPE) {
-    sprintf(text, "Clone of %s~RS ~FG%ss~RS: %s~RS\n", user->recap, type,
+    sprintf(text, "Clone of %s~RS ~FG%ss~RS: %s\n", user->recap, type,
             inpstr);
     record(user->room, text);
     write_room(user->room, text);
@@ -68,10 +68,10 @@ say(UR_OBJECT user, char *inpstr)
     write_monitor(user, user->room, 0);
   }
   name = user->vis ? user->recap : invisname;
-  sprintf(text, "%s~RS ~FG%ss~RS: %s~RS\n", name, type, inpstr);
+  sprintf(text, "%s~RS ~FG%ss~RS: %s\n", name, type, inpstr);
   record(user->room, text);
   write_room_except(user->room, text, user);
-  vwrite_user(user, "You ~FG%s~RS: %s~RS\n", type, inpstr);
+  vwrite_user(user, "You ~FG%s~RS: %s\n", type, inpstr);
 }
 
 
@@ -141,10 +141,10 @@ say_to(UR_OBJECT user, char *inpstr)
   }
   name = user->vis ? user->recap : invisname;
   n = u->vis ? u->recap : invisname;
-  sprintf(text, "(%s~RS) %s~RS ~FC%ss~RS: %s~RS\n", n, name, type, inpstr);
+  sprintf(text, "(%s~RS) %s~RS ~FC%ss~RS: %s\n", n, name, type, inpstr);
   record(user->room, text);
   write_room_except(user->room, text, user);
-  vwrite_user(user, "(%s~RS) You ~FC%s~RS: %s~RS\n", u->recap, type, inpstr);
+  vwrite_user(user, "(%s~RS) You ~FC%s~RS: %s\n", u->recap, type, inpstr);
 }
 
 
@@ -190,12 +190,81 @@ shout(UR_OBJECT user, char *inpstr)
     write_monitor(user, NULL, 0);
   }
   name = user->vis ? user->recap : invisname;
-  sprintf(text, "~OL!~RS %s~RS ~OL%ss~RS: %s~RS\n", name, type, inpstr);
+  sprintf(text, "~OL!~RS %s~RS ~OL%ss~RS: %s\n", name, type, inpstr);
   record_shout(text);
   write_room_except(NULL, text, user);
-  vwrite_user(user, "~OL!~RS You ~OL%s~RS: %s~RS\n", type, inpstr);
+  vwrite_user(user, "~OL!~RS You ~OL%s~RS: %s\n", type, inpstr);
 }
 
+/*
+ * Shout something to someone
+ */
+void
+sto(UR_OBJECT user, char *inpstr)
+{
+  static const char usage[] = "Usage: sto <user> <text>\n";
+  const char *type;
+  const char *name, *n;
+  UR_OBJECT u;
+  
+  /* FIXME: Use sentinel other JAILED */
+  if (user->muzzled != JAILED) {
+    write_user(user, "You are muzzled, you cannot speak.\n");
+    return;
+  }
+  if (word_count < 3) {
+    write_user(user, usage);
+    return;
+  }
+  u = get_user_name(user, word[1]);
+  if (!u) {
+    write_user(user, notloggedon);
+    return;
+  }
+  if (u == user) {
+    write_user(user, "Talking to yourself is the first sign of madness.\n");
+    return;
+  }
+  if (check_igusers(u, user) && user->level < GOD) {
+    vwrite_user(user, "%s~RS is ignoring you.\n",
+                u->recap);
+    return;
+  }
+  if (u->igntells && (user->level < WIZ || u->level > user->level)) {
+    vwrite_user(user, "%s~RS is ignoring stuff at the moment.\n",
+                u->recap);
+    return;
+  }
+  inpstr = remove_first(inpstr);
+  switch (amsys->ban_swearing) {
+  case SBMAX:
+    if (contains_swearing(inpstr)) {
+      write_user(user, noswearing);
+      return;
+    }
+    break;
+  case SBMIN:
+    inpstr = censor_swear_words(inpstr);
+    break;
+  case SBOFF:
+  default:
+    /* do nothing as ban_swearing is off */
+    break;
+  }
+  type = smiley_type(inpstr);
+  if (!type) {
+    type = "shout";
+  }
+  if (!user->vis) {
+    write_monitor(user, NULL, 0);
+  }
+  name = user->vis ? user->recap : invisname;
+  n = u->vis ? u->recap : invisname;
+  sprintf(text, "~OL!~RS %s~RS ~OL%ss~RS to ~OL%s~RS: %s~RS\n", name, type, n, inpstr);
+  record_shout(text);
+  write_room_except(NULL, text, user);
+  vwrite_user(user, "~OL!~RS You ~OL%s~RS to ~OL%s~RS: %s~RS\n", type, n, inpstr);
+}
 
 /*
  * Tell another user something
@@ -277,7 +346,7 @@ tell_user(UR_OBJECT user, char *inpstr)
     type = "say";
   }
   name = user->vis || u->level >= user->level ? user->recap : invisname;
-  sprintf(text, "~OL~FG>~RS %s~RS ~FC%ss~RS: %s~RS\n", name, type, inpstr);
+  sprintf(text, "~OL~FG>~RS %s~RS ~FC%ss~RS: %s\n", name, type, inpstr);
   if (u->afk) {
     record_afk(user, u, text);
     if (*u->afk_mesg) {
@@ -312,7 +381,7 @@ tell_user(UR_OBJECT user, char *inpstr)
 #endif
   record_tell(user, u, text);
   write_user(u, text);
-  sprintf(text, "~OL~FG>~RS (%s~RS) You ~FC%s~RS: %s~RS\n", u->recap, type,
+  sprintf(text, "~OL~FG>~RS (%s~RS) You ~FC%s~RS: %s\n", u->recap, type,
           inpstr);
   record_tell(user, user, text);
   write_user(user, text);
@@ -359,13 +428,13 @@ emote(UR_OBJECT user, char *inpstr)
   }
   name = user->vis ? user->recap : invisname;
   if (user->type == CLONE_TYPE) {
-    sprintf(text, "Clone of %s~RS%s%s~RS\n", name, *inpstr != '\'' ? " " : "",
+    sprintf(text, "Clone of %s~RS%s%s\n", name, *inpstr != '\'' ? " " : "",
             inpstr);
     record(user->room, text);
     write_room(user->room, text);
     return;
   }
-  sprintf(text, "%s~RS%s%s~RS\n", name, *inpstr != '\'' ? " " : "", inpstr);
+  sprintf(text, "%s~RS%s%s\n", name, *inpstr != '\'' ? " " : "", inpstr);
   record(user->room, text);
   write_room_ignore(user->room, user, text);
 }
@@ -408,7 +477,7 @@ semote(UR_OBJECT user, char *inpstr)
     write_monitor(user, NULL, 0);
   }
   name = user->vis ? user->recap : invisname;
-  sprintf(text, "~OL!~RS %s~RS%s%s~RS\n", name, *inpstr != '\'' ? " " : "",
+  sprintf(text, "~OL!~RS %s~RS%s%s\n", name, *inpstr != '\'' ? " " : "",
           inpstr);
   record_shout(text);
   write_room_ignore(NULL, user, text);
@@ -474,7 +543,7 @@ pemote(UR_OBJECT user, char *inpstr)
     break;
   }
   name = user->vis || u->level >= user->level ? user->recap : invisname;
-  sprintf(text, "~OL~FG>~RS %s~RS%s%s~RS\n", name, *inpstr != '\'' ? " " : "",
+  sprintf(text, "~OL~FG>~RS %s~RS%s%s\n", name, *inpstr != '\'' ? " " : "",
           inpstr);
   if (u->afk) {
     record_afk(user, u, text);
@@ -510,7 +579,7 @@ pemote(UR_OBJECT user, char *inpstr)
 #endif
   record_tell(user, u, text);
   write_user(u, text);
-  sprintf(text, "~FG~OL>~RS (%s~RS) %s~RS%s%s~RS\n", u->recap, name,
+  sprintf(text, "~FG~OL>~RS (%s~RS) %s~RS%s%s\n", u->recap, name,
           *inpstr != '\'' ? " " : "", inpstr);
   record_tell(user, user, text);
   write_user(user, text);
@@ -552,7 +621,7 @@ echo(UR_OBJECT user, char *inpstr)
     break;
   }
   write_monitor(user, user->room, 0);
-  sprintf(text, "+ %s~RS\n", inpstr);
+  sprintf(text, "+ %s\n", inpstr);
   record(user->room, text);
   write_room(user->room, text);
 }
@@ -614,13 +683,13 @@ mutter(UR_OBJECT user, char *inpstr)
   }
   name = user->vis ? user->recap : invisname;
   n = u->vis ? u->recap : invisname;
-  sprintf(text, "(NOT %s~RS) %s~RS ~FC%ss~RS: %s~RS\n", n, name, type,
+  sprintf(text, "(NOT %s~RS) %s~RS ~FC%ss~RS: %s\n", n, name, type,
           inpstr);
 #if !!0
   record(user->room, text);
 #endif
   write_room_except_both(user->room, text, user, u);
-  vwrite_user(user, "(NOT %s~RS) You ~FC%s~RS: %s~RS\n", u->recap, type,
+  vwrite_user(user, "(NOT %s~RS) You ~FC%s~RS: %s\n", u->recap, type,
               inpstr);
 }
 
@@ -672,9 +741,9 @@ plead(UR_OBJECT user, char *inpstr)
     type = "plead";
   }
   vwrite_level(WIZ, 1, RECORD, user,
-               "~OL~FG>~RS [~FRSOS~RS] %s~RS ~OL%ss~RS: %s~RS\n", user->recap,
+               "~OL~FG>~RS [~FRSOS~RS] %s~RS ~OL%ss~RS: %s\n", user->recap,
                type, inpstr);
-  sprintf(text, "~OL~FG>~RS [~FRSOS~RS] You ~OL%s~RS: %s~RS\n", type, inpstr);
+  sprintf(text, "~OL~FG>~RS [~FRSOS~RS] You ~OL%s~RS: %s\n", type, inpstr);
   record_tell(user, user, text);
   write_user(user, text);
 }
@@ -737,9 +806,9 @@ wizshout(UR_OBJECT user, char *inpstr)
     type = "say";
   }
   vwrite_level(lev, 1, RECORD, user,
-               "~OL~FG>~RS [~FY%s~RS] %s~RS ~FY%ss~RS: %s~RS\n",
+               "~OL~FG>~RS [~FY%s~RS] %s~RS ~FY%ss~RS: %s\n",
                user_level[lev].name, user->recap, type, inpstr);
-  sprintf(text, "~OL~FG>~RS [~FY%s~RS] You ~FY%s~RS: %s~RS\n",
+  sprintf(text, "~OL~FG>~RS [~FY%s~RS] You ~FY%s~RS: %s\n",
           user_level[lev].name, type, inpstr);
   record_tell(user, user, text);
   write_user(user, text);
@@ -796,7 +865,7 @@ wizemote(UR_OBJECT user, char *inpstr)
     /* do nothing as ban_swearing is off */
     break;
   }
-  vwrite_level(lev, 1, RECORD, NULL, "~OL~FG>~RS [~FY%s~RS] %s~RS%s%s~RS\n",
+  vwrite_level(lev, 1, RECORD, NULL, "~OL~FG>~RS [~FY%s~RS] %s~RS%s%s\n",
                user_level[lev].name, user->recap, *inpstr != '\'' ? " " : "",
                inpstr);
 }
@@ -887,7 +956,7 @@ picture_tell(UR_OBJECT user)
     u->misc_op = 2;
     break;
   }
-  vwrite_user(user, "You ~OL~FGshow the following picture to~RS %s~RS\n\n",
+  vwrite_user(user, "You ~OL~FGshow the following picture to~RS %s\n\n",
               u->recap);
   switch (more(user, user->socket, filename)) {
   case 0:
@@ -1410,7 +1479,7 @@ bcast(UR_OBJECT user, char *inpstr, int beeps)
   }
   force_listen = 1;
   write_monitor(user, NULL, 0);
-  vwrite_room(NULL, "%s~OL~FR--==<~RS %s~RS ~OL~FR>==--~RS\n",
+  vwrite_room(NULL, "%s~OL~FR--==<~RS %s~RS ~OL~FR>==--\n",
               beeps ? "\007" : "", inpstr);
 }
 
@@ -1474,7 +1543,7 @@ wake(UR_OBJECT user)
 #endif
   name = user->vis ? user->recap : invisname;
   vwrite_user(u,
-              "\n%s~BR***~RS %s~RS ~BRsays~RS: ~OL~LI~BRHEY! WAKE UP!!!~RS ~BR***~RS\n\n",
+              "\n%s~BR***~RS %s~RS ~BRsays~RS: ~OL~LI~BRHEY! WAKE UP!!!~RS ~BR***\n\n",
               u->ignbeeps ? "" : "\007", name);
   write_user(user, "Wake up call sent.\n");
 }
@@ -1561,8 +1630,8 @@ beep(UR_OBJECT user, char *inpstr)
     /* do nothing as ban_swearing is off */
     break;
   }
-  vwrite_user(u, "\007%s~RS ~OL~FRbeeps to you~RS: %s~RS\n", name, inpstr);
-  vwrite_user(user, "\007You ~OL~FRbeep to~RS %s~RS: %s~RS\n", u->recap,
+  vwrite_user(u, "\007%s~RS ~OL~FRbeeps to you~RS: %s\n", name, inpstr);
+  vwrite_user(user, "\007You ~OL~FRbeep to~RS %s~RS: %s\n", u->recap,
               inpstr);
 }
 
@@ -2157,7 +2226,7 @@ show(UR_OBJECT user, char *inpstr)
     break;
   }
   write_monitor(user, user->room, 0);
-  vwrite_room(user->room, "~OL~FCType -->~RS %s~RS\n", inpstr);
+  vwrite_room(user->room, "~OL~FCType -->~RS %s\n", inpstr);
 }
 
 
@@ -2206,10 +2275,10 @@ friend_say(UR_OBJECT user, char *inpstr)
     type = "say";
   }
   name = user->vis ? user->recap : invisname;
-  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] %s~RS ~FG%ss~RS: %s~RS\n", name,
+  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] %s~RS ~FG%ss~RS: %s\n", name,
           type, inpstr);
   write_friends(user, text, 1);
-  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] You ~FG%s~RS: %s~RS\n", type,
+  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] You ~FG%s~RS: %s\n", type,
           inpstr);
   record_tell(user, user, text);
   write_user(user, text);
@@ -2256,7 +2325,7 @@ friend_emote(UR_OBJECT user, char *inpstr)
     break;
   }
   name = user->vis ? user->recap : invisname;
-  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] %s~RS%s%s~RS\n", name,
+  sprintf(text, "~OL~FG>~RS [~FGFriend~RS] %s~RS%s%s\n", name,
           *inpstr != '\'' ? " " : "", inpstr);
   write_friends(user, text, 1);
   record_tell(user, user, text);

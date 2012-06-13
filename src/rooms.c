@@ -192,7 +192,7 @@ personal_room(UR_OBJECT user)
       return;
     }
     write_user(user,
-               "~OL~FRYou whistle a sharp spell and watch your room crumble into dust.~RS\n");
+               "~OL~FRYou whistle a sharp spell and watch your room crumble into dust.\n");
     /* remove invites */
     for (u = user_first; u; u = u->next) {
       if (u->invite_room == rm) {
@@ -200,7 +200,7 @@ personal_room(UR_OBJECT user)
       }
     }
     /* remove all the key flags */
-    write_user(user, "~OL~FRAll keys to your room crumble to ashes.~RS\n");
+    write_user(user, "~OL~FRAll keys to your room crumble to ashes.\n");
     all_unsetbit_flagged_user_entry(user, fufROOMKEY);
     /* destroy */
     destruct_room(rm);
@@ -1409,15 +1409,15 @@ rooms(UR_OBJECT user, int show_topics, int wrap)
   }
   if (!strcasecmp(word[1], "-l")) {
     write_user(user, "The following rooms are default...\n\n");
-    vwrite_user(user, "Default main room : ~OL%s~RS\n", room_first->name);
-    vwrite_user(user, "Default warp room : ~OL%s~RS\n",
+    vwrite_user(user, "Default main room : ~OL%s\n", room_first->name);
+    vwrite_user(user, "Default warp room : ~OL%s\n",
                 *amsys->default_warp ? amsys->default_warp : "<none>");
-    vwrite_user(user, "Default jail room : ~OL%s~RS\n",
+    vwrite_user(user, "Default jail room : ~OL%s\n",
                 *amsys->default_jail ? amsys->default_jail : "<none>");
 #ifdef GAMES
-    vwrite_user(user, "Default bank room : ~OL%s~RS\n",
+    vwrite_user(user, "Default bank room : ~OL%s\n",
                 *amsys->default_bank ? amsys->default_bank : "<none>");
-    vwrite_user(user, "Default shoot room : ~OL%s~RS\n",
+    vwrite_user(user, "Default shoot room : ~OL%s\n",
                 *amsys->default_shoot ? amsys->default_shoot : "<none>");
 #endif
     if (!priv_room[0].name) {
@@ -1520,7 +1520,7 @@ join(UR_OBJECT user)
   }
   move_user(user, rm, 0);
   vwrite_user(user,
-              "~FC~OLYou have joined~RS %s~RS ~FC~OLin the~RS %s~RS~FC~OL.~RS\n",
+              "~FC~OLYou have joined~RS %s~RS ~FC~OLin the~RS %s~RS~FC~OL.\n",
               u->recap, u->room->show_name);
 }
 

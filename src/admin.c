@@ -283,7 +283,7 @@ start_ident(UR_OBJECT user)
   amsys->ident_state = 1;
   destruct_user(user);
   --amsys->num_of_logins;
-  write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Started>~RS\n", NULL);
+  write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Started>\n", NULL);
   write_sock(amsys->ident_socket, "\n");
   write_sock(amsys->ident_socket, "PID\n");
 }
@@ -3003,11 +3003,11 @@ samesite(UR_OBJECT user, int stage)
     } else {
       if (!on) {
         vwrite_user(user,
-                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s~RS\n\n",
+                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s\n\n",
                     cnt, same, user->samesite_check_store);
       } else {
         vwrite_user(user,
-                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s~RS\n\n",
+                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s\n\n",
                     cnt, same, user->samesite_check_store);
       }
     }
@@ -4018,7 +4018,7 @@ recount_users(UR_OBJECT user, char *inpstr)
   write_user(user,
              "\n+----------------------------------------------------------------------------+\n");
   incorrect = correct = added = removed = 0;
-  write_user(user, "~OLRecounting all of the users...~RS\n");
+  write_user(user, "~OLRecounting all of the users...\n");
   /* First process the files to see if there are any to add to the directory listing */
   write_user(user, "Processing users to add...");
   u = create_user();
