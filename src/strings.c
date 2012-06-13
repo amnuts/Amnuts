@@ -376,6 +376,20 @@ strtolower(char *str)
 
 
 /*
+ * Convert string to name (first char is upper, rest is lower)
+ */
+void
+strtoname(char *str)
+{
+  *str = toupper(*str);
+  ++str;
+  for (; *str; ++str) {
+    *str = tolower(*str);
+  }
+}
+
+
+/*
  * Returns 1 if string is a positive number
  */
 int

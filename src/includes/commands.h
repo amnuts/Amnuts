@@ -34,6 +34,7 @@
   ML_ENTRY((MODE,         "mode",       "",    NEW,     USER   )) \
   ML_ENTRY((SAY,          "say",        "",    JAILED,  SOCIAL )) \
   ML_ENTRY((SHOUT,        "shout",      "[",   SUPER,   SOCIAL )) \
+  ML_ENTRY((STO,          "sto",        "[-",  SUPER,   SOCIAL )) \
   ML_ENTRY((TELL,         "tell",       "",    NEW,     SOCIAL )) \
   ML_ENTRY((EMOTE,        "emote",      ":;",  NEW,     SOCIAL )) \
   ML_ENTRY((SEMOTE,       "semote",     "&!",  SUPER,   SOCIAL )) \
