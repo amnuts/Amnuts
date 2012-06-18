@@ -1784,7 +1784,7 @@ wipe_board(UR_OBJECT user)
 int
 check_board_wipe(UR_OBJECT user)
 {
-  char w1[ARR_SIZE], w2[ARR_SIZE], line[ARR_SIZE], filename[80], id[ARR_SIZE], *s;
+  char w1[ARR_SIZE], w2[ARR_SIZE], line[ARR_SIZE], filename[80], id[ARR_SIZE], *s, *s2;
   FILE *fp;
   int valid, cnt, msg_number, pt;
   RM_OBJECT rm;
@@ -1840,10 +1840,11 @@ check_board_wipe(UR_OBJECT user)
     }
   }
   fclose(fp);
+  s2 = colour_com_strip(w2);
   /* lower case the name incase of recapping */
-  strtolower(w2);
-  *w2 = toupper(*w2);
-  if (strcmp(w2, user->name)) {
+  strtolower(s2);
+  *s2 = toupper(*s2);
+  if (strcmp(s2, user->name)) {
     write_user(user,
                "You did not post that message. Use ~FCbfrom~RS to check the number again.\n");
     return 0;
