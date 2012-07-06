@@ -8559,7 +8559,7 @@ display_colour(UR_OBJECT user)
     return;
   }
   for (i = 0; colours[i]; ++i) {
-    vwrite_user(user, "~%s: %sAmnuts version %s VIDEO TEST\n",
+    vwrite_user(user, "^%s: %sAmnuts version %s VIDEO TEST\n",
                 colours[i], colours[i], AMNUTSVER);
   }
 }
