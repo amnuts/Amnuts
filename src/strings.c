@@ -641,7 +641,9 @@ align_string(int pos, int cstrlen, int mark, const char *marker,
       marker = "|";
     }
     *vtext = *marker;
-    vtext[strlen(vtext) - 1] = *marker;
+    int index = 0;
+    if (strlen(vtext) > 0) index = strlen(vtext) - 1;
+    vtext[index] = *marker;
   }
   strcat(vtext, "\n");
   return vtext;

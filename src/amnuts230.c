@@ -532,9 +532,8 @@ check_directories(void)
 {
   char dirname[80];
   struct stat stbuf;
-  int levels, found, i, j;
+  int i, j;
 
-  levels = found = 0;
   /* Check for unique directory names */
   for (i = 0; i < NUM_LEVELS; ++i) {
     for (j = i + 1; j < NUM_LEVELS; ++j) {
