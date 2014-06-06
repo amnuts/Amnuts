@@ -4347,11 +4347,7 @@ login(UR_OBJECT user, char *inpstr)
       return;
     }
     if (!strcmp(name, "who")) {
-      /*
-         if you do not like this logon who, then replace it with the normal
-         one of who(user,0);
-       */
-      login_who(user);
+      who(user,0);
       write_user(user, "\nGive me a name: ");
       return;
     }
@@ -6409,74 +6405,6 @@ who(UR_OBJECT user, int type)
                             "Total of ~OL~FG%d~RS friend%s : ~OL~FC%d~RS visible, ~OL~FC%d~RS invisible",
                             total, PLTEXT_S(total), total - invis, invis));
     break;
-  }
-  write_user(user,
-             "+----------------------------------------------------------------------------+\n");
-}
-
-
-/*
- * Display a short, non-colour version for the .who for those looking at it from the
- * login prompt.  Thanks to Xan, Arny and Squirt for this idea (even though the code is mine ;)
- */
-void
-login_who(UR_OBJECT user)
-{
-  char line[USER_NAME_LEN + 10], text2[ARR_SIZE], doing[6];
-  UR_OBJECT u;
-  int invis, on;
-
-  write_user(user,
-             "\n+----------------------------------------------------------------------------+\n");
-  write_user(user,
-             align_string(1, 78, 0, NULL, "Current users %s", long_date(1)));
-  write_user(user,
-             "+----------------------------------------------------------------------------+\n\n");
-
-  invis = on = 0;
-  *text = '\0';
-  *text2 = '\0';
-  *line = '\0';
-  *doing = '\0';
-
-  for (u = user_first; u; u = u->next) {
-    if (u->login || u->type == CLONE_TYPE) {
-      continue;
-    }
-    if (!u->vis) {
-      ++invis;
-      continue;
-    }
-    if (u->afk) {
-      strcpy(doing, "<AFK> ");
-    } else if (u->malloc_start) {
-      strcpy(doing, "<EDIT>");
-    } else {
-      strcpy(doing, "      ");
-    }
-    sprintf(line, "%s %s", u->bw_recap, doing);
-    sprintf(text2, "%-*s", USER_NAME_LEN + 7, line);
-    strcat(text, text2);
-    if (!(++on % 4)) {
-      strcat(text, "\n");
-      write_user(user, text);
-      *text = '\0';
-    }
-  }
-  if (on % 4) {
-    strcat(text, "\n");
-    write_user(user, text);
-  }
-  if (!(on + invis)) {
-    write_user(user,
-               align_string(1, 78, 0, NULL,
-                            "No users are currently logged on\n"));
-  } else {
-    write_user(user, "\n");
-    write_user(user,
-               align_string(1, 78, 0, NULL,
-                            "%d user%s logged on, %d %s invis", on + invis,
-                            PLTEXT_S(on + invis), invis, PLTEXT_IS(invis)));
   }
   write_user(user,
              "+----------------------------------------------------------------------------+\n");

@@ -112,7 +112,6 @@ int misc_ops(UR_OBJECT, char *);
 int exec_com(UR_OBJECT, char *, enum cmd_value);
 void look(UR_OBJECT);
 void who(UR_OBJECT, int);
-void login_who(UR_OBJECT);
 void display_files(UR_OBJECT, int);
 void help(UR_OBJECT);
 void help_commands_level(UR_OBJECT);
