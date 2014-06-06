@@ -443,12 +443,9 @@ void
 rmail(UR_OBJECT user)
 {
   char filename[80];
-  int ret, size;
-  struct stat stbuf;
+  int ret;
 
   sprintf(filename, "%s/%s/%s.M", USERFILES, USERMAILS, user->name);
-  /* get file size */
-  size = stat(filename, &stbuf) == -1 ? 0 : stbuf.st_size;
 
   /* Just reading the one message or all new mail */
   if (word_count > 1) {
