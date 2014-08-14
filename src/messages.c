@@ -610,9 +610,9 @@ dmail(UR_OBJECT user)
 
   if (word_count < 2) {
     write_user(user, "Usage: dmail all\n");
-    write_user(user, "Usage: dmail <#>\n");
-    write_user(user, "Usage: dmail to <#>\n");
-    write_user(user, "Usage: dmail from <#> to <#>\n");
+    write_user(user, "       dmail <#>\n");
+    write_user(user, "       dmail to <#>\n");
+    write_user(user, "       dmail from <#> to <#>\n");
     return;
   }
   if (get_wipe_parameters(user) == -1) {
@@ -1580,7 +1580,7 @@ read_board_specific(UR_OBJECT user, RM_OBJECT rm, int msg_number)
 void
 write_board(UR_OBJECT user, char *inpstr)
 {
-  char filename[80];
+  char filename[80]; /* TODO: the max filename size should be calculated */
   const char *name;
   char *c;
   FILE *fp;
