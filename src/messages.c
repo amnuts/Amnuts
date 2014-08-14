@@ -1696,9 +1696,9 @@ wipe_board(UR_OBJECT user)
                              && (is_my_room(user, rm)
                                  || user->level >= GOD)))) {
     write_user(user, "Usage: wipe all\n");
-    write_user(user, "Usage: wipe <#>\n");
-    write_user(user, "Usage: wipe to <#>\n");
-    write_user(user, "Usage: wipe from <#> to <#>\n");
+    write_user(user, "       wipe <#>\n");
+    write_user(user, "       wipe to <#>\n");
+    write_user(user, "       wipe from <#> to <#>\n");
     return;
   } else if (word_count < 2 && ((user->level < WIZ && !is_personal_room(rm))
                                 || (is_personal_room(rm)
