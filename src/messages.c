@@ -1120,7 +1120,7 @@ set_forward_email(UR_OBJECT user)
   fputs(talker_signature, fp);
   fclose(fp);
   /* send the mail */
-  sprintf(subject, "Verification of auto-mail (%s).\n", user->name);
+  sprintf(subject, "Verification of auto-mail (%s).", user->name);
   send_forward_email(user->email, filename, subject);
   write_syslog(SYSLOG, 1,
                "%s had mail sent to them by set_forward_email().\n",
@@ -1229,7 +1229,7 @@ forward_email(char *name, char *from, char *message)
   fputs("\n\n", fp);
   fputs(talker_signature, fp);
   fclose(fp);
-  sprintf(subject, "Auto-forward of smail (%s).\n", u->name);
+  sprintf(subject, "Auto-forward of smail (%s).", u->name);
   send_forward_email(u->email, filename, subject);
   write_syslog(SYSLOG, 1, "%s had mail sent to their email address.\n",
                u->name);
@@ -1253,6 +1253,8 @@ send_forward_email(char *send_to, char *mail_file, char *subject)
     remove(mail_file);
     return -1;                  /* double_fork() failed */
   case 0:
+    // the subject must come before the recepient (otherwise recent mail
+    // versions will refuse to send the mail).
     sprintf(text, "mail '%s' -s '%s' < %s", send_to, subject, mail_file);
     system(text);
     remove(mail_file);
@@ -1262,7 +1264,11 @@ send_forward_email(char *send_to, char *mail_file, char *subject)
     break;
   }
 #else
-  sprintf(text, "mail '%s' -s '%s' < %s &", send_to, subject, mail_file);
+  // We must not run this on background, otherwise we never know if the mailer
+  // will actually have time to read the mail_file before we remove it!
+  // Also: the subject must come before the recepient (otherwise recent mail
+  // versions will refuse to send the mail).
+  sprintf(text, "mail -s '%s' '%s' < %s", subject, send_to, mail_file);
   system(text);
   remove(mail_file);
 #endif
