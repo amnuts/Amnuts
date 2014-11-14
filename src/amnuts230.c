@@ -4340,12 +4340,12 @@ login(UR_OBJECT user, char *inpstr)
       write_user(user, "\nGive me a name: ");
       return;
     }
-    if (!strcmp(name, "quit")) {
+    if (!strcasecmp(name, "quit")) {
       write_user(user, "\n\n*** Abandoning login attempt ***\n\n");
       disconnect_user(user);
       return;
     }
-    if (!strcmp(name, "who")) {
+    if (!strcasecmp(name, "who")) {
       /*
          if you do not like this logon who, then replace it with the normal
          one of who(user,0);
