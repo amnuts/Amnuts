@@ -64,10 +64,10 @@ TALKEROBJS      = \
         $(OBJDIR)/speech.o \
         $(OBJDIR)/strings.o \
         $(OBJDIR)/admin.o \
-        $(OBJDIR)/spodlist.o \
+        $(OBJDIR)/spodlist.o
 
 IDENTDOBJS      = \
-        $(OBJDIR)/ident.o \
+        $(OBJDIR)/ident.o
 
 UNAME := $(shell uname)
 
