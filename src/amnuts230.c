@@ -4281,14 +4281,14 @@ more_users(UR_OBJECT user)
  * adds a string to the user history list
  */
 void
-add_history(char *name, int showtime, const char *str, ...)
+add_history(char *username, int showtime, const char *str, ...)
 {
-  char filename[80];
+  char name[ARR_SIZE], filename[80];
   FILE *fp;
   va_list args;
   time_t now;
 
-  /* FIXME: Bad side effect */
+  sscanf(username, "%s", name);
   strtolower(name);
   *name = toupper(*name);
   /* add to actual history listing */
