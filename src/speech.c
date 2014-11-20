@@ -65,7 +65,7 @@ say(UR_OBJECT user, char *inpstr)
     return;
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   sprintf(text, "%s~RS ~FG%ss~RS: %s\n", name, type, inpstr);
@@ -137,7 +137,7 @@ say_to(UR_OBJECT user, char *inpstr)
     type = "say";
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   n = u->vis ? u->recap : invisname;
@@ -187,7 +187,7 @@ shout(UR_OBJECT user, char *inpstr)
     type = "shout";
   }
   if (!user->vis) {
-    write_monitor(user, NULL, 0);
+    write_monitor(user, NULL);
   }
   name = user->vis ? user->recap : invisname;
   sprintf(text, "~OL!~RS %s~RS ~OL%ss~RS: %s\n", name, type, inpstr);
@@ -256,7 +256,7 @@ sto(UR_OBJECT user, char *inpstr)
     type = "shout";
   }
   if (!user->vis) {
-    write_monitor(user, NULL, 0);
+    write_monitor(user, NULL);
   }
   name = user->vis ? user->recap : invisname;
   n = u->vis ? u->recap : invisname;
@@ -424,7 +424,7 @@ emote(UR_OBJECT user, char *inpstr)
     break;
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   if (user->type == CLONE_TYPE) {
@@ -474,7 +474,7 @@ semote(UR_OBJECT user, char *inpstr)
     break;
   }
   if (!user->vis) {
-    write_monitor(user, NULL, 0);
+    write_monitor(user, NULL);
   }
   name = user->vis ? user->recap : invisname;
   sprintf(text, "~OL!~RS %s~RS%s%s\n", name, *inpstr != '\'' ? " " : "",
@@ -620,7 +620,7 @@ echo(UR_OBJECT user, char *inpstr)
     /* do nothing as ban_swearing is off */
     break;
   }
-  write_monitor(user, user->room, 0);
+  write_monitor(user, user->room);
   sprintf(text, "+ %s\n", inpstr);
   record(user->room, text);
   write_room(user->room, text);
@@ -679,7 +679,7 @@ mutter(UR_OBJECT user, char *inpstr)
     type = "mutter";
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   n = u->vis ? u->recap : invisname;
@@ -1301,7 +1301,7 @@ greet(UR_OBJECT user, char *inpstr)
     write_user(user, "You can only have up to 11 letters in the greet.\n");
     return;
   }
-  write_monitor(user, user->room, 0);
+  write_monitor(user, user->room);
   write_room(user->room, "\n");
   for (i = 0; i < 5; ++i) {
     *pbuff = '\0';
@@ -1377,7 +1377,7 @@ think_it(UR_OBJECT user, char *inpstr)
     break;
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   if (word_count < 2) {
@@ -1424,7 +1424,7 @@ sing_it(UR_OBJECT user, char *inpstr)
     break;
   }
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   name = user->vis ? user->recap : invisname;
   if (word_count < 2) {
@@ -1478,7 +1478,7 @@ bcast(UR_OBJECT user, char *inpstr, int beeps)
     break;
   }
   force_listen = 1;
-  write_monitor(user, NULL, 0);
+  write_monitor(user, NULL);
   vwrite_room(NULL, "%s~OL~FR--==<~RS %s~RS ~OL~FR>==--\n",
               beeps ? "\007" : "", inpstr);
 }
@@ -2225,7 +2225,7 @@ show(UR_OBJECT user, char *inpstr)
     /* do nothing as ban_swearing is off */
     break;
   }
-  write_monitor(user, user->room, 0);
+  write_monitor(user, user->room);
   vwrite_room(user->room, "~OL~FCType -->~RS %s\n", inpstr);
 }
 

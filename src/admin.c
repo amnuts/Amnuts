@@ -2092,7 +2092,7 @@ kill_user(UR_OBJECT user)
   sprintf(text, "~FRKilled~RS by %s.\n", user->name);
   add_history(victim->name, 1, "%s", text);
   disconnect_user(victim);
-  write_monitor(user, NULL, 0);
+  write_monitor(user, NULL);
   write_room(NULL,
              "~FM~OLYou hear insane laughter from beyond the grave...\n");
 }
@@ -4222,7 +4222,7 @@ set_command_level(UR_OBJECT user)
     write_syslog(SYSLOG, 1,
                  "%s has returned level to normal for cmd \"%s\"\n",
                  user->name, cmd->name);
-    write_monitor(user, NULL, 0);
+    write_monitor(user, NULL);
     vwrite_room(NULL,
                 "~OL~FR--==<~RS The level for command ~OL%s~RS has been returned to %s ~OL~FR>==--\n",
                 cmd->name, user_level[cmd->level].name);
@@ -4247,7 +4247,7 @@ set_command_level(UR_OBJECT user)
   write_syslog(SYSLOG, 1, "%s has set the level for cmd \"%s\" to %d (%s)\n",
                user->name, cmd->name, cmd->level,
                user_level[cmd->level].name);
-  write_monitor(user, NULL, 0);
+  write_monitor(user, NULL);
   vwrite_room(NULL,
               "~OL~FR--==<~RS The level for command ~OL%s~RS has been set to %s ~OL~FR>==--\n",
               cmd->name, user_level[cmd->level].name);
@@ -4685,7 +4685,7 @@ bring(UR_OBJECT user)
     vwrite_room_except(user->room, user, "%s~RS chants a mystic spell...\n",
                        user->recap);
   } else {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
     vwrite_room_except(user->room, user, "%s chants a mystic spell...\n",
                        invisname);
   }

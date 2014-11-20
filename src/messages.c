@@ -2348,7 +2348,7 @@ editor(UR_OBJECT user, char *inpstr)
 #endif
       name = user->vis ? user->recap : invisname;
       if (!user->vis) {
-        write_monitor(user, user->room, 0);
+        write_monitor(user, user->room);
       }
       vwrite_room_except(user->room, user,
                          "%s~RS finishes composing some text.\n", name);
@@ -2392,7 +2392,7 @@ editor(UR_OBJECT user, char *inpstr)
       write_user(user, "\nMessage aborted.\n");
       name = user->vis ? user->recap : invisname;
       if (!user->vis) {
-        write_monitor(user, user->room, 0);
+        write_monitor(user, user->room);
       }
       vwrite_room_except(user->room, user,
                          "%s~RS gives up composing some text.\n", name);
@@ -2434,7 +2434,7 @@ editor(UR_OBJECT user, char *inpstr)
                "[---------------- Please try to keep between these two markers ----------------]\n\n~FG1>~RS");
     name = user->vis ? user->recap : invisname;
     if (!user->vis) {
-      write_monitor(user, user->room, 0);
+      write_monitor(user, user->room);
     }
     vwrite_room_except(user->room, user,
                        "%s~RS starts composing some text...\n", name);
@@ -2497,7 +2497,7 @@ END:
   write_user(user, "\nNo text.\n");
   name = user->vis ? user->recap : invisname;
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   vwrite_room_except(user->room, user,
                      "%s~RS gives up composing some text.\n", name);

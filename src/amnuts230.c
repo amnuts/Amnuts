@@ -4032,10 +4032,10 @@ dump_commands(int sig)
 
 
 /*
- * shows the name of a user if they are invis.  Records to tell buffer if rec=1
+ * shows the name of a user if they are invis.
  */
 void
-write_monitor(UR_OBJECT user, RM_OBJECT rm, int rec)
+write_monitor(UR_OBJECT user, RM_OBJECT rm)
 {
   UR_OBJECT u;
   CMD_OBJECT cmd;
@@ -4063,10 +4063,6 @@ write_monitor(UR_OBJECT user, RM_OBJECT rm, int rec)
     if (u->room == rm || !rm) {
       if (!u->ignall) {
         vwrite_user(u, "~BB~FG[%s]~RS ", user->name);
-      }
-      /* FIXME: This records variable text; text is not set */
-      if (rec) {
-        record_tell(user, u, text);
       }
     }
   }

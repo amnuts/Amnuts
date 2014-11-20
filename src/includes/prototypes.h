@@ -98,7 +98,7 @@ void write_syslog(int, int, const char *, ...)
 int do_write_syslog(const char *);
 void record_last_command(UR_OBJECT, CMD_OBJECT, size_t);
 void dump_commands(int);
-void write_monitor(UR_OBJECT, RM_OBJECT, int);
+void write_monitor(UR_OBJECT, RM_OBJECT);
 int more(UR_OBJECT, int, const char *);
 int more_users(UR_OBJECT);
 void add_history(char *, int, const char *, ...)

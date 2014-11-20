@@ -1008,7 +1008,7 @@ move(UR_OBJECT user)
   write_user(user, "~FC~OLYou chant an ancient spell...\n");
   name = user->vis ? user->recap : invisname;
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   vwrite_room_except(user->room, user,
                      "%s~RS ~FC~OLchants an ancient spell...\n", name);
