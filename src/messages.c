@@ -464,6 +464,7 @@ rmail(UR_OBJECT user)
   }
   /* Reading the whole mail box */
   write_user(user, "\n~BB*** Your mailbox has the following messages ***\n\n");
+  user->filepos = 0;
   ret = more(user, user->socket, filename);
   if (ret == 1) {
     user->misc_op = 2;
