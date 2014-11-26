@@ -1,0 +1,6 @@
+~OLComando :~RS visit
+~OLUso     :~RS visit <utilizador>
+
+Permite-te visitar a sala pessoal de outro <utilizador>, desde que ela
+exista e não esteja fechada. A função de salas pessoais tem de estar
+activada.

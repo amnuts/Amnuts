@@ -1,0 +1,5 @@
+~OLComando :~RS set gender
+~OLUso     :~RS set gender m|f|n
+
+Este atributo é usado par definit o teu sexo, "m" para masculino, "f"
+para feminino e "n" para neutro.

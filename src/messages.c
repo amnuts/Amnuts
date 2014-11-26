@@ -429,6 +429,7 @@ smail(UR_OBJECT user, char *inpstr)
     }
     inpstr = user->malloc_start;
   }
+  strtoname(user->mail_to);
   send_mail(user, user->mail_to, inpstr, 0);
   send_copies(user, inpstr);
   *user->mail_to = '\0';
@@ -442,12 +443,9 @@ void
 rmail(UR_OBJECT user)
 {
   char filename[80];
-  int ret, size;
-  struct stat stbuf;
+  int ret;
 
   sprintf(filename, "%s/%s/%s.M", USERFILES, USERMAILS, user->name);
-  /* get file size */
-  size = stat(filename, &stbuf) == -1 ? 0 : stbuf.st_size;
 
   /* Just reading the one message or all new mail */
   if (word_count > 1) {
@@ -466,6 +464,7 @@ rmail(UR_OBJECT user)
   }
   /* Reading the whole mail box */
   write_user(user, "\n~BB*** Your mailbox has the following messages ***\n\n");
+  user->filepos = 0;
   ret = more(user, user->socket, filename);
   if (ret == 1) {
     user->misc_op = 2;
@@ -612,9 +611,9 @@ dmail(UR_OBJECT user)
 
   if (word_count < 2) {
     write_user(user, "Usage: dmail all\n");
-    write_user(user, "Usage: dmail <#>\n");
-    write_user(user, "Usage: dmail to <#>\n");
-    write_user(user, "Usage: dmail from <#> to <#>\n");
+    write_user(user, "       dmail <#>\n");
+    write_user(user, "       dmail to <#>\n");
+    write_user(user, "       dmail from <#> to <#>\n");
     return;
   }
   if (get_wipe_parameters(user) == -1) {
@@ -1122,7 +1121,7 @@ set_forward_email(UR_OBJECT user)
   fputs(talker_signature, fp);
   fclose(fp);
   /* send the mail */
-  sprintf(subject, "Verification of auto-mail (%s).\n", user->name);
+  sprintf(subject, "Verification of auto-mail (%s).", user->name);
   send_forward_email(user->email, filename, subject);
   write_syslog(SYSLOG, 1,
                "%s had mail sent to them by set_forward_email().\n",
@@ -1231,7 +1230,7 @@ forward_email(char *name, char *from, char *message)
   fputs("\n\n", fp);
   fputs(talker_signature, fp);
   fclose(fp);
-  sprintf(subject, "Auto-forward of smail (%s).\n", u->name);
+  sprintf(subject, "Auto-forward of smail (%s).", u->name);
   send_forward_email(u->email, filename, subject);
   write_syslog(SYSLOG, 1, "%s had mail sent to their email address.\n",
                u->name);
@@ -1255,6 +1254,8 @@ send_forward_email(char *send_to, char *mail_file, char *subject)
     remove(mail_file);
     return -1;                  /* double_fork() failed */
   case 0:
+    // the subject must come before the recepient (otherwise recent mail
+    // versions will refuse to send the mail).
     sprintf(text, "mail '%s' -s '%s' < %s", send_to, subject, mail_file);
     system(text);
     remove(mail_file);
@@ -1264,7 +1265,11 @@ send_forward_email(char *send_to, char *mail_file, char *subject)
     break;
   }
 #else
-  sprintf(text, "mail '%s' -s '%s' < %s &", send_to, subject, mail_file);
+  // We must not run this on background, otherwise we never know if the mailer
+  // will actually have time to read the mail_file before we remove it!
+  // Also: the subject must come before the recepient (otherwise recent mail
+  // versions will refuse to send the mail).
+  sprintf(text, "mail -s '%s' '%s' < %s", subject, send_to, mail_file);
   system(text);
   remove(mail_file);
 #endif
@@ -1482,6 +1487,7 @@ read_board(UR_OBJECT user)
   } else {
     sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
   }
+  user->filepos = 0;
   ret = more(user, user->socket, filename);
   if (!ret) {
     write_user(user, "There are no messages on the board.\n\n");
@@ -1582,7 +1588,7 @@ read_board_specific(UR_OBJECT user, RM_OBJECT rm, int msg_number)
 void
 write_board(UR_OBJECT user, char *inpstr)
 {
-  char filename[80];
+  char filename[80]; /* TODO: the max filename size should be calculated */
   const char *name;
   char *c;
   FILE *fp;
@@ -1642,7 +1648,7 @@ write_board(UR_OBJECT user, char *inpstr)
                  filename);
     return;
   }
-  name = user->vis ? user->bw_recap : invisname;
+  name = user->vis ? user->recap : invisname;
   /*
      The posting time (PT) is the time its written in machine readable form, this
      makes it easy for this program to check the age of each message and delete
@@ -1698,9 +1704,9 @@ wipe_board(UR_OBJECT user)
                              && (is_my_room(user, rm)
                                  || user->level >= GOD)))) {
     write_user(user, "Usage: wipe all\n");
-    write_user(user, "Usage: wipe <#>\n");
-    write_user(user, "Usage: wipe to <#>\n");
-    write_user(user, "Usage: wipe from <#> to <#>\n");
+    write_user(user, "       wipe <#>\n");
+    write_user(user, "       wipe to <#>\n");
+    write_user(user, "       wipe from <#> to <#>\n");
     return;
   } else if (word_count < 2 && ((user->level < WIZ && !is_personal_room(rm))
                                 || (is_personal_room(rm)
@@ -1783,7 +1789,7 @@ wipe_board(UR_OBJECT user)
 int
 check_board_wipe(UR_OBJECT user)
 {
-  char w1[ARR_SIZE], w2[ARR_SIZE], line[ARR_SIZE], filename[80], id[ARR_SIZE], *s;
+  char w1[ARR_SIZE], w2[ARR_SIZE], line[ARR_SIZE], filename[80], id[ARR_SIZE], *s, *s2;
   FILE *fp;
   int valid, cnt, msg_number, pt;
   RM_OBJECT rm;
@@ -1839,10 +1845,11 @@ check_board_wipe(UR_OBJECT user)
     }
   }
   fclose(fp);
+  s2 = colour_com_strip(w2);
   /* lower case the name incase of recapping */
-  strtolower(w2);
-  *w2 = toupper(*w2);
-  if (strcmp(w2, user->name)) {
+  strtolower(s2);
+  *s2 = toupper(*s2);
+  if (strcmp(s2, user->name)) {
     write_user(user,
                "You did not post that message. Use ~FCbfrom~RS to check the number again.\n");
     return 0;
@@ -2343,7 +2350,7 @@ editor(UR_OBJECT user, char *inpstr)
 #endif
       name = user->vis ? user->recap : invisname;
       if (!user->vis) {
-        write_monitor(user, user->room, 0);
+        write_monitor(user, user->room);
       }
       vwrite_room_except(user->room, user,
                          "%s~RS finishes composing some text.\n", name);
@@ -2387,7 +2394,7 @@ editor(UR_OBJECT user, char *inpstr)
       write_user(user, "\nMessage aborted.\n");
       name = user->vis ? user->recap : invisname;
       if (!user->vis) {
-        write_monitor(user, user->room, 0);
+        write_monitor(user, user->room);
       }
       vwrite_room_except(user->room, user,
                          "%s~RS gives up composing some text.\n", name);
@@ -2429,7 +2436,7 @@ editor(UR_OBJECT user, char *inpstr)
                "[---------------- Please try to keep between these two markers ----------------]\n\n~FG1>~RS");
     name = user->vis ? user->recap : invisname;
     if (!user->vis) {
-      write_monitor(user, user->room, 0);
+      write_monitor(user, user->room);
     }
     vwrite_room_except(user->room, user,
                        "%s~RS starts composing some text...\n", name);
@@ -2492,7 +2499,7 @@ END:
   write_user(user, "\nNo text.\n");
   name = user->vis ? user->recap : invisname;
   if (!user->vis) {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
   }
   vwrite_room_except(user->room, user,
                      "%s~RS gives up composing some text.\n", name);

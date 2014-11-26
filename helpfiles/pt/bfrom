@@ -1,0 +1,6 @@
+~OLComando :~RS bfrom
+~OLUso     :~RS bfrom [<sala>]
+
+Mostra-te as pessoas que escreveram mensagens no quadro de mensagens da
+<sala>, sem mostrar o conteúdo das mensagens. Se o parâmetro <sala> for
+omitido, mostrará o da sala em que te encontras.

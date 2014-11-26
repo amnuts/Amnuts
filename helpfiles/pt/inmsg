@@ -1,0 +1,7 @@
+~OLComando :~RS inmsg
+~OLUso     :~RS inmsg [<texto>]
+
+Define a mensagem que é apresentada a seguir ao nome quando entras numa
+sala, i.e., se o teu nome for Andy e tu definires "entra depressa", as
+outras pessoas irão ver "Andy entra depressa" quando entrares na sala. Se
+omitires a mensagem aparecer-te-á a tua mensagem corrente.

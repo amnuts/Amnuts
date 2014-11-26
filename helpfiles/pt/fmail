@@ -1,0 +1,7 @@
+~OLComando :~RS fmail
+~OLUso     :~RS fmail all|<mensagem>
+
+Este comando permite-te fazer um forward a todas ou a mensagens
+específicas da tua mailbox local para o teu email. Tens de ter o teu
+email introduzido e verificado, embora não precises de ter o auto-forward
+ligado.

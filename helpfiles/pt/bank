@@ -1,0 +1,7 @@
+~OLComando :~RS bank
+~OLUso     :~RS bank deposit <quantia> | withdraw <quantia> | balance
+
+Este comando permite-te ver quanto dinheiro tens no banco. A opção
+'deposit' permite-te pôr dinheiro no banco (se tiveres algum), a opção
+'withdraw' premite-te tirar dinheiro do banco (se lá tiveres algum), e
+a opção 'balance' permite-te ver quanto dinheiro tens no banco.

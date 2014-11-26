@@ -1,0 +1,11 @@
+~OLComando :~RS grepu
+~OLUso     :~RS grepu <padrão>
+
+Este comando permite-te procurar utilizadores em que o nome tenha o 
+<padrão> nele. O padrão pode ter wildcards ?, para correspondência de uma
+letra, ou  * para correspondência de múltiplas letras. Por exemplo:
+
+.grepu an?? corresponde a Andy, Andi, Anne e aí por diante.
+.grepu an* corresponde a Andy, Anne, Another, Anthony e aí por diante.
+
+Não se pode ter wildcards juntas, como ?*, *? ou **.

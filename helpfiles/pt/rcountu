@@ -1,0 +1,8 @@
+~OLCommand :~RS rcountu
+~OLUsage   :~RS rcountu
+
+Este comado permite-te fazer uma revisão aos nós na lista ligada de
+utilizadores para ver se algum deve ser adicionado ou removido, e também
+verifica os níveis gravados de utilizadores. Deveria ser usado se 
+tivesses alterado manualmente os ficheiros dos utilizadores, ou
+adicioando ou apagado um ficheiro deles.

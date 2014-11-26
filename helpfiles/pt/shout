@@ -1,0 +1,5 @@
+~OLComando :~RS shout
+~OLUso     :~RS shout <mensagem>
+~OLAtalhos :~RS [
+
+Permite-te fazer um "shout" (gritar), para o talker todo.

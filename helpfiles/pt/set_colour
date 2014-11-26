@@ -1,0 +1,6 @@
+~OLComando :~RS set colour
+~OLUso     :~RS set colour
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Este comando ligará
+ou desligará a capacidade de veres cores no talker.

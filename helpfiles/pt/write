@@ -1,0 +1,5 @@
+~OLComando :~RS write
+~OLUso     :~RS write [<texto>]
+
+Escreve uma mensagem do quadro da sala onde te encontras. Se omitires o
+texto, és enviado para o editor, onde podes escrever a mensagem.

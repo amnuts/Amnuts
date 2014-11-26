@@ -1,0 +1,7 @@
+~OLComando :~RS system
+~OLUso     :~RS system -m|-n|-r|-u|-a
+
+Mostra-te vários pârametros de sistema. Se usares a opção -m, então irás
+ver a informação da memória, -n mostra-te a informação do netlink, -r irá
+dar-te informação de sala e -u dar-te-á informação relativa ao uso.
+A opção -a mostra toda a informação.

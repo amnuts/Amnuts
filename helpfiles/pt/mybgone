@@ -1,0 +1,6 @@
+~OLComando :~RS mybgone
+~OLUso     :~RS mybgone <utilizador>|all
+
+Podes usar este comando para expelir pessoas da tua sala pessoal. Podes
+apenas mover ua pessoa usando a opção <utlizador>, se puseres "all", 
+então todas as pessoas na sala serão expulsas.

@@ -1,0 +1,4 @@
+~OLComando :~RS unban
+~OLUso     :~RS unban site <site> | user <utilizador> | new <site>
+
+O site, utilizador ou novo site deixará de estar banido.

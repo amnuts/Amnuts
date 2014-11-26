@@ -1,0 +1,6 @@
+~OLComando :~RS tell
+~OLUso     :~RS tell <utilizador> <texto>
+~OLAtalhos :~RS >
+
+Permite-te falar em modo privado com outro utilizador, sem teres de
+encontrar uma sala privada.

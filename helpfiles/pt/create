@@ -1,0 +1,7 @@
+~OLComando :~RS create
+~OLUso     :~RS create <utilizador> <password>
+
+Permite-te criar uma nova conta para um utilizador com o nome e a
+password fornecidas. Usado, por exemplo, quando uma nova conta é
+necessária para um utilizador de um endereço onde não se possam ligar
+novos utilizadores (banido).

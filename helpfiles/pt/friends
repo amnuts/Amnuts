@@ -1,0 +1,7 @@
+~OLComando :~RS friends
+~OLUso     :~RS friends [<nome>]
+
+Permite-te adicionar ou remover pessoas da tua lista de amigos. Se for
+omitido a opção <nome> então ser-te-ão mostrado os teus amigos. Se usares
+a opção <nome> e a pessoa não estiver listada, o seu nome será 
+adicionado, senão será removido da lista.

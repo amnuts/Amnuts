@@ -1,0 +1,7 @@
+~OLComando :~RS monitor
+~OLUso     :~RS monitor
+
+Irá modificar entre on e off a capacidade de ver o nome dos utilizadores
+num echo, shout, shemote, bcast, etc., se o utilizador estiver invisível.
+Esta é uma boa maneira de manter sob controlo as pessoas que abusam dos
+comandos "greet" e "echo".

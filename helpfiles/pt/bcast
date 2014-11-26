@@ -1,0 +1,6 @@
+~OLComando :~RS bcast
+~OLUso     :~RS bcast <texto>
+
+Irá ser feito um broadcast do texto através do talker, forçando
+qualquer pessoa que estaja a ignorar a vê-lo. O nome da pessoa que
+usar este comando não será mostrado.

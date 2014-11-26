@@ -1,0 +1,7 @@
+~OLComando :~RS smail
+~OLUso     :~RS smail <utilizador>[@<serviço>] [<texto>]
+
+Permite-te enviar um email para um utilizador (possivelmente um talker
+remoto, por via de um serviço netlink, se o teu talker estiver ligado).
+Se omitires o texto, serás enviado para o modo editor, e poderás escrever
+a mensagem dessa maneira. É recomendado se quiseres escrever muito.

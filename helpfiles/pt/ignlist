@@ -1,0 +1,5 @@
+~OLComando :~RS ignlist
+~OLUso     :~RS ignlist
+
+Mostra uma lista de coisas que podes ignorar, e se estás correntemente a
+ignorá-las ou não.

@@ -1,0 +1,4 @@
+~OLComando :~RS site
+~OLUso     :~RS site <utilizador>
+
+Mostra-te o endereço de onde o <utilizador> se está a ligar.

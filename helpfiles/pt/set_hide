@@ -1,0 +1,17 @@
+~OLComando :~RS set hide
+~OLUso     :~RS set hide
+
+This attribute is a toggle, meaning that if it is off, using this turns it
+on, if it is on, using this turns it off, and it will indicate as such.
+This will hide your email address from view (using the .ustat command)
+to other users that are not part of the talker staff. This talker, by
+default, does NOT show your email to other users that are not part of
+the administrative staff.
+
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Irá esconder o teu
+endereço de email de visualização (usando o comando .ustat) de outros
+utilizadores que não façam parte da staff do talker. Este talker, por
+defeito, NÃO mostra o teu email a outros utilizadores, que não façam
+parte da staff administrativa.

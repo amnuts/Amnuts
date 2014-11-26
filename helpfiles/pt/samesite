@@ -1,0 +1,9 @@
+~OLComando :~RS samesite
+~OLUso     :~RS samesite user|site [all]
+
+Mostrará os utilizadores que se liguem do mesmo site, como um dado
+utilizador ou um dado site. Se omitires a opção "all", então listará
+apenas aqueles utilizadores que se encontram ligados. Se utilizares a
+opção "user", então ser-te-á perguntado que utilizador pretendes utilizar
+senão se utilizares "site", ser-te-á perguntado um endereço. Podes usar
+um endereço parcial ou total, mas nao 'wildcards'.

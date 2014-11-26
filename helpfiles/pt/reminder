@@ -1,0 +1,10 @@
+~OLComando :~RS reminder
+~OLUso     :~RS (para ver)
+~OL        :~RS reminder all | today | <dia> [<mês> [<ano>]]
+~OL        :~RS (para gerir)
+~OL        :~RS reminder set | del <lembrete>
+
+Este comando permite-te definidir lembretes. Serás notificado do número
+de lembretes que tens para aquele dia quando te ligares, e os lembretes
+também serão mais visíveis no calendário. Se a data para um lembrete
+tiver passado, então o lembrete será automaticamente removido.

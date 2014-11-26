@@ -1,0 +1,5 @@
+~OLComando :~RS wake
+~OLUso     :~RS wake <utilizador>
+
+Envia uma mensagem e um beep para outro utilizador, para captar a sua
+atenção.

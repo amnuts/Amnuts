@@ -1,0 +1,6 @@
+~OLComando :~RS recount
+~OLUso     :~RS recount [motds]
+
+Isto permite que os quadros sejam recontados caso tenham sido editados
+manualmente e o contador tenha um erro. Se a opção "motds" fôr usada, o
+pre- e post-login motds serão recontados.

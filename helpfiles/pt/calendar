@@ -1,0 +1,11 @@
+~OLComando :~RS calendar
+~OLUso     :~RS calendar [<mês> [<ano>]]
+
+Irá mostrar um calendário, dando relevo (se estiveres a utilizar cores)
+ao dia de hoje. Se nenhuma opção for utilizada, então irá mostrar o
+calendário para o mês e o ano corrente. Se a opção <mês> for usada, 
+então, então irá mostrar o calendário para aquele mês, no ano corrente.
+Senão irá mostrar o calendário para o mês e o ano que desejares. <mês> é
+um número entre 1 e 12, <ano> é um número entre 1 e 99, ou 1800 e 3000. 
+
+

@@ -1,0 +1,6 @@
+~OLComando :~RS ban
+~OLUso   :~RS ban site <endereço> | user <utilizador> |
+          ~RS | new <endereço>
+
+Este comando irá banir um endereço, um utilizador, ou novos
+utilizadores que se liguem através de um endereço.

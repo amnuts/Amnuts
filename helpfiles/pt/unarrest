@@ -1,0 +1,9 @@
+~OLComando :~RS unarrest
+~OLUso     :~RS unarrest <utilizador>
+
+Redefinine o nível do utilizador para aquele onde estava antes de ser
+preso, tira-o da prisão e leva-o para a sala principal. O utilizador não
+tem de estar online para se executar o comando. O unarrest é baseado em
+níveis, por isso se um ARCH prendeu alguém, tem de ser um ARCH ou
+superior a fazer o unarrest. O nível de arrest é mostrado através do 
+".ustat".

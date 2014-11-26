@@ -1,0 +1,6 @@
+~OLComando :~RS last
+~OLUso     :~RS last [<utilizador>]
+
+Mostra-te qual a última vez que um utilizador se ligou. Se a opção
+<utilizador> for omitida então será mostrada uma lista do últimos
+utilizadores que se ligaram.

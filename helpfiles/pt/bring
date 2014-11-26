@@ -1,0 +1,4 @@
+~OLComando :~RS bring
+~OLUso     :~RS bring <utilizador>
+
+Move um utilizador da sala onde está para a sala onde te encontras.

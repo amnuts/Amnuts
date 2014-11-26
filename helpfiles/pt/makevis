@@ -1,0 +1,4 @@
+~OLComando :~RS makevis
+~OLUso     :~RS makevis <utilizador>
+
+Força um utilizador a ficar visível se estiver invisível.

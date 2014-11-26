@@ -1,0 +1,5 @@
+~OLComando :~RS greet
+~OLUso     :~RS greet <texto>
+
+Escreve o texto para a sala em letras grandes. O texto tem de ter apenas
+10 caracteres ou menos, e consistir apenas em letras de a-z (A-Z).

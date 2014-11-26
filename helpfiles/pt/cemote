@@ -1,0 +1,4 @@
+~OLComando :~RS cemote
+~OLUso     :~RS cemote <sala> <texto>
+
+Permite fazer um "emote" através do teu clone na <sala> dada.

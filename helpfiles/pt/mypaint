@@ -1,0 +1,5 @@
+~OLComando :~RS mypaint
+~OLUso     :~RS mypaint [<texto>]
+
+Com isto podes definir uma nova descrição da tua sala pessoal. As funções
+da sala pessoal têm de estar activas para usar este comando.

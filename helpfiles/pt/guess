@@ -1,0 +1,4 @@
+~OLComando :~RS guess
+~OLUso     :~RS guess <letra>
+
+Dá uma letra para tentar adivinhar no jogo da forca corrente.

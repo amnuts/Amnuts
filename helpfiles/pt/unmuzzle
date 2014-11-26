@@ -1,0 +1,6 @@
+~OLComando :~RS unmuzzle
+~OLUso     :~RS unmuzzle <utilizador>
+
+Remove a mordaça de um utilizador. Irá apenas funcionar para um
+utilizador que estivesse previamente amordaçado, por alguém de um nível
+inferior ou igual ao teu.

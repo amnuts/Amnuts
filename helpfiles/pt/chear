@@ -1,0 +1,7 @@
+~OLComando :~RS chear
+~OLUso     :~RS chear <room> all|swears|nothing
+
+Define que parte da conversação na sala onde tens os clones ser-te-á
+mostrada. "all" faz com que te apareça tudo o que esteja a ser dito,
+"swears", fará com que sejam reportadas apenas impropérios (definidos
+no sistema) e "nothing" irá fazer com que tudo seja ignorado.

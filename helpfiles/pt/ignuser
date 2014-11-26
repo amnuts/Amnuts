@@ -1,0 +1,7 @@
+~OLComando :~RS ignuser
+~OLUso     :~RS ignuser [<utilizador>]
+
+Permite-te ignorar "tells", "pemotes", "shouts", etc., de um determinado
+<utilizador>. Se o <utilizador> for omitido. então será mostrada uma
+lista de todos os utilizadores que estás a ignorar correntemente. Vê
+"version" para saberes a quantidade de utilizadores que podes ignorar.

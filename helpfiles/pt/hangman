@@ -1,0 +1,8 @@
+~OLComando :~RS hangman
+~OLUso     :~RS hangman start|stop|status
+
+Permite-te começar ou parar um jogo da forca, e também serve para ver o
+status do jogo corrente. Se usares a opção "start", então irá ser
+iniciado um novo jogo da forca (se não estiveres já a jogar) com uma 
+palavra aleatória. Utiliza o comando "guess" para adivinhares uma letra 
+na palavra.

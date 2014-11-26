@@ -1,0 +1,6 @@
+~OLComando :~RS destroy
+~OLUso     :~RS destroy [<sala>] [<utilizador>]
+
+Irá destruir um clone numa dada sala, ou se omitido, na sala em que
+estás. Se tiveres os previlégios requeridos, então podes destruir clones
+de outros utilizadores, dando o argumento opcional <utilizador>.

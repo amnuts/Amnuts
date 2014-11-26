@@ -1,0 +1,11 @@
+~OLComando :~RS set show
+~OLUso     :~RS set show
+
+Mostra-te uma lista de que atributos podes mudar. Usa o ".help set
+<atributo>" para veres a sua ajuda:
+
+gender      age         email       www
+hide        wrap        pager       colour
+room        autofwd     password    rdesc
+command     recap       icq         alert
+revbuff

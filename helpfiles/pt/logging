@@ -1,0 +1,8 @@
+~OLComando :~RS logging
+~OLUso     :~RS logging -l|-s|-r|-n|-e|-on|-off
+
+Permite-te ligar as funções de logging. Usando a opção -l irá listar o
+status das funções de logging. As opções -s, -r, -n, e -e modificam o
+estado do log de sistema, request log, netlinks log e logs de erro 
+(respectivamente). A opção -on irá ligar todas as funções de logging, e a
+opção -off irá desligá-las.

@@ -1,0 +1,4 @@
+~OLComando :~RS shackle
+~OLUso     :~RS shackle <utilizador>
+
+Irá impedir que um utilizador se mova da sala onde ele se encontra.

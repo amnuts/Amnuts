@@ -1,0 +1,7 @@
+~OLComando :~RS sayto
+~OLUso     :~RS sayto <utilizador> <texto>
+~OLAtalhos :~RS -
+
+É utilizador para falar directamente com alguém que esteja na mesma sala
+que tu. O texto será visto por todos os que estão na sala, mas será
+mostrado como "(<utizador>) Andy diz: ..."

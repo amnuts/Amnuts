@@ -1,0 +1,5 @@
+~OLComando :~RS history
+~OLUso     :~RS history <utilizador>
+
+Permite-te ver o histórico de um dado utilizador, estando detalhadas as
+promoções, despromoções, amordaçamentos, etc.

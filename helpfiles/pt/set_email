@@ -1,0 +1,17 @@
+~OLComando :~RS set email
+~OLUso     :~RS set email [<email>]
+
+Permite que guardes o teu endereço de email no teu ficheiro de utilizador
+para ser usado pelo mail local para fazer redireccionamento (se o sistema
+permitir), e irá ser mostrado no comando .ustat, dependendo se também
+usaste o ".set hide" para esconder o teu enderço de email dos outros
+utilizadores.
+
+Usar apenas este comando irá apagar o tua definição de email. Definindo o
+teu email irá enviar-te uma pequena mensagem para o email definido, que
+incluirá um código de verificação para usar com o comando .verify, O teu
+endereço de umail DEVE ser verificado com este código para poder ser
+usado o redireccionamento, se o talker o permitir.
+
+O endereço de email é mantido escondido por defeito. Vê o ".help set
+hide", para mais detalhes.

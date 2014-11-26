@@ -10,13 +10,13 @@
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
 
-#ifdef NETLINKS
 
 #include "defines.h"
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
 
+#ifdef NETLINKS
 /**************************************************************************/
 
 #define ML_ENTRY(a) ML_EXPAND a

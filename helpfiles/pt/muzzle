@@ -1,0 +1,9 @@
+~OLComando :~RS muzzle
+~OLUso     :~RS muzzle <utilizador>
+
+Amordaça um utilizador, o que o impede de falar, usar o "shout", o 
+"emote" e enviar mails para outras pessoas. O nível do muzzle é baseado
+no nível do utilizador que o executou. Se um ARCH amordaça um utilizador,
+por exemplo, o utilizador pode apenas ser desamordaçado por ARCHs ou
+GODs, se, no entando, ele for amordaçado por um GOD, apenas outro GOD
+pode desamordaça-lo.

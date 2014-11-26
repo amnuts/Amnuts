@@ -1,0 +1,10 @@
+~OLComando :~RS prompt
+~OLUso     :~RS prompt
+
+Modifica a prompt entre on e off. A prompt tem o seguinte layout:
+
+<hora corrente do sistema, tempo online, nome!+>
+
+O + aparecerá apenas se estiveres invisível.
+
+O ! aparecerá apenas se estiveres a ignorar algo.

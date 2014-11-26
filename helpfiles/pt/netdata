@@ -1,0 +1,7 @@
+~OLComando :~RS netdata
+~OLUso     :~RS netdata
+
+Este comando mostra se estão a ser recebidos dados das ligações à rede.
+Não recebe argumentos. Os dados neste caso são ou mails ou mensagens,
+que são as passagens de texto (por exemplo, uma descrição de uma sala)
+para um utilizador remoto.

@@ -1,0 +1,7 @@
+~OLComando :~RS adminfiles
+~OLUso     :~RS adminfiles [<ficheiro>]
+
+Este comando permite-te mostrar certos ficheiros que são apenas para
+administradores. Para ver que ficheiros estão disponíveis para
+visualização, omite o <ficheiro>. Senão, inclui o <ficheiro> para ver esse
+ficheiro específico.

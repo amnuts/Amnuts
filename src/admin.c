@@ -283,7 +283,7 @@ start_ident(UR_OBJECT user)
   amsys->ident_state = 1;
   destruct_user(user);
   --amsys->num_of_logins;
-  write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Started>~RS\n", NULL);
+  write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Started>\n", NULL);
   write_sock(amsys->ident_socket, "\n");
   write_sock(amsys->ident_socket, "PID\n");
 }
@@ -2092,7 +2092,7 @@ kill_user(UR_OBJECT user)
   sprintf(text, "~FRKilled~RS by %s.\n", user->name);
   add_history(victim->name, 1, "%s", text);
   disconnect_user(victim);
-  write_monitor(user, NULL, 0);
+  write_monitor(user, NULL);
   write_room(NULL,
              "~FM~OLYou hear insane laughter from beyond the grave...\n");
 }
@@ -2483,7 +2483,7 @@ create_account(UR_OBJECT user)
   if (!load_user_details(u)) {
     strcpy(u->pass, crypt(word[2], crypt_salt));
     strcpy(u->recap, u->name);
-    strcpy(u->desc, "is a newbie needing a desc.");
+    strcpy(u->desc, "is a newbie");
     strcpy(u->in_phrase, "wanders in.");
     strcpy(u->out_phrase, "wanders out");
     strcpy(u->last_site, "created_account");
@@ -3003,11 +3003,11 @@ samesite(UR_OBJECT user, int stage)
     } else {
       if (!on) {
         vwrite_user(user,
-                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s~RS\n\n",
+                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s\n\n",
                     cnt, same, user->samesite_check_store);
       } else {
         vwrite_user(user,
-                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s~RS\n\n",
+                    "\nChecked ~FM~OL%d~RS users, ~FM~OL%d~RS had the site as ~FG~OL%s\n\n",
                     cnt, same, user->samesite_check_store);
       }
     }
@@ -4018,7 +4018,7 @@ recount_users(UR_OBJECT user, char *inpstr)
   write_user(user,
              "\n+----------------------------------------------------------------------------+\n");
   incorrect = correct = added = removed = 0;
-  write_user(user, "~OLRecounting all of the users...~RS\n");
+  write_user(user, "~OLRecounting all of the users...\n");
   /* First process the files to see if there are any to add to the directory listing */
   write_user(user, "Processing users to add...");
   u = create_user();
@@ -4222,7 +4222,7 @@ set_command_level(UR_OBJECT user)
     write_syslog(SYSLOG, 1,
                  "%s has returned level to normal for cmd \"%s\"\n",
                  user->name, cmd->name);
-    write_monitor(user, NULL, 0);
+    write_monitor(user, NULL);
     vwrite_room(NULL,
                 "~OL~FR--==<~RS The level for command ~OL%s~RS has been returned to %s ~OL~FR>==--\n",
                 cmd->name, user_level[cmd->level].name);
@@ -4247,7 +4247,7 @@ set_command_level(UR_OBJECT user)
   write_syslog(SYSLOG, 1, "%s has set the level for cmd \"%s\" to %d (%s)\n",
                user->name, cmd->name, cmd->level,
                user_level[cmd->level].name);
-  write_monitor(user, NULL, 0);
+  write_monitor(user, NULL);
   vwrite_room(NULL,
               "~OL~FR--==<~RS The level for command ~OL%s~RS has been set to %s ~OL~FR>==--\n",
               cmd->name, user_level[cmd->level].name);
@@ -4685,7 +4685,7 @@ bring(UR_OBJECT user)
     vwrite_room_except(user->room, user, "%s~RS chants a mystic spell...\n",
                        user->recap);
   } else {
-    write_monitor(user, user->room, 0);
+    write_monitor(user, user->room);
     vwrite_room_except(user->room, user, "%s chants a mystic spell...\n",
                        invisname);
   }

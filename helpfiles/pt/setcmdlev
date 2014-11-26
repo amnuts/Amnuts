@@ -1,0 +1,8 @@
+~OLComando :~RS setcmdlev
+~OLUso     :~RS setcmdlev <comando> <nível>|norm
+
+Com este comando podes alterar o nível de um comando, enquando o talker
+estiver activo (i.e., se reiniciares ou desligares o talker, então o
+comando irá voltar ao normal). Se passares a opção "norm", então o
+comando voltará ao seu nível normal. Podes alterar apenas o nivel dos
+comandos aos quais tens acesso.

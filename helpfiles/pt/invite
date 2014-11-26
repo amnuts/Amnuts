@@ -1,0 +1,5 @@
+~OLComando :~RS invite
+~OLUso     :~RS invite <utilizador>
+
+Permite que um utilizador da tua escolha seja convidado a entrar numa
+sala privada onde te encontras nesse momento.

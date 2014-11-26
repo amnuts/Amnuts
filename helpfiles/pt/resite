@@ -1,0 +1,8 @@
+~OLComando :~RS resite
+~OLUso     :~RS resite <utilizador>|-a
+
+Se estiveres a correr o ident daemon, então este comado permitir-te-á
+obter o site de um dado utilizador outra vez. Isto é útil quando o ident
+daemon não estava a correr quando se o utilizador se ligou.  Se usares a
+opção -a, então irás obter o site de todos os utilizadores ligados.
+

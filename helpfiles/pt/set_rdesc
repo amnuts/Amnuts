@@ -1,0 +1,7 @@
+~OLComando :~RS set rdesc
+~OLUso     :~RS set rdesc
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Esta definição irá
+fazer com que quando entras numa sala, ou quando fazes "look", a
+descrição da sala não apareça. Por defeito está a on.

@@ -1,0 +1,10 @@
+~OLComando :~RS demote
+~OLUso     :~RS demote <utilizador> [<nível>]
+
+Irá despromover o utilizador para o nível abaixo na lista de ranks. Não
+podes despromover abaixo do nível mais baixo, e também não podes
+despromover alguém com um nível igual ou mais elevado que o teu. Podes
+também despromover um utilizador mesmo se ele não estiver ligado. Se a
+opção <nível> for utilizada, então o utilizador será despromovido 
+directamente para o nível dado, ao invés de ser despromovido para o
+nível abaixo em que ele está.

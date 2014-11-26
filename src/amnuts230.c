@@ -245,7 +245,7 @@ main(int argc, char **argv)
         }
       }
       if (!len) {
-        write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Disconnected>~RS\n",
+        write_level(WIZ, 1, NORECORD, "~FY<ArIdent Daemon Disconnected>\n",
                     NULL);
         amsys->ident_state = 0;
         continue;
@@ -375,7 +375,7 @@ main(int argc, char **argv)
          Deal with input chars. If the following if test succeeds we
          are dealing with a character mode client so call function.
        */
-      if (!iscntrl(inpstr[len - 1]) || user->buffpos) {
+      if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
         if (!get_charclient_line(user, inpstr, len)) {
           continue;
         }
@@ -413,7 +413,7 @@ main(int argc, char **argv)
          * misc op or the user is on a remote site
          */
         if (!user->misc_op) {
-          if (!strcmp(curstr, ".") && *user->inpstr_old) {
+          if ((!strcmp(curstr, ".")) && *user->inpstr_old) {
             strcpy(curstr, user->inpstr_old);
             vwrite_user(user, "%s\n", curstr);
           }
@@ -532,9 +532,8 @@ check_directories(void)
 {
   char dirname[80];
   struct stat stbuf;
-  int levels, found, i, j;
+  int i, j;
 
-  levels = found = 0;
   /* Check for unique directory names */
   for (i = 0; i < NUM_LEVELS; ++i) {
     for (j = i + 1; j < NUM_LEVELS; ++j) {
@@ -1509,10 +1508,10 @@ parse_init_section(void)
 
   case INITOPT_MESG_CHECK_TIME:
     /* mesg_check_time */
-    if (wrd[1][2] != ':' || strlen(wrd[1]) > 5 || !isdigit(wrd[1][0])
-        || !isdigit(wrd[1][1])
-        || !isdigit(wrd[1][3])
-        || !isdigit(wrd[1][4])) {
+    if (wrd[1][2] != ':' || strlen(wrd[1]) > 5 || !isdigit((int) wrd[1][0])
+        || !isdigit((int) wrd[1][1])
+        || !isdigit((int) wrd[1][3])
+        || !isdigit((int) wrd[1][4])) {
       fprintf(stderr, "Amnuts: %s has Invalid value on line %d.\n",
               *initopt, config_line);
       boot_exit(1);
@@ -2613,7 +2612,7 @@ load_user_details(UR_OBJECT user)
     str = s;
     for (wcnt = 0; wcnt < UFILE_WORDS; ++wcnt) {
       for (; *str; ++str) {
-        if (!isspace(*str)) {
+        if (!isspace((int) *str)) {
           break;
         }
       }
@@ -2823,10 +2822,9 @@ load_user_details(UR_OBJECT user)
       if (wcnt >= 2) {
         str = remove_first(s);
         *user->verify_code = '\0';
-        if (strcmp(str, "#UNSET")
-            /* These two are for backwards compatibility */
-            && strcmp(str, "#NONE")
-            && strcmp(str, "#EMAILSET")) {
+        /* Leave the three of them (backwards compatibility) */ 
+        /* And keep there the conditions to 0: who said that anything != 0 is true? Maybe in your OS, but not in all of them... */ 
+        if ((strcmp(str, "#UNSET") != 0) && (strcmp(str, "#NONE") != 0) && (strcmp(str, "#EMAILSET") != 0)) {
           strcpy(user->verify_code, str);
         }
       }
@@ -4034,10 +4032,10 @@ dump_commands(int sig)
 
 
 /*
- * shows the name of a user if they are invis.  Records to tell buffer if rec=1
+ * shows the name of a user if they are invis.
  */
 void
-write_monitor(UR_OBJECT user, RM_OBJECT rm, int rec)
+write_monitor(UR_OBJECT user, RM_OBJECT rm)
 {
   UR_OBJECT u;
   CMD_OBJECT cmd;
@@ -4065,10 +4063,6 @@ write_monitor(UR_OBJECT user, RM_OBJECT rm, int rec)
     if (u->room == rm || !rm) {
       if (!u->ignall) {
         vwrite_user(u, "~BB~FG[%s]~RS ", user->name);
-      }
-      /* FIXME: This records variable text; text is not set */
-      if (rec) {
-        record_tell(user, u, text);
       }
     }
   }
@@ -4287,14 +4281,14 @@ more_users(UR_OBJECT user)
  * adds a string to the user history list
  */
 void
-add_history(char *name, int showtime, const char *str, ...)
+add_history(char *username, int showtime, const char *str, ...)
 {
-  char filename[80];
+  char name[ARR_SIZE], filename[80];
   FILE *fp;
   va_list args;
   time_t now;
 
-  /* FIXME: Bad side effect */
+  sscanf(username, "%s", name);
   strtolower(name);
   *name = toupper(*name);
   /* add to actual history listing */
@@ -4342,17 +4336,13 @@ login(UR_OBJECT user, char *inpstr)
       write_user(user, "\nGive me a name: ");
       return;
     }
-    if (!strcmp(name, "quit")) {
+    if (!strcasecmp(name, "quit")) {
       write_user(user, "\n\n*** Abandoning login attempt ***\n\n");
       disconnect_user(user);
       return;
     }
-    if (!strcmp(name, "who")) {
-      /*
-         if you do not like this logon who, then replace it with the normal
-         one of who(user,0);
-       */
-      login_who(user);
+    if (!strcasecmp(name, "who")) {
+      who(user,0);
       write_user(user, "\nGive me a name: ");
       return;
     }
@@ -4515,7 +4505,7 @@ login(UR_OBJECT user, char *inpstr)
       return;
     }
     echo_on(user);
-    strcpy(user->desc, "is a newbie needing a desc.");
+    strcpy(user->desc, "is a newbie");
     strcpy(user->in_phrase, "enters");
     strcpy(user->out_phrase, "goes");
     strcpy(user->date, (long_date(1)));
@@ -5313,6 +5303,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
    *
    * Then again, you might not be wondering ;)
    */
+
   cmdid = (enum cmd_value) (com_tab - command_table);
   for (cmd = first_command; cmd; cmd = cmd->next) {
     if ((enum cmd_value) cmd->id == cmdid) {
@@ -5409,7 +5400,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
 #endif
 
   /* Main switch */
-  switch (cmd->id) {
+  switch (com_num) {
   case QUIT:
     disconnect_user(user);
     break;
@@ -5424,6 +5415,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
     break;
   case SHOUT:
     shout(user, inpstr);
+    break;
+  case STO:
+    sto(user, inpstr);
     break;
   case TELL:
     tell_user(user, inpstr);
@@ -6413,74 +6407,6 @@ who(UR_OBJECT user, int type)
 
 
 /*
- * Display a short, non-colour version for the .who for those looking at it from the
- * login prompt.  Thanks to Xan, Arny and Squirt for this idea (even though the code is mine ;)
- */
-void
-login_who(UR_OBJECT user)
-{
-  char line[USER_NAME_LEN + 10], text2[ARR_SIZE], doing[6];
-  UR_OBJECT u;
-  int invis, on;
-
-  write_user(user,
-             "\n+----------------------------------------------------------------------------+\n");
-  write_user(user,
-             align_string(1, 78, 0, NULL, "Current users %s", long_date(1)));
-  write_user(user,
-             "+----------------------------------------------------------------------------+\n\n");
-
-  invis = on = 0;
-  *text = '\0';
-  *text2 = '\0';
-  *line = '\0';
-  *doing = '\0';
-
-  for (u = user_first; u; u = u->next) {
-    if (u->login || u->type == CLONE_TYPE) {
-      continue;
-    }
-    if (!u->vis) {
-      ++invis;
-      continue;
-    }
-    if (u->afk) {
-      strcpy(doing, "<AFK> ");
-    } else if (u->malloc_start) {
-      strcpy(doing, "<EDIT>");
-    } else {
-      strcpy(doing, "      ");
-    }
-    sprintf(line, "%s %s", u->bw_recap, doing);
-    sprintf(text2, "%-*s", USER_NAME_LEN + 7, line);
-    strcat(text, text2);
-    if (!(++on % 4)) {
-      strcat(text, "\n");
-      write_user(user, text);
-      *text = '\0';
-    }
-  }
-  if (on % 4) {
-    strcat(text, "\n");
-    write_user(user, text);
-  }
-  if (!(on + invis)) {
-    write_user(user,
-               align_string(1, 78, 0, NULL,
-                            "No users are currently logged on\n"));
-  } else {
-    write_user(user, "\n");
-    write_user(user,
-               align_string(1, 78, 0, NULL,
-                            "%d user%s logged on, %d %s invis", on + invis,
-                            PLTEXT_S(on + invis), invis, PLTEXT_IS(invis)));
-  }
-  write_user(user,
-             "+----------------------------------------------------------------------------+\n");
-}
-
-
-/*
  * Display some files to the user.  This was once intergrated with the ".help" command,
  * but due to the new processing that goes through it was moved into its own command.
  * The files listed are now stored in MISCFILES rather than HELPFILES as they may not
@@ -6610,7 +6536,7 @@ help(UR_OBJECT user)
     return;
   }
   if (word_count < 3) {
-    sprintf(filename, "%s/%s", HELPFILES, com->name);
+    sprintf(filename, "%s/%s/%s", HELPFILES, LANGUAGE, com->name);
   } else {
     if (com == command_table + SET) {
       const struct set_entry *attr, *a;
@@ -6648,13 +6574,13 @@ help(UR_OBJECT user)
         return;
       }
       if (word_count < 4) {
-        sprintf(filename, "%s/%s_%s", HELPFILES, com->name, attr->type);
+        sprintf(filename, "%s/%s/%s_%s", HELPFILES, LANGUAGE, com->name, attr->type);
       } else {
-        sprintf(filename, "%s/%s", HELPFILES, com->name);
+        sprintf(filename, "%s/%s/%s", HELPFILES, LANGUAGE, com->name);
       }
     } else {
       com = command_table + HELP;
-      sprintf(filename, "%s/%s", HELPFILES, com->name);
+      sprintf(filename, "%s/%s/%s", HELPFILES, LANGUAGE, com->name);
     }
   }
   switch (more(user, user->socket, filename)) {
@@ -6853,7 +6779,7 @@ help_nuts_credits(UR_OBJECT user)
               "~BRNUTS version %s, Copyright (C) Neil Robertson 1996.\n\n",
               NUTSVER);
   write_user(user,
-             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             ~RS\n");
+             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n");
   write_user(user,
              "NUTS stands for Neil's Unix Talk Server, a program which started out as a\n");
   write_user(user,
@@ -6879,7 +6805,7 @@ help_nuts_credits(UR_OBJECT user)
   write_user(user,
              "remain so for the forseeable future.\n\nNeil Robertson - November 1996.\n");
   write_user(user,
-             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             ~RS\n\n");
+             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
 }
 
 
@@ -6891,7 +6817,7 @@ void
 help_amnuts_credits(UR_OBJECT user)
 {
   write_user(user,
-             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             ~RS\n\n");
+             "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
   vwrite_user(user,
               "~OL~FCAmnuts version %s~RS, Copyright (C) Andrew Collington, 2003\n",
               AMNUTSVER);
@@ -6912,7 +6838,7 @@ help_amnuts_credits(UR_OBJECT user)
   write_user(user,
              "   -- The Amnuts Development Group\n\n(for NUTS credits, see \".help nuts\")\n");
   write_user(user,
-             "\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             ~RS\n\n");
+             "\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
 }
 
 
@@ -7183,7 +7109,7 @@ examine(UR_OBJECT user)
   }
   idle = (int) (time(0) - u->last_input) / 60;
   if (u->malloc_start) {
-    vwrite_user(user, "Ignoring all: ~FCUsing Line Editor~RS\n");
+    vwrite_user(user, "Ignoring all: ~FCUsing Line Editor\n");
   } else {
     vwrite_user(user, "Ignoring all: %s\n", noyes[u->ignall]);
   }
@@ -7472,7 +7398,7 @@ set_attributes(UR_OBJECT user)
       write_user(user, "Usage: set recap <name as you would like it>\n");
       return;
     }
-    if (strlen(word[2]) > RECAP_NAME_LEN) {
+    if (strlen(word[2]) > RECAP_NAME_LEN - 3) {
       write_user(user,
                  "The recapped name length is too long - try using fewer colour codes.\n");
       return;
@@ -7492,6 +7418,7 @@ set_attributes(UR_OBJECT user)
       return;
     }
     strcpy(user->recap, word[2]);
+    strcat(user->recap, "~RS"); /* user->recap is allways escaped with a reset to its colours... */
     strcpy(user->bw_recap, recname);
     vwrite_user(user,
                 "Your name will now appear as \"%s~RS\" on the \"who\", \"examine\", tells, etc.\n",
@@ -8555,7 +8482,7 @@ display_colour(UR_OBJECT user)
     return;
   }
   for (i = 0; colours[i]; ++i) {
-    vwrite_user(user, "~%s: %sAmnuts version %s VIDEO TEST~RS\n",
+    vwrite_user(user, "^%s: %sAmnuts version %s VIDEO TEST\n",
                 colours[i], colours[i], AMNUTSVER);
   }
 }

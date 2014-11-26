@@ -1,0 +1,8 @@
+~OLComando :~RS gcom
+~OLUso     :~RS gcom <utilizador> [<comando>]
+
+Permite-te dar a um <utilizador> o acesso a um comando ao qual ele não
+teria acesso em condições normais. Se a opção <comando> não for usada,
+então irá mostrar os comandos aos quais o <utilizador> teve acesso.
+Isto funcionada como um modificador, ou seja, se o utilizador não tinha
+acesso ao comando passa a ter, e se já tinha passa a não ter.

@@ -1,0 +1,6 @@
+~OLComando :~RS set wrap
+~OLUso     :~RS set wrap
+
+Este atributo é um modificador, isto é, se estiver off, usando-o, fica
+on, e se o voltares a utilizar fica off, indicando-o. Orá tentar fazer um
+output de 80 colunas, se o teu cliente não for capaz disso.

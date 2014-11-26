@@ -1,0 +1,7 @@
+~OLComando :~RS outmsg
+~OLUso     :~RS outmsg [<texto>]
+
+Define a mensagem que é mostrada a seguir ao teu nome quando sais de uma
+sala, i.e., se o teu nome é Andy e tu definiste-a para "sai depressa", as
+outras pessoas verão "Andy sai depressa" quando sais da sala. Se omitires
+o <texto> mostra-te a mensagem corrente.

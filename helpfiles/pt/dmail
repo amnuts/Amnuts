@@ -1,0 +1,12 @@
+~OLComando :~RS dmail
+~OLUso     :~RS dmail <mensagem>
+~OL        :~RS dmail to <até-mensagem>
+~OL        :~RS dmail from <desde-mensagem> to <até-mensagem>
+~OL        :~RS dmail all
+
+Este comando permite-te apagar mensagens da tua caixa de correio. Podes
+apagar uma mensagem específica, fornecendo o número, ou apagar desde a
+primeira até à mensagem pretendida. Podes também apagar desde uma
+determinada mensagem até uma outra, ou podes mesmo apagar todo o teu
+mail. Se forneceres um número maior do que a quantidade de mail que
+tens, todo o teu mail será apagado.

@@ -1,0 +1,9 @@
+~OLComando :~RS read
+~OLUso     :~RS read [<sala>] [<mensagem>]
+
+Isto mostra o quadro de mensagens de uma dada sala, desde que tenhas
+acesso à sala (i.e., desde que não estava em private). Se não fôr passada
+como opção nenhuma sala, mostra o quadro da sala onde estás. Se usares a
+opção <mensagem>, então irás ler apenas a mensagem com esse número
+específico, para a sala dada, ou para a sala em que estás se não tiveres
+passado como argumento nenhuma sala.

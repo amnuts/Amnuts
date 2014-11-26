@@ -1,0 +1,6 @@
+~OLComando :~RS bbcast
+~OLUso     :~RS bbcast <texto>
+
+Irá ser feito um broadcast do texto através do talker com um beep,
+forçando qualquer pessoa que esteja a ignorar a ouvi-lo. O nome da
+pessoa que utilizou o comando não será mostrado.

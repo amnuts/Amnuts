@@ -1,0 +1,5 @@
+~OLComando :~RS cbuff
+~OLUso     :~RS cbuff
+~OLAtalhos :~RS *
+
+Apaga o buffer de conversação da sala em que te encontras.

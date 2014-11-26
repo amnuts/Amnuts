@@ -1,0 +1,6 @@
+~OLComando :~RS force
+~OLUso     :~RS force <utilizador> <texto>
+
+Este comando permite-te forçar um utilizador a executar um comando sem
+que tenha de escrever nada. Por exemplo ".force bod .h smail" faria com
+que o utilizador Bod lê-se a ajuda sobre o comando "smail".

@@ -1,0 +1,8 @@
+~OLComando :~RS mode
+~OLUso     :~RS mode
+
+Muda-te entre o modo de "speech" e o modo de comandos. No modo de
+"speech", qualquer coisa que escrevas é interpretado como uma fala, a não
+ser que seja precedida por um ponto. No modo de comandos, tens uma prompt
+e tudo o que escrevers é tratado como um comando, para falar tens de usar
+explicitamente o comando "say".

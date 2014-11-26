@@ -221,7 +221,7 @@ reset_user(UR_OBJECT user)
   *user->icq = '\0';
   *user->recap = '\0';
   *user->bw_recap = '\0';
-  strcpy(user->desc, "is a newbie needing a desc.");
+  strcpy(user->desc, "is a newbie");
   strcpy(user->in_phrase, "enters");
   strcpy(user->out_phrase, "goes");
   *user->afk_mesg = '\0';
@@ -355,7 +355,7 @@ reset_user(UR_OBJECT user)
 
 
 /*
- * Destruct an object.
+ * Destruct an user
  */
 void
 destruct_user(UR_OBJECT user)
@@ -377,8 +377,15 @@ destruct_user(UR_OBJECT user)
       user->next->prev = user->prev;
     }
   }
+  /* TODO: not having the free() we never get rid of allocated unused memory
+   *       but having makes the talker crash if you inject enough garbage to
+   *       a connected socket... This should be fixed, but while not, it's
+   *       better to have it commented.
+   */
+/*
   memset(user, 0, (sizeof *user));
   free(user);
+*/
   destructed = 1;
 }
 
@@ -957,7 +964,7 @@ get_user_name(UR_OBJECT user, const char *name)
         break;
       }
       /* FIXME: Bounds checking */
-      strcat(text, found++ % 8 ? "~RS  " : "~RS\n  ");
+      strcat(text, found++ % 8 ? "~RS  " : "\n  ");
       strcat(text, u->recap);
       last = u;
     }

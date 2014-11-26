@@ -1,0 +1,4 @@
+~OLComando :~RS disconnect
+~OLUso     :~RS disconnect <sala>
+
+Desliga o netlink numa sala.

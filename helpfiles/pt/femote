@@ -1,0 +1,6 @@
+~OLComando :~RS femote
+~OLUso     :~RS femote <texto>
+
+Irá mostrar um "emote" para todas as pessoas que constem na tua lista de
+amigos, e apenas a essas pessoas, qualquer que seja a sala onde eles se
+encontrem.

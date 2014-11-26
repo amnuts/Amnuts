@@ -1,0 +1,8 @@
+~OLComando :~RS private
+~OLUso     :~RS private [<sala>]
+
+Isto porá a sala onde estás correntemente com status privado, desde que
+não esteja "fixed" e que haja utilizadores suficientes dentro dela. Se
+fores de nível suficientemente elevado para usar a opção <sala>, então
+serás capaz de mudar o status da sala, desde que estejam pessoas
+suficientes e que não esteja "fixed".

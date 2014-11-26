@@ -1,0 +1,9 @@
+~OLComando :~RS rloadrm
+~OLUso     :~RS rloadrm -a|<sala>
+
+Permite recarregar as descrições das salas, caso seja necessários. Este
+comando é geralmente usado caso o ficheiro de descrição de uma sala tenha
+sido alterado manualmente e queiras fazer as mudanças no talker (e.g., 
+erros ortográficos correigidos) sem ter de o reiniciar. Se a opção -a fôr
+usada, as descrições de todas as salas serão recarregadas, senão será só
+a descrição para a sala introduzida. Isto não afectará salas pessoais. 

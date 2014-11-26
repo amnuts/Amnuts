@@ -1,0 +1,6 @@
+~OLComando :~RS rooms
+~OLUso     :~RS rooms [-l]
+
+Mostra a lista de salas e os seus tópicos correntes. Se a opção "-l" (el)
+for usada, então quaisquer salas que requeiram que sejas de um certo 
+nível ou acima para entrares, serã mostradas.

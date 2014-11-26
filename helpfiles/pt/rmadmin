@@ -1,0 +1,12 @@
+~OLComando :~RS rmadmin
+~OLUso     :~RS rmadmin -l|-m|-u <utilizador>|-d <utilizador>
+
+Este comando serve para ajudar os admins a gerir as salas pessoais. Se
+usares aopção "-l" então irão ser listadas todas as salas pessoais
+correntemente activas no talker, com alguma informação acerca de cada
+sala. Se a opção "-m" for utilizada, irá mostrar a quantidade de memória
+que as salas pessoais estão a utilizar neste momento. Se a opção "-u" for
+usada com o nome de um utilizador, então irá descarregar  aquela sala
+pessoal da memória. Se a opção -d for usada com um nome, irá descarregar
+aquela sala da memória e apagar todos os ficheiros associados com aquela
+sala (quadro de mensagens, descrição da sala, etc.).

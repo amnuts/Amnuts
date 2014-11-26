@@ -1,0 +1,4 @@
+~OLCommand :~RS donate
+~OLUsage   :~RS donate <utilizador> <quantidade>
+
+Permite-te dar dinheiro a outros utilizadores.

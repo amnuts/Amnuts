@@ -1,0 +1,9 @@
+~OLComando :~RS rmail
+~OLUso     :~RS rmail [new|<mensagem>]
+
+Se a opção "new" for utilizada, então serão mostradas apenas as mensagens
+que foram enviadas para ti desde que viste as mensagens pela últimas vez.
+Se deres um número de uma mensagem, ser-te-á mostrada apenas aquela
+mensagem. Se não passares argumentos ser-te-ão mostradas todas as que
+tenhas na caixa-de-correio. Os números das mensagens podem ser vistos
+através do comando "from".

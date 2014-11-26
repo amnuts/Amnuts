@@ -1,0 +1,9 @@
+~OLComando :~RS xcom
+~OLUso     :~RS xcom <utilizador> [<comando>]
+
+Permite que retires ao <utilizador> a possibilidade de utilizar um
+determinado <comando>, ao qual ele teria, normalmente, acesso. Se a opção
+<comando> não for usada, irá mostrar uma lista de comandos que foram
+removidos ao <utilizador>. Funciona como um modificador, portanto se o 
+<comando> não tiver sido removido ao utilizador, quando se executar o
+comando, ele perderá acesso. Senão, o acesso será devolvido.

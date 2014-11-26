@@ -1,0 +1,5 @@
+~OLComando :~RS memcount
+~OLUso     :~RS memcount
+
+Permite ver a quantidade de memória que os objectos do talker estão a
+ocupar correntemente.

@@ -1,0 +1,6 @@
+~OLComando :~RS myname
+~OLUso     :~RS myname
+
+Permite-te renomear a tua sala pessoal para que tenha algo mais do que
+"(~$)" como nome. As funções da sala pessoal têm de estar activadas
+para usar este comando.
