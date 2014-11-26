@@ -1487,6 +1487,7 @@ read_board(UR_OBJECT user)
   } else {
     sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
   }
+  user->filepos = 0;
   ret = more(user, user->socket, filename);
   if (!ret) {
     write_user(user, "There are no messages on the board.\n\n");
