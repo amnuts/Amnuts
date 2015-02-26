@@ -43,7 +43,8 @@ IDENTDCPPFLAGS = -I$(INCDIR)
 #IDENTDCPPFLAGS = -I$(INCDIR) -DMANDNS
 
 # These are sort of gcc dependant; roll your own if you use another compiler
-CFLAGS         = -g -O2 -Wall -W
+CFLAGS         = -g -Wall -W
+#CFLAGS         = -g -O2 -Wall -W
 #CFLAGS         = -g -O0 -fno-inline
 #CFLAGS         = -g -O2 -Wall -W -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wpacked -Wnested-externs -Winline -Wlong-long
 #CFLAGS         = -g -O2 -Wall -W -pedantic -Wfloat-equal -Wtraditional -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn -Wpacked -Wpadded -Wredundant-decls -Wnested-externs -Wunreachable-code -Winline -Wlong-long
