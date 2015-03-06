@@ -607,7 +607,7 @@ const struct colour_codes_struct colour_codes[] = {
 /*
  * some general arrays being defined
  */
-const char *const noyes[] = { "NO", "YES" };
+const char *const noyes[] = { "NO", "YES" }; // 3 characters max
 const char *const offon[] = { "OFF", "ON" };
 const char *const minmax[] = { "OFF", "MIN", "MAX" };
 const char *const sex[] = { "Neuter", "Male", "Female" };

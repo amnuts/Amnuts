@@ -6924,7 +6924,7 @@ help_amnuts_credits(UR_OBJECT user)
 void
 status(UR_OBJECT user)
 {
-  char ir[ROOM_NAME_LEN + 1], text2[ARR_SIZE], text3[ARR_SIZE], rm[3],
+  char ir[ROOM_NAME_LEN + 1], text2[ARR_SIZE], text3[ARR_SIZE], rm[4],
     qcall[USER_NAME_LEN];
   char email[82], nm[5], muzlev[20], arrlev[20];
   UR_OBJECT u;
