@@ -1,104 +1,39 @@
-#
-# Amnuts version 2.3.0
-# Copyright (c) Andrew Collington 1996-2003
-# http://amnuts.talker.com/
-# mailto:amnuts@talker.com
-#
-# gmake (GNU make) is presently REQUIRED!
-
-TALKER          = amnuts230
-IDENTD          = amnutsIdent
 BINDIR          = ..
-OBJDIR          = objects
-INCDIR          = includes
-SRCDIR          = $(CURDIR)
 PERMS           = 755
-CC              = cc
-#CC             = cc -V 3.0.4 -std=c99 -D_XOPEN_SOURCE=600
-# This should take cpp args and cause dependancy info to go to stdout
-# It would be nice to use gcc -MMD to make this at the same time as compile
-# It would be nice to use gcc 3+ (2.96+) -MP to fix dependancy info for gmake
-MAKEDEPEND      = $(CC) -MM
-#MAKEDEPEND     = makedepend -f -
+CC              = gcc
+INCDIR          = includes
+C_FLAGS         = -g -Wall -W -MMD
+CC_FLAGS        = -I$(INCDIR) -DIDENTD -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
+LD_FLAGS        =
 
-# GAMES => include games (i.e., hangman, gun duelling, money)
-# WIZPORT => include support for wizport
-# NETLINKS => include support for netlinks
-# MANDNS => include support for "host" program for name resolution
-# IDENTD => include support for "ident" daemon for name resolution
-# ISOWEEKS => use ISO 8601 week calendars (Mon-Sun; first week has 4+ days).
-# DOUBLEFORK => use old double_fork() code (actually quad fork() with system())
-# DUMPCORE => cause crash actions to dump core and exit for debugging
-#TALKERCPPFLAGS = -I$(INCDIR)
-#TALKERCPPFLAGS = -I$(INCDIR) -DGAMES
-#TALKERCPPFLAGS = -I$(INCDIR) -DMANDNS -DWIZPORT -DGAMES
-#TALKERCPPFLAGS = -I$(INCDIR) -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
-#TALKERCPPFLAGS = -I$(INCDIR) -DIDENTD -DWIZPORT -DGAMES
-#TALKERCPPFLAGS = -I$(INCDIR) -DIDENTD -DNETLINKS -DWIZPORT -DGAMES
-TALKERCPPFLAGS = -I$(INCDIR) -DIDENTD -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
+TALKER_BIN      = amnuts230
+TALKER_OBJ_DIR  = objects
+TALKER_SRC_DIR  = $(CURDIR)
 
-# MANDNS => use for "host" program for name resolution
-# DEBUG => include copious debugging output to stdout
-IDENTDCPPFLAGS = -I$(INCDIR)
-#IDENTDCPPFLAGS = -I$(INCDIR) -DMANDNS
+IDENTD_BIN      = amnutsIdent
+IDENTD_OBJ_DIR  = objects
+IDENTD_SRC_DIR  = $(CURDIR)/identd
 
-# These are sort of gcc dependant; roll your own if you use another compiler
-CFLAGS         = -g -Wall -W
-#CFLAGS         = -g -O2 -Wall -W
-#CFLAGS         = -g -O0 -fno-inline
-#CFLAGS         = -g -O2 -Wall -W -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wpacked -Wnested-externs -Winline -Wlong-long
-#CFLAGS         = -g -O2 -Wall -W -pedantic -Wfloat-equal -Wtraditional -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn -Wpacked -Wpadded -Wredundant-decls -Wnested-externs -Wunreachable-code -Winline -Wlong-long
-#CFLAGS         = -Q -fprofile-arcs -ftest-coverage -ggdb3 -O2 -Wall -W
+TALKER_SRC      = $(wildcard $(TALKER_SRC_DIR)/*.c $(TALKER_SRC_DIR)/commands/*.c)
+TALKER_OBJS     = $(addprefix $(TALKER_OBJ_DIR)/,$(notdir $(TALKER_SRC:.c=.o)))
 
-LDFLAGS         =
+IDENTD_SRC      = $(wildcard $(IDENTD_SRC_DIR)/*.c)
+IDENTD_OBJS     = $(addprefix $(IDENTD_OBJ_DIR)/,$(notdir $(IDENTD_SRC:.c=.o)))
 
-# if you add a new file you must add a line here!
-TALKEROBJS      = \
-        $(OBJDIR)/amnuts230.o \
-        $(OBJDIR)/pager.o \
-        $(OBJDIR)/reboot.o \
-        $(OBJDIR)/netlinks.o \
-        $(OBJDIR)/rooms.o \
-        $(OBJDIR)/messages.o \
-        $(OBJDIR)/games.o \
-        $(OBJDIR)/objects.o \
-        $(OBJDIR)/speech.o \
-        $(OBJDIR)/strings.o \
-        $(OBJDIR)/admin.o \
-        $(OBJDIR)/spodlist.o
 
-IDENTDOBJS      = \
-        $(OBJDIR)/ident.o
 
-UNAME := $(shell uname)
-
+UNAME           = $(shell uname)
 ifeq ($(UNAME), Darwin)
-        TALKERLIBS     = -lcrypto
+	TALKER_LIBS = -lcrypto
 endif
-
 ifeq ($(UNAME), SunOS)
-        TALKERLIBS     = -lnsl -lsocket
+	TALKER_LIBS = -lnsl -lsocket
 endif
-
 ifeq ($(UNAME), Linux)
-        TALKERLIBS     = -lcrypt
+	TALKER_LIBS = -lcrypt
 endif
 
-#if you're using Solaris, comment the above and uncomment the below
-#TALKERLIBS     = -lnsl -lsocket
-
-IDENTDLIBS     =
-#if you're using Solaris, comment the above and uncomment the below
-#IDENTDLIBS     = -lnsl -lsocket
-
-#
-# you should not need to alter anything below this point
-#
-
-#VPATH = $(SRCDIR)
-#vpath %.c $(SRCDIR)
-#vpath %.h $(SRCDIR)/$(INCDIR)
-#vpath %.o $(OBJDIR)
+IDENTD_LIBS = 
 
 all: build
 
@@ -106,43 +41,51 @@ all: build
 
 distclean: clean
 	@echo "Removing binary and backup files"
-	rm -f $(TALKER) $(BINDIR)/$(TALKER) $(IDENTD) $(BINDIR)/$(IDENTD)
-	rm -f *.[ch]~ *.[ch].bak $(INCDIR)/*.[ch]~ $(INCDIR)/*.[ch].bak
+	rm -f $(TALKER_SRC_DIR)/*.[ch]~ $(TALKER_SRC_DIR)/*.[ch].bak
+	rm -f $(IDENTD_SRC_DIR)/*.[ch]~ $(IDENTD_SRC_DIR)/*.[ch].bak 
+	rm -f $(TALKER_BIN) $(BINDIR)/$(TALKER_BIN)
+	rm -f $(IDENTD_BIN) $(BINDIR)/$(IDENTD_BIN)
+	rm -f $(INCDIR)/*.[ch]~ $(INCDIR)/*.[ch].bak
 
 clean:
 	@echo "Removing object and dependancy files"
-	rm -f $(TALKEROBJS) $(IDENTDOBJS)
-	rm -f $(TALKEROBJS:.o=.d) $(IDENTDOBJS:.o=.d)
+	rm -f $(TALKER_OBJS) $(TALKER_OBJS:.o=.d)
+	rm -f $(IDENTD_OBJS) $(IDENTD_OBJS:.o=.d)
 
-install: $(BINDIR)/$(TALKER) $(BINDIR)/$(IDENTD)
+install: $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN)
 
-build: $(TALKER) $(IDENTD)
+build: $(TALKER_BIN) $(IDENTD_BIN)
 
-compile: $(TALKEROBJS) $(IDENTDOBJS)
+compile: $(TALKER_OBJS) $(IDENTD_OBJS)
 
-$(BINDIR)/$(TALKER) $(BINDIR)/$(IDENTD): $(BINDIR)/%: %
+print-%: ; @echo $* = $($*)
+
+
+vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR)
+
+
+$(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
 	chmod $(PERMS) $<
-	ln -f $< $@
+	mv -f $< $@
 
-$(TALKER): $(TALKEROBJS)
+$(TALKER_BIN): $(TALKER_OBJS)
 	@echo "Linking $@ ..."
-	$(CC) $(LDFLAGS) $^ $(TALKERLIBS) -o $@
+	$(CC) $(LD_FLAGS) $^ $(TALKER_LIBS) -o $@
 
-$(IDENTD): $(IDENTDOBJS)
+$(IDENTD_BIN): $(IDENTD_OBJS)
 	@echo "Linking $@ ..."
-	$(CC) $(LDLAGS) $^ $(IDENTDLIBS) -o $@
+	$(CC) $(LD_FLAGS) $^ $(IDENTD_LIBS) -o $@
 
-$(TALKEROBJS): $(OBJDIR)/%.o: %.c
-	@echo "Compiling $< ..."
-	@test -d $(OBJDIR) || mkdir $(OBJDIR)
-	$(CC) $(CFLAGS) $(TALKERCPPFLAGS) -c $< -o $@
-	@$(MAKEDEPEND) $(TALKERCPPFLAGS) $< | sed -e 's/#.*//' -e '/\\$$/N' -e 's/\\\n//g' -e 's/  */ /g' -e 's/^ //' -e 's/ $$//' -e '/^$$/d' -e 's!^[^:]*$*\.o *: *!$@: !' -e 'p' -e 's!^[^:]*$*\.o *: *$*\.c *!!' -e '/^$$/d' -e 's/$$/:/' > $(@:.o=.d)
+$(TALKER_OBJS): $(TALKER_OBJ_DIR)/%.o: %.c
+	@echo "Compiling talker $< ... ($@)"
+	@test -d $(TALKER_OBJ_DIR) || mkdir $(TALKER_OBJ_DIR)
+	$(CC) $(C_FLAGS) $(CC_FLAGS) -c -o $@ $<
 
-$(IDENTDOBJS): $(OBJDIR)/%.o: %.c
-	@echo "Compiling $< ..."
-	$(CC) $(CFLAGS) $(IDENTDCPPFLAGS) -c $< -o $@
-	@$(MAKEDEPEND) $(IDENTDCPPFLAGS) $< | sed -e 's/#.*//' -e '/\\$$/N' -e 's/\\\n//g' -e 's/  */ /g' -e 's/^ //' -e 's/ $$//' -e '/^$$/d' -e 's!^[^:]*$*\.o *: *!$@: !' -e 'p' -e 's!^[^:]*$*\.o *: *$*\.c *!!' -e '/^$$/d' -e 's/$$/:/' > $(@:.o=.d)
+$(IDENTD_OBJS): $(IDENTD_OBJ_DIR)/%.o: %.c
+	@echo "Compiling identd $< ... ($@)"
+	@test -d $(IDENTD_OBJ_DIR) || mkdir $(IDENTD_OBJ_DIR)
+	$(CC) $(C_FLAGS) $(CC_FLAGS) -c -o $@ $<
 
--include $(TALKEROBJS:.o=.d) $(IDENTDOBJS:.o=.d)
+-include $(TALKER_OBJS:.o=.d) $(IDENTD_OBJS:.o=.d)
 
