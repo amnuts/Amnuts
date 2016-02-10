@@ -141,24 +141,6 @@ record_edit(UR_OBJECT from, UR_OBJECT to, const char *str)
 }
 
 
-/*
- * Clear the review buffer
- */
-void
-revclr(UR_OBJECT user)
-{
-#if !!0
-  static const char usage[] = "Usage: cbuff\n";
-#endif
-  const char *name;
-
-  clear_revbuff(user->room);
-  name = user->vis ? user->recap : invisname;
-  vwrite_room_except(user->room, user, "%s~RS clears the review buffer.\n",
-                     name);
-  write_user(user, "You clear the review buffer.\n");
-}
-
 
 /*
 * Clear the tell buffer of the user
@@ -185,29 +167,7 @@ clear_revbuff(RM_OBJECT rm)
 }
 
 
-/*
- * Clear the tell buffer of the user
- */
-void
-clear_tells(UR_OBJECT user)
-{
-  destruct_review_buffer_type(user, rbfTELL, 0);
-}
 
-
-/*
- * Clear the shout buffer of the talker
- */
-void
-clear_shouts(void)
-{
-  int i;
-
-  for (i = 0; i < REVIEW_LINES; ++i) {
-    *amsys->shoutbuff[i] = '\0';
-  }
-  amsys->sbuffline = 0;
-}
 
 
 /*
