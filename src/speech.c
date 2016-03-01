@@ -46,7 +46,6 @@ review_buffer(UR_OBJECT user, unsigned flags)
   return count;
 }
 
-
 /*
  * Record speech and emotes in the room.
  */
@@ -60,7 +59,6 @@ record(RM_OBJECT rm, char *str)
   rm->revline = (rm->revline + 1) % REVIEW_LINES;
 }
 
-
 /*
  * Records shouts and shemotes sent over the talker.
  */
@@ -73,7 +71,6 @@ record_shout(const char *str)
   amsys->shoutbuff[amsys->sbuffline][REVIEW_LEN + 1] = '\0';
   amsys->sbuffline = (amsys->sbuffline + 1) % REVIEW_LINES;
 }
-
 
 /*
  * Records tells and pemotes sent to the user.
@@ -96,7 +93,6 @@ record_tell(UR_OBJECT from, UR_OBJECT to, const char *str)
   }
 }
 
-
 /*
  * Records tells and pemotes sent to the user when afk.
  */
@@ -117,7 +113,6 @@ record_afk(UR_OBJECT from, UR_OBJECT to, const char *str)
     destruct_review_buffer_type(to, rbfAFK, 1);
   }
 }
-
 
 /*
  * Records tells and pemotes sent to the user when in the line editor.
@@ -140,18 +135,6 @@ record_edit(UR_OBJECT from, UR_OBJECT to, const char *str)
   }
 }
 
-
-
-/*
-* Clear the tell buffer of the user
-*/
-void
-clear_afk(UR_OBJECT user)
-{
-  destruct_review_buffer_type(user, rbfAFK, 0);
-}
-
-
 /*
  * Clear the review buffer in the room
  */
@@ -164,19 +147,6 @@ clear_revbuff(RM_OBJECT rm)
     *rm->revbuff[i] = '\0';
   }
   rm->revline = 0;
-}
-
-
-
-
-
-/*
- * Clear the tell buffer of the user
- */
-void
-clear_edit(UR_OBJECT user)
-{
-  destruct_review_buffer_type(user, rbfEDIT, 0);
 }
 
 /*

@@ -117,9 +117,6 @@ get_motd_num(int motd)
   return !num ? 1 : num;
 }
 
-
-
-
 /*
  * This is function that sends mail to other users
  */
@@ -203,12 +200,6 @@ send_mail(UR_OBJECT user, char *to, char *ptr, int iscopy)
   return 1;
 }
 
-
-
-
-
-
-
 /*
  * allows a user to choose what message to read
  */
@@ -280,7 +271,6 @@ read_specific_mail(UR_OBJECT user)
               smail_number, total);
 }
 
-
 /*
  * Read just the new mail, taking the fseek size from the stat st_buf saved in the
  * mail file first line - along with how many new mail messages there are
@@ -332,13 +322,6 @@ read_new_mail(UR_OBJECT user)
   }
 }
 
-
-
-
-
-
-
-
 /*
  * send out copy of smail to anyone that is in user->copyto
  */
@@ -361,8 +344,6 @@ send_copies(UR_OBJECT user, char *ptr)
     *user->copyto[i] = '\0';
   }
 }
-
-
 
 /*
  * This is function that sends mail to other users
@@ -447,7 +428,6 @@ send_broadcast_mail(UR_OBJECT user, char *ptr, enum lvl_value lvl, int all)
   return cnt;
 }
 
-
 /*
  * type=0 => return total message count
  * type=1 => return new messages count
@@ -489,7 +469,6 @@ mail_sizes(char *name, int type)
   fclose(fp);
   return cnt;
 }
-
 
 /*
  * Reset the new mail count and file size at the top of a user mail file
@@ -596,8 +575,6 @@ set_forward_email(UR_OBJECT user)
   write_user(user,
              "If you do not receive any email, then use ~FCset email <email>~RS again, making\nsure you have the correct address.\n\n");
 }
-
-
 
 /*
  * send smail to the email ccount
@@ -746,132 +723,7 @@ double_fork(void)
 #endif
 
 
-/*
- * allows a user to email specific messages to themselves
- */
-void
-forward_specific_mail(UR_OBJECT user)
-{
-  char w1[ARR_SIZE], line[ARR_SIZE], filenamei[80], filenameo[80],
-    subject[80], *s;
-  FILE *fpi, *fpo;
-  int valid, cnt, total, smail_number, tmp1, tmp2;
-
-  if (word_count < 2) {
-    write_user(user, "Usage: fmail all|<mail number>\n");
-    return;
-  }
-  total = mail_sizes(user->name, 0);
-  if (!total) {
-    write_user(user, "You currently have no mail.\n");
-    return;
-  }
-  if (!user->mail_verified) {
-    write_user(user, "You have not yet verified your email address.\n");
-    return;
-  }
-  sprintf(subject, "Manual forwarding of smail (%s)", user->name);
-  /* send all smail */
-  if (!strcasecmp(word[1], "all")) {
-    sprintf(filenameo, "%s/%s.FWD", MAILSPOOL, user->name);
-    fpo = fopen(filenameo, "w");
-    if (!fpo) {
-      write_syslog(SYSLOG, 0,
-                   "Unable to open forward mail file in forward_specific_mail()\n");
-      write_user(user, "Sorry, could not forward any mail to you.\n");
-      return;
-    }
-    sprintf(filenamei, "%s/%s/%s.M", USERFILES, USERMAILS, user->name);
-    fpi = fopen(filenamei, "r");
-    if (!fpi) {
-      write_user(user, "Sorry, could not forward any mail to you.\n");
-      write_syslog(SYSLOG, 0,
-                   "Unable to open %s's mailbox in forward_specific_mail()\n",
-                   user->name);
-      fclose(fpo);
-      return;
-    }
-    fprintf(fpo, "From: %s\n", TALKER_NAME);
-    fprintf(fpo, "To: %s <%s>\n\n", user->name, user->email);
-    fscanf(fpi, "%d %d\r", &tmp1, &tmp2);
-    for (s = fgets(line, ARR_SIZE - 1, fpi); s;
-         s = fgets(line, ARR_SIZE - 1, fpi)) {
-      fprintf(fpo, "%s", colour_com_strip(s));
-    }
-    fputs(talker_signature, fpo);
-    fclose(fpi);
-    fclose(fpo);
-    send_forward_email(user->email, filenameo, subject);
-    write_user(user,
-               "You have now sent ~OL~FRall~RS your smails to your email account.\n");
-    return;
-  }
-  /* send just a specific smail */
-  smail_number = atoi(word[1]);
-  if (!smail_number) {
-    write_user(user, "Usage: fmail all/<mail number>\n");
-    return;
-  }
-  if (smail_number > total) {
-    vwrite_user(user, "You only have %d message%s in your mailbox.\n", total,
-                PLTEXT_S(total));
-    return;
-  }
-  sprintf(filenameo, "%s/%s.FWD", MAILSPOOL, user->name);
-  fpo = fopen(filenameo, "w");
-  if (!fpo) {
-    write_syslog(SYSLOG, 0,
-                 "Unable to open forward mail file in forward_specific_mail()\n");
-    write_user(user, "Sorry, could not forward any mail to you.\n");
-    return;
-  }
-  sprintf(filenamei, "%s/%s/%s.M", USERFILES, USERMAILS, user->name);
-  fpi = fopen(filenamei, "r");
-  if (!fpi) {
-    write_user(user, "Sorry, could not forward any mail to you.\n");
-    write_syslog(SYSLOG, 0,
-                 "Unable to open %s's mailbox in forward_specific_mail()\n",
-                 user->name);
-    fclose(fpo);
-    return;
-  }
-  fprintf(fpo, "From: %s\n", TALKER_NAME);
-  fprintf(fpo, "To: %s <%s>\n\n", user->name, user->email);
-  valid = cnt = 1;
-  fscanf(fpi, "%d %d\r", &tmp1, &tmp2);
-  for (s = fgets(line, ARR_SIZE - 1, fpi); s;
-       s = fgets(line, ARR_SIZE - 1, fpi)) {
-    if (*s == '\n') {
-      valid = 1;
-    }
-    sscanf(s, "%s", w1);
-    if (valid && !strcmp(colour_com_strip(w1), "From:")) {
-      valid = 0;
-      if (smail_number == cnt++) {
-        break;
-      }
-    }
-  }
-  for (; s; s = fgets(line, ARR_SIZE - 1, fpi)) {
-    if (*s == '\n') {
-      break;
-    }
-    fprintf(fpo, "%s", colour_com_strip(s));
-  }
-  fputs(talker_signature, fpo);
-  fclose(fpi);
-  fclose(fpo);
-  send_forward_email(user->email, filenameo, subject);
-  vwrite_user(user,
-              "You have now sent smail number ~FM~OL%d~RS to your email account.\n",
-              smail_number);
-}
-
-
 /***** Message boards *****/
-
-
-
 
 
 /*
@@ -952,12 +804,6 @@ read_board_specific(UR_OBJECT user, RM_OBJECT rm, int msg_number)
     }
   }
 }
-
-
-
-
-
-
 
 /*
  * Check if a normal user can remove a message
@@ -1093,58 +939,6 @@ board_from(UR_OBJECT user)
   vwrite_user(user, "\nTotal of ~OL%d~RS messages.\n\n", rm->mesg_cnt);
 }
 
-
-
-
-
-
-
-/*
- * Show list of people suggestions are from without seeing the whole lot
- */
-void
-suggestions_from(UR_OBJECT user)
-{
-  char id[ARR_SIZE], line[ARR_SIZE], filename[80], *s, *str;
-  FILE *fp;
-  int valid;
-  int cnt;
-
-  if (!amsys->suggestion_count) {
-    write_user(user, "There are currently no suggestions.\n");
-    return;
-  }
-  sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
-  fp = fopen(filename, "r");
-  if (!fp) {
-    write_user(user,
-               "There was an error trying to read the suggestion board.\n");
-    write_syslog(SYSLOG, 0,
-                 "Unable to open suggestion board in suggestions_from().\n");
-    return;
-  }
-  vwrite_user(user, "\n~BB*** Suggestions on the %s board from ***\n\n",
-              SUGBOARD);
-  valid = 1;
-  cnt = 0;
-  for (s = fgets(line, ARR_SIZE - 1, fp); s;
-       s = fgets(line, ARR_SIZE - 1, fp)) {
-    if (*s == '\n') {
-      valid = 1;
-    }
-    sscanf(s, "%s", id);
-    str = colour_com_strip(id);
-    if (valid && !strcmp(str, "From:")) {
-      vwrite_user(user, "~FC%2d)~RS %s", ++cnt, remove_first(s));
-      valid = 0;
-    }
-  }
-  fclose(fp);
-  vwrite_user(user, "\nTotal of ~OL%d~RS suggestions.\n\n",
-              amsys->suggestion_count);
-}
-
-
 /*
  * delete lines from boards or mail or suggestions, etc
  */
@@ -1240,61 +1034,6 @@ wipe_messages(char *filename, int from, int to, int type)
   rename("tempfile", filename);
   return rem;
 }
-
-
-/*
- * Send mail message to all people on your friends list
- */
-void
-friend_smail(UR_OBJECT user, char *inpstr)
-{
-  FU_OBJECT fu;
-
-  if (inpstr) {
-    /* FIXME: Use sentinel other JAILED */
-    if (user->muzzled != JAILED) {
-      write_user(user, "You are muzzled, you cannot mail anyone.\n");
-      return;
-    }
-    /* check to see if use has friends listed */
-    if (!count_friends(user)) {
-      write_user(user, "You have no friends listed.\n");
-      return;
-    }
-    if (word_count < 2) {
-      /* go to the editor to smail */
-#ifdef NETLINKS
-      if (user->type == REMOTE_TYPE) {
-        write_user(user,
-                   "Sorry, due to software limitations remote users cannot use the line editor.\nUse the \".fsmail <text>\" method instead.\n");
-        return;
-      }
-#endif
-      write_user(user,
-                 "\n~BB*** Writing mail message to all your friends ***\n\n");
-      user->misc_op = 24;
-      editor(user, NULL);
-    }
-    /* do smail - no editor */
-    strcat(inpstr, "\n");
-  } else {
-    /* now do smail - out of editor */
-    if (*user->malloc_end-- != '\n') {
-      *user->malloc_end-- = '\n';
-    }
-    inpstr = user->malloc_start;
-  }
-  for (fu = user->fu_first; fu; fu = fu->next) {
-    if (fu->flags & fufFRIEND) {
-      send_mail(user, fu->name, inpstr, 2);
-    }
-  }
-  write_user(user, "Mail sent to all people on your friends list.\n");
-  write_syslog(SYSLOG, 1,
-               "%s sent mail to all people on their friends list.\n",
-               user->name);
-}
-
 
 /*
  * The editor used for writing profiles, mail and messages on the boards
