@@ -9,5 +9,5 @@
 void
 clear_edit(UR_OBJECT user)
 {
-	destruct_review_buffer_type(user, rbfEDIT, 0);
+    destruct_review_buffer_type(user, rbfEDIT, 0);
 }

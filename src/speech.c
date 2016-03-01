@@ -23,27 +23,27 @@
 int
 review_buffer(UR_OBJECT user, unsigned flags)
 {
-  int count = 0;
-  RB_OBJECT rb, next;
+    int count = 0;
+    RB_OBJECT rb, next;
 
-  if (user->reverse_buffer) {
-    for (rb = user->rb_last; rb; rb = next) {
-      next = rb->prev;
-      if (rb->flags & flags) {
-        write_user(user, rb->buffer);
-        ++count;
-      }
+    if (user->reverse_buffer) {
+        for (rb = user->rb_last; rb; rb = next) {
+            next = rb->prev;
+            if (rb->flags & flags) {
+                write_user(user, rb->buffer);
+                ++count;
+            }
+        }
+    } else {
+        for (rb = user->rb_first; rb; rb = next) {
+            next = rb->next;
+            if (rb->flags & flags) {
+                write_user(user, rb->buffer);
+                ++count;
+            }
+        }
     }
-  } else {
-    for (rb = user->rb_first; rb; rb = next) {
-      next = rb->next;
-      if (rb->flags & flags) {
-        write_user(user, rb->buffer);
-        ++count;
-      }
-    }
-  }
-  return count;
+    return count;
 }
 
 /*
@@ -52,11 +52,11 @@ review_buffer(UR_OBJECT user, unsigned flags)
 void
 record(RM_OBJECT rm, char *str)
 {
-  *rm->revbuff[rm->revline] = '\0';
-  strncat(rm->revbuff[rm->revline], str, REVIEW_LEN);
-  rm->revbuff[rm->revline][REVIEW_LEN] = '\n';
-  rm->revbuff[rm->revline][REVIEW_LEN + 1] = '\0';
-  rm->revline = (rm->revline + 1) % REVIEW_LINES;
+    *rm->revbuff[rm->revline] = '\0';
+    strncat(rm->revbuff[rm->revline], str, REVIEW_LEN);
+    rm->revbuff[rm->revline][REVIEW_LEN] = '\n';
+    rm->revbuff[rm->revline][REVIEW_LEN + 1] = '\0';
+    rm->revline = (rm->revline + 1) % REVIEW_LINES;
 }
 
 /*
@@ -65,11 +65,11 @@ record(RM_OBJECT rm, char *str)
 void
 record_shout(const char *str)
 {
-  *amsys->shoutbuff[amsys->sbuffline] = '\0';
-  strncat(amsys->shoutbuff[amsys->sbuffline], str, REVIEW_LEN);
-  amsys->shoutbuff[amsys->sbuffline][REVIEW_LEN] = '\n';
-  amsys->shoutbuff[amsys->sbuffline][REVIEW_LEN + 1] = '\0';
-  amsys->sbuffline = (amsys->sbuffline + 1) % REVIEW_LINES;
+    *amsys->shoutbuff[amsys->sbuffline] = '\0';
+    strncat(amsys->shoutbuff[amsys->sbuffline], str, REVIEW_LEN);
+    amsys->shoutbuff[amsys->sbuffline][REVIEW_LEN] = '\n';
+    amsys->shoutbuff[amsys->sbuffline][REVIEW_LEN + 1] = '\0';
+    amsys->sbuffline = (amsys->sbuffline + 1) % REVIEW_LINES;
 }
 
 /*
@@ -78,19 +78,19 @@ record_shout(const char *str)
 void
 record_tell(UR_OBJECT from, UR_OBJECT to, const char *str)
 {
-  int count;
+    int count;
 
-  if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfTELL)) {
-    write_syslog(ERRLOG, 1,
-                 "Could not create tell review buffer entry for %s.\n",
-                 to->name);
-    return;
-  }
-  /* check to see if we need to prune */
-  count = has_review(to, rbfTELL);
-  if (count > REVTELL_LINES) {
-    destruct_review_buffer_type(to, rbfTELL, 1);
-  }
+    if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfTELL)) {
+        write_syslog(ERRLOG, 1,
+                "Could not create tell review buffer entry for %s.\n",
+                to->name);
+        return;
+    }
+    /* check to see if we need to prune */
+    count = has_review(to, rbfTELL);
+    if (count > REVTELL_LINES) {
+        destruct_review_buffer_type(to, rbfTELL, 1);
+    }
 }
 
 /*
@@ -99,19 +99,19 @@ record_tell(UR_OBJECT from, UR_OBJECT to, const char *str)
 void
 record_afk(UR_OBJECT from, UR_OBJECT to, const char *str)
 {
-  int count;
+    int count;
 
-  if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfAFK)) {
-    write_syslog(ERRLOG, 1,
-                 "Could not create afk review buffer entry for %s.\n",
-                 to->name);
-    return;
-  }
-  /* check to see if we need to prune */
-  count = has_review(to, rbfAFK);
-  if (count > REVTELL_LINES) {
-    destruct_review_buffer_type(to, rbfAFK, 1);
-  }
+    if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfAFK)) {
+        write_syslog(ERRLOG, 1,
+                "Could not create afk review buffer entry for %s.\n",
+                to->name);
+        return;
+    }
+    /* check to see if we need to prune */
+    count = has_review(to, rbfAFK);
+    if (count > REVTELL_LINES) {
+        destruct_review_buffer_type(to, rbfAFK, 1);
+    }
 }
 
 /*
@@ -120,19 +120,19 @@ record_afk(UR_OBJECT from, UR_OBJECT to, const char *str)
 void
 record_edit(UR_OBJECT from, UR_OBJECT to, const char *str)
 {
-  int count;
+    int count;
 
-  if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfEDIT)) {
-    write_syslog(ERRLOG, 1,
-                 "Could not create edit review buffer entry for %s.\n",
-                 to->name);
-    return;
-  }
-  /* check to see if we need to prune */
-  count = has_review(to, rbfEDIT);
-  if (count > REVTELL_LINES) {
-    destruct_review_buffer_type(to, rbfEDIT, 1);
-  }
+    if (!create_review_buffer_entry(to, !from ? "?" : from->name, str, rbfEDIT)) {
+        write_syslog(ERRLOG, 1,
+                "Could not create edit review buffer entry for %s.\n",
+                to->name);
+        return;
+    }
+    /* check to see if we need to prune */
+    count = has_review(to, rbfEDIT);
+    if (count > REVTELL_LINES) {
+        destruct_review_buffer_type(to, rbfEDIT, 1);
+    }
 }
 
 /*
@@ -141,12 +141,12 @@ record_edit(UR_OBJECT from, UR_OBJECT to, const char *str)
 void
 clear_revbuff(RM_OBJECT rm)
 {
-  int i;
+    int i;
 
-  for (i = 0; i < REVIEW_LINES; ++i) {
-    *rm->revbuff[i] = '\0';
-  }
-  rm->revline = 0;
+    for (i = 0; i < REVIEW_LINES; ++i) {
+        *rm->revbuff[i] = '\0';
+    }
+    rm->revline = 0;
 }
 
 /*
@@ -155,13 +155,13 @@ clear_revbuff(RM_OBJECT rm)
 int
 has_review(UR_OBJECT user, unsigned flags)
 {
-  int count = 0;
-  RB_OBJECT rb;
+    int count = 0;
+    RB_OBJECT rb;
 
-  for (rb = user->rb_first; rb; rb = rb->next) {
-    if (rb->flags & flags) {
-      ++count;
+    for (rb = user->rb_first; rb; rb = rb->next) {
+        if (rb->flags & flags) {
+            ++count;
+        }
     }
-  }
-  return count;
+    return count;
 }

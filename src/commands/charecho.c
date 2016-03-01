@@ -12,14 +12,14 @@
 void
 toggle_charecho(UR_OBJECT user)
 {
-  if (!user->charmode_echo) {
-    write_user(user, "Echoing for character mode clients ~FGON~RS.\n");
-    user->charmode_echo = 1;
-  } else {
-    write_user(user, "Echoing for character mode clients ~FROFF~RS.\n");
-    user->charmode_echo = 0;
-  }
-  if (!user->room) {
-    prompt(user);
-  }
+    if (!user->charmode_echo) {
+        write_user(user, "Echoing for character mode clients ~FGON~RS.\n");
+        user->charmode_echo = 1;
+    } else {
+        write_user(user, "Echoing for character mode clients ~FROFF~RS.\n");
+        user->charmode_echo = 0;
+    }
+    if (!user->room) {
+        prompt(user);
+    }
 }

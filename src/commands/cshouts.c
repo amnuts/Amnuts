@@ -10,10 +10,10 @@
 void
 clear_shouts(void)
 {
-  int i;
+    int i;
 
-  for (i = 0; i < REVIEW_LINES; ++i) {
-    *amsys->shoutbuff[i] = '\0';
-  }
-  amsys->sbuffline = 0;
+    for (i = 0; i < REVIEW_LINES; ++i) {
+        *amsys->shoutbuff[i] = '\0';
+    }
+    amsys->sbuffline = 0;
 }

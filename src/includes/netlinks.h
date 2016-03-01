@@ -34,16 +34,15 @@
  * used much i.e., VERIFICATION have been left long for readability.
  */
 
-enum nlc_value
-{
+enum nlc_value {
 #define ML_EXPAND(value,name) NLC_ ## value,
-  NLC_LIST
+    NLC_LIST
 #undef ML_EXPAND
 };
 
 static const char *const netcom[] = {
 #define ML_EXPAND(value,name) name,
-  NLC_LIST
+    NLC_LIST
 #undef ML_EXPAND
 };
 

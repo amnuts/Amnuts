@@ -9,6 +9,6 @@
 void
 clear_afk(UR_OBJECT user)
 {
-	destruct_review_buffer_type(user, rbfAFK, 0);
+    destruct_review_buffer_type(user, rbfAFK, 0);
     write_user(user, "Your AFK review buffer has now been cleared.\n");
 }

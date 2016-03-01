@@ -10,5 +10,5 @@
 void
 clear_tells(UR_OBJECT user)
 {
-  destruct_review_buffer_type(user, rbfTELL, 0);
+    destruct_review_buffer_type(user, rbfTELL, 0);
 }

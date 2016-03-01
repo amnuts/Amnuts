@@ -281,39 +281,34 @@
 #endif
 
 /* XXX: Maybe find a better solution than enums? Pointers are unique */
-enum ct_value
-{
+enum ct_value {
 #define ML_EXPAND(value,name) CT_ ## value,
-  CT_LIST
+    CT_LIST
 #undef ML_EXPAND
 };
 
-enum cmd_value
-{
+enum cmd_value {
 #define ML_EXPAND(value,name,alias,level,type) value,
-  CMD_LIST
+    CMD_LIST
 #undef ML_EXPAND
 };
 
-enum set_value
-{
+enum set_value {
 #define ML_EXPAND(value,name,desc) SET ## value,
-  SET_LIST
+    SET_LIST
 #undef ML_EXPAND
 };
 
-struct cmd_entry
-{
-  const char *name;
-  const char *alias;
-  int level;                    /* FIXME: Should be enum lvl_value */
-  enum ct_value function;
+struct cmd_entry {
+    const char *name;
+    const char *alias;
+    int level; /* FIXME: Should be enum lvl_value */
+    enum ct_value function;
 };
 
-struct set_entry
-{
-  const char *type;
-  const char *desc;
+struct set_entry {
+    const char *type;
+    const char *desc;
 };
 
 /* XXX: Ug! Kill the globals */
@@ -329,19 +324,19 @@ enum cmd_value com_num = COUNT;
 
 const char *const command_types[] = {
 #define ML_EXPAND(value,name) name,
-  CT_LIST
+    CT_LIST
 #undef ML_EXPAND
 };
 
 const struct cmd_entry command_table[] = {
 #define ML_EXPAND(value,name,alias,level,type) { name, alias, level, CT_ ## type },
-  CMD_LIST
+    CMD_LIST
 #undef ML_EXPAND
 };
 
 const struct set_entry setstr[] = {
 #define ML_EXPAND(value,name,desc) { name, desc },
-  SET_LIST
+    SET_LIST
 #undef ML_EXPAND
 };
 
