@@ -3,3 +3,5 @@
 .project
 .idea
 src/objects
+!src/objects/.gitignore
+compile_commands.json
