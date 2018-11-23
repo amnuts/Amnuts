@@ -1,26 +1,22 @@
-BINDIR          = ..
+BINDIR          = $(CURDIR)
+INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
 CC              = gcc
-INCDIR          = includes
 C_FLAGS         = -g -Wall -W -MMD
 CC_FLAGS        = -I$(INCDIR) -DIDENTD -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
 LD_FLAGS        =
 
 TALKER_BIN      = amnuts230
-TALKER_OBJ_DIR  = objects
-TALKER_SRC_DIR  = $(CURDIR)
-
-IDENTD_BIN      = amnutsIdent
-IDENTD_OBJ_DIR  = objects
-IDENTD_SRC_DIR  = $(CURDIR)/identd
-
+TALKER_OBJ_DIR  = $(CURDIR)/src/objects
+TALKER_SRC_DIR  = $(CURDIR)/src
 TALKER_SRC      = $(wildcard $(TALKER_SRC_DIR)/*.c $(TALKER_SRC_DIR)/commands/*.c)
 TALKER_OBJS     = $(addprefix $(TALKER_OBJ_DIR)/,$(notdir $(TALKER_SRC:.c=.o)))
 
+IDENTD_BIN      = amnutsIdent
+IDENTD_OBJ_DIR  = $(TALKER_SRC_DIR)/objects
+IDENTD_SRC_DIR  = $(TALKER_SRC_DIR)/identd
 IDENTD_SRC      = $(wildcard $(IDENTD_SRC_DIR)/*.c)
 IDENTD_OBJS     = $(addprefix $(IDENTD_OBJ_DIR)/,$(notdir $(IDENTD_SRC:.c=.o)))
-
-
 
 UNAME           = $(shell uname)
 ifeq ($(UNAME), Darwin)
@@ -67,7 +63,6 @@ vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR)
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
 	chmod $(PERMS) $<
-	mv -f $< $@
 
 $(TALKER_BIN): $(TALKER_OBJS)
 	@echo "Linking $@ ..."
