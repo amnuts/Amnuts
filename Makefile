@@ -1,38 +1,70 @@
+#
+# General setup of GCC and compiler flags, base directories, etc.
+#
 BINDIR          = $(CURDIR)
 INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
 CC              = gcc
 C_FLAGS         = -g -Wall -W -MMD
-CC_FLAGS        = -I$(INCDIR) -DIDENTD -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
+CC_FLAGS        = -I$(INCDIR)
 LD_FLAGS        =
 
-VENDOR_SRC_DIR  = $(CURDIR)/src/vendors
+#
+# TALKER_FLAGS allows you to turn off certain aspects within the talker
+# as if they were never there.  Don't want Netlinks function?  Then just
+# remove the '-DNETLINKS' - same for the others.
+# Possible flags are (each starting with '-D'):
+#     GAMES - include games
+#     WIZPORT - Allow a seperate port just for WIZ levels to use
+#     IDENTD - Ident Deamon
+#     MANDNS - Manual DNS lookups
+#     NETLINKS - The infamous Netlinks
+#
+TALKER_FLAGS    = -DGAMES -DWIZPORT -DIDENTD -DMANDNS -DNETLINKS
 
+#
+# Locations and binary name for talker build
+#
 TALKER_BIN      = amnuts230
 TALKER_OBJ_DIR  = $(CURDIR)/src/objects
 TALKER_SRC_DIR  = $(CURDIR)/src
 TALKER_SRC      = $(wildcard $(TALKER_SRC_DIR)/*.c $(TALKER_SRC_DIR)/commands/*.c)
 TALKER_OBJS     = $(addprefix $(TALKER_OBJ_DIR)/,$(notdir $(TALKER_SRC:.c=.o)))
 
+#
+# Locations and binary name for ident server build
+#
 IDENTD_BIN      = amnutsIdent
 IDENTD_OBJ_DIR  = $(TALKER_SRC_DIR)/objects
 IDENTD_SRC_DIR  = $(TALKER_SRC_DIR)/identd
 IDENTD_SRC      = $(wildcard $(IDENTD_SRC_DIR)/*.c)
 IDENTD_OBJS     = $(addprefix $(IDENTD_OBJ_DIR)/,$(notdir $(IDENTD_SRC:.c=.o)))
 
-UNAME           = $(shell uname)
+#
+# Location of vendor directory
+#
+VENDOR_SRC_DIR  = $(CURDIR)/src/vendors
+
+#
+# Platform-specific libraries that need to be included
+#
+UNAME = $(shell uname)
 ifeq ($(UNAME), Darwin)
 	TALKER_LIBS = -lcrypto
+	IDENTD_LIBS =
 endif
 ifeq ($(UNAME), SunOS)
 	TALKER_LIBS = -lnsl -lsocket
+	IDENTD_LIBS =
 endif
 ifeq ($(UNAME), Linux)
 	TALKER_LIBS = -lcrypt
+	IDENTD_LIBS =
 endif
 
-IDENTD_LIBS = 
-
+#
+# Build rules
+#
 all: build
 
 .PHONY: all compile build install clean distclean
@@ -58,9 +90,7 @@ compile: $(TALKER_OBJS) $(IDENTD_OBJS)
 
 print-%: ; @echo $* = $($*)
 
-
 vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDOR_SRC_DIR)/sds
-
 
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
@@ -77,12 +107,11 @@ $(IDENTD_BIN): $(IDENTD_OBJS)
 $(TALKER_OBJS): $(TALKER_OBJ_DIR)/%.o: %.c
 	@echo "Compiling talker $< ... ($@)"
 	@test -d $(TALKER_OBJ_DIR) || mkdir $(TALKER_OBJ_DIR)
-	$(CC) $(C_FLAGS) $(CC_FLAGS) -c -o $@ $<
+	$(CC) $(C_FLAGS) $(CC_FLAGS) $(TALKER_FLAGS) -c -o $@ $<
 
 $(IDENTD_OBJS): $(IDENTD_OBJ_DIR)/%.o: %.c
 	@echo "Compiling identd $< ... ($@)"
 	@test -d $(IDENTD_OBJ_DIR) || mkdir $(IDENTD_OBJ_DIR)
-	$(CC) $(C_FLAGS) $(CC_FLAGS) -c -o $@ $<
+	$(CC) $(C_FLAGS) $(CC_FLAGS) $(TALKER_FLAGS)  -c -o $@ $<
 
 -include $(TALKER_OBJS:.o=.d) $(IDENTD_OBJS:.o=.d)
-
