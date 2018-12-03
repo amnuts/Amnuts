@@ -6,6 +6,8 @@ C_FLAGS         = -g -Wall -W -MMD
 CC_FLAGS        = -I$(INCDIR) -DIDENTD -DMANDNS -DNETLINKS -DWIZPORT -DGAMES
 LD_FLAGS        =
 
+VENDOR_SRC_DIR  = $(CURDIR)/src/vendors
+
 TALKER_BIN      = amnuts230
 TALKER_OBJ_DIR  = $(CURDIR)/src/objects
 TALKER_SRC_DIR  = $(CURDIR)/src
@@ -57,7 +59,7 @@ compile: $(TALKER_OBJS) $(IDENTD_OBJS)
 print-%: ; @echo $* = $($*)
 
 
-vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR)
+vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDOR_SRC_DIR)/sds
 
 
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
