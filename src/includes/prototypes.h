@@ -13,6 +13,8 @@
 #ifndef AMNUTS_PROTOTYPES_H
 #define AMNUTS_PROTOTYPES_H
 
+#include "../vendors/sds/sds.h"
+
 #ifndef __attribute__
 #if !defined __GNUC__ || __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 7)
 #define __attribute__(x)
@@ -27,10 +29,9 @@
  * comment these out should you get an error with them...but you shouldn't!
  */
 #ifdef  __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
-  extern char *crypt(const char *, const char *);
+    extern char *crypt(const char *, const char *);
 #ifdef  __cplusplus
 }
 #endif
@@ -58,7 +59,7 @@ void parse_sites_section(void);
 void init_signals(void);
 void sig_handler(int);
 void boot_exit(int)
-  __attribute__ ((__noreturn__));
+__attribute__((__noreturn__));
 void check_reboot_shutdown(void);
 void check_idle_and_timeout(void);
 void record_last_login(const char *);
@@ -74,27 +75,27 @@ int remove_top_bottom(char *, int);
 int count_lines(char *);
 void write_sock(int, const char *);
 void vwrite_user(UR_OBJECT, const char *, ...)
-  __attribute__ ((__format__(__printf__, 2, 3)));
+__attribute__((__format__(__printf__, 2, 3)));
 void write_user(UR_OBJECT, const char *);
 void vwrite_level(enum lvl_value, int, int, UR_OBJECT, const char *, ...)
-  __attribute__ ((__format__(__printf__, 5, 6)));
+__attribute__((__format__(__printf__, 5, 6)));
 void write_level(enum lvl_value, int, int, const char *, UR_OBJECT);
 void vwrite_room(RM_OBJECT, const char *, ...)
-  __attribute__ ((__format__(__printf__, 2, 3)));
+__attribute__((__format__(__printf__, 2, 3)));
 void write_room(RM_OBJECT, const char *);
 void vwrite_room_except(RM_OBJECT, UR_OBJECT, const char *, ...)
-  __attribute__ ((__format__(__printf__, 3, 4)));
+__attribute__((__format__(__printf__, 3, 4)));
 void write_room_except(RM_OBJECT, const char *, UR_OBJECT);
 void vwrite_room_except_both(RM_OBJECT, UR_OBJECT, UR_OBJECT,
-                             const char *, ...)
-  __attribute__ ((__format__(__printf__, 4, 5)));
+        const char *, ...)
+__attribute__((__format__(__printf__, 4, 5)));
 void write_room_except_both(RM_OBJECT, const char *, UR_OBJECT, UR_OBJECT);
 void vwrite_room_ignore(RM_OBJECT rm, UR_OBJECT user, const char *str, ...)
-  __attribute__ ((__format__(__printf__, 3, 4)));
+__attribute__((__format__(__printf__, 3, 4)));
 void write_room_ignore(RM_OBJECT rm, UR_OBJECT user, const char *str);
 void write_friends(UR_OBJECT, const char *, int);
 void write_syslog(int, int, const char *, ...)
-  __attribute__ ((__format__(__printf__, 3, 4)));
+__attribute__((__format__(__printf__, 3, 4)));
 int do_write_syslog(const char *);
 void record_last_command(UR_OBJECT, CMD_OBJECT, size_t);
 void dump_commands(int);
@@ -102,7 +103,7 @@ void write_monitor(UR_OBJECT, RM_OBJECT, int);
 int more(UR_OBJECT, int, const char *);
 int more_users(UR_OBJECT);
 void add_history(char *, int, const char *, ...)
-  __attribute__ ((__format__(__printf__, 3, 4)));
+__attribute__((__format__(__printf__, 3, 4)));
 void login(UR_OBJECT, char *);
 void attempts(UR_OBJECT);
 void show_login_info(UR_OBJECT);
@@ -325,7 +326,7 @@ void check_nethangs_send_keepalives(void);
 void accept_server_connection(int sock);
 void exec_netcom(NL_OBJECT nl, char *inpstr);
 void nl_transfer(NL_OBJECT nl, char *name, char *pass,
-                 enum lvl_value lvl, char *inpstr);
+        enum lvl_value lvl, char *inpstr);
 void nl_release(NL_OBJECT nl, char *name);
 void nl_action(NL_OBJECT nl, char *name, char *inpstr);
 void nl_granted(NL_OBJECT nl, char *name);
@@ -390,7 +391,7 @@ RM_OBJECT get_room(const char *);
 RM_OBJECT get_room_full(const char *);
 enum lvl_value get_level(const char *);
 int create_review_buffer_entry(UR_OBJECT, const char *, const char *,
-                               unsigned int);
+        unsigned int);
 int destruct_review_buffer_entry(UR_OBJECT, RB_OBJECT);
 void destruct_all_review_buffer(UR_OBJECT);
 void destruct_review_buffer_type(UR_OBJECT, unsigned int, int);
@@ -563,11 +564,12 @@ void strtoname(char *);
 int is_number(const char *);
 char *istrstr(char *, const char *);
 char *replace_string(char *, const char *, const char *);
+char *repeat_string(const char *, int times);
 const char *ordinal_text(int);
 char *long_date(int);
 const char *smiley_type(const char *);
 char *align_string(int, int, int, const char *, const char *, ...)
-  __attribute__ ((__format__(__printf__, 5, 6)));
+__attribute__((__format__(__printf__, 5, 6)));
 int pattern_match(char *, char *);
 int validate_email(char *);
 char *process_input_string(char *, CMD_OBJECT);

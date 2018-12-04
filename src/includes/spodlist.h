@@ -29,14 +29,14 @@
 #define AMNUTS_SPODLIST_H
 
 typedef struct spodlist *SP_OBJECT;
+
 /*
  * spod list structure
  */
-struct spodlist
-{
-  char name[USER_NAME_LEN];
-  int login;
-  SP_OBJECT next;
+struct spodlist {
+    char name[USER_NAME_LEN];
+    int login;
+    SP_OBJECT next;
 };
 
 SP_OBJECT first_spod = NULL;
