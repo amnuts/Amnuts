@@ -3963,13 +3963,13 @@ record_last_command(UR_OBJECT user, CMD_OBJECT cmd, size_t len)
 void
 dump_commands(int sig)
 {
-    char filename[32];
+    sds filename;
     char dstr[32];
     FILE *fp;
     int i, j;
 
     strftime(dstr, 32, "%Y%m%d", localtime(&amsys->boot_time));
-    sprintf(filename, "%s/%s.%s", LOGFILES, LAST_CMD, dstr);
+    filename = sdscatfmt(sdsempty(), "%s/%s.%s", LOGFILES, LAST_CMD, dstr);
     fp = fopen(filename, "w");
     if (!fp) {
         return;
@@ -3980,6 +3980,7 @@ dump_commands(int sig)
         fprintf(fp, "%s\n", cmd_history[i & 15]);
     }
     fclose(fp);
+    sdsfree(filename);
 }
 
 /*
@@ -4235,16 +4236,13 @@ more_users(UR_OBJECT user)
 void
 add_history(char *username, int showtime, const char *str, ...)
 {
-    char name[ARR_SIZE], filename[80];
+    sds filename;
     FILE *fp;
     va_list args;
     time_t now;
 
-    sscanf(username, "%s", name);
-    strtolower(name);
-    *name = toupper(*name);
-    /* add to actual history listing */
-    sprintf(filename, "%s/%s/%s.H", USERFILES, USERHISTORYS, name);
+    strtoname(username);
+    filename = sdscatfmt(sdsempty(), "%s/%s/%s.H", USERFILES, USERHISTORYS, username);
     fp = fopen(filename, "a");
     if (!fp) {
         return;
@@ -4258,7 +4256,8 @@ add_history(char *username, int showtime, const char *str, ...)
     vfprintf(fp, str, args);
     va_end(args);
     fclose(fp);
-    write_syslog(SYSLOG, 1, "HISTORY added for %s.\n", name);
+    sdsfree(filename);
+    write_syslog(SYSLOG, 1, "HISTORY added for %s.\n", username);
 }
 
 
@@ -6053,9 +6052,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
 void
 login_who(UR_OBJECT user)
 {
-    char line[USER_NAME_LEN + 10], text2[ARR_SIZE], doing[6];
+    sds userText, lineText;
     UR_OBJECT u;
-    int invis, on;
+    int invis, on, len;
 
     write_user(user,
             "\n+----------------------------------------------------------------------------+\n");
@@ -6065,10 +6064,7 @@ login_who(UR_OBJECT user)
             "+----------------------------------------------------------------------------+\n\n");
 
     invis = on = 0;
-    *text = '\0';
-    *text2 = '\0';
-    *line = '\0';
-    *doing = '\0';
+    lineText = sdsempty();
 
     for (u = user_first; u; u = u->next) {
         if (u->login || u->type == CLONE_TYPE) {
@@ -6078,25 +6074,20 @@ login_who(UR_OBJECT user)
             ++invis;
             continue;
         }
-        if (u->afk) {
-            strcpy(doing, "<AFK> ");
-        } else if (u->malloc_start) {
-            strcpy(doing, "<EDIT>");
-        } else {
-            strcpy(doing, "      ");
+        userText = sdscatfmt(sdsempty(), "%s %s", u->bw_recap, (u->afk ? "<AFK> " : u->malloc_start ? "<EDIT>" : "      "));
+        if ((len = ((USER_NAME_LEN + 7) - (int)sdslen(userText)))) {
+            userText = sdscat(userText, repeat_string(" ", len));
         }
-        sprintf(line, "%s %s", u->bw_recap, doing);
-        sprintf(text2, "%-*s", USER_NAME_LEN + 7, line);
-        strcat(text, text2);
+        lineText = sdscat(lineText, userText);
         if (!(++on % 4)) {
-            strcat(text, "\n");
-            write_user(user, text);
-            *text = '\0';
+            lineText = sdscat(lineText, "\n");
+            write_user(user, lineText);
+            lineText = sdsempty();
         }
     }
     if (on % 4) {
-        strcat(text, "\n");
-        write_user(user, text);
+        lineText = sdscat(lineText, "\n");
+        write_user(user, lineText);
     }
     if (!(on + invis)) {
         write_user(user,
@@ -6111,6 +6102,8 @@ login_who(UR_OBJECT user)
     }
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
+    sdsfree(lineText);
+    sdsfree(userText);
 }
 
 /*

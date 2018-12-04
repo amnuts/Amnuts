@@ -13,6 +13,8 @@
 #ifndef AMNUTS_PROTOTYPES_H
 #define AMNUTS_PROTOTYPES_H
 
+#include "../vendors/sds/sds.h"
+
 #ifndef __attribute__
 #if !defined __GNUC__ || __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 7)
 #define __attribute__(x)
