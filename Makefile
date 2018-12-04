@@ -20,7 +20,7 @@ LD_FLAGS        =
 #     MANDNS - Manual DNS lookups
 #     NETLINKS - The infamous Netlinks
 #
-TALKER_FLAGS    = #-DGAMES -DWIZPORT -DIDENTD -DMANDNS -DNETLINKS
+TALKER_FLAGS    = -DGAMES -DWIZPORT -DIDENTD -DMANDNS -DNETLINKS
 
 #
 # Locations and binary name for talker build
