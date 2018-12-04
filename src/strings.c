@@ -447,6 +447,23 @@ replace_string(char *inpstr, const char *old_str, const char *new_str)
 }
 
 /*
+ * Take a string and repeat is the given number of times
+ */
+char *
+repeat_string(const char *string, int times)
+{
+    size_t slen = strlen(string);
+    char *dest = malloc(times*slen+1);
+
+    int i; char *p;
+    for ( i=0, p = dest; i < times; ++i, p += slen ) {
+        memcpy(p, string, slen);
+    }
+    *p = '\0';
+    return dest;
+}
+
+/*
  * Get ordinal value of a date and return the string
  */
 const char *

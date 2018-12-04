@@ -562,6 +562,7 @@ void strtoname(char *);
 int is_number(const char *);
 char *istrstr(char *, const char *);
 char *replace_string(char *, const char *, const char *);
+char *repeat_string(const char *, int times);
 const char *ordinal_text(int);
 char *long_date(int);
 const char *smiley_type(const char *);
