@@ -13,7 +13,8 @@ preview(UR_OBJECT user)
 #if !!0
     static const char usage[] = "Usage: preview [<picture>]\n";
 #endif
-    char filename[80], line[100];
+    sds filename;
+    char line[100];
     FILE *fp;
     DIR *dirp;
     struct dirent *dp;
@@ -70,7 +71,7 @@ preview(UR_OBJECT user)
         write_user(user, "Sorry, there is no picture with that name.\n");
         return;
     }
-    sprintf(filename, "%s/%s", PICTFILES, word[1]);
+    filename = sdscatfmt(sdsempty(), "%s/%s", PICTFILES, word[1]);
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user, "Sorry, there is no picture with that name.\n");
@@ -85,4 +86,5 @@ preview(UR_OBJECT user)
         user->misc_op = 2;
         break;
     }
+    sdsfree(filename);
 }

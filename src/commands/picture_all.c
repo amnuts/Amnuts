@@ -11,7 +11,7 @@ void
 picture_all(UR_OBJECT user)
 {
     static const char usage[] = "Usage: picture <picture>\n";
-    char filename[80];
+    sds filename;
     const char *name;
     UR_OBJECT u;
     FILE *fp;
@@ -29,10 +29,11 @@ picture_all(UR_OBJECT user)
         write_user(user, "Sorry, there is no picture with that name.\n");
         return;
     }
-    sprintf(filename, "%s/%s", PICTFILES, word[1]);
+    filename = sdscatfmt(sdsempty(), "%s/%s", PICTFILES, word[1]);
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user, "Sorry, there is no picture with that name.\n");
+        sdsfree(filename);
         return;
     }
     fclose(fp);
@@ -87,4 +88,5 @@ picture_all(UR_OBJECT user)
         user->misc_op = 2;
         break;
     }
+    sdsfree(filename);
 }

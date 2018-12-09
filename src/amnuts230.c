@@ -2646,12 +2646,16 @@ load_user_details(UR_OBJECT user)
             default:
             case 4:
                 user->read_mail = (time_t) atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->last_login_len = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->total_login = (time_t) atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->last_login = (time_t) atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2661,14 +2665,19 @@ load_user_details(UR_OBJECT user)
             default:
             case 5:
                 user->retired = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->muzzled = (enum lvl_value) atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->arrestby = (enum lvl_value) atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->unarrest = (enum lvl_value) atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->level = (enum lvl_value) atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2678,20 +2687,28 @@ load_user_details(UR_OBJECT user)
             default:
             case 8:
                 user->logons = atoi(user_words[8]);
+                __attribute__ ((fallthrough));
             case 7:
                 user->mail_verified = atoi(user_words[7]);
+                __attribute__ ((fallthrough));
             case 6:
                 user->monitor = atoi(user_words[6]);
+                __attribute__ ((fallthrough));
             case 5:
                 user->vis = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->prompt = atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->command_mode = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->charmode_echo = atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->accreq = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2701,35 +2718,49 @@ load_user_details(UR_OBJECT user)
             default:
             case 14:
                 user->reverse_buffer = atoi(user_words[14]);
+                __attribute__ ((fallthrough));
             case 13:
                 *user->icq = '\0';
                 if (strcmp(user_words[13], "#UNSET")) {
                     strcpy(user->icq, user_words[13]);
                 }
+                __attribute__ ((fallthrough));
             case 12:
                 user->cmd_type = atoi(user_words[12]);
+                __attribute__ ((fallthrough));
             case 11:
                 user->show_rdesc = atoi(user_words[11]);
+                __attribute__ ((fallthrough));
             case 10:
                 user->show_pass = atoi(user_words[10]);
+                __attribute__ ((fallthrough));
             case 9:
                 user->autofwd = atoi(user_words[9]);
+                __attribute__ ((fallthrough));
             case 8:
                 user->alert = atoi(user_words[8]);
+                __attribute__ ((fallthrough));
             case 7:
                 user->lroom = atoi(user_words[7]);
+                __attribute__ ((fallthrough));
             case 6:
                 user->colour = atoi(user_words[6]);
+                __attribute__ ((fallthrough));
             case 5:
                 user->hideemail = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->pager = atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->wrap = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->age = atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->gender = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2739,20 +2770,28 @@ load_user_details(UR_OBJECT user)
             default:
             case 8:
                 user->ignbeeps = atoi(user_words[8]);
+                __attribute__ ((fallthrough));
             case 7:
                 user->igngreets = atoi(user_words[7]);
+                __attribute__ ((fallthrough));
             case 6:
                 user->ignwiz = atoi(user_words[6]);
+                __attribute__ ((fallthrough));
             case 5:
                 user->ignlogons = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->ignpics = atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->ignshouts = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->igntells = atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->ignall = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2763,16 +2802,22 @@ load_user_details(UR_OBJECT user)
             default:
             case 6:
                 user->hps = atoi(user_words[6]);
+                __attribute__ ((fallthrough));
             case 5:
                 user->bullets = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->kills = atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->deaths = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->misses = atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->hits = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2784,6 +2829,7 @@ load_user_details(UR_OBJECT user)
                 /* XXX: Was t_expire; now using last_login */
             case 1:
                 user->expire = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2793,8 +2839,10 @@ load_user_details(UR_OBJECT user)
             default:
             case 2:
                 strcpy(user->logout_room, user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 strcpy(user->last_site, user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }
@@ -2853,20 +2901,28 @@ load_user_details(UR_OBJECT user)
             default:
             case 8:
                 user->bank = atoi(user_words[8]);
+                __attribute__ ((fallthrough));
             case 7:
                 user->money = atoi(user_words[7]);
+                __attribute__ ((fallthrough));
             case 6:
                 user->hps = atoi(user_words[6]);
+                __attribute__ ((fallthrough));
             case 5:
                 user->bullets = atoi(user_words[5]);
+                __attribute__ ((fallthrough));
             case 4:
                 user->kills = atoi(user_words[4]);
+                __attribute__ ((fallthrough));
             case 3:
                 user->deaths = atoi(user_words[3]);
+                __attribute__ ((fallthrough));
             case 2:
                 user->misses = atoi(user_words[2]);
+                __attribute__ ((fallthrough));
             case 1:
                 user->hits = atoi(user_words[1]);
+                __attribute__ ((fallthrough));
             case 0:
                 break;
             }

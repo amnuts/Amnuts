@@ -1021,12 +1021,11 @@ nl_error(NL_OBJECT nl)
         nl->mesg_user = NULL;
     }
     if (*nl->mail_to) {
-        char mailfile[80];
-
+        sds filename;
         fclose(nl->mailfile);
-        sprintf(mailfile, "%s/IN_%s_%s@%s", MAILSPOOL, nl->mail_to, nl->mail_from,
-                nl->service);
-        remove(mailfile);
+        filename = sdscatfmt(sdsempty(), "%s/IN_%s_%s@%s", MAILSPOOL, nl->mail_to, nl->mail_from, nl->service);
+        remove(filename);
+        sdsfree(filename);
         *nl->mail_to = '\0';
         *nl->mail_from = '\0';
     }
@@ -1059,7 +1058,7 @@ void
 nl_user_notexist(NL_OBJECT nl, char *to, char *from)
 {
     char text2[ARR_SIZE];
-    char filename[80];
+    sds filename;
     UR_OBJECT user;
 
     user = get_user(from);
@@ -1072,8 +1071,9 @@ nl_user_notexist(NL_OBJECT nl, char *to, char *from)
                 to, nl->service);
         send_mail(NULL, from, text2, 0);
     }
-    sprintf(filename, "%s/OUT_%s_%s@%s", MAILSPOOL, from, to, nl->service);
+    filename = sdscatfmt(sdsempty(), "%s/OUT_%s_%s@%s", MAILSPOOL, from, to, nl->service);
     remove(filename);
+    sdsfree(filename);
 }
 
 /*
@@ -1082,11 +1082,12 @@ nl_user_notexist(NL_OBJECT nl, char *to, char *from)
 void
 nl_user_exist(NL_OBJECT nl, char *to, char *from)
 {
-    char text2[ARR_SIZE], filename[80], line[82], *s;
+    sds filename;
+    char text2[ARR_SIZE], line[82], *s;
     FILE *fp;
     UR_OBJECT user;
 
-    sprintf(filename, "%s/OUT_%s_%s@%s", MAILSPOOL, from, to, nl->service);
+    filename = sdscatfmt(sdsempty(), "%s/OUT_%s_%s@%s", MAILSPOOL, from, to, nl->service);
     fp = fopen(filename, "r");
     if (!fp) {
         user = get_user(from);
@@ -1100,6 +1101,7 @@ nl_user_exist(NL_OBJECT nl, char *to, char *from)
                     nl->service);
             send_mail(NULL, from, text2, 0);
         }
+        sdsfree(filename);
         return;
     }
     sprintf(text, "%s %s %s\n", netcom[NLC_MAIL], to, from);
@@ -1111,6 +1113,7 @@ nl_user_exist(NL_OBJECT nl, char *to, char *from)
     sprintf(text, "\n%s\n", netcom[NLC_ENDMAIL]);
     write_sock(nl->socket, text);
     remove(filename);
+    sdsfree(filename);
 }
 
 /*
@@ -1119,11 +1122,10 @@ nl_user_exist(NL_OBJECT nl, char *to, char *from)
 void
 nl_mail(NL_OBJECT nl, char *to, char *from)
 {
-    char filename[80];
+    sds filename;
 
-    write_syslog(NETLOG, 1, "NETLINK: Mail received for %s from %s.\n", to,
-            nl->service);
-    sprintf(filename, "%s/IN_%s_%s@%s", MAILSPOOL, to, from, nl->service);
+    write_syslog(NETLOG, 1, "NETLINK: Mail received for %s from %s.\n", to, nl->service);
+    filename = sdscatfmt(sdsempty(), "%s/IN_%s_%s@%s", MAILSPOOL, to, from, nl->service);
     nl->mailfile = fopen(filename, "w");
     if (!nl->mailfile) {
         write_syslog(SYSLOG, 0,
@@ -1131,10 +1133,12 @@ nl_mail(NL_OBJECT nl, char *to, char *from)
                 filename);
         sprintf(text, "%s %s %s\n", netcom[NLC_MAILERROR], to, from);
         write_sock(nl->socket, text);
+        sdsfree(filename);
         return;
     }
     strcpy(nl->mail_to, to);
     strcpy(nl->mail_from, from);
+    sdsfree(filename);
 }
 
 /*

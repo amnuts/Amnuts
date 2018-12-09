@@ -11,7 +11,7 @@ void
 picture_tell(UR_OBJECT user)
 {
     static const char usage[] = "Usage: ptell <user> <picture>\n";
-    char filename[80];
+    sds filename;
     const char *name;
     UR_OBJECT u;
     FILE *fp;
@@ -73,7 +73,7 @@ picture_tell(UR_OBJECT user)
         write_user(user, "Sorry, there is no picture with that name.\n");
         return;
     }
-    sprintf(filename, "%s/%s", PICTFILES, word[2]);
+    filename = sdscatfmt(sdsempty(), "%s/%s", PICTFILES, word[2]);
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user, "Sorry, there is no picture with that name.\n");
@@ -98,4 +98,5 @@ picture_tell(UR_OBJECT user)
         user->misc_op = 2;
         break;
     }
+    sdsfree(filename);
 }

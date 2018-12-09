@@ -9,7 +9,8 @@
 void
 change_user_name(UR_OBJECT user)
 {
-    char oldname[ARR_SIZE], newname[ARR_SIZE], oldfile[80], newfile[80];
+    char oldname[ARR_SIZE], newname[ARR_SIZE];
+    sds oldfile, newfile;
     UR_OBJECT u, usr;
     UD_OBJECT uds;
     const char *name;
@@ -126,38 +127,38 @@ change_user_name(UR_OBJECT user)
     record_last_logout(oldname);
     record_last_login(newname);
     /* all memory occurences should be done.  now do files */
-    sprintf(oldfile, "%s/%s.D", USERFILES, oldname);
-    sprintf(newfile, "%s/%s.D", USERFILES, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.M", USERFILES, USERMAILS, oldname);
-    sprintf(newfile, "%s/%s/%s.M", USERFILES, USERMAILS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.M", USERFILES, USERMAILS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.M", USERFILES, USERMAILS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.P", USERFILES, USERPROFILES, oldname);
-    sprintf(newfile, "%s/%s/%s.P", USERFILES, USERPROFILES, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.P", USERFILES, USERPROFILES, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.P", USERFILES, USERPROFILES, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.H", USERFILES, USERHISTORYS, oldname);
-    sprintf(newfile, "%s/%s/%s.H", USERFILES, USERHISTORYS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.H", USERFILES, USERHISTORYS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.H", USERFILES, USERHISTORYS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.C", USERFILES, USERCOMMANDS, oldname);
-    sprintf(newfile, "%s/%s/%s.C", USERFILES, USERCOMMANDS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.C", USERFILES, USERCOMMANDS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.C", USERFILES, USERCOMMANDS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.MAC", USERFILES, USERMACROS, oldname);
-    sprintf(newfile, "%s/%s/%s.MAC", USERFILES, USERMACROS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.MAC", USERFILES, USERMACROS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.MAC", USERFILES, USERMACROS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.R", USERFILES, USERROOMS, oldname);
-    sprintf(newfile, "%s/%s/%s.R", USERFILES, USERROOMS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.R", USERFILES, USERROOMS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.R", USERFILES, USERROOMS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.B", USERFILES, USERROOMS, oldname);
-    sprintf(newfile, "%s/%s/%s.B", USERFILES, USERROOMS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.B", USERFILES, USERROOMS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.B", USERFILES, USERROOMS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.K", USERFILES, USERROOMS, oldname);
-    sprintf(newfile, "%s/%s/%s.K", USERFILES, USERROOMS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.K", USERFILES, USERROOMS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.K", USERFILES, USERROOMS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.REM", USERFILES, USERREMINDERS, oldname);
-    sprintf(newfile, "%s/%s/%s.REM", USERFILES, USERREMINDERS, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.REM", USERFILES, USERREMINDERS, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.REM", USERFILES, USERREMINDERS, newname);
     rename(oldfile, newfile);
-    sprintf(oldfile, "%s/%s/%s.U", USERFILES, USERFLAGGED, oldname);
-    sprintf(newfile, "%s/%s/%s.U", USERFILES, USERFLAGGED, newname);
+    oldfile = sdscatfmt(sdsempty(), "%s/%s/%s.U", USERFILES, USERFLAGGED, oldname);
+    newfile = sdscatfmt(sdsempty(), "%s/%s/%s.U", USERFILES, USERFLAGGED, newname);
     rename(oldfile, newfile);
     /* give results of name change */
     sprintf(text, "Had name changed from ~OL%s~RS by %s~RS.\n", oldname,
@@ -196,4 +197,6 @@ change_user_name(UR_OBJECT user)
                 "You have changed the name of ~OL%s~RS to ~OL%s~RS.\n\n",
                 oldname, newname);
     }
+    sdsfree(oldfile);
+    sdsfree(newfile);
 }
