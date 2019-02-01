@@ -53,8 +53,10 @@ VENDOR_SDS_OBJS     = $(addprefix $(VENDOR_SDS_OBJ_DIR)/,$(notdir $(VENDOR_SDS_S
 #
 UNAME = $(shell uname)
 ifeq ($(UNAME), Darwin)
-	TALKER_LIBS = -lcrypto
-	IDENTD_LIBS =
+	LD_FLAGS    += -L/usr/local/opt/openssl/lib
+	CC_FLAGS    += -I/usr/local/opt/openssl/include
+	TALKER_LIBS  = -lcrypto
+	IDENTD_LIBS  =
 endif
 ifeq ($(UNAME), SunOS)
 	TALKER_LIBS = -lnsl -lsocket
