@@ -32,7 +32,7 @@ main(int argc, char **argv)
     int len;
     char inpstr[ARR_SIZE], future[ARR_SIZE], *next_str, *curstr, *last_ptr;
 #ifdef IDENTD
-    char buffer[100];
+    sds buffer;
     UR_OBJECT u;
 #endif
     UR_OBJECT user, next;
@@ -272,9 +272,10 @@ main(int argc, char **argv)
                     next = u->next;
                     if (!strcmp(word[1], u->site_port) && atoi(word[2]) == u->socket) {
                         if (!strchr(u->site, '@')) {
-                            sprintf(buffer, "%s@%s", word[3], u->site);
+                            buffer = sdscatfmt(sdsempty(), "%s@%s", word[3], u->site);
                             *u->site = '\0';
                             strncat(u->site, buffer, (sizeof u->site) - 1);
+                            sdsfree(buffer);
                             if (site_banned(u->site, 0)) {
                                 write_user(u,
                                         "\nSorry, logins from your site have been banned.\n\n");
@@ -723,7 +724,7 @@ void
 accept_connection(int lsock)
 {
 #ifdef IDENTD
-    char buffer[40];
+    sds buffer;
 #endif
     char hostaddr[MAXADDR]; /* XXX: Use NI_MAXHOST, INET_ADDRSTRLEN, INET6_ADDRSTRLEN */
     char hostname[MAXHOST]; /* XXX: Use NI_MAXHOST */
@@ -858,14 +859,15 @@ accept_connection(int lsock)
 #ifdef IDENTD
     if (amsys->resolve_ip == 3 && amsys->ident_state) {
 #ifdef WIZPORT
-        sprintf(buffer, "AUTH: %d %s %s %s\n", user->socket, user->site_port,
+        buffer = sdscatfmt(sdsempty(), "AUTH: %d %s %s %s\n", user->socket, user->site_port,
                 !user->wizport ? amsys->mport_port : amsys->wport_port,
                 user->site);
 #else
-        sprintf(buffer, "AUTH: %d %s %s %s\n", user->socket, user->site_port,
+        buffer = sdscatfmt(sdsempty(), "AUTH: %d %s %s %s\n", user->socket, user->site_port,
                 amsys->mport_port, user->site);
 #endif
         write_sock(amsys->ident_socket, buffer);
+        sdsfree(buffer);
     }
 #endif
 }
@@ -4709,7 +4711,7 @@ show_login_info(UR_OBJECT user)
 void
 connect_user(UR_OBJECT user)
 {
-    char rmname[ROOM_NAME_LEN + 20];
+    sds rmname;
     const char *bp;
     UR_OBJECT u;
     int was_private, cnt, newmail;
@@ -4795,11 +4797,11 @@ connect_user(UR_OBJECT user)
     }
     was_private = check_start_room(user);
     if (user->room == room_first) {
-        *rmname = '\0';
+        rmname = sdsempty();
     } else if (is_personal_room(user->room)) {
-        sprintf(rmname, " (%s~RS)", user->room->show_name);
+        rmname = sdscatfmt(sdsempty(), " (%s~RS)", user->room->show_name);
     } else {
-        sprintf(rmname, " (%s)", user->room->name);
+        rmname = sdscatfmt(sdsempty(), " (%s)", user->room->name);
     }
     if (user->level == JAILED) {
         vwrite_room_except(NULL, user,
@@ -4840,6 +4842,7 @@ connect_user(UR_OBJECT user)
             vwrite_user(user, "\nYou are connecting%s.\n\n", rmname);
         }
     }
+    sdsfree(rmname);
     logon_flag = 0;
     ++user->logons;
     alert_friends(user);
@@ -6170,7 +6173,7 @@ help_commands_level(UR_OBJECT user)
 {
     int cnt, total, highlight;
     enum lvl_value lvl;
-    char temp[30], temp1[30];
+    sds temp, temp1;
     CMD_OBJECT cmd;
 
     start_pager(user);
@@ -6199,15 +6202,15 @@ help_commands_level(UR_OBJECT user)
         highlight = 1;
         /* scroll through all commands, format and print */
         for (cmd = first_command; cmd; cmd = cmd->next) {
-            *temp1 = '\0';
+            temp1 = sdsempty();
             if (cmd->level != lvl) {
                 continue;
             }
             if (has_xcom(user, cmd->id)) {
-                sprintf(temp1, "~FR%s~RS%s %s", cmd->name, highlight ? "~FC" : "",
+                temp1 = sdscatfmt(sdsempty(), "~FR%s~RS%s %s", cmd->name, highlight ? "~FC" : "",
                         cmd->alias);
             } else {
-                sprintf(temp1, "%s %s", cmd->name, cmd->alias);
+                temp1 = sdscatfmt(sdsempty(), "%s %s", cmd->name, cmd->alias);
             }
             if (++cnt == 5) {
                 strcat(text, temp1);
@@ -6217,7 +6220,7 @@ help_commands_level(UR_OBJECT user)
                 highlight = 0;
                 *text = '\0';
             } else {
-                sprintf(temp, "%-*s  ", 11 + (int) teslen(temp1, 0), temp1);
+                temp = sdscatprintf(sdsempty(), "%-*s  ", 11 + (int) teslen(temp1, 0), temp1);
                 strcat(text, temp);
             }
             if (!cnt) {
@@ -6243,6 +6246,8 @@ help_commands_level(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
+    sdsfree(temp);
+    sdsfree(temp1);
 }
 
 /*
@@ -6251,7 +6256,7 @@ help_commands_level(UR_OBJECT user)
 void
 help_commands_function(UR_OBJECT user)
 {
-    char temp[30], temp1[30];
+    sds temp, temp1;
     CMD_OBJECT cmd;
     int cnt, total, function, found;
 
@@ -6278,7 +6283,7 @@ help_commands_function(UR_OBJECT user)
         *text = '\0';
         /* scroll through all commands, format and print */
         for (cmd = first_command; cmd; cmd = cmd->next) {
-            *temp1 = '\0';
+            temp1 = sdsempty();
             if (cmd->level > user->level || cmd->function != function) {
                 continue;
             }
@@ -6289,9 +6294,9 @@ help_commands_function(UR_OBJECT user)
                 strcpy(text, "     ");
             }
             if (has_xcom(user, cmd->id)) {
-                sprintf(temp1, "~FR%s~RS %s", cmd->name, cmd->alias);
+                temp1 = sdscatfmt(sdsempty(), "~FR%s~RS %s", cmd->name, cmd->alias);
             } else {
-                sprintf(temp1, "%s %s", cmd->name, cmd->alias);
+                temp1 = sdscatfmt(sdsempty(), "%s %s", cmd->name, cmd->alias);
             }
             if (++cnt == 5) {
                 strcat(text, temp1);
@@ -6300,7 +6305,7 @@ help_commands_function(UR_OBJECT user)
                 cnt = 0;
                 *text = '\0';
             } else {
-                sprintf(temp, "%-*s  ", 11 + (int) teslen(temp1, 0), temp1);
+                temp = sdscatprintf(sdsempty(), "%-*s  ", 11 + (int) teslen(temp1, 0), temp1);
                 strcat(text, temp);
             }
             if (!cnt) {
@@ -6326,6 +6331,8 @@ help_commands_function(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
+    sdsfree(temp);
+    sdsfree(temp1);
 }
 
 /*
