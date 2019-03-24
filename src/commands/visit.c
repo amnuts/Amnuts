@@ -9,7 +9,7 @@
 void
 personal_room_visit(UR_OBJECT user)
 {
-    char rmname[ROOM_NAME_LEN + 1];
+    sds rmname;
     RM_OBJECT rm;
 
     if (word_count < 2) {
@@ -32,9 +32,10 @@ personal_room_visit(UR_OBJECT user)
         return;
     }
     /* get room to go to */
-    sprintf(rmname, "(%s)", word[1]);
+    rmname = sdscatfmt(sdsempty(), "(%s)", word[1]);
     strtolower(rmname);
     rm = get_room_full(rmname);
+    sdsfree(rmname);
     if (!rm) {
         write_user(user, nosuchroom);
         return;
