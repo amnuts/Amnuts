@@ -352,12 +352,11 @@ reset_user(UR_OBJECT user)
 }
 
 /*
- * Destruct an user
+ * Destruct an user object from linked list
  */
 void
 destruct_user(UR_OBJECT user)
 {
-    /* Remove from linked list */
     if (user == user_first) {
         user_first = user->next;
         if (user == user_last) {
@@ -374,15 +373,13 @@ destruct_user(UR_OBJECT user)
             user->next->prev = user->prev;
         }
     }
-    /* TODO: not having the free() we never get rid of allocated unused memory
-     *       but having makes the talker crash if you inject enough garbage to
-     *       a connected socket... This should be fixed, but while not, it's
-     *       better to have it commented.
-     */
-    /*
-      memset(user, 0, (sizeof *user));
-      free(user);
-     */
+
+    if (user) {
+        memset(user, 0, (sizeof *user));
+        free(user);
+        user = NULL;
+    }
+
     destructed = 1;
 }
 
@@ -399,7 +396,6 @@ create_room(void)
     if (!room) {
         fprintf(stderr, "Amnuts: Memory allocation failure in create_room().\n");
         boot_exit(1);
-        return room;
     }
     memset(room, 0, (sizeof *room));
     /* Append object into linked list. */
@@ -439,7 +435,7 @@ create_room(void)
 }
 
 /*
- * Destruct a room object.
+ * Destruct a room object from the linked list.
  */
 void
 destruct_room(RM_OBJECT rm)
@@ -461,8 +457,11 @@ destruct_room(RM_OBJECT rm)
             rm->next->prev = rm->prev;
         }
     }
-    memset(rm, 0, (sizeof *rm));
-    free(rm);
+    if (rm) {
+        memset(rm, 0, (sizeof *rm));
+        free(rm);
+        rm = NULL;
+    }
 }
 
 /*
