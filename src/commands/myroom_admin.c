@@ -9,7 +9,7 @@
 void
 personal_room_admin(UR_OBJECT user)
 {
-    char rmname[ROOM_NAME_LEN + 1], filename[80];
+    sds rmname, filename;
     RM_OBJECT rm;
     UR_OBJECT u;
     int trsize, rmcount, locked, unlocked;
@@ -70,7 +70,7 @@ personal_room_admin(UR_OBJECT user)
             }
             ++rmcount;
             vwrite_user(user,
-                    "| Owner : ~OL%-*.*s~RS       Status : ~OL%s~RS   Msg Count : ~OL%2d~RS  People : ~OL%2d~RS |\n",
+                    "| Owner : ~OL%-*.*s~RS   Status : ~OL%s~RS   Msg Count : ~OL%2d~RS  People : ~OL%2d~RS |\n",
                     USER_NAME_LEN, USER_NAME_LEN, rm->owner,
                     is_private_room(rm) ? "~FRlocked  " : "~FGunlocked",
                     rm->mesg_cnt, room_visitor_count(rm));
@@ -96,10 +96,11 @@ personal_room_admin(UR_OBJECT user)
             write_user(user, "Usage: rmadmin -l / -m / -u <name> / -d <name>\n");
             return;
         }
-        sprintf(rmname, "(%s)", word[2]);
+        rmname = sdscatfmt(sdsempty(), "(%s)", word[2]);
         strtolower(rmname);
         /* first do checks on the room */
         rm = get_room_full(rmname);
+        sdsfree(rmname);
         if (!rm) {
             write_user(user, "That user does not have a personal room built.\n");
             return;
@@ -121,10 +122,11 @@ personal_room_admin(UR_OBJECT user)
         *word[2] = toupper(*word[2]);
         /* delete all files */
         if (!strcmp(word[1], "-d")) {
-            sprintf(filename, "%s/%s/%s.R", USERFILES, USERROOMS, word[2]);
+            filename = sdscatfmt(sdsempty(), "%s/%s/%s.R", USERFILES, USERROOMS, word[2]);
             remove(filename);
-            sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, word[2]);
+            filename = sdscatfmt(sdsempty(), "%s/%s/%s.B", USERFILES, USERROOMS, word[2]);
             remove(filename);
+            sdsfree(filename);
             write_syslog(SYSLOG, 1, "%s deleted the personal room of %s.\n",
                     user->name, word[2]);
             vwrite_user(user,
