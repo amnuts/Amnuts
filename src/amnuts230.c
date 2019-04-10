@@ -4030,6 +4030,7 @@ dump_commands(int sig)
     filename = sdscatfmt(sdsempty(), "%s/%s.%s", LOGFILES, LAST_CMD, dstr);
     fp = fopen(filename, "w");
     if (!fp) {
+        sdsfree(filename);
         return;
     }
     fprintf(fp, "Caught signal %d:\n\n", sig);
@@ -4303,6 +4304,7 @@ add_history(char *username, int showtime, const char *str, ...)
     filename = sdscatfmt(sdsempty(), "%s/%s/%s.H", USERFILES, USERHISTORYS, username);
     fp = fopen(filename, "a");
     if (!fp) {
+        sdsfree(filename);
         return;
     }
     time(&now);
