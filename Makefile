@@ -43,10 +43,18 @@ IDENTD_OBJS     = $(addprefix $(IDENTD_OBJ_DIR)/,$(notdir $(IDENTD_SRC:.c=.o)))
 #
 # Locations of vendors libraries
 #
-VENDOR_SDS_SRC_DIR  = $(TALKER_SRC_DIR)/vendors/sds
-VENDOR_SDS_OBJ_DIR  = $(TALKER_OBJ_DIR)
-VENDOR_SDS_SRC      = $(wildcard $(VENDOR_SDS_SRC_DIR)/*.c)
-VENDOR_SDS_OBJS     = $(addprefix $(VENDOR_SDS_OBJ_DIR)/,$(notdir $(VENDOR_SDS_SRC:.c=.o)))
+
+# SDS: https://github.com/antirez/sds
+VENDOR_SDS_SRC_DIR = $(TALKER_SRC_DIR)/vendors/sds
+VENDOR_SDS_OBJ_DIR = $(TALKER_OBJ_DIR)
+VENDOR_SDS_SRC     = $(wildcard $(VENDOR_SDS_SRC_DIR)/*.c)
+VENDOR_SDS_OBJS    = $(addprefix $(VENDOR_SDS_OBJ_DIR)/,$(notdir $(VENDOR_SDS_SRC:.c=.o)))
+
+# libtelnet: https://github.com/seanmiddleditch/libtelnet
+VENDOR_LIBTELNET_SRC_DIR = $(TALKER_SRC_DIR)/vendors/libtelnet
+VENDOR_LIBTELNET_OBJ_DIR = $(TALKER_OBJ_DIR)
+VENDOR_LIBTELNET_SRC     = $(wildcard $(VENDOR_LIBTELNET_SRC_DIR)/*.c)
+VENDOR_LIBTELNET_OBJS    = $(addprefix $(VENDOR_LIBTELNET_OBJ_DIR)/,$(notdir $(VENDOR_LIBTELNET_SRC:.c=.o)))
 
 #
 # Platform-specific libraries that need to be included
@@ -79,35 +87,37 @@ distclean: clean
 	rm -f $(TALKER_SRC_DIR)/*.[ch]~ $(TALKER_SRC_DIR)/*.[ch].bak
 	rm -f $(IDENTD_SRC_DIR)/*.[ch]~ $(IDENTD_SRC_DIR)/*.[ch].bak 
 	rm -f $(VENDOR_SDS_SRC_DIR)/*.[ch]~ $(VENDOR_SDS_SRC_DIR)/*.[ch].bak
+	rm -f $(VENDOR_LIBTELNET_SRC_DIR)/*.[ch]~ $(VENDOR_LIBTELNET_SRC_DIR)/*.[ch].bak
 	rm -f $(TALKER_BIN) $(BINDIR)/$(TALKER_BIN)
 	rm -f $(IDENTD_BIN) $(BINDIR)/$(IDENTD_BIN)
 	rm -f $(INCDIR)/*.[ch]~ $(INCDIR)/*.[ch].bak
 
 clean:
-	@echo "Removing object and dependancy files"
+	@echo "Removing object and dependency files"
 	rm -f $(TALKER_OBJS) $(TALKER_OBJS:.o=.d)
 	rm -f $(IDENTD_OBJS) $(IDENTD_OBJS:.o=.d)
 	rm -f $(VENDOR_SDS_OBJS) $(VENDOR_SDS_OBJS:.o=.d)
+	rm -f $(VENDOR_LIBTELNET_OBJS) $(VENDOR_LIBTELNET_OBJS:.o=.d)
 
 install: $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN)
 
 build: $(TALKER_BIN) $(IDENTD_BIN)
 
-compile: $(TALKER_OBJS) $(IDENTD_OBJS) $(VENDOR_SDS_OBJS)
+compile: $(TALKER_OBJS) $(IDENTD_OBJS) $(VENDOR_SDS_OBJS) $(VENDOR_LIBTELNET_OBJS)
 
 print-%: ; @echo $* = $($*)
 
-vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDOR_SDS_SRC_DIR)
+vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDOR_SDS_SRC_DIR) $(VENDOR_LIBTELNET_SRC_DIR)
 
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
 	chmod $(PERMS) $<
 
-$(TALKER_BIN): $(TALKER_OBJS) $(VENDOR_SDS_OBJS)
+$(TALKER_BIN): $(TALKER_OBJS) $(VENDOR_SDS_OBJS) $(VENDOR_LIBTELNET_OBJS)
 	@echo "Linking $@ ..."
 	$(CC) $(LD_FLAGS) $^ $(TALKER_LIBS) -o $@
 
-$(IDENTD_BIN): $(IDENTD_OBJS) $(VENDOR_SDS_OBJS)
+$(IDENTD_BIN): $(IDENTD_OBJS) $(VENDOR_SDS_OBJS) $(VENDOR_LIBTELNET_OBJS)
 	@echo "Linking $@ ..."
 	$(CC) $(LD_FLAGS) $^ $(IDENTD_LIBS) -o $@
 
@@ -126,4 +136,9 @@ $(VENDOR_SDS_OBJS): $(VENDOR_SDS_OBJ_DIR)/%.o: %.c
 	@test -d $(VENDOR_SDS_OBJ_DIR) || mkdir $(VENDOR_SDS_OBJ_DIR)
 	$(CC) $(C_FLAGS) $(CC_FLAGS) $(TALKER_FLAGS) -c -o $@ $<
 
--include $(TALKER_OBJS:.o=.d) $(IDENTD_OBJS:.o=.d) $(VENDOR_SDS_OBJS:.o=.d)
+$(VENDOR_LIBTELNET_OBJS): $(VENDOR_LIBTELNET_OBJ_DIR)/%.o: %.c
+	@echo "Compiling libtelnet library $< ... ($@)"
+	@test -d $(VENDOR_LIBTELNET_OBJ_DIR) || mkdir $(VENDOR_LIBTELNET_OBJ_DIR)
+	$(CC) $(C_FLAGS) $(CC_FLAGS) $(TALKER_FLAGS) -c -o $@ $<
+
+-include $(TALKER_OBJS:.o=.d) $(IDENTD_OBJS:.o=.d) $(VENDOR_SDS_OBJS:.o=.d) $(VENDOR_LIBTELNET_OBJS:.o=.d)
