@@ -542,7 +542,7 @@ void show_spodlist(UR_OBJECT);
 
 
 /*
- * functions in strings.h
+ * functions in strings.c
  */
 int get_charclient_line(UR_OBJECT, char *, int);
 void terminate(char *);
@@ -577,5 +577,13 @@ void split_command_string(char *);
 size_t teslen(const char *, size_t);
 void get_soundex(const char *, char *);
 char *word_time(int);
+
+/*
+ * functions in telnet.c
+ */
+void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data);
+void user_telnet_input(UR_OBJECT user, const char *buffer, size_t size);
+void user_telnet_online(const char *line, size_t overflow, void *user_data);
+void user_telnet_send(int sock, const char *buffer, size_t size);
 
 #endif

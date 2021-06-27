@@ -609,8 +609,7 @@ align_string(int pos, int cstrlen, int mark, const char *marker,
         break;
     case 1:
         /* centre align */
-        sprintf(text2, "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd,
-                "");
+        sprintf(text2, "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd, "");
         break;
     case 2:
         /* right align */

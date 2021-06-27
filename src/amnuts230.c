@@ -16,6 +16,7 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#include "telnet.h"
 #undef __MAIN_FILE__
 #endif
 
@@ -369,18 +370,26 @@ main(int argc, char **argv)
                 continue;
             }
             /* ignore control code replies */
+            /*
             if (*inpstr == '\xff') {
                 continue;
             }
+             */
+
+            telnet_recv(user->telnet, inpstr, len);
+
             /*
                Deal with input chars. If the following if test succeeds we
                are dealing with a character mode client so call function.
              */
+            /*
             if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
                 if (!get_charclient_line(user, inpstr, len)) {
                     continue;
                 }
-            }
+            }*/
+
+
             curstr = next_str = inpstr;
             last_ptr = inpstr + len;
             for (;;) {
@@ -842,6 +851,7 @@ accept_connection(int lsock)
         return;
     }
     user->socket = accept_sock;
+    user->telnet = telnet_init(telopts, telnet_event_handler, 0, user);
     user->login = LOGIN_NAME;
     user->last_input = time(0);
 #ifdef WIZPORT
@@ -853,7 +863,8 @@ accept_connection(int lsock)
     strcpy(user->site, hostname);
     strcpy(user->ipsite, hostaddr);
     sprintf(user->site_port, "%d", ntohs(sa.sin_port));
-    echo_on(user);
+    //echo_on(user);
+    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
     write_user(user, "Give me a name: ");
     ++amsys->num_of_logins;
 #ifdef IDENTD
@@ -3579,7 +3590,8 @@ write_user(UR_OBJECT user, const char *str)
         /* Flush buffer if above high water mark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
-            send(user->socket, buff, buffpos, 0);
+            telnet_printf(user->telnet, buff);
+            //send(user->socket, buff, buffpos, 0);
             buffpos = 0;
         }
         if (*s == '\n') {
@@ -3628,11 +3640,13 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
     if (buffpos) {
-        send(user->socket, buff, buffpos, 0);
+        telnet_printf(user->telnet, buff);
+        //send(user->socket, buff, buffpos, 0);
     }
     /* Reset terminal at end of string */
     if (user->colour) {
-        write_sock(user->socket, colour_codes[0].esc_code);
+        telnet_printf(user->telnet, colour_codes[0].esc_code);
+        //write_sock(user->socket, colour_codes[0].esc_code);
     }
 }
 
