@@ -40,6 +40,7 @@ extern "C" {
  * functions in amnuts230.c
  */
 int main(int, char **);
+void handle_user_input(UR_OBJECT user, char *inpstr, int len);
 void check_directories(void);
 int find_user_listed(const char *);
 int user_logged_on(const char *);
@@ -582,8 +583,5 @@ char *word_time(int);
  * functions in telnet.c
  */
 void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data);
-void user_telnet_input(UR_OBJECT user, const char *buffer, size_t size);
-void user_telnet_online(const char *line, size_t overflow, void *user_data);
-void user_telnet_send(int sock, const char *buffer, size_t size);
 
 #endif

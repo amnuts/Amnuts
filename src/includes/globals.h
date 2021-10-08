@@ -171,8 +171,6 @@ struct user_struct {
     int wizport;
 #endif
     int socket;
-    char telnet_line_buf[256];
-    int telnet_line_pos;
     int buffpos;
     int filepos;
     int charcnt;
