@@ -3,6 +3,9 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "../vendors/sds/sds.h"
+#endif
 
 /*
  * Show a picture to the whole room that the user is in

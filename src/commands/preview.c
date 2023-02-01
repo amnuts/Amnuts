@@ -3,9 +3,12 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "../vendors/sds/sds.h"
+#endif
 
 /*
- * see list of pictures availiable--file dictated in "go" script
+ * see list of pictures available--file dictated in "go" script
  */
 void
 preview(UR_OBJECT user)
