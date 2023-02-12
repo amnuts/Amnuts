@@ -1,7 +1,7 @@
 #
 # General setup of GCC and compiler flags, base directories, etc.
 #
-BINDIR          = $(CURDIR)
+BINDIR          = $(CURDIR)/build
 INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
 CC              = gcc
@@ -102,6 +102,7 @@ vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDO
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
 	chmod $(PERMS) $<
+	mv $< $(BINDIR)
 
 $(TALKER_BIN): $(TALKER_OBJS) $(VENDOR_SDS_OBJS)
 	@echo "Linking $@ ..."

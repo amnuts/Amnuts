@@ -8,5 +8,6 @@ src/objects
 compile_commands.json
 cmake-build-debug/
 docker-compose.yml
+Dockerfile
 amnutsIdent
 amnutsTalker
