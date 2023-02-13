@@ -10,18 +10,15 @@ else
     echo "Unknown platform - falling back to amd64"
 fi
 
-CONFIG_FILE="$(pwd)/storage/datafiles/config"
+CONFIG_FILE="$(pwd)/files/datafiles/config"
 MAIN_PORT=$(cat $CONFIG_FILE | grep "\bmainport\b" | awk '{ print $2 }')
 WIZ_PORT=$(cat $CONFIG_FILE | grep "\bwizport\b" | awk '{ print $2 }')
 LINK_PORT=$(cat $CONFIG_FILE | grep "\blinkport\b" | awk '{ print $2 }')
 
 cat << EOT > Dockerfile
-FROM ${OS_ARCH}/gcc:11
+FROM ${OS_ARCH}/alpine
 
-RUN apt-get update \\
-    && apt-get install -y supervisor \\
-    && rm -rf /var/lib/apt/lists/* /var/cache/apk/* /usr/share/man /tmp/*
-
+RUN apk add build-base supervisor bash busybox-extras
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 WORKDIR /amnuts
 
@@ -33,6 +30,7 @@ version: "3"
 services:
   amnuts:
     build: ./
+    image: amnuts-build
     environment:
       - MAIN_PORT=$MAIN_PORT
       - WIZ_PORT=$WIZ_PORT
