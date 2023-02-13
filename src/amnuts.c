@@ -141,18 +141,23 @@ main(int argc, char **argv)
 #endif
     }
 
-    /* Run in background automatically. */
-    switch (fork()) {
-    case -1:
-        /* fork failure */
-        boot_exit(11);
-        break;
-    case 0:
-        /* child continues */
-        break;
-    default:
-        /* parent dies */
-        _exit(0);
+    /* Run in background automatically unless we're running in a docker container */
+    char* run_in_foreground = getenv("IN_FOREGROUND");
+    if (run_in_foreground == NULL) {
+        switch (fork()) {
+            case -1:
+                /* fork failure */
+                boot_exit(11);
+                break;
+            case 0:
+                /* child continues */
+                break;
+            default:
+                /* parent dies */
+                _exit(0);
+        }
+    } else {
+        printf("Running in foreground...");
     }
     /* XXX: Add setsid() and redirect stdio to /dev/null somewhere */
 

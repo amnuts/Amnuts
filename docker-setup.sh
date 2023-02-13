@@ -19,10 +19,14 @@ cat << EOT > Dockerfile
 FROM ${OS_ARCH}/alpine
 
 RUN apk add build-base supervisor bash busybox-extras
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-WORKDIR /amnuts
+COPY supervisord.conf /etc/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+WORKDIR /amnuts
+EXPOSE $MAIN_PORT
+EXPOSE $WIZ_PORT
+EXPOSE $LINK_PORT
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 EOT
 
 cat << EOT > docker-compose.yml
@@ -32,13 +36,13 @@ services:
     build: ./
     image: amnuts-build
     environment:
-      - MAIN_PORT=$MAIN_PORT
-      - WIZ_PORT=$WIZ_PORT
-      - LINK_PORT=$LINK_PORT
+      - "MAIN_PORT=$MAIN_PORT"
+      - "WIZ_PORT=$WIZ_PORT"
+      - "LINK_PORT=$LINK_PORT"
     ports:
-      - ${MAIN_PORT}:${MAIN_PORT}
-      - ${WIZ_PORT}:${WIZ_PORT}
-      - ${LINK_PORT}:${LINK_PORT}
+      - "${MAIN_PORT}:${MAIN_PORT}"
+      - "${WIZ_PORT}:${WIZ_PORT}"
+      - "${LINK_PORT}:${LINK_PORT}"
     volumes:
       - .:/amnuts
 EOT

@@ -38,4 +38,19 @@ If you want to jump on the container itself, use:
 Once you have run the "make install" command, you can then start the talker
 with:
 
-    docker-compose run amnuts
+    docker-compose run -d --service-ports amnuts
+
+This will run a container in the background with the Amnuts talker running.
+Supervisord is used to keep the process going.
+
+Alternatively, you can simply build the image with:
+
+    docker-compose build
+
+And then run it with:
+
+    docker-compose up
+
+The docker setup is in its early stages, so may well be adapted and changed
+over time.  Your mileage may vary.  Use your best judgement.  Try things out.
+Raise an issue or a pull request if you know a better way!

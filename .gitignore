@@ -11,3 +11,5 @@ docker-compose.yml
 Dockerfile
 amnutsIdent
 amnutsTalker
+supervisord.pid
+supervisord.log
