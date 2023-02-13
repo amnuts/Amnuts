@@ -1,7 +1,7 @@
 #
 # General setup of GCC and compiler flags, base directories, etc.
 #
-BINDIR          = $(CURDIR)
+BINDIR          = $(CURDIR)/build
 INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
 CC              = gcc
@@ -15,8 +15,8 @@ LD_FLAGS        =
 # remove the '-DNETLINKS' - same for the others.
 # Possible flags are (each starting with '-D'):
 #     GAMES - include games
-#     WIZPORT - Allow a seperate port just for WIZ levels to use
-#     IDENTD - Ident Deamon
+#     WIZPORT - Allow a separate port just for WIZ levels to use
+#     IDENTD - Ident Daemon
 #     MANDNS - Manual DNS lookups
 #     NETLINKS - The infamous Netlinks
 #
@@ -25,7 +25,7 @@ TALKER_FLAGS    = -DGAMES -DWIZPORT -DIDENTD -DMANDNS -DNETLINKS
 #
 # Locations and binary name for talker build
 #
-TALKER_BIN      = amnuts230
+TALKER_BIN      = amnutsTalker
 TALKER_SRC_DIR  = $(CURDIR)/src
 TALKER_OBJ_DIR  = $(TALKER_SRC_DIR)/objects
 TALKER_SRC      = $(wildcard $(TALKER_SRC_DIR)/*.c $(TALKER_SRC_DIR)/commands/*.c)
@@ -84,7 +84,7 @@ distclean: clean
 	rm -f $(INCDIR)/*.[ch]~ $(INCDIR)/*.[ch].bak
 
 clean:
-	@echo "Removing object and dependancy files"
+	@echo "Removing object and dependency files"
 	rm -f $(TALKER_OBJS) $(TALKER_OBJS:.o=.d)
 	rm -f $(IDENTD_OBJS) $(IDENTD_OBJS:.o=.d)
 	rm -f $(VENDOR_SDS_OBJS) $(VENDOR_SDS_OBJS:.o=.d)
@@ -102,6 +102,7 @@ vpath %.c $(TALKER_SRC_DIR) $(TALKER_SRC_DIR)/commands $(IDENTD_SRC_DIR) $(VENDO
 $(BINDIR)/$(TALKER_BIN) $(BINDIR)/$(IDENTD_BIN): $(BINDIR)/%: %
 	@echo "Installing $< ..."
 	chmod $(PERMS) $<
+	mv $< $(BINDIR)
 
 $(TALKER_BIN): $(TALKER_OBJS) $(VENDOR_SDS_OBJS)
 	@echo "Linking $@ ..."

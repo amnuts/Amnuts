@@ -141,18 +141,23 @@ main(int argc, char **argv)
 #endif
     }
 
-    /* Run in background automatically. */
-    switch (fork()) {
-    case -1:
-        /* fork failure */
-        boot_exit(11);
-        break;
-    case 0:
-        /* child continues */
-        break;
-    default:
-        /* parent dies */
-        _exit(0);
+    /* Run in background automatically unless we're running in a docker container */
+    char* run_in_foreground = getenv("IN_FOREGROUND");
+    if (run_in_foreground == NULL) {
+        switch (fork()) {
+            case -1:
+                /* fork failure */
+                boot_exit(11);
+                break;
+            case 0:
+                /* child continues */
+                break;
+            default:
+                /* parent dies */
+                _exit(0);
+        }
+    } else {
+        printf("Running in foreground...");
     }
     /* XXX: Add setsid() and redirect stdio to /dev/null somewhere */
 
@@ -6140,6 +6145,7 @@ login_who(UR_OBJECT user)
             userText = sdscat(userText, repeat_string(" ", len));
         }
         lineText = sdscat(lineText, userText);
+        sdsfree(userText);
         if (!(++on % 4)) {
             lineText = sdscat(lineText, "\n");
             write_user(user, lineText);
@@ -6164,7 +6170,6 @@ login_who(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     sdsfree(lineText);
-    sdsfree(userText);
 }
 
 /*
@@ -6228,6 +6233,8 @@ help_commands_level(UR_OBJECT user)
             if (!cnt) {
                 strcat(text, "     ");
             }
+            sdsfree(temp);
+            sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
             write_user(user, align_string(0, 78, 1, "|", "%s", text));
@@ -6248,8 +6255,6 @@ help_commands_level(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
-    sdsfree(temp);
-    sdsfree(temp1);
 }
 
 /*
@@ -6313,6 +6318,8 @@ help_commands_function(UR_OBJECT user)
             if (!cnt) {
                 strcat(text, "     ");
             }
+            sdsfree(temp);
+            sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
             write_user(user, align_string(0, 78, 1, "|", "%s", text));
@@ -6333,8 +6340,6 @@ help_commands_function(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
-    sdsfree(temp);
-    sdsfree(temp1);
 }
 
 /*
