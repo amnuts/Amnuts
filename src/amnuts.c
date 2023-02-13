@@ -6145,6 +6145,7 @@ login_who(UR_OBJECT user)
             userText = sdscat(userText, repeat_string(" ", len));
         }
         lineText = sdscat(lineText, userText);
+        sdsfree(userText);
         if (!(++on % 4)) {
             lineText = sdscat(lineText, "\n");
             write_user(user, lineText);
@@ -6169,7 +6170,6 @@ login_who(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     sdsfree(lineText);
-    sdsfree(userText);
 }
 
 /*
@@ -6233,6 +6233,8 @@ help_commands_level(UR_OBJECT user)
             if (!cnt) {
                 strcat(text, "     ");
             }
+            sdsfree(temp);
+            sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
             write_user(user, align_string(0, 78, 1, "|", "%s", text));
@@ -6253,8 +6255,6 @@ help_commands_level(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
-    sdsfree(temp);
-    sdsfree(temp1);
 }
 
 /*
@@ -6318,6 +6318,8 @@ help_commands_function(UR_OBJECT user)
             if (!cnt) {
                 strcat(text, "     ");
             }
+            sdsfree(temp);
+            sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
             write_user(user, align_string(0, 78, 1, "|", "%s", text));
@@ -6338,8 +6340,6 @@ help_commands_function(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     stop_pager(user);
-    sdsfree(temp);
-    sdsfree(temp1);
 }
 
 /*

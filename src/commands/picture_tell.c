@@ -80,6 +80,7 @@ picture_tell(UR_OBJECT user)
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user, "Sorry, there is no picture with that name.\n");
+        sdsfree(filename);
         return;
     }
     fclose(fp);
