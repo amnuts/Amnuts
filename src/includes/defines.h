@@ -49,7 +49,7 @@
 #define TALKER_NAME "Your Talker's Name Here"
 
 /* general directories */
-#define BASE_STORAGE_DIR "storage/"
+#define BASE_STORAGE_DIR "files/"
 #define ADMINFILES BASE_STORAGE_DIR "adminfiles"
 #define DATAFILES  BASE_STORAGE_DIR "datafiles"
 #define DUMPFILES  BASE_STORAGE_DIR "dumpfiles"
