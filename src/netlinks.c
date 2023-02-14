@@ -1472,6 +1472,11 @@ release_nl(UR_OBJECT user)
 int
 action_nl(UR_OBJECT user, const char *command, const char *inpstr)
 {
+    sds text;
+
+    if (!user || user->type != REMOTE_TYPE) {
+        return 0;
+    }
     if (user->room) {
         return 0;
     }
@@ -1479,12 +1484,12 @@ action_nl(UR_OBJECT user, const char *command, const char *inpstr)
         command = "NL";
     }
     if (!inpstr || !*inpstr) {
-        sprintf(text, "%s %s %s\n", netcom[NLC_ACTION], user->name, command);
+        text = sdscatfmt(sdsempty(), "%s %s %s\n", netcom[NLC_ACTION], user->name, command);
     } else {
-        sprintf(text, "%s %s %s %s\n", netcom[NLC_ACTION], user->name, command,
-                inpstr);
+        text = sdscatfmt(sdsempty(), "%s %s %s %s\n", netcom[NLC_ACTION], user->name, command, inpstr);
     }
     write_sock(user->netlink->socket, text);
+    sdsfree(text);
     return 1;
 }
 
