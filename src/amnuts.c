@@ -4484,6 +4484,9 @@ login(UR_OBJECT user, char *inpstr)
             write_user(user, "\nPlease confirm password: ");
             user->login = LOGIN_CONFIRM;
         } else {
+            vwrite_user(user, "password = %s\n", passwd);
+            vwrite_user(user, "user password = %s\n", user->pass);
+            vwrite_user(user, "crypted = %s\n", crypt(passwd, user->pass));
             if (strcmp(user->pass, crypt(passwd, user->pass))) {
                 write_user(user, "\n\nIncorrect login.\n\n");
                 attempts(user);
