@@ -1,6 +1,6 @@
 +-----------------------------------------------------------------------------+
      COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT - COPYRIGHT
-       Copyright information for Amnuts
+                      Copyright information for Amnuts
 +-----------------------------------------------------------------------------+
 
 Preamble
@@ -11,7 +11,7 @@ with ID 1027006837.1806.0.nnrp-07.c2de0bc0@news.demon.co.uk
 posted to newgroups alt.talkers, alt.talkers.nuts, and
 alt.talkers.programming that he was now allowing all versions
 of his NUTS codes to optionally be distributed under the General
-Public License. For reference this mesage can be accessed at the URL:
+Public License. For reference this message can be accessed at the URL:
 http://groups.google.com/groups?selm=1027006837.1806.0.nnrp-07.c2de0bc0%40news.demon.co.uk
 For further information on NUTS licensing see the file docs/nuts_copyright.
 
@@ -19,7 +19,7 @@ For further information on NUTS licensing see the file docs/nuts_copyright.
 Copyright Information for Amnuts code
 -------------------------------------
 
-Amnuts 2.3.0 A Unix Talk Server via Telnet
+Amnuts, A Unix Talk Server via Telnet
 Copyright (C) 1996-1996  Neil Robertson (Boltar) [NUTS]
 Copyright (C) 1997-2003  Andrew Collington (Andy) [Amnuts]
 Copyright (C) 1999-1999  Gordon Chiu (Ardant) [ident-daemon]
@@ -68,7 +68,6 @@ associated files.  This copyright pertains to ANY version of Amnuts,
 documents, or web site.  If you have any problems with this copyright
 notice then you should not use the code at all.
 
-Andrew Collington
-September, 2001
-
+                                                             Andrew Collington
+                                                                February, 2023
 +-----------------------------------------------------------------------------+

@@ -2,8 +2,8 @@
          Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
                       Last update: 2003-08-04
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                              talker@amnuts.net
+                          https://www.amnuts.net/
 
                                    based on
 
