@@ -73,7 +73,7 @@
 #define USERFLAGGED   "flagged"
 
 /* seemless reboot */
-#define REBOOTING_DIR           BASE_STORAGE_DIR "reboot"
+#define REBOOTING_DIR           BASE_STORAGE_DIR "/reboot"
 #define USER_LIST_FILE          REBOOTING_DIR "/_ulist"
 #define TALKER_SYSINFO_FILE     REBOOTING_DIR "/_sysinfo"
 #define CHILDS_PID_FILE         REBOOTING_DIR "/_child_pid"
@@ -175,7 +175,7 @@
 
 /*
  * some macros that are used in the code
- * these are for grammer
+ * these are for grammar
  */
 #define PLTEXT_S(n) ((1==(n))?"":"s")
 #define PLTEXT_ES(n) ((1==(n))?"":"es")
@@ -184,6 +184,8 @@
 #define SIZEOF(table) ((sizeof (table))/(sizeof *(table)))
 /* these are for bit manipulation */
 #define BIT(pos) (1L<<(pos))
+/* utils */
+#define STRLEN(s) (sizeof(s) / sizeof(s[0]) - 1)
 
 /* money code */
 #define DEFAULT_MONEY 1000

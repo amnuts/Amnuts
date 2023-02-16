@@ -639,7 +639,7 @@ void
 retrieve_users(void)
 {
     char name[USER_NAME_LEN], rmname[ROOM_NAME_LEN],
-            filename[USER_NAME_LEN + 15], line[ARR_SIZE * 3 + 1], *s;
+            filename[USER_NAME_LEN + STRLEN(REBOOTING_DIR) + 15], line[ARR_SIZE * 3 + 1], *s;
     struct user_struct spanky;
     FILE *f, *pf;
     UR_OBJECT u;

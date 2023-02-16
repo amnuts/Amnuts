@@ -4593,7 +4593,7 @@ show_login_info(UR_OBJECT user)
     static const char *const see[] = {"~OL~FYinvisible", "~OL~FCvisible"};
     static const char *const myoffon[] = {"~OL~FCoff", "~OL~FRon "};
     static const char *const times[] = {"morning", "afternoon", "evening"};
-    char temp[ARR_SIZE], text[ARR_SIZE], text2[ARR_SIZE];
+    char temp[ARR_SIZE], text[ARR_SIZE * 2], text2[ARR_SIZE];
     time_t now;
     const struct tm *date;
     int yes, cnt, phase, exline;
