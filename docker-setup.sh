@@ -18,7 +18,7 @@ LINK_PORT=$(cat $CONFIG_FILE | grep "\blinkport\b" | awk '{ print $2 }')
 cat << EOT > Dockerfile
 FROM ${OS_ARCH}/alpine
 
-RUN apk add build-base supervisor bash busybox-extras
+RUN apk add build-base supervisor bash busybox-extras gdb
 COPY supervisord.conf /etc/supervisord.conf
 
 WORKDIR /amnuts
@@ -45,4 +45,8 @@ services:
       - "${LINK_PORT}:${LINK_PORT}"
     volumes:
       - .:/amnuts
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
 EOT

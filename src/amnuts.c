@@ -784,8 +784,9 @@ accept_connection(int lsock)
         /* resolve using identd (ArIdent) */
         strcpy(hostname, hostaddr);
         if (amsys->ident_state) {
-            sprintf(buffer, "SITE: %s\n", hostaddr);
+            sds buffer = sdscatfmt(sdsempty(), "SITE: %s\n", hostaddr);
             write_sock(amsys->ident_socket, buffer);
+            sdsfree(buffer);
         }
         break;
 #endif
@@ -3064,7 +3065,7 @@ save_user_details(UR_OBJECT user, int save_current)
 int
 load_user_details_old(UR_OBJECT user)
 {
-    char line[82], filename[80];
+    char line[1024], filename[80];
     FILE *fp;
     int temp1, temp2, temp3, temp4;
 
@@ -3202,7 +3203,7 @@ load_user_details_old(UR_OBJECT user)
 int
 load_oldversion_user(UR_OBJECT user, int version)
 {
-    char line[81], filename[80];
+    char line[1024], filename[80];
     FILE *fp;
     int temp1, temp2, temp3, temp4, oldvote;
 
@@ -3581,7 +3582,7 @@ write_user(UR_OBJECT user, const char *str)
     cnt = 0;
     buffpos = 0;
     for (s = str; *s; ++s) {
-        /* Flush buffer if above high water mark;
+        /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
             send(user->socket, buff, buffpos, 0);
@@ -3601,8 +3602,8 @@ write_user(UR_OBJECT user, const char *str)
         } else if (*s == '~') {
             /*
                Process colour commands eg ~FR. We have to strip out the commands
-               from the string even if user doesnt have colour switched on hence
-               the user->colour check isnt done just yet
+               from the string even if user doesn't have colour switched on hence
+               the user->colour check isn't done just yet
              */
             for (i = 0; colour_codes[i].txt_code; ++i) {
                 if (!strncmp(s + 1, colour_codes[i].txt_code,
@@ -3620,7 +3621,7 @@ write_user(UR_OBJECT user, const char *str)
                 continue;
             }
         } else if (*s == '^') {
-            /* See if its a ^ before a ~ , if so then we print colour command as text */
+            /* See if it's a ^ before a ~ , if so then we print colour command as text */
             if (s[1] == '~') {
                 ++s;
             }
@@ -4484,9 +4485,6 @@ login(UR_OBJECT user, char *inpstr)
             write_user(user, "\nPlease confirm password: ");
             user->login = LOGIN_CONFIRM;
         } else {
-            vwrite_user(user, "password = %s\n", passwd);
-            vwrite_user(user, "user password = %s\n", user->pass);
-            vwrite_user(user, "crypted = %s\n", crypt(passwd, user->pass));
             if (strcmp(user->pass, crypt(passwd, user->pass))) {
                 write_user(user, "\n\nIncorrect login.\n\n");
                 attempts(user);
@@ -4595,7 +4593,7 @@ show_login_info(UR_OBJECT user)
     static const char *const see[] = {"~OL~FYinvisible", "~OL~FCvisible"};
     static const char *const myoffon[] = {"~OL~FCoff", "~OL~FRon "};
     static const char *const times[] = {"morning", "afternoon", "evening"};
-    char temp[ARR_SIZE], text2[ARR_SIZE];
+    char temp[ARR_SIZE], text[ARR_SIZE], text2[ARR_SIZE];
     time_t now;
     const struct tm *date;
     int yes, cnt, phase, exline;
@@ -4852,7 +4850,9 @@ connect_user(UR_OBJECT user)
             vwrite_user(user, "\nYou are connecting%s.\n\n", rmname);
         }
     }
-    sdsfree(rmname);
+    if (rmname != NULL) {
+        sdsfree(rmname);
+    }
     logon_flag = 0;
     ++user->logons;
     alert_friends(user);
