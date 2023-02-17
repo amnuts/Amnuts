@@ -262,7 +262,7 @@ set_attributes(UR_OBJECT user)
             return;
         }
         strcpy(user->recap, word[2]);
-        strcat(user->recap, "~RS"); /* user->recap is allways escaped with a reset to its colours... */
+        strcat(user->recap, "~RS"); /* user->recap is always escaped with a reset to its colours... */
         strcpy(user->bw_recap, recname);
         vwrite_user(user,
                 "Your name will now appear as \"%s~RS\" on the \"who\", \"examine\", tells, etc.\n",

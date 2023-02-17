@@ -3940,7 +3940,7 @@ write_friends(UR_OBJECT user, const char *str, int revt)
 /*
  * Write a string to system log
  * type = what syslog(s) to write to
- * write_time = whether or not you have a time stamp imcluded
+ * write_time = whether you have a time stamp included
  * str = string passed - possibly with %s, %d, etc
  * ... = variable length args passed
  */
@@ -3966,7 +3966,7 @@ write_syslog(int type, int write_time, const char *str, ...)
     type &= amsys->logging; /* Do not log to turned off logs */
     if (type & SYSLOG) {
         sprintf(filename, "%s/%s.%s", LOGFILES, MAINSYSLOG, dstr);
-        /* even if do_write_syslog fails, continue incase trying to write to others */
+        /* even if do_write_syslog fails, continue in case trying to write to others */
         do_write_syslog(filename);
     }
     if (type & REQLOG) {
@@ -4003,7 +4003,7 @@ do_write_syslog(const char *filename)
 }
 
 /*
- * this version of the the last command log - the two procedures below - are
+ * this version of the last command log - the two procedures below - are
  * thanks to Karri (The Bat) Kalpio who makes KTserv
  * record the last command executed - helps find crashes
  */
@@ -4544,7 +4544,7 @@ login(UR_OBJECT user, char *inpstr)
         add_history(user->name, 1, "Was initially created.\n");
         write_syslog(SYSLOG, 1, "New user \"%s\" created.\n", user->name);
         ++amsys->logons_new;
-        /* Check out above for explaination of this */
+        /* Check out above for explanation of this */
         cls(user);
         /* If there is no motd2 files then do not display them */
         if (amsys->motd2_cnt) {
@@ -4949,7 +4949,7 @@ disconnect_user(UR_OBJECT user)
             user->misc_op = 0;
             user->edit_op = 0;
             user->edit_line = 0;
-            /* reset ignore status--incase user was in the editor */
+            /* reset ignore status--in case user was in the editor */
             user->ignall = user->ignall_store;
         }
         save_user_details(user, 1);
@@ -6553,7 +6553,7 @@ user_is_friend(UR_OBJECT user, UR_OBJECT u)
 
 /*
  * Alert anyone logged on who has user in their friends
- * list that the user has just loged on
+ * list that the user has just logged on
  */
 void
 alert_friends(UR_OBJECT user)
@@ -6653,7 +6653,7 @@ scalar_to_ymd(long scalar, int *yr, int *mo, int *dy)
 }
 
 /*
- * determine if the y/m/d given is todays date
+ * determine if the y/m/d given is today's date
  */
 int
 is_ymd_today(int yr, int mo, int dy)

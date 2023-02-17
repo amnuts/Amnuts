@@ -829,7 +829,7 @@ destruct_flagged_user_entry(UR_OBJECT user, FU_OBJECT fu)
 }
 
 /*
- * desctruct all nodes in flagged user linked list
+ * destruct all nodes in flagged user linked list
  */
 void
 destruct_all_flagged_users(UR_OBJECT user)
@@ -919,7 +919,7 @@ get_user(const char *name)
 }
 
 /*
- * Get user from abreviated name
+ * Get user from abbreviated name
  */
 UR_OBJECT
 get_user_name(UR_OBJECT user, const char *name)
@@ -1199,7 +1199,7 @@ destruct_review_buffer_entry(UR_OBJECT user, RB_OBJECT rb)
 }
 
 /*
- * desctruct all nodes in review buffer linked list
+ * destruct all nodes in review buffer linked list
  */
 void
 destruct_all_review_buffer(UR_OBJECT user)
@@ -1211,7 +1211,7 @@ destruct_all_review_buffer(UR_OBJECT user)
 }
 
 /*
- * desctruct all nodes of a certain type in review buffer linked list
+ * destruct all nodes of a certain type in review buffer linked list
  */
 void
 destruct_review_buffer_type(UR_OBJECT user, unsigned flags, int first)

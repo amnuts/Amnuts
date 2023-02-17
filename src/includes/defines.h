@@ -72,7 +72,7 @@
 #define USERREMINDERS "reminders"
 #define USERFLAGGED   "flagged"
 
-/* seemless reboot */
+/* seamless reboot */
 #define REBOOTING_DIR           BASE_STORAGE_DIR "/reboot"
 #define USER_LIST_FILE          REBOOTING_DIR "/_ulist"
 #define TALKER_SYSINFO_FILE     REBOOTING_DIR "/_sysinfo"

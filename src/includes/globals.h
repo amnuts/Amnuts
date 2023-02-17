@@ -241,7 +241,7 @@ struct last_login_struct {
 };
 
 /*
- * room informaytion structure
+ * room information structure
  */
 struct room_struct {
     char name[ROOM_NAME_LEN + 1];

@@ -388,8 +388,8 @@ is_number(const char *str)
 
 /*
  * Performs the same as strstr, in that it returns a pointer to the
- * first occurence of pat in str--except that this is performed case
- * insensitive
+ * first occurrence of pat in str--except that this is performed
+ * case-insensitive
  */
 char *
 istrstr(char *str, const char *pat)
@@ -425,7 +425,7 @@ istrstr(char *str, const char *pat)
 }
 
 /*
- * Take the string "inpstr" and replace any occurence of "old_str" with
+ * Take the string "inpstr" and replace any occurrence of "old_str" with
  * the string "new_str"
  */
 char *
@@ -531,7 +531,7 @@ long_date(int which)
 
 /*
  * takes string str and determines what smiley type it should have.  The type is then
- * stored in "type".  The smiley type is determind by the last 2 characters in str.
+ * stored in "type".  The smiley type is determined by the last 2 characters in str.
  */
 const char *
 smiley_type(const char *str)

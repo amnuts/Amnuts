@@ -129,7 +129,7 @@ change_user_name(UR_OBJECT user)
     /* change last_login info so that old name if offline */
     record_last_logout(oldname);
     record_last_login(newname);
-    /* all memory occurences should be done.  now do files */
+    /* all memory occurrences should be done.  now do files */
     oldfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, oldname);
     newfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, newname);
     rename(oldfile, newfile);

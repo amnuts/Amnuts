@@ -5,7 +5,7 @@
 #include "prototypes.h"
 
 /*
- * Show the list of commands, credits, and display the helpfiles for the given command
+ * Show the list of commands, credits, and display the help files for the given command
  */
 void
 help(UR_OBJECT user)

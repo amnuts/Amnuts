@@ -453,7 +453,7 @@ do_sreboot(UR_OBJECT user)
 
     /*
      * here is where to add for any other syncing that needs to be done
-     * when your talker shutsdown... notes, etc
+     * when your talker shuts down... notes, etc
      */
 
     close_fds();
@@ -469,11 +469,11 @@ do_sreboot(UR_OBJECT user)
         break;
     case 0:
         /*
-         * XXX: ISO C and historical compatibility introduce anomolies for
+         * XXX: ISO C and historical compatibility introduce anomalies for
          * all exec functions.
          *
          * execv style will strip const from char specifiers because
-         * historically there was no const and const cannot be tranparently
+         * historically there was no const and const cannot be transparently
          * added to indirect types.
          *
          * execl style need a char null pointer because they are variadic
@@ -484,7 +484,7 @@ do_sreboot(UR_OBJECT user)
         /*** run the background process..and die! ***/
         write_syslog(SYSLOG, 0, "BOOT: Exiting child process.\n");
         break;
-    default: /* parents thread ... put the childs pid to file, for reboot matching */
+    default: /* parents thread ... put the child's pid to file, for reboot matching */
         f = fopen(CHILDS_PID_FILE, "w");
         if (!f) {
             write_syslog(SYSLOG | ERRLOG, 0,
