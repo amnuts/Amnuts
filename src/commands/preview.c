@@ -48,7 +48,7 @@ preview(UR_OBJECT user)
             sprintf(text, "%-12.12s   ", dp->d_name);
             strcat(line, text);
             if (++cnt == 5) {
-                write_user(user, align_string(0, 78, 1, "|", "  %s", line));
+                write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "  %s", line));
                 *line = '\0';
                 cnt = 0;
             }
@@ -56,12 +56,12 @@ preview(UR_OBJECT user)
         closedir(dirp);
         if (total) {
             if (cnt) {
-                write_user(user, align_string(0, 78, 1, "|", "  %s", line));
+                write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "  %s", line));
             }
             write_user(user,
                     "+----------------------------------------------------------------------------+\n");
             write_user(user,
-                    align_string(0, 78, 1, "|", "  There are %d picture%s  ",
+                    align_string(ALIGN_LEFT, 78, 1, "|", "  There are %d picture%s  ",
                     total, PLTEXT_S(total)));
             write_user(user,
                     "+----------------------------------------------------------------------------+\n\n");

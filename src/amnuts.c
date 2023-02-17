@@ -6128,7 +6128,7 @@ login_who(UR_OBJECT user)
     write_user(user,
             "\n+----------------------------------------------------------------------------+\n");
     write_user(user,
-            align_string(1, 78, 0, NULL, "Current users %s", long_date(1)));
+            align_string(ALIGN_CENTRE, 78, 0, NULL, "Current users %s", long_date(1)));
     write_user(user,
             "+----------------------------------------------------------------------------+\n\n");
 
@@ -6161,12 +6161,12 @@ login_who(UR_OBJECT user)
     }
     if (!(on + invis)) {
         write_user(user,
-                align_string(1, 78, 0, NULL,
+                align_string(ALIGN_CENTRE, 78, 0, NULL,
                 "No users are currently logged on\n"));
     } else {
         write_user(user, "\n");
         write_user(user,
-                align_string(1, 78, 0, NULL,
+                align_string(ALIGN_CENTRE, 78, 0, NULL,
                 "%d user%s logged on, %d %s invis", on + invis,
                 PLTEXT_S(on + invis), invis, PLTEXT_IS(invis)));
     }

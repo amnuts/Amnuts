@@ -155,7 +155,7 @@ help_commands_level(UR_OBJECT user)
     write_user(user,
                "+----------------------------------------------------------------------------+\n");
     write_user(user,
-               align_string(1, 78, 1, "|",
+               align_string(ALIGN_CENTRE, 78, 1, "|",
                             "  Commands available to you (level ~OL%s~RS) ",
                             user_level[user->level].name));
     write_user(user,
@@ -184,7 +184,7 @@ help_commands_level(UR_OBJECT user)
             if (++cnt == 5) {
                 strcat(text, temp1);
                 strcat(text, "~RS");
-                write_user(user, align_string(0, 78, 1, "|", "%s", text));
+                write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "%s", text));
                 cnt = 0;
                 highlight = 0;
                 *text = '\0';
@@ -199,7 +199,7 @@ help_commands_level(UR_OBJECT user)
             sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
-            write_user(user, align_string(0, 78, 1, "|", "%s", text));
+            write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "%s", text));
     }
     /* count up total number of commands for user level */
     for (cmd = first_command; cmd; cmd = cmd->next) {
@@ -211,7 +211,7 @@ help_commands_level(UR_OBJECT user)
     write_user(user,
                "+----------------------------------------------------------------------------+\n");
     write_user(user,
-               align_string(0, 78, 1, "|",
+               align_string(ALIGN_LEFT, 78, 1, "|",
                             "  There is a total of ~OL%d~RS command%s that you can use ",
                             total, PLTEXT_S(total)));
     write_user(user,
@@ -239,7 +239,7 @@ help_commands_function(UR_OBJECT user)
     write_user(user,
                "+----------------------------------------------------------------------------+\n");
     write_user(user,
-               align_string(1, 78, 1, "|",
+               align_string(ALIGN_CENTRE, 78, 1, "|",
                             "  Commands available to you (level ~OL%s~RS) ",
                             user_level[user->level].name));
     write_user(user,
@@ -258,7 +258,7 @@ help_commands_function(UR_OBJECT user)
             }
             if (!found++) {
                 write_user(user,
-                           align_string(0, 78, 1, "|", "  ~OL~FG%s~RS ",
+                           align_string(ALIGN_LEFT, 78, 1, "|", "  ~OL~FG%s~RS ",
                                         command_types[function]));
                 strcpy(text, "     ");
             }
@@ -270,7 +270,7 @@ help_commands_function(UR_OBJECT user)
             if (++cnt == 5) {
                 strcat(text, temp1);
                 strcat(text, "~RS");
-                write_user(user, align_string(0, 78, 1, "|", "%s", text));
+                write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "%s", text));
                 cnt = 0;
                 *text = '\0';
             } else {
@@ -284,7 +284,7 @@ help_commands_function(UR_OBJECT user)
             sdsfree(temp1);
         }
         if (cnt > 0 && cnt < 5)
-            write_user(user, align_string(0, 78, 1, "|", "%s", text));
+            write_user(user, align_string(ALIGN_LEFT, 78, 1, "|", "%s", text));
     }
     /* count up total number of commands for user level */
     for (cmd = first_command; cmd; cmd = cmd->next) {
@@ -296,7 +296,7 @@ help_commands_function(UR_OBJECT user)
     write_user(user,
                "+----------------------------------------------------------------------------+\n");
     write_user(user,
-               align_string(0, 78, 1, "|",
+               align_string(ALIGN_LEFT, 78, 1, "|",
                             "  There is a total of ~OL%d~RS command%s that you can use ",
                             total, PLTEXT_S(total)));
     write_user(user,

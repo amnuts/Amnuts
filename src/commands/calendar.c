@@ -43,7 +43,7 @@ show_calendar(UR_OBJECT user)
     /* show calendar */
     write_user(user, "\n+-----------------------------------+\n");
     write_user(user,
-            align_string(1, 37, 1, "|", "~OL~FC%.4d %s~RS", yr,
+            align_string(ALIGN_CENTRE, 37, 1, "|", "~OL~FC%.4d %s~RS", yr,
             short_month_name[mo - 1]));
     write_user(user, "+-----------------------------------+\n");
     *temp = '\0';

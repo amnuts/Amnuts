@@ -75,7 +75,7 @@ grep_users(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     write_user(user,
-            align_string(0, 78, 1, "|",
+            align_string(ALIGN_LEFT, 78, 1, "|",
             "  ~OL%d~RS user%s had the pattern ~OL%s~RS ",
             found, PLTEXT_S(found), word[1]));
     write_user(user,

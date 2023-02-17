@@ -603,19 +603,16 @@ align_string(int pos, int cstrlen, int mark, const char *marker,
         return vtext;
     }
     switch (pos) {
-    case 0:
-        /* left align */
-        sprintf(text2, "%s%*.*s", vtext, (spc * 2) - odd, (spc * 2) - odd, "");
-        break;
-    case 1:
-        /* centre align */
-        sprintf(text2, "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd,
-                "");
-        break;
-    case 2:
-        /* right align */
-        sprintf(text2, "%*.*s%s", (spc * 2) - odd, (spc * 2) - odd, "", vtext);
-        break;
+        case ALIGN_LEFT:
+            sprintf(text2, "%s%*.*s", vtext, (spc * 2) - odd, (spc * 2) - odd, "");
+            break;
+        case ALIGN_CENTRE:
+            sprintf(text2, "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd,
+                    "");
+            break;
+        case ALIGN_RIGHT:
+            sprintf(text2, "%*.*s%s", (spc * 2) - odd, (spc * 2) - odd, "", vtext);
+            break;
     }
     strcpy(vtext, text2);
     /* if marked, then add spaces on the other side too */

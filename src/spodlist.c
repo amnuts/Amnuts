@@ -224,7 +224,7 @@ show_spodlist(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     write_user(user,
-            align_string(0, 78, 1, "|",
+            align_string(ALIGN_LEFT, 78, 1, "|",
             "  Positions %d to %d (out of %d users) ",
             start_pos, end_pos, listed));
     write_user(user,

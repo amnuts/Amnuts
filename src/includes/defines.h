@@ -124,6 +124,9 @@
 #define UFILE_WORD_LEN 255
 #define RECORD 1
 #define NORECORD 0
+#define ALIGN_LEFT 0
+#define ALIGN_CENTRE 1
+#define ALIGN_RIGHT 2
 
 
 /* netlink defines */

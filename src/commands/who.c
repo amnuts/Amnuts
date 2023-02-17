@@ -55,7 +55,7 @@ who(UR_OBJECT user, int type)
     write_user(user,
             "\n+----------------------------------------------------------------------------+\n");
     write_user(user,
-            align_string(1, 78, 0, NULL, "%sCurrent users %s",
+            align_string(ALIGN_CENTRE, 78, 0, NULL, "%sCurrent users %s",
             (user->login) ? "" : "~FG", long_date(1)));
     switch (type) {
     case 0:
@@ -186,13 +186,13 @@ who(UR_OBJECT user, int type)
         }
 #ifdef NETLINKS
         write_user(user,
-                align_string(1, 78, 0, NULL,
+                align_string(ALIGN_CENTRE, 78, 0, NULL,
                 "Total of ~OL~FG%d~RS user%s %s: ~OL~FC%d~RS visible, ~OL~FC%d~RS invisible, ~OL~FC%d~RS remote",
                 total, PLTEXT_S(total), type == 2 ? text : "",
                 amsys->num_of_users - invis, invis, remote));
 #else
         write_user(user,
-                align_string(1, 78, 0, NULL,
+                align_string(ALIGN_CENTRE, 78, 0, NULL,
                 "Total of ~OL~FG%d~RS user%s %s: ~OL~FC%d~RS visible, ~OL~FC%d~RS invisible",
                 total, PLTEXT_S(total), type == 2 ? text : "",
                 amsys->num_of_users - invis, invis));
@@ -200,7 +200,7 @@ who(UR_OBJECT user, int type)
         break;
     case 1:
         write_user(user,
-                align_string(1, 78, 0, NULL,
+                align_string(ALIGN_CENTRE, 78, 0, NULL,
                 "Total of ~OL~FG%d~RS friend%s : ~OL~FC%d~RS visible, ~OL~FC%d~RS invisible",
                 total, PLTEXT_S(total), total - invis, invis));
         break;
