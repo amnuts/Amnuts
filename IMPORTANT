@@ -13,7 +13,7 @@ the others before you make any changes.
 First off, support is only given through the GitHub site, where you can get the
 latest version, submit issues or request features, and so on.  The address is:
 
-    http://www.amnuts.net/
+    https://amnuts.net/
  or https://github.com/amnuts/Amnuts
 
 The main difference you will notice about this code and any of the previous
@@ -34,7 +34,7 @@ If you don't have all the software installed that's required for compiling,
 you can also compile and run via docker.  More information can be found in the
 'docs/docker' file.
 
-The ident deamon needs to be run separately.  This is because it's a separate 
+The ident daemon needs to be run separately.  This is because it's a separate
 program to the talker, compiled as its own executable.
 
 Remember to login initially with the username 'test' and the password 'test'.
@@ -53,5 +53,6 @@ you don't get a thorough response.
 
 
                                                              Andrew Collington
+                                                   The Amnuts Development Team
                                                                 February, 2023
 +-----------------------------------------------------------------------------+
