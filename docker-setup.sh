@@ -11,9 +11,9 @@ else
 fi
 
 CONFIG_FILE="$(pwd)/files/datafiles/config"
-MAIN_PORT=$(cat $CONFIG_FILE | grep "\bmainport\b" | awk '{ print $2 }')
-WIZ_PORT=$(cat $CONFIG_FILE | grep "\bwizport\b" | awk '{ print $2 }')
-LINK_PORT=$(cat $CONFIG_FILE | grep "\blinkport\b" | awk '{ print $2 }')
+MAIN_PORT=$(cat "$CONFIG_FILE" | grep "\bmainport\b" | awk '{ print $2 }')
+WIZ_PORT=$(cat "$CONFIG_FILE" | grep "\bwizport\b" | awk '{ print $2 }')
+LINK_PORT=$(cat "$CONFIG_FILE" | grep "\blinkport\b" | awk '{ print $2 }')
 
 cat << EOT > Dockerfile
 FROM ${OS_ARCH}/alpine
