@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -241,7 +240,7 @@ struct last_login_struct {
 };
 
 /*
- * room informaytion structure
+ * room information structure
  */
 struct room_struct {
     char name[ROOM_NAME_LEN + 1];

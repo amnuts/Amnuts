@@ -4,8 +4,8 @@
 #include "prototypes.h"
 
 /*
- * Reloads the description for one or all rooms--incase you have edited the
- * file and do not want to reboot the talker to to make the changes displayed
+ * Reloads the description for one or all rooms--in case you have edited the
+ * file and do not want to reboot the talker to make the changes displayed
  */
 void
 reload_room_description(UR_OBJECT user)

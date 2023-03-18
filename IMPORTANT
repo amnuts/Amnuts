@@ -1,6 +1,6 @@
 +-----------------------------------------------------------------------------+
-    IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT
-        Information for the running of a talker based on Amnuts
+     IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT - IMPORTANT
+          Information for the running of a talker based on Amnuts
 +-----------------------------------------------------------------------------+
 
 If you are installing this Amnuts version as a fresh talker, with no prior
@@ -10,11 +10,11 @@ upgrade your existing talker, or are going to use this code as your base and
 add bits from your existing talker, then it is vital you read this document and 
 the others before you make any changes.
 
-First off, support is only given through the websites, and not through private 
-email.  You can gain support through the main Amnuts website 
-(http://amnuts.talker.com/ or http://www.amnuts.org/), or if you are looking
-to submit bugs or get the latest updated files, then you can gain that through
-the developer's site (http://www.amnuts.net/).
+First off, support is only given through the GitHub site, where you can get the
+latest version, submit issues or request features, and so on.  The address is:
+
+    https://amnuts.net/
+ or https://github.com/amnuts/Amnuts
 
 The main difference you will notice about this code and any of the previous
 releases is that Amnuts now comes in many different files.  This means that if
@@ -30,7 +30,11 @@ More information can be found in the 'compiling' document, found in the 'docs'
 directory.  You should read the compiling document, and then have a look at the
 Makefile and familiarize yourself with it.
 
-The ident deamon needs to be run separately.  This is because it's a separate 
+If you don't have all the software installed that's required for compiling,
+you can also compile and run via docker.  More information can be found in the
+'docs/docker' file.
+
+The ident daemon needs to be run separately.  This is because it's a separate
 program to the talker, compiled as its own executable.
 
 Remember to login initially with the username 'test' and the password 'test'.
@@ -43,12 +47,12 @@ name changing command. :)
 The *MOST* important thing to remember though is; RTFM!!  Read the
 documents supplied with the distribution, look at the code, try something
 out.. Only then if that fails should you go asking questions on boards and
-such.  It also helps if you give an example of what you've tried too.
+such.  It also helps if you give an example of what you've tried, too.
 Bug reports I'm still up to receiving, but even then, don't be upset if
 you don't get a thorough response.
 
 
-                                                              Andrew Collington
-                                                    The Amnuts Development Team
-                                                                   August, 2003
+                                                             Andrew Collington
+                                                   The Amnuts Development Team
+                                                                February, 2023
 +-----------------------------------------------------------------------------+

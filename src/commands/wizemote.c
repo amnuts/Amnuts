@@ -5,7 +5,7 @@
 #include "prototypes.h"
 
 /*
- * Emote something to other wizes and gods. If the level isnt given it
+ * Emote something to other wizes and gods. If the level isn't given it
  * defaults to WIZ level.
  */
 void

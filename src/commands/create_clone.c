@@ -25,7 +25,7 @@ create_clone(UR_OBJECT user)
             return;
         }
     }
-    /* If room is private then nocando */
+    /* If room is private then no-can-do */
     if (!has_room_access(user, rm)) {
         write_user(user,
                 "That room is currently private, you cannot create a clone there.\n");

@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -15,6 +14,9 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "./vendors/sds/sds.h"
+#endif
 
 #ifdef NETLINKS
 /**************************************************************************/
@@ -1469,6 +1471,11 @@ release_nl(UR_OBJECT user)
 int
 action_nl(UR_OBJECT user, const char *command, const char *inpstr)
 {
+    sds text;
+
+    if (!user || user->type != REMOTE_TYPE) {
+        return 0;
+    }
     if (user->room) {
         return 0;
     }
@@ -1476,12 +1483,12 @@ action_nl(UR_OBJECT user, const char *command, const char *inpstr)
         command = "NL";
     }
     if (!inpstr || !*inpstr) {
-        sprintf(text, "%s %s %s\n", netcom[NLC_ACTION], user->name, command);
+        text = sdscatfmt(sdsempty(), "%s %s %s\n", netcom[NLC_ACTION], user->name, command);
     } else {
-        sprintf(text, "%s %s %s %s\n", netcom[NLC_ACTION], user->name, command,
-                inpstr);
+        text = sdscatfmt(sdsempty(), "%s %s %s %s\n", netcom[NLC_ACTION], user->name, command, inpstr);
     }
     write_sock(user->netlink->socket, text);
+    sdsfree(text);
     return 1;
 }
 

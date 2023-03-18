@@ -19,7 +19,7 @@ the form <map name>.map.
 Also the 2 ban files: sitebans and userbans are stored here which store
 banned sites and banned users.
 
-There is another directory in here, 'old_datafiles', just incase any of you
+There is another directory in here, 'old_datafiles', just in case any of you
 wanted the old rooms and config files.
 
 

@@ -34,7 +34,7 @@
 #define __SDS_H
 
 #define SDS_MAX_PREALLOC (1024*1024)
-const char *SDS_NOINIT;
+extern const char *SDS_NOINIT;
 
 #include <sys/types.h>
 #include <stdarg.h>
@@ -131,10 +131,10 @@ static inline void sdssetlen(sds s, size_t newlen) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
         case SDS_TYPE_5:
-            {
-                unsigned char *fp = ((unsigned char*)s)-1;
-                *fp = SDS_TYPE_5 | (newlen << SDS_TYPE_BITS);
-            }
+        {
+            unsigned char *fp = ((unsigned char*)s)-1;
+            *fp = SDS_TYPE_5 | (newlen << SDS_TYPE_BITS);
+        }
             break;
         case SDS_TYPE_8:
             SDS_HDR(8,s)->len = newlen;
@@ -155,11 +155,11 @@ static inline void sdsinclen(sds s, size_t inc) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
         case SDS_TYPE_5:
-            {
-                unsigned char *fp = ((unsigned char*)s)-1;
-                unsigned char newlen = SDS_TYPE_5_LEN(flags)+inc;
-                *fp = SDS_TYPE_5 | (newlen << SDS_TYPE_BITS);
-            }
+        {
+            unsigned char *fp = ((unsigned char*)s)-1;
+            unsigned char newlen = SDS_TYPE_5_LEN(flags)+inc;
+            *fp = SDS_TYPE_5 | (newlen << SDS_TYPE_BITS);
+        }
             break;
         case SDS_TYPE_8:
             SDS_HDR(8,s)->len += inc;

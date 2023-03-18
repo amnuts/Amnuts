@@ -53,7 +53,7 @@ change_pass(UR_OBJECT user)
         add_history(user->name, 1, "Changed passwords.\n");
         return;
     }
-    /* Change someone elses */
+    /* Change someone else's password */
     if (user->level < GOD) {
         write_user(user,
                 "You are not a high enough level to use the user option.\n");
@@ -63,7 +63,7 @@ change_pass(UR_OBJECT user)
     if (!strcmp(word[3], user->name)) {
         /*
            security feature  - prevents someone coming to a wizes terminal and
-           changing his password since he wont have to know the old one
+           changing their password since they won't have to know the old one
          */
         write_user(user,
                 "You cannot change your own password using the <user> option.\n");

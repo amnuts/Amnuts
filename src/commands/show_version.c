@@ -15,7 +15,7 @@ show_version(UR_OBJECT user)
 
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
-    write_user(user, align_string(1, 78, 1, "|", "~OL%s~RS", TALKER_NAME));
+    write_user(user, align_string(ALIGN_CENTRE, 78, 1, "|", "~OL%s~RS", TALKER_NAME));
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     vwrite_user(user,

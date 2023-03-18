@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -78,11 +77,11 @@ talker_shutdown(UR_OBJECT user, const char *str, int sdboot)
         /* If someone has changed the binary or the config filename while this
            prog has been running this will not work */
         /*
-         * XXX: ISO C and historical compatibility introduce anomolies for
+         * XXX: ISO C and historical compatibility introduce anomalies for
          * all exec functions.
          *
          * execv style will strip const from char specifiers because
-         * historically there was no const and const cannot be tranparently
+         * historically there was no const and const cannot be transparently
          * added to indirect types.
          *
          * execl style need a char null pointer because they are variadic
@@ -720,8 +719,8 @@ purge(int type, char *purge_site, int purge_days)
         strcpy(u->name, entry->name);
         if (!load_user_details(u)) {
             rem_user_node(u->name); /* get rid of name from userlist */
-            clean_files(u->name); /* just incase there are any odd files around */
-            clean_retire_list(u->name); /* just incase the user is retired */
+            clean_files(u->name); /* just in case there are any odd files around */
+            clean_retire_list(u->name); /* just in case the user is retired */
             destruct_user(u);
             destructed = 0;
             continue;

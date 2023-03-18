@@ -5,7 +5,7 @@
 
 /*
  * Create an account for a user if new users from their site have been
- * banned and they want to log on - you know they aint a trouble maker, etc
+ * banned, and they want to log on - you know they ain't a troublemaker, etc
  */
 void
 create_account(UR_OBJECT user)

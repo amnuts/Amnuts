@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -48,7 +47,7 @@ count_suggestions(void)
 }
 
 /*
- * work out how many motds are stored - if an motd file is deleted after
+ * work out how many motds are stored - if a motd file is deleted after
  * this count has been made then you need to recount them with the recount
  * command.  If you fail to do this and something buggers up because the count
  * is wrong then it is your own fault.
@@ -91,7 +90,7 @@ count_motds(int forcecnt)
 }
 
 /*
- * return a random number for an motd file - if 0 then return 1
+ * return a random number for a motd file - if 0 then return 1
  */
 int
 get_motd_num(int motd)
@@ -671,7 +670,7 @@ send_forward_email(char *send_to, char *mail_file, char *subject)
 #else
     // We must not run this on background, otherwise we never know if the mailer
     // will actually have time to read the mail_file before we remove it!
-    // Also: the subject must come before the recepient (otherwise recent mail
+    // Also: the subject must come before the recipient (otherwise recent mail
     // versions will refuse to send the mail).
     sprintf(text, "mail -s '%s' '%s' < %s", subject, send_to, mail_file);
     system(text);
@@ -864,7 +863,7 @@ check_board_wipe(UR_OBJECT user)
     }
     fclose(fp);
     s2 = colour_com_strip(w2);
-    /* lower case the name incase of recapping */
+    /* lower case the name i case of recapping */
     strtolower(s2);
     *s2 = toupper(*s2);
     if (strcmp(s2, user->name)) {
@@ -940,7 +939,7 @@ board_from(UR_OBJECT user)
 int
 get_wipe_parameters(UR_OBJECT user)
 {
-    /* get delete paramters */
+    /* get delete parameters */
     strtolower(word[1]);
     if (!strcmp(word[1], "all")) {
         user->wipe_from = -1;
@@ -976,7 +975,7 @@ get_wipe_parameters(UR_OBJECT user)
  * suggestions, etc. It works on the premise that every message is
  * seperated by a newline on a line by itself. And as all messages have
  * this form--no probs :) Just do not go screwing with how the messages
- * are stored and you will be ok :P
+ * are stored, and you will be ok :P
  *
  * from = message to start deleting at
  * to = message to stop deleting at (both inclusive)

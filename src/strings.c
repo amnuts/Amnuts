@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -388,8 +387,8 @@ is_number(const char *str)
 
 /*
  * Performs the same as strstr, in that it returns a pointer to the
- * first occurence of pat in str--except that this is performed case
- * insensitive
+ * first occurrence of pat in str--except that this is performed
+ * case-insensitive
  */
 char *
 istrstr(char *str, const char *pat)
@@ -425,7 +424,7 @@ istrstr(char *str, const char *pat)
 }
 
 /*
- * Take the string "inpstr" and replace any occurence of "old_str" with
+ * Take the string "inpstr" and replace any occurrence of "old_str" with
  * the string "new_str"
  */
 char *
@@ -531,7 +530,7 @@ long_date(int which)
 
 /*
  * takes string str and determines what smiley type it should have.  The type is then
- * stored in "type".  The smiley type is determind by the last 2 characters in str.
+ * stored in "type".  The smiley type is determined by the last 2 characters in str.
  */
 const char *
 smiley_type(const char *str)
@@ -582,17 +581,17 @@ smiley_type(const char *str)
  * mark=0, no markers on the left and right sides.  mark=1, markers in place
  */
 char *
-align_string(int pos, int cstrlen, int mark, const char *marker,
-        const char *str, ...)
+align_string(int pos, int cstrlen, int mark, const char *marker, const char *str, ...)
 {
     va_list args;
     char text2[ARR_SIZE * 2];
+    char vtext[ARR_SIZE];
     int len = 0, spc = 0, odd = 0;
 
     /* first build up the string */
     *vtext = '\0';
     va_start(args, str);
-    vsprintf(vtext, str, args);
+    vsnprintf(vtext, sizeof(vtext), str, args);
     va_end(args);
     /* get size */
     len = strlen(vtext) - teslen(vtext, 0);
@@ -600,29 +599,25 @@ align_string(int pos, int cstrlen, int mark, const char *marker,
     odd = ((spc + spc + len) - (cstrlen));
     /* if greater than size given then do not do anything except return */
     if (len > cstrlen) {
-        return vtext;
+        return strdup(vtext);
     }
     switch (pos) {
-    case 0:
-        /* left align */
-        sprintf(text2, "%s%*.*s", vtext, (spc * 2) - odd, (spc * 2) - odd, "");
-        break;
-    case 1:
-        /* centre align */
-        sprintf(text2, "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd,
-                "");
-        break;
-    case 2:
-        /* right align */
-        sprintf(text2, "%*.*s%s", (spc * 2) - odd, (spc * 2) - odd, "", vtext);
-        break;
+        case ALIGN_LEFT:
+            snprintf(text2, sizeof(text2), "%s%*.*s", vtext, (spc * 2) - odd, (spc * 2) - odd, "");
+            break;
+        case ALIGN_CENTRE:
+            snprintf(text2, sizeof(text2), "%*.*s%s%*.*s", spc, spc, "", vtext, spc - odd, spc - odd, "");
+            break;
+        case ALIGN_RIGHT:
+            snprintf(text2, sizeof(text2), "%*.*s%s", (spc * 2) - odd, (spc * 2) - odd, "", vtext);
+            break;
     }
     strcpy(vtext, text2);
     /* if marked, then add spaces on the other side too */
     if (mark) {
         /* if markers cannot be placed without over-writing text then return */
-        if (len > (cstrlen - 1)) {
-            return vtext;
+        if (len > (cstrlen - 2)) {
+            return strdup(vtext);
         }
         /* if they forgot to pass a marker, use a default one */
         if (!marker) {
@@ -630,16 +625,18 @@ align_string(int pos, int cstrlen, int mark, const char *marker,
         }
         *vtext = *marker;
         int index = 0;
-        if (strlen(vtext) > 0) index = strlen(vtext) - 1;
+        if (strlen(vtext) > 0) {
+            index = strlen(vtext) - 1;
+        }
         vtext[index] = *marker;
     }
     strcat(vtext, "\n");
-    return vtext;
+    return strdup(vtext);
 }
 
 /*
  * Check to see if the pattern "pat" appears in the string "str".
- * Uses recursion to acheive this
+ * Uses recursion to achieve this
  */
 int
 pattern_match(char *str, char *pat)

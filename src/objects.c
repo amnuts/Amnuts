@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -829,7 +828,7 @@ destruct_flagged_user_entry(UR_OBJECT user, FU_OBJECT fu)
 }
 
 /*
- * desctruct all nodes in flagged user linked list
+ * destruct all nodes in flagged user linked list
  */
 void
 destruct_all_flagged_users(UR_OBJECT user)
@@ -919,7 +918,7 @@ get_user(const char *name)
 }
 
 /*
- * Get user from abreviated name
+ * Get user from abbreviated name
  */
 UR_OBJECT
 get_user_name(UR_OBJECT user, const char *name)
@@ -1199,7 +1198,7 @@ destruct_review_buffer_entry(UR_OBJECT user, RB_OBJECT rb)
 }
 
 /*
- * desctruct all nodes in review buffer linked list
+ * destruct all nodes in review buffer linked list
  */
 void
 destruct_all_review_buffer(UR_OBJECT user)
@@ -1211,7 +1210,7 @@ destruct_all_review_buffer(UR_OBJECT user)
 }
 
 /*
- * desctruct all nodes of a certain type in review buffer linked list
+ * destruct all nodes of a certain type in review buffer linked list
  */
 void
 destruct_review_buffer_type(UR_OBJECT user, unsigned flags, int first)

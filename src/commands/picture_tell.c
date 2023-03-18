@@ -3,6 +3,9 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "../vendors/sds/sds.h"
+#endif
 
 /*
  * Displays a picture to a person
@@ -77,6 +80,7 @@ picture_tell(UR_OBJECT user)
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user, "Sorry, there is no picture with that name.\n");
+        sdsfree(filename);
         return;
     }
     fclose(fp);

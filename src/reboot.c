@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -453,7 +452,7 @@ do_sreboot(UR_OBJECT user)
 
     /*
      * here is where to add for any other syncing that needs to be done
-     * when your talker shutsdown... notes, etc
+     * when your talker shuts down... notes, etc
      */
 
     close_fds();
@@ -469,11 +468,11 @@ do_sreboot(UR_OBJECT user)
         break;
     case 0:
         /*
-         * XXX: ISO C and historical compatibility introduce anomolies for
+         * XXX: ISO C and historical compatibility introduce anomalies for
          * all exec functions.
          *
          * execv style will strip const from char specifiers because
-         * historically there was no const and const cannot be tranparently
+         * historically there was no const and const cannot be transparently
          * added to indirect types.
          *
          * execl style need a char null pointer because they are variadic
@@ -484,7 +483,7 @@ do_sreboot(UR_OBJECT user)
         /*** run the background process..and die! ***/
         write_syslog(SYSLOG, 0, "BOOT: Exiting child process.\n");
         break;
-    default: /* parents thread ... put the childs pid to file, for reboot matching */
+    default: /* parents thread ... put the child's pid to file, for reboot matching */
         f = fopen(CHILDS_PID_FILE, "w");
         if (!f) {
             write_syslog(SYSLOG | ERRLOG, 0,
@@ -639,7 +638,7 @@ void
 retrieve_users(void)
 {
     char name[USER_NAME_LEN], rmname[ROOM_NAME_LEN],
-            filename[USER_NAME_LEN + 15], line[ARR_SIZE * 3 + 1], *s;
+            filename[USER_NAME_LEN + STRLEN(REBOOTING_DIR) + 15], line[ARR_SIZE * 3 + 1], *s;
     struct user_struct spanky;
     FILE *f, *pf;
     UR_OBJECT u;

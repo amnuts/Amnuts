@@ -1,46 +1,38 @@
 +-----------------------------------------------------------------------------+
- README - README - README - README - README - README - README - README - README
-   Introductory information for the Unix talker code Amnuts
+     README - README - README - README - README - README - README - README
+              Introductory information for the Amnuts talker code
 +-----------------------------------------------------------------------------+
 
-Welcome to the Amnuts talker code, version 2.3.0!  Or, if you have already
-used Amnuts, then welcome back!  This is the latest version of Amnuts and MANY
-things have changed.
+Welcome to the Amnuts talker code!  Or, if you have already used Amnuts, then
+welcome back - it's good to still have you with us. :-)
 
-Amnuts development slowed down for a (long) while, but thanks to two people
-in particular, it managed to get back on track.  These people go by the handles
-'Ardant' and 'Uzume'.  Ardant supplied a CVS repository and bug tracking
-software for Amnuts, and Uzume and worked tirelessly in updating Amnuts and
-making it more stable.  Many thanks to both of them.
+It has been 20 years - yup, two whole decades - since this README was last
+updated, and, honestly, not much has changed in the world of Amnuts Talkers.
+The Golden Age of talkers has long past, though it's still awesome to see some
+die-hard fans still out there and keeping talkers alive (Marado's TalkerNode,
+for example).
 
-Because of the CVS and Bugzilla, a new website was set up for the development
-of the Amnuts talker code.  This can be found at:
+As for Amnuts, as you're undoubtedly aware, it's now available from GitHub.
+You can get there from:
 
-   http://www.amnuts.net/
+    https://amnuts.net/
+ or https://github.com/amnuts/Amnuts
 
-Instructions can be found there on how to use CVS and Bugzilla.  If you find
-any bugs with this version of Amnuts then it would be appreciated if you use
-Bugzilla to report them.  From the CVS repository you can download the latest
-files.
+You can submit issues and post up on the discussion board there.  Please feel
+free to fork and submit pull requests.
 
-The Amnuts code can be found, as always, at:
+To get started with Amnuts you'll need either a linux environment or you can
+use docker.  For further details, see the docs/docker and and other related
+files in the docs directory.
 
-   http://amnuts.talker.com/
+Lots of the documentation and files here haven't been updated for those same
+two decades, but hopefully one day they will be revived and revamped.  Until
+then, just head towards the wind and push on as best you can. ;-)
 
-or can now also be access via:
+Thanks for using Amnuts, and as you're here you must be interested in talkers,
+so thanks also for keeping those alive!  Enjoy!
 
-   http://www.amnuts.org/
-
-Please read the 'IMPORTANT' file, and the 'amnuts_changes' in the DOCs
-directory for more information on what changes have been made since
-version 2.2.1 (the previous release to this one) because there have been a
-LOT of them!  Even if you are a previous Amnuts user, programmer, owner,
-whatever - you should STILL READ THE FILES! :)
-
-Thanks for using Amnuts!  Enjoy!
-
-
-                                                              Andrew Collington
-                                                    The Amnuts Development Team
-                                                                   August, 2003
+                                                             Andrew Collington
+                                                   The Amnuts Development Team
+                                                                February, 2023
 +-----------------------------------------------------------------------------+
