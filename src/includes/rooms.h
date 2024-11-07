@@ -8,7 +8,7 @@
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
 
- ***************************************************************************
+ ***************************************************************************/
 
 #ifndef AMNUTS_ROOMS_H
 #define AMNUTS_ROOMS_H
