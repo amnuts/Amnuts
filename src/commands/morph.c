@@ -2,6 +2,9 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "../vendors/sds/sds.h"
+#endif
 
 /*
  * Change a user name from their existing one to whatever
@@ -126,7 +129,7 @@ change_user_name(UR_OBJECT user)
     /* change last_login info so that old name if offline */
     record_last_logout(oldname);
     record_last_login(newname);
-    /* all memory occurences should be done.  now do files */
+    /* all memory occurrences should be done.  now do files */
     oldfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, oldname);
     newfile = sdscatfmt(sdsempty(), "%s/%s.D", USERFILES, newname);
     rename(oldfile, newfile);

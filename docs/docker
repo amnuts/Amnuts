@@ -1,0 +1,56 @@
++------------------------------------------------------------------------------+
+ DOCKER - DOCKER - DOCKER - DOCKER - DOCKER - DOCKER - DOCKER - DOCKER - DOCKER
+                 Information on spinning up Amnuts with Docker
++------------------------------------------------------------------------------+
+
+The Docker setup for Amnuts is pretty new and probably doesn't cover all the
+needs you could want, and if you have to change things then you're pretty much
+on your own.  However, it could provide you a way to compile and run an Amnuts
+based talker without having all the GCC requirements installed... So long as
+you have bash and docker, you should be able to get up and running pretty easily.
+
+To start with, you'll need to run:
+
+    ./docker-startup.sh
+
+This will create the Dockerfile and docker-compose.yml files for your platform
+(amd64 or arm64v8 are supported).  If you make changes to the docker-startup.sh
+file or the accompanying supervisord.conf file, you'll need to remove the
+previously built image (assuming you have built one) and run the docker-setup
+file again.
+
+To compile the code, use the command:
+
+    docker-compose run --rm amnuts make install
+
+This will build the image if you haven't already, create a container, compile
+the talker, then remove the container.  Because all the files are mounted as a
+volume, you'll not lose any files when the container is removed.
+
+In fact, you can run any of the Makefile commands this way, eg:
+
+    docker-compose run --rm amnuts make distclean
+
+If you want to jump on the container itself, use:
+
+    docker-compose run --rm amnuts /bin/bash
+
+Once you have run the "make install" command, you can then start the talker
+with:
+
+    docker-compose run -d --service-ports amnuts
+
+This will run a container in the background with the Amnuts talker running.
+Supervisord is used to keep the process going.
+
+Alternatively, you can simply build the image with:
+
+    docker-compose build
+
+And then run it with:
+
+    docker-compose up
+
+The docker setup is in its early stages, so may well be adapted and changed
+over time.  Your mileage may vary.  Use your best judgement.  Try things out.
+Raise an issue or a pull request if you know a better way!

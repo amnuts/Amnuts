@@ -109,7 +109,7 @@ samesite(UR_OBJECT user, int stage)
         /* read userlist and check against all users */
         found = cnt = same = 0;
         for (entry = first_user_entry; entry; entry = entry->next) {
-            *entry->name = toupper(*entry->name); /* just incase */
+            *entry->name = toupper(*entry->name); /* just in case */
             /* create a user object if user not already logged on */
             u_loop = create_user();
             if (!u_loop) {

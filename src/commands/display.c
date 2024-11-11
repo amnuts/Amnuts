@@ -4,7 +4,7 @@
 #include "prototypes.h"
 
 /*
- * Display some files to the user.  This was once intergrated with the ".help" command,
+ * Display some files to the user.  This was once integrated with the ".help" command,
  * but due to the new processing that goes through it was moved into its own command.
  * The files listed are now stored in MISCFILES rather than HELPFILES as they may not
  * necessarily be for any help commands.

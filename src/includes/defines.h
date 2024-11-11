@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -49,19 +48,20 @@
 #define TALKER_NAME "Your Talker's Name Here"
 
 /* general directories */
-#define DATAFILES  "datafiles"
-#define HELPFILES  "helpfiles"
-#define MAILSPOOL  "mailspool"
-#define MISCFILES  "miscfiles"
-#define PICTFILES  "pictfiles"
-#define MOTDFILES  "motds"
-#define DUMPFILES  "dumpfiles"
-#define TEXTFILES  "textfiles"
-#define ADMINFILES "adminfiles"
-#define LOGFILES   "logfiles"
+#define BASE_STORAGE_DIR "files"
+#define ADMINFILES BASE_STORAGE_DIR "/adminfiles"
+#define DATAFILES  BASE_STORAGE_DIR "/datafiles"
+#define DUMPFILES  BASE_STORAGE_DIR "/dumpfiles"
+#define HELPFILES  BASE_STORAGE_DIR "/helpfiles"
+#define LOGFILES   BASE_STORAGE_DIR "/logfiles"
+#define MAILSPOOL  BASE_STORAGE_DIR "/mailspool"
+#define MISCFILES  BASE_STORAGE_DIR "/miscfiles"
+#define MOTDFILES  BASE_STORAGE_DIR "/motds"
+#define PICTFILES  BASE_STORAGE_DIR "/pictfiles"
+#define TEXTFILES  BASE_STORAGE_DIR "/textfiles"
 
 /* user directories */
-#define USERFILES     "userfiles"
+#define USERFILES     BASE_STORAGE_DIR "/userfiles"
 #define USERMAILS     "mail"
 #define USERPROFILES  "profiles"
 #define USERHISTORYS  "historys"
@@ -71,13 +71,13 @@
 #define USERREMINDERS "reminders"
 #define USERFLAGGED   "flagged"
 
-/* seemless reboot */
-#define REBOOTING_DIR           "reboot"
-#define USER_LIST_FILE          "reboot/_ulist"
-#define TALKER_SYSINFO_FILE     "reboot/_sysinfo"
-#define CHILDS_PID_FILE         "reboot/_child_pid"
-#define ROOM_LIST_FILE          "reboot/_rlist"
-#define LAST_USERS_FILE         "reboot/_last"
+/* seamless reboot */
+#define REBOOTING_DIR           BASE_STORAGE_DIR "/reboot"
+#define USER_LIST_FILE          REBOOTING_DIR "/_ulist"
+#define TALKER_SYSINFO_FILE     REBOOTING_DIR "/_sysinfo"
+#define CHILDS_PID_FILE         REBOOTING_DIR "/_child_pid"
+#define ROOM_LIST_FILE          REBOOTING_DIR "/_rlist"
+#define LAST_USERS_FILE         REBOOTING_DIR "/_last"
 
 /* files */
 #define CONFIGFILE   "config"
@@ -123,6 +123,9 @@
 #define UFILE_WORD_LEN 255
 #define RECORD 1
 #define NORECORD 0
+#define ALIGN_LEFT 0
+#define ALIGN_CENTRE 1
+#define ALIGN_RIGHT 2
 
 
 /* netlink defines */
@@ -174,7 +177,7 @@
 
 /*
  * some macros that are used in the code
- * these are for grammer
+ * these are for grammar
  */
 #define PLTEXT_S(n) ((1==(n))?"":"s")
 #define PLTEXT_ES(n) ((1==(n))?"":"es")
@@ -183,6 +186,8 @@
 #define SIZEOF(table) ((sizeof (table))/(sizeof *(table)))
 /* these are for bit manipulation */
 #define BIT(pos) (1L<<(pos))
+/* utils */
+#define STRLEN(s) (sizeof(s) / sizeof(s[0]) - 1)
 
 /* money code */
 #define DEFAULT_MONEY 1000

@@ -2,6 +2,9 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#ifndef __SDS_H
+#include "../vendors/sds/sds.h"
+#endif
 
 /*
  * let a user go into another user's personal room if it is unlocked

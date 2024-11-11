@@ -1,11 +1,10 @@
 /****************************************************************************
-         Amnuts version 2.3.0 - Copyright (C) Andrew Collington, 2003
-                      Last update: 2003-08-04
+             Amnuts - Copyright (C) Andrew Collington, 1996-2023
+                        Last update: Sometime in 2023
 
-                              amnuts@talker.com
-                          http://amnuts.talker.com/
+                   talker@amnuts.net - https://amnuts.net/
 
-                                   based on
+                                 based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
@@ -224,7 +223,7 @@ show_spodlist(UR_OBJECT user)
     write_user(user,
             "+----------------------------------------------------------------------------+\n");
     write_user(user,
-            align_string(0, 78, 1, "|",
+            align_string(ALIGN_LEFT, 78, 1, "|",
             "  Positions %d to %d (out of %d users) ",
             start_pos, end_pos, listed));
     write_user(user,

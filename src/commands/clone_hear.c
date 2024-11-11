@@ -5,7 +5,7 @@
 #include "prototypes.h"
 
 /*
- * Set what a clone will hear, either all speach , just bad language
+ * Set what a clone will hear, either all speech , just bad language
  * or nothing.
  */
 void

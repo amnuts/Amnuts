@@ -10,7 +10,7 @@
 void
 look(UR_OBJECT user)
 {
-    char temp[81];
+    sds temp, text = sdsempty();
     RM_OBJECT rm;
     UR_OBJECT u;
     int i, exits, users;
@@ -28,33 +28,33 @@ look(UR_OBJECT user)
         write_user(user, user->room->desc);
     }
     exits = 0;
-    strcpy(text, "\n~FCExits are:");
+    text = sdscpy(text, "\n~FCExits are:");
     for (i = 0; i < MAX_LINKS; ++i) {
         if (!rm->link[i]) {
             break;
         }
         if (is_private_room(rm->link[i])) {
-            sprintf(temp, "  ~FR%s", rm->link[i]->name);
+            temp = sdscatfmt(sdsempty(), "  ~FR%s", rm->link[i]->name);
         } else {
-            sprintf(temp, "  ~FG%s", rm->link[i]->name);
+            temp = sdscatfmt(sdsempty(), "  ~FG%s", rm->link[i]->name);
         }
-        strcat(text, temp);
+        text = sdscat(text, temp);
         ++exits;
     }
 #ifdef NETLINKS
     if (rm->netlink && rm->netlink->stage == UP) {
         if (rm->netlink->allow == IN) {
-            sprintf(temp, "  ~FR%s*", rm->netlink->service);
+            temp = sdscatfmt(sdsempty(), "  ~FR%s*", rm->netlink->service);
         } else {
-            sprintf(temp, "  ~FG%s*", rm->netlink->service);
+            temp = sdscatfmt(sdsempty(), "  ~FG%s*", rm->netlink->service);
         }
-        strcat(text, temp);
+        text = sdscat(text, temp);
     } else
 #endif
         if (!exits) {
-        strcpy(text, "\n~FCThere are no exits.");
-    }
-    strcat(text, "\n\n");
+            text = sdscpy(text, "\n~FCThere are no exits.");
+        }
+    text = sdscat(text, "\n\n");
     write_user(user, text);
     users = 0;
     for (u = user_first; u; u = u->next) {
@@ -71,33 +71,35 @@ look(UR_OBJECT user)
         write_user(user, "~FGYou are all alone here.\n");
     }
     write_user(user, "\n");
-    strcpy(text, "Access is ");
+    text = sdscpy(text, "Access is ");
     if (is_personal_room(rm)) {
         strcat(text, "personal ");
         if (is_private_room(rm)) {
-            strcat(text, "~FR(locked)~RS");
+            text = sdscat(text, "~FR(locked)~RS");
         } else {
-            strcat(text, "~FG(unlocked)~RS");
+            text = sdscat(text, "~FG(unlocked)~RS");
         }
     } else {
         if (is_fixed_room(rm)) {
-            strcat(text, "~FRfixed~RS to ");
+            text = sdscat(text, "~FRfixed~RS to ");
         } else {
-            strcat(text, "set to ");
+            text = sdscat(text, "set to ");
         }
         if (is_private_room(rm)) {
-            strcat(text, "~FRPRIVATE~RS");
+            text = sdscat(text, "~FRPRIVATE~RS");
         } else {
-            strcat(text, "~FGPUBLIC~RS");
+            text = sdscat(text, "~FGPUBLIC~RS");
         }
     }
-    sprintf(temp, " and there %s ~OL~FM%d~RS message%s on the board.\n",
+    temp = sdscatprintf(sdsempty(), " and there %s ~OL~FM%d~RS message%s on the board.\n",
             PLTEXT_IS(rm->mesg_cnt), rm->mesg_cnt, PLTEXT_S(rm->mesg_cnt));
-    strcat(text, temp);
+    text = sdscat(text, temp);
     write_user(user, text);
     if (*rm->topic) {
         vwrite_user(user, "~FG~OLCurrent topic:~RS %s\n", rm->topic);
     } else {
         write_user(user, "~FGNo topic has been set yet.\n");
     }
+    sdsfree(text);
+    sdsfree(temp);
 }

@@ -2,6 +2,14 @@
 .cproject
 .project
 .idea
+.vscode
 src/objects
-!src/objects/.gitignore
+!src/objects/.gitkeep
 compile_commands.json
+cmake-build-debug/
+docker-compose.yml
+Dockerfile
+amnutsIdent
+amnutsTalker
+supervisord.pid
+supervisord.log

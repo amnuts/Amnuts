@@ -5,7 +5,7 @@
 #include "prototypes.h"
 
 /*
- * Shout something to other wizes and gods. If the level isnt given it
+ * Shout something to other wizes and gods. If the level isn't given it
  * defaults to WIZ level.
  */
 void
@@ -40,7 +40,7 @@ wizshout(UR_OBJECT user, char *inpstr)
         }
         inpstr = remove_first(inpstr);
     }
-    /* Even wizzes cannot escapde the swear ban! MWHAHahaha.... ahem. */
+    /* Even wizzes cannot escape the swear ban! MWHAHahaha.... ahem. */
     switch (amsys->ban_swearing) {
     case SBMAX:
         if (contains_swearing(inpstr)) {
