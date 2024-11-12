@@ -28,12 +28,10 @@ telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data)
         /* data received */
         case TELNET_EV_DATA:
             handle_user_input(user, (char *)ev->data.buffer, ev->data.size);
-            telnet_negotiate(telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
-            telnet_negotiate(telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
             break;
         /* data must be sent */
         case TELNET_EV_SEND:
-            write_sock(user->socket, ev->data.buffer);
+            write_sock(user->socket, ev->data.buffer, ev->data.size);
             break;
         /* enable compress2 if accepted by client */
         case TELNET_EV_DO:
@@ -47,17 +45,6 @@ telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data)
             disconnect_user(user);
             break;
         /* ignore */
-        case TELNET_EV_IAC:
-        case TELNET_EV_WILL:
-        case TELNET_EV_WONT:
-        case TELNET_EV_DONT:
-        case TELNET_EV_SUBNEGOTIATION:
-        case TELNET_EV_COMPRESS:
-        case TELNET_EV_ZMP:
-        case TELNET_EV_TTYPE:
-        case TELNET_EV_ENVIRON:
-        case TELNET_EV_MSSP:
-        case TELNET_EV_WARNING:
         default:
             break;
     }

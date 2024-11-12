@@ -73,7 +73,11 @@ void parse_commands(void);
 void clean_files(char *);
 int remove_top_bottom(char *, int);
 int count_lines(char *);
-void write_sock(int, const char *);
+void write_sock(int s, const char *str);
+void write_sock_with_size(int s, const char *str, size_t length);
+void write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag);
+void write_telnet(telnet_t *t, const char *str);
+void write_telnet_with_size(telnet_t *t, const char *str, size_t length);
 void vwrite_user(UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_user(UR_OBJECT, const char *);

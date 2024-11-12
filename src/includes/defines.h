@@ -206,3 +206,10 @@
 #define rbfAFK     BIT(2)
 
 #endif
+
+/* macros for some variable length functions */
+#define write_sock(...) write_sock_dispatch(__VA_ARGS__, write_sock_with_size_and_flags, write_sock_with_size, write_sock)(__VA_ARGS__)
+#define write_sock_dispatch(_1, _2, _3, _4, NAME, ...) NAME
+
+#define write_telnet(...) write_telnet_dispatch(__VA_ARGS__, write_telnet_with_size, write_telnet)(__VA_ARGS__)
+#define write_telnet_dispatch(_1, _2, _3, NAME, ...) NAME

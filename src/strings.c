@@ -201,10 +201,7 @@ resolve_check(const char *wd)
 void
 echo_off(UR_OBJECT user)
 {
-    if (user->show_pass) {
-        return;
-    }
-    vwrite_user(user, "%c%c%c", '\xff', '\xfb', '\x01');
+    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
 }
 
 /*
@@ -213,10 +210,7 @@ echo_off(UR_OBJECT user)
 void
 echo_on(UR_OBJECT user)
 {
-    if (user->show_pass) {
-        return;
-    }
-    vwrite_user(user, "%c%c%c", '\xff', '\xfc', '\x01');
+    telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
 }
 
 /*

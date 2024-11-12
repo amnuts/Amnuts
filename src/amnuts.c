@@ -386,7 +386,7 @@ handle_user_input(UR_OBJECT user, char *inpstr, int len) {
        Deal with input chars. If the following if test succeeds we
        are dealing with a character mode client so call function.
      */
-    if (user->buffpos) {
+    if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
         if (!get_charclient_line(user, inpstr, len)) {
             return;
         }
@@ -861,10 +861,8 @@ accept_connection(int lsock)
     strcpy(user->site, hostname);
     strcpy(user->ipsite, hostaddr);
     sprintf(user->site_port, "%d", ntohs(sa.sin_port));
-    // echo_on(user);
-    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_COMPRESS2);
+    echo_on(user);
     write_user(user, "Give me a name: ");
-    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
     ++amsys->num_of_logins;
 #ifdef IDENTD
     if (amsys->resolve_ip == 3 && amsys->ident_state) {
@@ -3521,12 +3519,40 @@ count_lines(char *filename)
  *****************************************************************************/
 
 /*
- * Write a NULL terminated string to a socket
+ * Write a NULL terminated string to a socket.
  */
 void
 write_sock(int s, const char *str)
 {
     send(s, str, strlen(str), 0);
+}
+
+void
+write_sock_with_size(int s, const char *str, size_t length) {
+    send(s, str, length, 0);
+}
+
+void
+write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag) {
+    send(s, str, length, flag);
+}
+
+/*
+ * Write a string via libtelnet
+ */
+void
+write_telnet(telnet_t *t, const char *str)
+{
+    telnet_printf(t, str);
+}
+
+void
+write_telnet_with_size(telnet_t *t, const char *str, size_t length)
+{
+    sds buff;
+    buff = sdscatprintf(sdsempty(), "%.*s", (int)length, str);
+    telnet_printf(t, buff);
+    sdsfree(buff);
 }
 
 /*
@@ -3589,9 +3615,11 @@ write_user(UR_OBJECT user, const char *str)
         /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
-            //telnet_printf(user->telnet, "%s", buff);
-            //telnet_send(user->telnet, buff, strlen(buff));
-            send(user->socket, buff, buffpos, 0);
+            if (user->telnet) {
+                write_telnet(user->telnet, buff, buffpos);
+            } else {
+                write_sock(user->socket, buff, buffpos);
+            }
             buffpos = 0;
         }
         if (*s == '\n') {
@@ -3640,15 +3668,19 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
     if (buffpos) {
-        //telnet_printf(user->telnet, "%s", buff);
-        //telnet_send(user->telnet, buff, strlen(buff));
-        send(user->socket, buff, buffpos, 0);
+        if (user->telnet) {
+            write_telnet(user->telnet, buff, buffpos);
+        } else {
+            write_sock(user->socket, buff, buffpos, 0);
+        }
     }
     /* Reset terminal at end of string */
     if (user->colour) {
-        //telnet_printf(user->telnet, "%s", colour_codes[0].esc_code);
-        //telnet_send(user->telnet, buff, strlen(buff));
-        write_sock(user->socket, colour_codes[0].esc_code);
+        if (user->telnet) {
+            write_telnet(user->telnet, colour_codes[0].esc_code);
+        } else {
+            write_sock(user->socket, colour_codes[0].esc_code);
+        }
     }
 }
 
@@ -4158,7 +4190,11 @@ more(UR_OBJECT user, int sock, const char *filename)
         /* Process line from file */
         for (s = str; *s; ++s) {
             if (buffpos > OUT_BUFF_SIZE - (6 < USER_NAME_LEN ? USER_NAME_LEN : 6)) {
-                send(sock, buff, buffpos, 0);
+                if (user && user->telnet) {
+                    write_telnet(user->telnet, buff, buffpos);
+                } else {
+                    write_sock(sock, buff, buffpos, 0);
+                }
                 buffpos = 0;
             }
             if (*s == '\n') {
@@ -4219,7 +4255,11 @@ more(UR_OBJECT user, int sock, const char *filename)
         lines += len / SCREEN_WRAP + (len < SCREEN_WRAP);
     }
     if (buffpos && sock != -1) {
-        send(sock, buff, buffpos, 0);
+        if (user && user->telnet) {
+            write_telnet(user->telnet, buff, buffpos);
+        } else {
+            write_sock(sock, buff, buffpos, 0);
+        }
     }
     /* if user is logging on dont page file */
     if (!user) {
