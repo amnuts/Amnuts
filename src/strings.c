@@ -9,10 +9,10 @@
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
 
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "./includes/defines.h"
+#include "./includes/globals.h"
+#include "./includes/commands.h"
+#include "./includes/prototypes.h"
 
 /***************************************************************************/
 
@@ -201,10 +201,7 @@ resolve_check(const char *wd)
 void
 echo_off(UR_OBJECT user)
 {
-    if (user->show_pass) {
-        return;
-    }
-    vwrite_user(user, "%c%c%c", '\xff', '\xfb', '\x01');
+    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
 }
 
 /*
@@ -213,10 +210,7 @@ echo_off(UR_OBJECT user)
 void
 echo_on(UR_OBJECT user)
 {
-    if (user->show_pass) {
-        return;
-    }
-    vwrite_user(user, "%c%c%c", '\xff', '\xfc', '\x01');
+    telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
 }
 
 /*
@@ -949,4 +943,26 @@ word_time(int t)
     }
     *fill++ = '\0';
     return time_string;
+}
+
+/**
+ * Work around a problem with sending escapes through telnet_printf()
+ */
+const char *
+escape_percentages(UR_OBJECT user, const char *str)
+{
+    if (user && user->telnet) {
+    	sds escaped_str = sdsnew("");
+    	for (const char *p = str; *p != '\0'; ++p) {
+    	    if (*p == '%') {
+    	        escaped_str = sdscat(escaped_str, "%%");
+    	    } else {
+   		        escaped_str = sdscatlen(escaped_str, p, 1);
+        	}
+    	}
+        str = escaped_str;
+	    sdsfree(escaped_str);
+    }
+
+    return str;
 }

@@ -1,7 +1,7 @@
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
+#include "../includes/commands.h"
+#include "../includes/prototypes.h"
 
 /*
  * Direct a say to someone, even though the whole room can hear it

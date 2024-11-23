@@ -9,10 +9,10 @@
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
 
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "./includes/defines.h"
+#include "./includes/globals.h"
+#include "./includes/commands.h"
+#include "./includes/prototypes.h"
 
 /***************************************************************************/
 
@@ -374,6 +374,9 @@ destruct_user(UR_OBJECT user)
     }
 
     if (user) {
+        if (user->telnet) {
+            telnet_free(user->telnet);
+        }
         memset(user, 0, (sizeof *user));
         free(user);
         user = NULL;

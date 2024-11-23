@@ -39,6 +39,7 @@ extern "C" {
  * functions in amnuts230.c
  */
 int main(int, char **);
+void handle_user_input(UR_OBJECT user, char *inpstr, int len);
 void check_directories(void);
 int find_user_listed(const char *);
 int user_logged_on(const char *);
@@ -72,7 +73,11 @@ void parse_commands(void);
 void clean_files(char *);
 int remove_top_bottom(char *, int);
 int count_lines(char *);
-void write_sock(int, const char *);
+void write_sock(int s, const char *str);
+void write_sock_with_size(int s, const char *str, size_t length);
+void write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag);
+void write_telnet(telnet_t *t, const char *str);
+void write_telnet_with_size(telnet_t *t, const char *str, size_t length);
 void vwrite_user(UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_user(UR_OBJECT, const char *);
@@ -541,7 +546,7 @@ void show_spodlist(UR_OBJECT);
 
 
 /*
- * functions in strings.h
+ * functions in strings.c
  */
 int get_charclient_line(UR_OBJECT, char *, int);
 void terminate(char *);
@@ -576,5 +581,11 @@ void split_command_string(char *);
 size_t teslen(const char *, size_t);
 void get_soundex(const char *, char *);
 char *word_time(int);
+const char *escape_percentages(UR_OBJECT user, const char *str);
+
+/*
+ * functions in telnet.c
+ */
+void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data);
 
 #endif

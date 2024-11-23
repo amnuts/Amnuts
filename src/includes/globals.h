@@ -12,6 +12,8 @@
 #ifndef AMNUTS_GLOBALS_H
 #define AMNUTS_GLOBALS_H
 
+#include "../vendors/libtelnet/libtelnet.h"
+
 #define ML_ENTRY(a) ML_EXPAND a
 
 /* Levels */
@@ -229,6 +231,7 @@ struct user_struct {
     int money;
     int bank;
     int inctime;
+    telnet_t *telnet;
 };
 
 /*
