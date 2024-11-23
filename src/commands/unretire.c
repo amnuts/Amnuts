@@ -1,7 +1,7 @@
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
+#include "../includes/commands.h"
+#include "../includes/prototypes.h"
 
 /*
  * Unretire a user--i.e., put them back on show on the wizlist
