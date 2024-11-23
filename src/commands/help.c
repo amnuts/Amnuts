@@ -1,8 +1,8 @@
 
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
+#include "../includes/commands.h"
+#include "../includes/prototypes.h"
 
 /*
  * Show the list of commands, credits, and display the help files for the given command

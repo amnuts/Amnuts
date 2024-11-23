@@ -1,7 +1,7 @@
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
+#include "../includes/commands.h"
+#include "../includes/prototypes.h"
 
 /*
  * Display how many times a command has been used, and its overall
@@ -11,78 +11,72 @@ void
 show_command_counts(UR_OBJECT user)
 {
     CMD_OBJECT cmd;
-    int total_hits, total_cmds, cmds_used, i, x;
-    char text2[ARR_SIZE];
+    int total_hits = 0, total_cmds = 0, cmds_used = 0, i, x = 0;
 
-    x = i = total_hits = total_cmds = cmds_used = 0;
-    *text2 = '\0';
-    /* get totals of commands and hits */
     for (cmd = first_command; cmd; cmd = cmd->next) {
         total_hits += cmd->count;
         ++total_cmds;
     }
+
     start_pager(user);
     write_user(user,
-            "\n+----------------------------------------------------------------------------+\n");
+        "\n+----------------------------------------------------------------------------+\n");
     write_user(user,
-            "| ~FC~OLCommand usage statistics~RS                                                   |\n");
+        "| ~FC~OLCommand usage statistics~RS                                                   |\n");
     write_user(user,
-            "+----------------------------------------------------------------------------+\n");
+        "+----------------------------------------------------------------------------+\n");
+
+    sds row = sdsempty();
     for (cmd = first_command; cmd; cmd = cmd->next) {
-        /* skip if command has not been used so as not to cause crash by trying to / by 0 */
-        if (!cmd->count) {
+        if (cmd->count == 0 || cmd->level > user->level) {
             continue;
         }
         ++cmds_used;
-        /* skip if user cannot use that command anyway */
-        if (cmd->level > user->level) {
-            continue;
-        }
-        i = ((cmd->count * 10000) / total_hits);
-        /* build up first half of the string */
-        if (!x) {
-            sprintf(text, "| %11.11s %4d %3d%% ", cmd->name, cmd->count, i / 100);
+        i = (cmd->count * 10000) / total_hits;
+        sds entry = sdsempty();
+        entry = sdscatprintf(entry, "%12.12s %4d %3d%%", cmd->name, cmd->count, i / 100);
+
+        if (x == 0) {
+            row = sdscatprintf(row, "| %s ", entry);
             ++x;
-        }            /* build up full line and print to user */
-        else if (x == 1) {
-            sprintf(text2, "   %11.11s %4d %3d%%   ", cmd->name, cmd->count,
-                    i / 100);
-            strcat(text, text2);
-            write_user(user, text);
-            *text = '\0';
-            *text2 = '\0';
+        } else if (x == 1) {
+            row = sdscatprintf(row, "   %s ", entry);
             ++x;
         } else {
-            sprintf(text2, "   %11.11s %4d %3d%%  |\n", cmd->name, cmd->count,
-                    i / 100);
-            strcat(text, text2);
-            write_user(user, text);
-            *text = '\0';
-            *text2 = '\0';
+            row = sdscatprintf(row, "   %s |\n", entry);
+            write_user(user, row);
+            sdsfree(row);
+            row = sdsempty();
             x = 0;
         }
+        sdsfree(entry);
     }
-    /* If you have only printed first half of the string */
+
     if (x == 1) {
-        strcat(text, "                                                     |\n");
-        write_user(user, text);
+        row = sdscat(row, "                                                    |\n");
+        write_user(user, row);
+    } else if (x == 2) {
+        row = sdscat(row, "                          |\n");
+        write_user(user, row);
     }
-    if (x == 2) {
-        strcat(text, "                          |\n");
-        write_user(user, text);
-    }
+
+    sdsfree(row);
+
     write_user(user,
-            "|                                                                            |\n");
+        "|                                                                            |\n");
     write_user(user,
-            "| Any other commands have not yet been used, or you cannot view them         |\n");
+        "| Any other commands have not yet been used, or you cannot view them         |\n");
     write_user(user,
-            "+----------------------------------------------------------------------------+\n");
-    sprintf(text2,
-            "Total of ~OL%d~RS commands.    ~OL%d~RS command%s used a total of ~OL%d~RS time%s.",
-            total_cmds, cmds_used, PLTEXT_S(cmds_used), total_hits,
-            PLTEXT_S(total_hits));
-    vwrite_user(user, "| %-92s |\n", text2);
+        "+----------------------------------------------------------------------------+\n");
+
+    char *summary = sdscatprintf(sdsempty(),
+        "Total of ~OL%d~RS commands.    ~OL%d~RS command%s used a total of ~OL%d~RS time%s.",
+        total_cmds, cmds_used, PLTEXT_S(cmds_used), total_hits, PLTEXT_S(total_hits));
+    vwrite_user(user, "| %-92s |\n", summary);
+    sdsfree(summary);
+
     write_user(user,
-            "+----------------------------------------------------------------------------+\n");
+        "+----------------------------------------------------------------------------+\n");
+
     stop_pager(user);
 }

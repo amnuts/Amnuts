@@ -11,11 +11,11 @@
 
 #ifndef __MAIN_FILE__
 #define __MAIN_FILE__
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
-#include "telnet.h"
+#include "./includes/defines.h"
+#include "./includes/globals.h"
+#include "./includes/commands.h"
+#include "./includes/prototypes.h"
+#include "./includes/telnet.h"
 #undef __MAIN_FILE__
 #endif
 
@@ -2138,8 +2138,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occurred!\n");
             abort();
             break;
         case 1:
@@ -2177,8 +2177,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occurred!\n");
             abort();
             break;
         case 1:
@@ -2216,8 +2216,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occurred!\n");
             abort();
             break;
         case 1:
@@ -2255,8 +2255,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A bus error occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A bus error occurred!\n");
             abort();
             break;
         case 1:
@@ -3608,6 +3608,9 @@ write_user(UR_OBJECT user, const char *str)
             return;
         }
     }
+
+    str = escape_percentages(user, str);
+
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
@@ -4187,6 +4190,9 @@ more(UR_OBJECT user, int sock, const char *filename)
             continue;
         }
 #endif
+
+    	str = escape_percentages(user, str);
+
         /* Process line from file */
         for (s = str; *s; ++s) {
             if (buffpos > OUT_BUFF_SIZE - (6 < USER_NAME_LEN ? USER_NAME_LEN : 6)) {

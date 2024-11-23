@@ -1,8 +1,8 @@
 
-#include "defines.h"
-#include "globals.h"
-#include "commands.h"
-#include "prototypes.h"
+#include "../includes/defines.h"
+#include "../includes/globals.h"
+#include "../includes/commands.h"
+#include "../includes/prototypes.h"
 
 /*
  * no longer invite a user to the room you are in if you invited them
