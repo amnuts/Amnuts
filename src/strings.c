@@ -944,3 +944,25 @@ word_time(int t)
     *fill++ = '\0';
     return time_string;
 }
+
+/**
+ * Work around a problem with sending escapes through telnet_printf()
+ */
+const char *
+escape_percentages(UR_OBJECT user, const char *str)
+{
+    if (user && user->telnet) {
+    	sds escaped_str = sdsnew("");
+    	for (const char *p = str; *p != '\0'; ++p) {
+    	    if (*p == '%') {
+    	        escaped_str = sdscat(escaped_str, "%%");
+    	    } else {
+   		        escaped_str = sdscatlen(escaped_str, p, 1);
+        	}
+    	}
+        str = escaped_str;
+	    sdsfree(escaped_str);
+    }
+
+    return str;
+}

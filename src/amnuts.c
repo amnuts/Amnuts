@@ -3608,6 +3608,9 @@ write_user(UR_OBJECT user, const char *str)
             return;
         }
     }
+
+    str = escape_percentages(user, str);
+
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
@@ -4187,6 +4190,9 @@ more(UR_OBJECT user, int sock, const char *filename)
             continue;
         }
 #endif
+
+    	str = escape_percentages(user, str);
+
         /* Process line from file */
         for (s = str; *s; ++s) {
             if (buffpos > OUT_BUFF_SIZE - (6 < USER_NAME_LEN ? USER_NAME_LEN : 6)) {
@@ -4289,7 +4295,7 @@ more(UR_OBJECT user, int sock, const char *filename)
            quit the user
          */
         vwrite_user(user,
-                "~BB~FG-=[~OL%d%%%%~RS~BB~FG]=- (~OLR~RS~BB~FG)EDISPLAY, (~OLB~RS~BB~FG)ACK, (~OLE~RS~BB~FG)XIT, <RETURN> TO CONTINUE:~RS ",
+                "~BB~FG-=[~OL%d%%~RS~BB~FG]=- (~OLR~RS~BB~FG)EDISPLAY, (~OLB~RS~BB~FG)ACK, (~OLE~RS~BB~FG)XIT, <RETURN> TO CONTINUE:~RS ",
                 fstat(fileno(fp), &stbuf) == -1
                 ? -1 : (100 * user->filepos) / (int) stbuf.st_size);
         no_prompt = 1;

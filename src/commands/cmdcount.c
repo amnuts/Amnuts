@@ -34,7 +34,7 @@ show_command_counts(UR_OBJECT user)
         ++cmds_used;
         i = (cmd->count * 10000) / total_hits;
         sds entry = sdsempty();
-        entry = sdscatprintf(entry, "%12.12s %4d %3d%%%%", cmd->name, cmd->count, i / 100);
+        entry = sdscatprintf(entry, "%12.12s %4d %3d%%", cmd->name, cmd->count, i / 100);
 
         if (x == 0) {
             row = sdscatprintf(row, "| %s ", entry);
