@@ -337,7 +337,7 @@ void nl_granted(NL_OBJECT nl, char *name);
 void nl_denied(NL_OBJECT nl, char *name, char *inpstr);
 void nl_mesg(NL_OBJECT nl, char *name);
 void nl_prompt(NL_OBJECT nl, char *name);
-void nl_verification(NL_OBJECT nl, char *w2, char *w3, int com);
+void nl_verification(NL_OBJECT *nl, char *w2, char *w3, int com);
 void nl_removed(NL_OBJECT nl, char *name);
 void nl_error(NL_OBJECT nl);
 void nl_checkexist(NL_OBJECT nl, char *to, char *from);

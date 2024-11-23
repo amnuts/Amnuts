@@ -4825,7 +4825,7 @@ connect_user(UR_OBJECT user)
             destruct_user(user);
             --amsys->num_of_logins;
 #ifdef NETLINKS
-            if (!action_nl(user, "look", NULL))
+            if (!action_nl(u, "look", NULL))
 #endif
             {
                 look(u);

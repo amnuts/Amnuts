@@ -468,10 +468,10 @@ exec_netcom(NL_OBJECT nl, char *inpstr)
             nl_prompt(nl, w2);
             break;
         case NLC_VERIFICATION:
-            nl_verification(nl, w2, w3, 0);
+            nl_verification(&nl, w2, w3, 0);
             break;
         case NLC_VERIFY:
-            nl_verification(nl, w2, w3, 1);
+            nl_verification(&nl, w2, w3, 1);
             break;
         case NLC_REMOVED:
             nl_removed(nl, w2);
@@ -513,7 +513,7 @@ exec_netcom(NL_OBJECT nl, char *inpstr)
         }
     NEXT_LINE:
         /* See if link has closed */
-        if (nl->type == UNCONNECTED) {
+        if (!nl || nl->type == UNCONNECTED) {
             return;
         }
         c[1] = ctemp;
@@ -887,14 +887,16 @@ nl_prompt(NL_OBJECT nl, char *name)
  * Verification received from remote site
  */
 void
-nl_verification(NL_OBJECT nl, char *w2, char *w3, int com)
+nl_verification(NL_OBJECT *nl_ptr, char *w2, char *w3, int com)
 {
+    NL_OBJECT nl = *nl_ptr;
     NL_OBJECT nl2;
 
     if (!com) {
         /* We are verifiying a remote site */
         if (!*w2) {
             shutdown_netlink(nl);
+            *nl_ptr = NULL;
             return;
         }
         for (nl2 = nl_first; nl2; nl2 = nl2->next) {
@@ -929,6 +931,7 @@ nl_verification(NL_OBJECT nl, char *w2, char *w3, int com)
         sprintf(text, "%s BAD\n", netcom[NLC_VERIFY]);
         write_sock(nl->socket, text);
         shutdown_netlink(nl);
+        *nl_ptr = NULL;
         return;
     }
 
@@ -938,20 +941,20 @@ nl_verification(NL_OBJECT nl, char *w2, char *w3, int com)
                 "NETLINK: Connection to %s has bad verification.\n",
                 nl->service);
         /* Let wizes know its failed, may be wiz initiated */
-        sprintf(text,
-                "~OLSYSTEM:~RS Connection to %s failed, bad verification.\n",
-                nl->service);
         vwrite_level((enum lvl_value) command_table[CONN].level, 1, NORECORD,
                 NULL,
                 "~OLSYSTEM:~RS Connection to %s failed, bad verification.\n",
                 nl->service);
         shutdown_netlink(nl);
+        *nl_ptr = NULL;
         return;
     }
     if (strcmp(w2, "OK")) {
         write_syslog(NETLOG, 1, "NETLINK: Unknown verify return code from %s.\n",
                 nl->service);
         shutdown_netlink(nl);
+        *nl_ptr = NULL;
+        return;
     }
     /* Set link permissions */
     if (!strcmp(w3, "OUT")) {
