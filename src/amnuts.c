@@ -4289,7 +4289,7 @@ more(UR_OBJECT user, int sock, const char *filename)
            quit the user
          */
         vwrite_user(user,
-                "~BB~FG-=[~OL%d%%~RS~BB~FG]=- (~OLR~RS~BB~FG)EDISPLAY, (~OLB~RS~BB~FG)ACK, (~OLE~RS~BB~FG)XIT, <RETURN> TO CONTINUE:~RS ",
+                "~BB~FG-=[~OL%d%%%%~RS~BB~FG]=- (~OLR~RS~BB~FG)EDISPLAY, (~OLB~RS~BB~FG)ACK, (~OLE~RS~BB~FG)XIT, <RETURN> TO CONTINUE:~RS ",
                 fstat(fileno(fp), &stbuf) == -1
                 ? -1 : (100 * user->filepos) / (int) stbuf.st_size);
         no_prompt = 1;
