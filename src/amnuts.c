@@ -3609,12 +3609,12 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
 
-    str = escape_percentages(user, str);
+    sds escaped_str = escape_percentages(user, str);
 
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
-    for (s = str; *s; ++s) {
+    for (s = escaped_str; *s; ++s) {
         /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
@@ -3685,6 +3685,8 @@ write_user(UR_OBJECT user, const char *str)
             write_sock(user->socket, colour_codes[0].esc_code);
         }
     }
+
+    sdsfree(escaped_str);
 }
 
 void

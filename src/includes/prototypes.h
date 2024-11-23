@@ -581,7 +581,7 @@ void split_command_string(char *);
 size_t teslen(const char *, size_t);
 void get_soundex(const char *, char *);
 char *word_time(int);
-const char *escape_percentages(UR_OBJECT user, const char *str);
+sds escape_percentages(UR_OBJECT user, const char *str);
 
 /*
  * functions in telnet.c
