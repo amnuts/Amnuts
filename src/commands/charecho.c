@@ -1,8 +1,8 @@
 
-#include "../includes/defines.h"
-#include "../includes/globals.h"
-#include "../includes/commands.h"
-#include "../includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
 
 /*
  * Set the character mode echo on or off. This is only for users logging in

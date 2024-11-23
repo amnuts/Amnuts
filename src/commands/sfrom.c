@@ -1,7 +1,7 @@
-#include "../includes/defines.h"
-#include "../includes/globals.h"
-#include "../includes/commands.h"
-#include "../includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
 
 /*
  * Show list of people suggestions are from without seeing the whole lot

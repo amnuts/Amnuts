@@ -9,11 +9,11 @@
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
 
-#include "./includes/defines.h"
-#include "./includes/globals.h"
-#include "./includes/commands.h"
-#include "./includes/spodlist.h"
-#include "./includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "spodlist.h"
+#include "prototypes.h"
 
 /***************************************************************************
 

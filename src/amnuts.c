@@ -11,11 +11,11 @@
 
 #ifndef __MAIN_FILE__
 #define __MAIN_FILE__
-#include "./includes/defines.h"
-#include "./includes/globals.h"
-#include "./includes/commands.h"
-#include "./includes/prototypes.h"
-#include "./includes/telnet.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
+#include "telnet.h"
 #undef __MAIN_FILE__
 #endif
 

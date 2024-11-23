@@ -1,7 +1,7 @@
-#include "../includes/defines.h"
-#include "../includes/globals.h"
-#include "../includes/commands.h"
-#include "../includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
 
 /*
  * Allows a user to alter the minimum level which can use the command given

@@ -1,8 +1,8 @@
 
-#include "../includes/defines.h"
-#include "../includes/globals.h"
-#include "../includes/commands.h"
-#include "../includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
 
 /*
  * Stop a user from using the go command and leaving the room they are currently in

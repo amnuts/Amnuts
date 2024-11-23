@@ -1,8 +1,8 @@
 
-#include "../includes/defines.h"
-#include "../includes/globals.h"
-#include "../includes/commands.h"
-#include "../includes/prototypes.h"
+#include "defines.h"
+#include "globals.h"
+#include "commands.h"
+#include "prototypes.h"
 
 /*
  * Show the wizzes that are currently logged on, and get a list of names from the lists saved
