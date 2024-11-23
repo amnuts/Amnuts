@@ -2138,8 +2138,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occurred!\n");
             abort();
             break;
         case 1:
@@ -2177,8 +2177,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occurred!\n");
             abort();
             break;
         case 1:
@@ -2216,8 +2216,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occurred!\n");
             abort();
             break;
         case 1:
@@ -2255,8 +2255,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A bus error occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A bus error occurred!\n");
             abort();
             break;
         case 1:

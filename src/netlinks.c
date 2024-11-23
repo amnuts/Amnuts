@@ -1095,11 +1095,11 @@ nl_user_exist(NL_OBJECT nl, char *to, char *from)
         user = get_user(from);
         if (user) {
             sprintf(text,
-                    "~OLSYSTEM:~RS An error occured during mail delivery to %s@%s.\n",
+                    "~OLSYSTEM:~RS An error occurred during mail delivery to %s@%s.\n",
                     to, nl->service);
             write_user(user, text);
         } else {
-            sprintf(text2, "An error occured during mail delivery to %s@%s.\n", to,
+            sprintf(text2, "An error occurred during mail delivery to %s@%s.\n", to,
                     nl->service);
             send_mail(NULL, from, text2, 0);
         }
@@ -1224,7 +1224,7 @@ nl_endmail(NL_OBJECT nl)
 }
 
 /*
- * An error occured at remote site
+ * An error occurred at remote site
  */
 void
 nl_mailerror(NL_OBJECT nl, char *to, char *from)
@@ -1234,11 +1234,11 @@ nl_mailerror(NL_OBJECT nl, char *to, char *from)
     user = get_user(from);
     if (user) {
         sprintf(text,
-                "~OLSYSTEM:~RS An error occured during mail delivery to %s@%s.\n",
+                "~OLSYSTEM:~RS An error occurred during mail delivery to %s@%s.\n",
                 to, nl->service);
         write_user(user, text);
     } else {
-        sprintf(text, "An error occured during mail delivery to %s@%s.\n", to,
+        sprintf(text, "An error occurred during mail delivery to %s@%s.\n", to,
                 nl->service);
         send_mail(NULL, from, text, 0);
     }
