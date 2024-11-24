@@ -3543,7 +3543,7 @@ write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag) 
 void
 write_telnet(telnet_t *t, const char *str)
 {
-    telnet_printf(t, str);
+    telnet_printf(t, "%s", str);
 }
 
 void
@@ -3551,7 +3551,7 @@ write_telnet_with_size(telnet_t *t, const char *str, size_t length)
 {
     sds buff;
     buff = sdscatprintf(sdsempty(), "%.*s", (int)length, str);
-    telnet_printf(t, buff);
+    write_telnet(t, buff);
     sdsfree(buff);
 }
 

@@ -335,7 +335,7 @@ build_ident_info(void)
 void
 close_fds(void)
 {
-    int i, d = 0;
+    int i;
     UR_OBJECT u;
 
     /* FIXME: use sysconf(_SC_OPEN_MAX) */
@@ -366,9 +366,8 @@ close_fds(void)
         if (u) {
             continue;
         }
-        if (!close(i)) {
-            ++d;
-        }
+
+        close(i);
     }
 }
 
