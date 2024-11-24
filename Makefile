@@ -4,8 +4,8 @@
 BINDIR          = $(CURDIR)/build
 INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
-CC              = gcc
-C_FLAGS         = -g -Wall -W -MMD
+CC              = clang
+C_FLAGS         = -g -Wall -Wextra -MMD
 CC_FLAGS        = -I$(INCDIR)
 LD_FLAGS        =
 

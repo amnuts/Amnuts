@@ -1,24 +1,14 @@
 #!/usr/bin/env bash
 
-MACHINE=$(uname -m)
-if [ "$MACHINE" == "x86_64" ] || [ "$MACHINE" == "i686" ]; then
-    OS_ARCH="amd64"
-elif [ "$MACHINE" == "aarch64" ] || [ "$MACHINE" == "arm64" ]; then
-    OS_ARCH="arm64v8"
-else
-    OS_ARCH="amd64"
-    echo "Unknown platform - falling back to amd64"
-fi
-
 CONFIG_FILE="$(pwd)/files/datafiles/config"
 MAIN_PORT=$(grep "\bmainport\b" "$CONFIG_FILE" | awk '{ print $2 }')
 WIZ_PORT=$(grep "\bwizport\b" "$CONFIG_FILE" | awk '{ print $2 }')
 LINK_PORT=$(grep "\blinkport\b" "$CONFIG_FILE" | awk '{ print $2 }')
 
 cat << EOT > Dockerfile
-FROM ${OS_ARCH}/alpine
+FROM alpine:latest
 
-RUN apk add build-base supervisor bash busybox-extras gdb
+RUN apk add --no-cache build-base bash busybox-extras clang gdb lldb supervisor
 COPY supervisord.conf /etc/supervisord.conf
 
 WORKDIR /amnuts
