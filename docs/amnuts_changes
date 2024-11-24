@@ -3,6 +3,24 @@
         Information on the changes between different version of Amnuts
 +------------------------------------------------------------------------------+
 
+2.5.0
+-----
+
+Added libtelnet vendor library to help with telnet negotiation
+Added workaround to libtelnet to be able to use the '%' symbol in speech :)
+
+Updated the cmdcount command code to make it better
+
+Fixed display bug in the preview command
+
+2.4.0
+-----
+
+Almost all of the commands have been moved to their own files, so a fair bit of reworking structure
+Added the SDS vendor library to start marking string copying/formatting/sizes a little safer, and made a start on that (long, long) journey
+A docker setup has been added for those who want to run or compile Amnuts in a container
+Various typos fixed
+Some docs updated
 
 2.3.0
 -----
