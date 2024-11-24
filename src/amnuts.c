@@ -3543,7 +3543,7 @@ write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag) 
 void
 write_telnet(telnet_t *t, const char *str)
 {
-    telnet_printf(t, str);
+    telnet_printf(t, "%s", str);
 }
 
 void
@@ -3551,7 +3551,7 @@ write_telnet_with_size(telnet_t *t, const char *str, size_t length)
 {
     sds buff;
     buff = sdscatprintf(sdsempty(), "%.*s", (int)length, str);
-    telnet_printf(t, buff);
+    write_telnet(t, buff);
     sdsfree(buff);
 }
 
@@ -3609,12 +3609,12 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
 
-    str = escape_percentages(user, str);
+    sds escaped_str = escape_percentages(user, str);
 
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
-    for (s = str; *s; ++s) {
+    for (s = escaped_str; *s; ++s) {
         /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
@@ -3685,6 +3685,8 @@ write_user(UR_OBJECT user, const char *str)
             write_sock(user->socket, colour_codes[0].esc_code);
         }
     }
+
+    sdsfree(escaped_str);
 }
 
 void
@@ -4823,7 +4825,7 @@ connect_user(UR_OBJECT user)
             destruct_user(user);
             --amsys->num_of_logins;
 #ifdef NETLINKS
-            if (!action_nl(user, "look", NULL))
+            if (!action_nl(u, "look", NULL))
 #endif
             {
                 look(u);

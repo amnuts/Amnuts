@@ -337,7 +337,7 @@ void nl_granted(NL_OBJECT nl, char *name);
 void nl_denied(NL_OBJECT nl, char *name, char *inpstr);
 void nl_mesg(NL_OBJECT nl, char *name);
 void nl_prompt(NL_OBJECT nl, char *name);
-void nl_verification(NL_OBJECT nl, char *w2, char *w3, int com);
+void nl_verification(NL_OBJECT *nl, char *w2, char *w3, int com);
 void nl_removed(NL_OBJECT nl, char *name);
 void nl_error(NL_OBJECT nl);
 void nl_checkexist(NL_OBJECT nl, char *to, char *from);
@@ -581,7 +581,7 @@ void split_command_string(char *);
 size_t teslen(const char *, size_t);
 void get_soundex(const char *, char *);
 char *word_time(int);
-const char *escape_percentages(UR_OBJECT user, const char *str);
+sds escape_percentages(UR_OBJECT user, const char *str);
 
 /*
  * functions in telnet.c
