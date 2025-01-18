@@ -57,5 +57,4 @@ resite(UR_OBJECT user)
     sprintf(text, "Refreshed site lookup for \"%s\".\n", u->name);
     write_user(user, text);
 }
-
 #endif

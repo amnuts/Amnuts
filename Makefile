@@ -4,8 +4,14 @@
 BINDIR          = $(CURDIR)/build
 INCDIR          = $(CURDIR)/src/includes
 PERMS           = 755
-CC              = gcc
-C_FLAGS         = -g -Wall -W -MMD
+CC              = clang
+# -std=gnu23 = Use the C23 standard with GNU extras
+# -g         = Add debugging information to the executable
+# -Wall      = Enable all compiler warnings
+# -Wextra    = Extra warnings not covered by the above
+# -MMD       = Generate dependency files
+# -Wpedantic = Be pedantic about the code
+C_FLAGS         = -std=gnu23 -g -Wall -Wextra -MMD -Wpedantic
 CC_FLAGS        = -I$(INCDIR)
 LD_FLAGS        =
 
