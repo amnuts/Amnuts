@@ -98,4 +98,3 @@ wipe_board(UR_OBJECT user)
     write_syslog(SYSLOG, 1, "%s wiped %d message%s from the board in the %s.\n",
             user->name, cnt, PLTEXT_S(cnt), rm->name);
 }
-
