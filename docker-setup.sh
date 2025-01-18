@@ -20,7 +20,6 @@ CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 EOT
 
 cat << EOT > docker-compose.yml
-version: "3"
 services:
   amnuts:
     build: ./
