@@ -71,8 +71,8 @@ create_account(UR_OBJECT user)
         strcpy(u->pass, crypt(word[2], crypt_salt));
         strcpy(u->recap, u->name);
         strcpy(u->desc, "is a newbie");
-        strcpy(u->in_phrase, "wanders in.");
-        strcpy(u->out_phrase, "wanders out");
+        strcpy(u->in_phrase, "enters");
+        strcpy(u->out_phrase, "goes");
         strcpy(u->last_site, "created_account");
         strcpy(u->site, u->last_site);
         strcpy(u->logout_room, "<none>");
