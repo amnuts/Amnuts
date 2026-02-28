@@ -206,6 +206,6 @@ write_apager(UR_OBJECT user)
     amsys->is_pager = 1;
     vwrite_user(user,
             "~OL~FG-=[%d/%d] (~RS~OLE~FG)xit, (~RS~OLR~FG)edisplay, (~RS~OLB~FG)ack, (~RS~OLT~FG)op, <return> to continue ]~RS ",
-            ++user->pm_currcount, (int) (user->pm_count / user->pager) + 1);
+            ++user->pm_currcount, (int) (user->pm_count / effective_pager(user)) + 1);
     amsys->is_pager = 0;
 }

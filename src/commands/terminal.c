@@ -33,5 +33,5 @@ show_terminal(UR_OBJECT user)
     vwrite_user(user, "Word wrap     : %s (width %d)\n", user->wrap ? "on" : "off", effective_wrap(user));
     vwrite_user(user, "Colour        : %s\n", user->colour ? "on" : "off");
     vwrite_user(user, "Char echo     : %s\n", user->charmode_echo ? "on" : "off");
-    write_user(user, "\n\n+----------------------------------------------------------------------------+\n\n");
+    write_user(user, "\n+----------------------------------------------------------------------------+\n\n");
 }

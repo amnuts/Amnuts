@@ -876,6 +876,10 @@ accept_connection(int lsock)
      */
     telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
     user->charmode_echo = 1;
+    /* proactively request terminal size and type from the client so the
+       values are available by the time the user finishes authenticating */
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_NAWS);
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_TTYPE);
     write_user(user, "Give me a name: ");
     ++amsys->num_of_logins;
 #ifdef IDENTD
@@ -4341,7 +4345,7 @@ more_users(UR_OBJECT user)
             /* skip to the position of the page in the user data */
             continue;
         }
-        if (lines++ >= user->pager) {
+        if (lines++ >= effective_pager(user)) {
             break;
         }
         ++user->user_page_pos;
@@ -6317,7 +6321,11 @@ show_attributes(UR_OBJECT user)
                     onoff[user->colour]);
             break;
         case SETPAGER:
-            sprintf(text, "%d", user->pager);
+            if (user->pager) {
+                sprintf(text, "%d", user->pager);
+            } else {
+                sprintf(text, "auto (%d)", effective_pager(user));
+            }
             vwrite_user(user, "| %-10.10s : ~OL%-61.61s~RS |\n", setstr[i].type,
                     text);
             break;
