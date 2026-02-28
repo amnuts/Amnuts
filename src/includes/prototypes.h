@@ -586,6 +586,9 @@ sds escape_percentages(UR_OBJECT user, const char *str);
 /*
  * functions in telnet.c
  */
+int effective_pager(UR_OBJECT);
+int effective_wrap(UR_OBJECT);
 void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data);
+void show_terminal(UR_OBJECT);
 
 #endif

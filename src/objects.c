@@ -289,6 +289,9 @@ reset_user(UR_OBJECT user)
     user->wipe_from = 0;
     user->wrap = 0;
     user->pager = 23;
+    user->term_width = 80;
+    user->term_height = 24;
+    *user->term_type = '\0';
     user->logons = 0;
     user->expire = 1;
     user->lroom = 0;

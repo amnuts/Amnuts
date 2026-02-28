@@ -144,7 +144,7 @@ display_pm(UR_OBJECT user)
     if (!user->pm_first) {
         return -1;
     }
-    pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+    pager = effective_pager(user);
     i = 0;
     for (t = !user->pm_current ? user->pm_first : user->pm_current; t;
             t = t->next) {
@@ -177,7 +177,7 @@ rewind_pager(UR_OBJECT user, int backup)
     if (!user->pm_first) {
         return -1;
     }
-    pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+    pager = effective_pager(user);
     if (backup == 2) {
         user->pm_current = NULL;
         user->pm_currcount = 0;

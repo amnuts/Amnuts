@@ -701,7 +701,7 @@ retrieve_users(void)
             }
             fclose(pf);
             /* position */
-            pager = u->pager < MAX_LINES || u->pager > 999 ? 23 : u->pager;
+            pager = effective_pager(u);
             pager *= u->pm_currcount;
             for (t = u->pm_first; t->next; t = t->next) {
                 if (!pager--) {

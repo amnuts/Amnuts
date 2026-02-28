@@ -50,8 +50,13 @@ get_charclient_line(UR_OBJECT user, char *inpstr, int len)
     }
     if (user->charmode_echo
             && ((user->login != LOGIN_PASSWD && user->login != LOGIN_CONFIRM)
-            || user->show_pass))
-        send(user->socket, inpstr, l, 0);
+            || user->show_pass)) {
+        if (user->telnet) {
+            telnet_send(user->telnet, inpstr, l);
+        } else {
+            send(user->socket, inpstr, l, 0);
+        }
+    }
     return 0;
 }
 

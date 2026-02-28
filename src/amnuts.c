@@ -3597,7 +3597,7 @@ write_user(UR_OBJECT user, const char *str)
     if (user->universal_pager && !amsys->is_pager) {
         int pager;
 
-        pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+        pager = effective_pager(user);
         add_pm(user, str);
         if (user->pm_count == pager) {
             user->pm_current = user->pm_last;
@@ -3664,7 +3664,7 @@ write_user(UR_OBJECT user, const char *str)
             }
         }
         buff[buffpos++] = *s;
-        if (user->wrap && ++cnt >= SCREEN_WRAP) {
+        if (user->wrap && ++cnt >= (size_t)effective_wrap(user)) {
             buff[buffpos++] = '\r';
             buff[buffpos++] = '\n';
             cnt = 0;
@@ -4165,7 +4165,7 @@ more(UR_OBJECT user, int sock, const char *filename)
     } else {
         /* jump to reading posn in file */
         fseek(fp, user->filepos, 0);
-        pager = user->pager < MAX_LINES || user->pager > 99 ? 23 : user->pager;
+        pager = effective_pager(user);
     }
     --pager;
     *text = '\0';
@@ -4252,7 +4252,7 @@ more(UR_OBJECT user, int sock, const char *filename)
                 }
             }
             buff[buffpos++] = *s;
-            if (user && user->wrap && ++cnt >= SCREEN_WRAP) {
+            if (user && user->wrap && ++cnt >= (size_t)(user ? effective_wrap(user) : SCREEN_WRAP)) {
                 buff[buffpos++] = '\r';
                 buff[buffpos++] = '\n';
                 cnt = 0;
@@ -4260,7 +4260,10 @@ more(UR_OBJECT user, int sock, const char *filename)
         }
         len = strlen(str);
         num_chars += len;
-        lines += len / SCREEN_WRAP + (len < SCREEN_WRAP);
+        {
+            int wrap = user ? effective_wrap(user) : SCREEN_WRAP;
+            lines += len / wrap + (len < wrap);
+        }
     }
     if (buffpos && sock != -1) {
         if (user && user->telnet) {
@@ -6164,6 +6167,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         break;
     case SPODLIST:
         show_spodlist(user);
+        break;
+    case TERMINAL:
+        show_terminal(user);
         break;
     default:
         write_user(user, "Command not executed.\n");
