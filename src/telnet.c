@@ -16,6 +16,18 @@
 #include "prototypes.h"
 #include "telnet.h"
 
+const telnet_telopt_t telopts[] = {
+  { TELNET_TELOPT_BINARY,    TELNET_WONT, TELNET_DO   },
+  { TELNET_TELOPT_SGA,       TELNET_WILL, TELNET_DONT },
+  { TELNET_TELOPT_COMPRESS2, TELNET_WILL, TELNET_DONT },
+  { TELNET_TELOPT_ECHO,      TELNET_WONT, TELNET_DONT },
+  { TELNET_TELOPT_MSSP,      TELNET_WONT, TELNET_DO   },
+  { TELNET_TELOPT_NAWS,      TELNET_WONT, TELNET_DO   },
+  { TELNET_TELOPT_TTYPE,     TELNET_WONT, TELNET_DO   },
+  { TELNET_TELOPT_ZMP,       TELNET_WONT, TELNET_DO   },
+  { -1, 0, 0 }
+};
+
 /***************************************************************************/
 
 
@@ -66,15 +78,10 @@ telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data)
   case TELNET_EV_DO:
     if (ev->neg.telopt == TELNET_TELOPT_COMPRESS2) {
       telnet_begin_compress2(telnet);
-    } else if (ev->neg.telopt == TELNET_TELOPT_ECHO) {
-      user->charmode_echo = 1;
     }
     break;
   /* client rejected our WILL — they handle it themselves */
   case TELNET_EV_DONT:
-    if (ev->neg.telopt == TELNET_TELOPT_ECHO) {
-      user->charmode_echo = 0;
-    }
     break;
   /* NAWS and TTYPE subnegotiation */
   case TELNET_EV_SUBNEGOTIATION:

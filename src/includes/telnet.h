@@ -14,16 +14,6 @@
 
 #include "../vendors/libtelnet/libtelnet.h"
 
-static const telnet_telopt_t telopts[] = {
-    { TELNET_TELOPT_BINARY,    TELNET_WONT, TELNET_DO   },
-    { TELNET_TELOPT_SGA,       TELNET_WILL, TELNET_DONT },
-    { TELNET_TELOPT_COMPRESS2, TELNET_WILL, TELNET_DONT },
-    { TELNET_TELOPT_ECHO,      TELNET_WILL, TELNET_DONT },
-    { TELNET_TELOPT_MSSP,      TELNET_WONT, TELNET_DO   },
-    { TELNET_TELOPT_NAWS,      TELNET_WONT, TELNET_DO   },
-    { TELNET_TELOPT_TTYPE,     TELNET_WONT, TELNET_DO   },
-    { TELNET_TELOPT_ZMP,       TELNET_WONT, TELNET_DO   },
-    { -1, 0, 0 }
-};
+extern const telnet_telopt_t telopts[];
 
 #endif

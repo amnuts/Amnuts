@@ -10,11 +10,8 @@
 void
 show_terminal(UR_OBJECT user)
 {
-    int pager;
-
-
     write_user(user, "+----------------------------------------------------------------------------+\n");
-    write_user(user, "~FB Terminal Information ***~RS\n");
+    write_user(user, "~FG Terminal Information~RS\n");
     write_user(user, "+----------------------------------------------------------------------------+\n\n");
 
     if (user->term_width != 80 || user->term_height != 24) {
@@ -27,7 +24,7 @@ show_terminal(UR_OBJECT user)
     } else {
         write_user(user, "Terminal type : unknown\n");
     }
-    pager = effective_pager(user);
+    int pager = effective_pager(user);
     if (user->pager >= MAX_LINES && user->pager <= 999) {
         vwrite_user(user, "Pager lines   : %d (manually set)\n", pager);
     } else {
@@ -36,5 +33,5 @@ show_terminal(UR_OBJECT user)
     vwrite_user(user, "Word wrap     : %s (width %d)\n", user->wrap ? "on" : "off", effective_wrap(user));
     vwrite_user(user, "Colour        : %s\n", user->colour ? "on" : "off");
     vwrite_user(user, "Char echo     : %s\n", user->charmode_echo ? "on" : "off");
-    write_user(user, "\n");
+    write_user(user, "\n\n+----------------------------------------------------------------------------+\n\n");
 }

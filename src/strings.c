@@ -23,7 +23,12 @@
 int
 get_charclient_line(UR_OBJECT user, char *inpstr, int len)
 {
+    int can_echo;
     size_t l;
+
+    can_echo = user->charmode_echo
+        && ((user->login != LOGIN_PASSWD && user->login != LOGIN_CONFIRM)
+        || user->show_pass);
 
     for (l = 0; l < (size_t) len; ++l) {
         /* see if delete entered */
@@ -46,16 +51,15 @@ get_charclient_line(UR_OBJECT user, char *inpstr, int len)
             }
             return 1;
         }
-        ++user->buffpos;
-    }
-    if (user->charmode_echo
-            && ((user->login != LOGIN_PASSWD && user->login != LOGIN_CONFIRM)
-            || user->show_pass)) {
-        if (user->telnet) {
-            telnet_send(user->telnet, inpstr, l);
-        } else {
-            send(user->socket, inpstr, l, 0);
+        /* echo regular character back to client */
+        if (can_echo) {
+            if (user->telnet) {
+                telnet_send(user->telnet, &inpstr[l], 1);
+            } else {
+                send(user->socket, &inpstr[l], 1, 0);
+            }
         }
+        ++user->buffpos;
     }
     return 0;
 }
@@ -206,7 +210,10 @@ resolve_check(const char *wd)
 void
 echo_off(UR_OBJECT user)
 {
-    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
+  if (user->show_pass) {
+    return;
+  }
+  telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
 }
 
 /*
@@ -215,7 +222,10 @@ echo_off(UR_OBJECT user)
 void
 echo_on(UR_OBJECT user)
 {
-    telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
+  if (user->show_pass) {
+    return;
+  }
+  telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
 }
 
 /*
@@ -950,25 +960,4 @@ word_time(int t)
     return time_string;
 }
 
-/**
- * Work around a problem with sending escapes through telnet_printf()
- */
-sds
-escape_percentages(UR_OBJECT user, const char *str)
-{
-	sds escaped_str = sdsempty();
 
-    if (user && user->telnet) {
-    	for (const char *p = str; *p != '\0'; ++p) {
-    	    if (*p == '%') {
-    	        escaped_str = sdscat(escaped_str, "%%");
-    	    } else {
-   		        escaped_str = sdscatlen(escaped_str, p, 1);
-        	}
-    	}
-    } else {
-      	escaped_str = sdsnew(str);
-    }
-
-    return escaped_str;
-}
