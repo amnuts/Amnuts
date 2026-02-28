@@ -3,6 +3,15 @@
         Information on the changes between different version of Amnuts
 +------------------------------------------------------------------------------+
 
+WIP version - will sort out later!
+-----
+
+* Better handling of telnet opts - removed libtelnet workaround as it's not needed
+* Improved charecho support via telnet opt codes
+* Use NAWS to get terminal size
+* Updated `pager` command to include `auto` size and have `.help` and other paged commands use your terminal height correctly
+* Added the `terminal` command to see your current terminal size and telnet opt values
+
 2.5.0
 -----
 
