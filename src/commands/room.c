@@ -44,7 +44,7 @@ rooms(UR_OBJECT user, int show_topics, int wrap)
             if (is_personal_room(rm)) {
                 continue;
             }
-            if (rm_cnt == user->pager - 4) {
+            if (rm_cnt == effective_pager(user) - 4) {
                 switch (show_topics) {
                 case 0:
                     user->misc_op = 10;

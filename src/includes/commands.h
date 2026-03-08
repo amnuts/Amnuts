@@ -233,6 +233,7 @@
   ML_GAMES((BANK,         "bank",       "",    USER,    GENERAL)) \
   ML_ENTRY((FLAGGED,      "flagged",    "",    USER,    GENERAL)) \
   ML_ENTRY((SPODLIST,     "spodlist",   "",    SUPER,   GENERAL)) \
+  ML_ENTRY((TERMINAL,     "terminal",   "",    NEW,     GENERAL)) \
   ML_ENTRY((COUNT,        NULL,         NULL,  GOD+1,   COUNT  ))
 
 

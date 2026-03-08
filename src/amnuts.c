@@ -390,6 +390,11 @@ handle_user_input(UR_OBJECT user, char *inpstr, int len) {
         if (!get_charclient_line(user, inpstr, len)) {
             return;
         }
+    } else if (user->telnet) {
+        /* bare Enter with nothing buffered: echo the newline for
+           character-mode (SGA) telnet connections where the server
+           handles line feed regardless of charmode_echo state */
+        write_user(user, "\n");
     }
 
     curstr = next_str = inpstr;
@@ -861,7 +866,20 @@ accept_connection(int lsock)
     strcpy(user->site, hostname);
     strcpy(user->ipsite, hostaddr);
     sprintf(user->site_port, "%d", ntohs(sa.sin_port));
-    echo_on(user);
+    /*
+     * Tell the client that we will handle echo (WILL ECHO). This disables
+     * the client's local echo and lets the server echo via charmode_echo.
+     * We set charmode_echo=1 for the login phase so get_charclient_line
+     * echoes typed characters back. Password entry is handled separately
+     * (get_charclient_line suppresses echo for LOGIN_PASSWD/LOGIN_CONFIRM).
+     * After login, connect_user syncs the ECHO state to the saved preference.
+     */
+    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
+    user->charmode_echo = 1;
+    /* proactively request terminal size and type from the client so the
+       values are available by the time the user finishes authenticating */
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_NAWS);
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_TTYPE);
     write_user(user, "Give me a name: ");
     ++amsys->num_of_logins;
 #ifdef IDENTD
@@ -3543,16 +3561,13 @@ write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag) 
 void
 write_telnet(telnet_t *t, const char *str)
 {
-    telnet_printf(t, "%s", str);
+    telnet_send(t, str, strlen(str));
 }
 
 void
 write_telnet_with_size(telnet_t *t, const char *str, size_t length)
 {
-    sds buff;
-    buff = sdscatprintf(sdsempty(), "%.*s", (int)length, str);
-    write_telnet(t, buff);
-    sdsfree(buff);
+    telnet_send(t, str, length);
 }
 
 /*
@@ -3597,7 +3612,7 @@ write_user(UR_OBJECT user, const char *str)
     if (user->universal_pager && !amsys->is_pager) {
         int pager;
 
-        pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+        pager = effective_pager(user);
         add_pm(user, str);
         if (user->pm_count == pager) {
             user->pm_current = user->pm_last;
@@ -3609,12 +3624,10 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
 
-    sds escaped_str = escape_percentages(user, str);
-
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
-    for (s = escaped_str; *s; ++s) {
+    for (s = str; *s; ++s) {
         /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
@@ -3664,7 +3677,7 @@ write_user(UR_OBJECT user, const char *str)
             }
         }
         buff[buffpos++] = *s;
-        if (user->wrap && ++cnt >= SCREEN_WRAP) {
+        if (user->wrap && ++cnt >= (size_t)effective_wrap(user)) {
             buff[buffpos++] = '\r';
             buff[buffpos++] = '\n';
             cnt = 0;
@@ -3686,7 +3699,6 @@ write_user(UR_OBJECT user, const char *str)
         }
     }
 
-    sdsfree(escaped_str);
 }
 
 void
@@ -4165,7 +4177,7 @@ more(UR_OBJECT user, int sock, const char *filename)
     } else {
         /* jump to reading posn in file */
         fseek(fp, user->filepos, 0);
-        pager = user->pager < MAX_LINES || user->pager > 99 ? 23 : user->pager;
+        pager = effective_pager(user);
     }
     --pager;
     *text = '\0';
@@ -4192,8 +4204,6 @@ more(UR_OBJECT user, int sock, const char *filename)
             continue;
         }
 #endif
-
-    	str = escape_percentages(user, str);
 
         /* Process line from file */
         for (s = str; *s; ++s) {
@@ -4252,7 +4262,7 @@ more(UR_OBJECT user, int sock, const char *filename)
                 }
             }
             buff[buffpos++] = *s;
-            if (user && user->wrap && ++cnt >= SCREEN_WRAP) {
+            if (user && user->wrap && ++cnt >= (size_t)effective_wrap(user)) {
                 buff[buffpos++] = '\r';
                 buff[buffpos++] = '\n';
                 cnt = 0;
@@ -4260,7 +4270,10 @@ more(UR_OBJECT user, int sock, const char *filename)
         }
         len = strlen(str);
         num_chars += len;
-        lines += len / SCREEN_WRAP + (len < SCREEN_WRAP);
+        {
+            int wrap = user ? effective_wrap(user) : SCREEN_WRAP;
+            lines += len / wrap + (len < wrap);
+        }
     }
     if (buffpos && sock != -1) {
         if (user && user->telnet) {
@@ -4332,7 +4345,7 @@ more_users(UR_OBJECT user)
             /* skip to the position of the page in the user data */
             continue;
         }
-        if (lines++ >= user->pager) {
+        if (lines++ >= effective_pager(user)) {
             break;
         }
         ++user->user_page_pos;
@@ -4548,7 +4561,6 @@ login(UR_OBJECT user, char *inpstr)
                 attempts(user);
                 return;
             }
-            echo_on(user);
             ++amsys->logons_old;
 #ifdef IDENTD
             /* check for ident user ident */
@@ -4581,7 +4593,6 @@ login(UR_OBJECT user, char *inpstr)
             attempts(user);
             return;
         }
-        echo_on(user);
         strcpy(user->desc, "is a newbie");
         strcpy(user->in_phrase, "enters");
         strcpy(user->out_phrase, "goes");
@@ -4635,9 +4646,9 @@ attempts(UR_OBJECT user)
     }
     reset_user(user);
     user->login = LOGIN_NAME;
+    user->charmode_echo = 1;
     *user->pass = '\0';
     write_user(user, "Give me a name: ");
-    echo_on(user);
 }
 
 /*
@@ -4945,6 +4956,10 @@ connect_user(UR_OBJECT user)
                 "~OL~FY*   use the .accreq command--once you do all these you will be promoted    *\n");
         write_user(user,
                 "~OL~FY****************************************************************************\n\n");
+    }
+    /* sync telnet ECHO state with user's charecho preference */
+    if (!user->charmode_echo) {
+        telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
     }
     prompt(user);
     record_last_login(user->name);
@@ -6165,6 +6180,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
     case SPODLIST:
         show_spodlist(user);
         break;
+    case TERMINAL:
+        show_terminal(user);
+        break;
     default:
         write_user(user, "Command not executed.\n");
         break;
@@ -6303,7 +6321,11 @@ show_attributes(UR_OBJECT user)
                     onoff[user->colour]);
             break;
         case SETPAGER:
-            sprintf(text, "%d", user->pager);
+            if (user->pager) {
+                sprintf(text, "%d", user->pager);
+            } else {
+                sprintf(text, "auto (%d)", effective_pager(user));
+            }
             vwrite_user(user, "| %-10.10s : ~OL%-61.61s~RS |\n", setstr[i].type,
                     text);
             break;

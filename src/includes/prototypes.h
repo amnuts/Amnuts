@@ -581,11 +581,17 @@ void split_command_string(char *);
 size_t teslen(const char *, size_t);
 void get_soundex(const char *, char *);
 char *word_time(int);
-sds escape_percentages(UR_OBJECT user, const char *str);
 
 /*
  * functions in telnet.c
  */
+int effective_pager(UR_OBJECT);
+int effective_wrap(UR_OBJECT);
 void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data);
+
+/*
+ * functions in commands/
+ */
+void show_terminal(UR_OBJECT);
 
 #endif

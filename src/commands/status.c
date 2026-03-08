@@ -134,7 +134,7 @@ status(UR_OBJECT user)
         }
         vwrite_user(user,
                 "Colours       : %-13.13s  Pager   : %-13d  Logon rm : %-13.13s\n",
-                noyes[u->colour], u->pager, rm);
+                noyes[u->colour], effective_pager(u), rm);
         if (!*u->call) {
             strcpy(qcall, "<no one>");
         } else {

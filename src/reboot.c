@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#include "telnet.h"
 
 /***************************************************************************
 
@@ -187,6 +188,11 @@ build_loggedin_users_info(UR_OBJECT user)
                         u->name, strerror(errno));
             }
             return -1;
+        }
+        /* telnet handle cannot survive re-exec; will be re-initialized */
+        if (u->telnet) {
+            telnet_free(u->telnet);
+            u->telnet = NULL;
         }
         fwrite(u, (sizeof *u), 1, f);
         fclose(f);
@@ -670,6 +676,8 @@ retrieve_users(void)
         if (!u) {
             continue;
         }
+        /* re-initialize telnet for the restored connection */
+        u->telnet = telnet_init(telopts, telnet_event_handler, 0, u);
         room = get_room_full(rmname);
         u->room = !room ? room_first : room;
         record_last_login(u->name);
@@ -701,7 +709,7 @@ retrieve_users(void)
             }
             fclose(pf);
             /* position */
-            pager = u->pager < MAX_LINES || u->pager > 999 ? 23 : u->pager;
+            pager = effective_pager(u);
             pager *= u->pm_currcount;
             for (t = u->pm_first; t->next; t = t->next) {
                 if (!pager--) {

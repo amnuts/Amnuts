@@ -231,6 +231,9 @@ struct user_struct {
     int money;
     int bank;
     int inctime;
+    int term_width;
+    int term_height;
+    char term_type[64];
     telnet_t *telnet;
 };
 
