@@ -1,6 +1,0 @@
-~OLCommand :~RS semote
-~OLUsage   :~RS semote <text>
-~OLAliases :~RS & or !
-
-Allows you to shout an emote to everyone logged on no matter what room
-they are in.

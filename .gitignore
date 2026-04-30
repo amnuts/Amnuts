@@ -13,3 +13,6 @@ amnutsIdent
 amnutsTalker
 supervisord.pid
 supervisord.log
+files/datafiles/config.yml
+files/datafiles/rooms.yml
+files/datafiles/.yml

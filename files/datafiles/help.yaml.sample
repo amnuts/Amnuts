@@ -1,0 +1,1608 @@
+accreq:
+  usage: accreq <email> [<text>]
+  description: |-
+    This command is for new users who wish to gain a full account on the
+    talker. <email> is your email address and <text> is a comment where you
+    can add any relevant information that might be useful in granting your
+    account request.
+
+addhistory:
+  usage: addhistory <user> <text>
+  description: This allows you to add your own text to a user's history list.
+
+adminfiles:
+  usage: adminfiles [<file>]
+  description: |-
+    This allows you to display certain files that are for admin users only. To
+    see what files are available to be viewed then omit the <file>. Else
+    include the <file> to view that particular file.
+
+afk:
+  usage: afk [lock] [<text>]
+  description: |-
+    This command allows you to set yourself to "Away From Keyboard" which
+    shows up when people "look" at the room and you will pronounced AFK if
+    they try to tell you or semote something to you. Just press return to
+    reset unless you have specified the "lock" option which will lock your
+    session and prevent someone using it while you away from the terminal.
+    Enter your talker password and press return to unlock it. You can leave
+    an optional message when you go afk which will be sent to anyone trying
+    to tell or semote to you.
+
+allclones:
+  usage: allclones
+  description: This shows who has clones on the system and what rooms they are in.
+
+arrest:
+  usage: arrest <user>
+  description: |-
+    Sends the given user to jail (if there is an allocated jail room) and
+    sets their level to JAILED. If the users logs off and then back on they
+    will remain JAILED and be sent automatically to jail room. If no jail
+    room is allocated then they will remain in the main room, although be
+    JAILED. The user does not have to be online to be arrested. The arrest
+    is level based, in that if an ARCH arrests someone then only an ARCH or
+    higher can unarrest them. The arresting level is displayed in the ustat.
+
+autopromo:
+  usage: autopromo
+  description: This toggle the status of the auto-promote function on and off.
+
+ban:
+  usage: ban site <site> | user <user> | new <site>
+  description: |-
+    This command will ban either a site, a user, or new users from a site
+    from having access to the talker.
+
+bank:
+  usage: bank deposit <amount> | withdraw <amount> | balance
+  description: |-
+    This command allows you to view how much money you have in the bank.
+    Using the deposit option allows you to put money into the bank (if you
+    have any on your person), the withdraw option allows you to take out
+    money from the bank (if you have some in there), and the balance option
+    allows you to see how much you have in the bank.
+
+bbcast:
+  usage: bbcast <text>
+  description: |-
+    The text will be broadcast throughout the talker with an audible beep,
+    forcing any that are ignoring to listen to it. The name of the person
+    using this command is not given.
+
+bcast:
+  usage: bcast <text>
+  description: |-
+    The text will be broadcast throughout the talker, forcing any that are
+    ignoring to listen to it. The name of the person using this command is
+    not given.
+
+beep:
+  usage: beep <user> [<text>]
+  description: |-
+    Allows you to send an audible message to a user. If no message is supplied
+    then a standard "beep" message will be show to the user.
+
+bfrom:
+  usage: bfrom [<room>]
+  description: |-
+    This shows you the people who posted to the <room> message board, without
+    actually showing the content of the messages. If the <room> is omitted,
+    it will default to the room you are currently in.
+
+bring:
+  usage: bring <user>
+  description: Moves a user from the room they are in to the room you are currently in.
+
+cafk:
+  usage: cafk
+  description: Clears your AFK review buffer.
+
+calendar:
+  usage: calendar [<month> [<year>]]
+  description: |-
+    This will display a calendar, highlighting (if you have colours turned
+    on) the current date. If no options are used then it will display the
+    calendar for the current month and year. If the <month> option is used
+    then it will display the calendar for that month and the current year.
+    Else it will display the calendar for which ever month and year you
+    supply. <month> is a number between 1 and 12, <year> is a number between
+    1 and 99, or 1800 and 3000.
+
+call:
+  usage: call [<user>]
+  description: |-
+    Allows you to set up a quick way of telling a user a message. If you
+    omit the user then you will be shown which user you have currently set
+    to quick call.
+
+    Quick call is used such as: ,hi there, how are ya?
+
+    Which will send the "hi there, how are ya?" to whomever is set in the
+    quick call.
+
+cash:
+  usage: cash
+  description: Allows you to see how much money you currently have.
+
+cbuff:
+  usage: cbuff
+  aliases:
+  - '*'
+  description: Clears the conversation buffer of the room you are currently in.
+
+cedit:
+  usage: cedit
+  description: Clears your EDIT review buffer.
+
+cemote:
+  usage: cemote <room> <text>
+  description: This allows you to emote through your clone in the <room> given.
+
+charecho:
+  usage: charecho
+  description: |-
+    This is a command that is only of use to people who use character
+    mode clients. Some of these clients will not echo the characters input
+    themselves even when told to do so; this command forces the talker to
+    do it instead. The command is a toggle so using it will alternately
+    flick the echoing on and off. If you switch echoing on even when your
+    client is echoing you will see every character twice.
+
+chear:
+  usage: chear <room> all|swears|nothing
+  description: |-
+    This sets what part of the conversation in the clones room the clone will
+    display to you. "all" makes it show all that is being said and emoted,
+    "swears" will make it just report swearing (system defined) and "nothing"
+    will force it to ignore everything.
+
+clearline:
+  usage: clearline <line>
+  description: |-
+    It is possible to clear the line of a user whilst they are in the login
+    stage (as shown on "people"). This is useful if that line has been stuck
+    in the login stage for too long, or you want to clear the line quickly
+    before the user logs in.
+
+clone:
+  usage: clone [<room>]
+  description: |-
+    Clone will create a clone of you in whichever room you specify. This
+    clone can then listen in to the conversation in that room, and you can
+    also talk through that clone or swap places with it.
+
+cls:
+  usage: cls
+  description: Clears the screen of any text.
+
+cmdcount:
+  usage: cmdcount
+  description: |-
+    This allows you to see what commands have been used, how many times and
+    what percentage that is of the overall usage.
+
+cname:
+  usage: cname <old-user> <new-user>
+  description: |-
+    This command allows you to change the name of an existing user to another
+    name. This will allow users to be able to change their name if they wish
+    without creating a new account, gain their logon time back, redo their
+    profile, lose their mail, etc. The user does not have to be logged on
+    for you to be able to use the command on them, though it works even if
+    they are.
+
+colour:
+  usage: colour
+  description: |-
+    Allows you to test the current colour configurations of the talker. For
+    this you must have "set colour" to be ON. If no colours show then you
+    should "set colour" to be OFF.
+
+connect:
+  usage: connect <room>
+  description: |-
+    This command tries to make this room a gateway to another talker by
+    bringing up a netlink. The link must be predefined in the config file.
+
+copyto:
+  usage: copyto <user> [<user>...]
+  description: |-
+    This command allows you to send a copy of the next mail you send to
+    someone to the user(s) given. The user(s) given can also be on a remote
+    system, providing it has connection to the talker. This is reset to send
+    out no copies after every mail sent.
+
+create:
+  usage: create <user> <password>
+  description: |-
+    This allows you to create a new account for a user with the name and
+    password given. Used, for example, when a new account is needed for a
+    user from a new user banned site.
+
+csay:
+  usage: csay <room> <text>
+  description: |-
+    Will make one of your clones in the given room speak. If you see something
+    nasty being said in the clones room it is an alternative to shouting,
+    telling or actually going to the room to admonish the miscreant.
+
+cshout:
+  usage: cshout
+  description: Clears the shouts buffer.
+
+ctells:
+  usage: ctells
+  description: Clears your private tells buffer.
+
+ctopic:
+  usage: ctopic [all]
+  description: |-
+    Lets you clear the topic of the room you are in, or all the topics on
+    the talker.
+
+demote:
+  usage: demote <user> [<level>]
+  description: |-
+    Will demote a user to the next level down in the ranks list. You cannot
+    demote below the lowest level, and you cannot demote anyone of the same
+    or higher level as you. You can also demote a user even if they are not
+    logged on. If the <level> option is used then the user will be demoted
+    directly to that given level, rather than the level below what they
+    currently are.
+
+desc:
+  usage: desc [<text>]
+  description: |-
+    This sets the message for your description, i.e., that which follows
+    your name when other people view the room or use the "who" command,
+    etc. If you omit the description it displays your current one.
+
+destroy:
+  usage: destroy [<room>] [<user>]
+  description: |-
+    This will destroy a clone in a given room, or if omitted, the room you
+    are currently in. If you have the required privileges, then you can
+    destroy another users clone by giving the optional <user> argument.
+
+disconnect:
+  usage: disconnect <room>
+  description: Bring down the netlink in a room.
+
+dmail:
+  usage:
+  - dmail <message>
+  - dmail to <to-message>
+  - dmail from <from-message> to <to-message>
+  - dmail all
+  description: |-
+    This command allows you to delete messages from your mailbox. You
+    can delete specific single messages by supplying just a number, or
+    from the first message to a given number. You can also delete from a
+    certain message to another message, or you can delete all your mail.
+    If a given number to delete to is higher than the actual amount of mail
+    in your mailbox, then all the mail will be deleted.
+
+donate:
+  usage: donate <user> <amount>
+  description: Allows you to give money to other users.
+
+dsug:
+  usage:
+  - dsug <message>
+  - dsug to <to-message>
+  - dsug from <from-message> to <to-message>
+  - dsug all
+  description: |-
+    This command allows you to delete suggestions from the suggestions board.
+    You can delete specific single suggestions by supplying just a number,
+    or from the first suggestion to a given number. You can also delete from
+    a certain suggestion to another suggestion, or you can delete all the
+    board. If a given number to delete to is higher than the actual amount
+    of suggestions on the board, then all the suggestions will be deleted.
+
+dump:
+  usage: dump -u|-r <level>|-c|-m|-s
+  description: |-
+    This command allows you to dump talker information directly to files on
+    the talker shell account. If you use the -u option you will dump all the
+    users names. If you use the -r <level> option then you will dump only
+    the users with that level. If you use the -c option then you will dump
+    the last 16 commands used. -m dumps the memory currently being used by
+    the talker, and -s dumps system information such as PID, netlink and IP
+    resolve status, and more.
+
+echo:
+  usage: echo <text>
+  aliases:
+  - +
+  description: |-
+    This command allows you to echo whatever you write as the text into the
+    room without other users seeing who said it.
+
+emote:
+  usage: emote <text>
+  aliases:
+  - ':'
+  - ;
+  - :'
+  - ;'
+  description: |-
+    Emotes allow you to express emotions. A example would be "Andy feels sad".
+    If you were logged in as Andy you would enter ".emote feels sad" and your
+    user name will be prefixed to the front. The result is seen in the room
+    you are currently in. You may also use a leading apostrophe to produce
+    results such as: "Andy's face breaks into a grin".
+
+entpro:
+  usage: entpro [<text>]
+  description: |-
+    This command allows you to enter a lengthy description (profile) of
+    yourself that people will see when they use the "examine" command. Since
+    you can write anything you like here people tend to use it for all sorts
+    of things.
+
+ewiz:
+  usage: ewiz [<level>] <text>
+  description: |-
+    This command allows one to emote to various staff levels though they
+    can only specifically emote to levels equal or less that of their own.
+    If no level is specified it defaults to lowest staff level which means
+    all staff levels can hear it. Example of emoting to all staff of ARCH
+    or above: .ewiz arch grins.
+
+examine:
+  usage: examine <user>
+  description: |-
+    This commands shows you the users profile and various useful statistics
+    relating to the users current or most recent login.
+
+expire:
+  usage: expire <user>
+  description: |-
+    This toggles the user expire on or off. If this is set off, then the
+    files of the given users will not be deleted after a given amount of
+    non-use. If set on then all the files will be deleted after the given
+    period of non-use.
+
+femote:
+  usage: femote <text>
+  description: |-
+    This will display an emote to anyone listed on your "friends" list,
+    and only those people, regardless of what room they are currently in.
+
+files:
+  usage: files [<file>]
+  description: |-
+    This allows you to display certain files. To see what files are available
+    to be viewed then omit the <file> name. Else include the <file> name to
+    view that particular file.
+
+fix:
+  usage: fix [<room>]
+  description: |-
+    This will fix a rooms access whether it is public or private so that it
+    cannot be changed using the public or private commands. If you omit the
+    <room> then you will fix the access of the room you are currently in.
+
+flagged:
+  usage: flagged
+  description: |-
+    This command allows you to see what users you have flagged, be it a
+    user that you have given a key to, a user you are ignoring, or a user
+    you have flagged as a friend.
+
+fmail:
+  usage: fmail all|<message>
+  description: |-
+    This command allows you to manually forward all of, or specific messages
+    from your local mail box to your email. You need to have your email
+    entered and verified, though you do not need to have the auto-forward set.
+
+force:
+  usage: force <user> <text>
+  description: |-
+    This command allows you to force a user to perform a command without them
+    having to type anything. For instance: ".force bod .h smail" would make
+    the user Bod read the help on the "smail" command.
+
+forwarding:
+  usage: forwarding
+  description: This will toggle the mail auto-forwarding function on or off.
+
+friends:
+  usage: friends [<name>]
+  description: |-
+    This allows you to add people to or remove people from your friends list.
+    If you do not use the <name> option then you will be shown anyone who
+    is currently listed. If you use the <name> option and that person is
+    not currently listed then their name will be added, else the name will
+    be removed from the list.
+
+from:
+  usage: from
+  description: |-
+    This shows you the people who have sent you the mail that is in your
+    mailbox without actually showing you the contents of the mail. If you
+    have any new (unread) mail then you will be notified how many you have
+    received.
+
+fsay:
+  usage: fsay <text>
+  description: |-
+    This will send the text as normal speech to anyone on your "friends" list,
+    and only those people, regardless of what room they are currently in.
+
+fsmail:
+  usage: fsmail [<text>]
+  description: |-
+    This command allows you to send one mail message to all those people
+    named on your friends listed. If you do not supply any text then you
+    will be sent to the line editor.
+
+fwho:
+  usage: fwho
+  description: |-
+    This shows a full list of the people on your "friends" list who are
+    currently logged on, including descriptions, rooms they are in, etc.
+
+gcom:
+  usage: gcom <user> [<command>]
+  description: |-
+    This enables you to give usage of a command to the <user> given that they
+    would not normally have. If the <command> option is not used then it
+    will display any commands that the user has been given access to. This
+    works as a toggle, so that if the <command> is not already listed for
+    the user then they will gain access to it else the access will be removed.
+
+go:
+  usage: go [<room>] | [<service>] [<password>]
+  description: |-
+    This command moves you to another room, providing that room is adjoined
+    and is not set to private (unless you have been invited into that room).
+    If you omit the room name you will be moved straight to the main room
+    (i.e., that room which you start in).
+
+greet:
+  usage: greet <text>
+  description: |-
+    Write the text to the room in large letters. The text must only be 10
+    or less characters long, and only consist or the characters a-z (A-Z).
+
+grepu:
+  usage: grepu <pattern>
+  description: |-
+    This command allows you to search for a user whose name has the <pattern>
+    in it. The pattern can have the wildcards ?, for a single letter match,
+    or * for multiple letter matches. For example:
+
+    .grepu an?? will match Andy, Andi, Anne and so on.
+    .grepu an* will match Andy, Anne, Another, Anthony and so on.
+
+    You cannot have the wildcards placed together, such as ?*, *? or **.
+
+guess:
+  usage: guess <letter>
+  description: Gives a letter as a guess for your current hangman game.
+
+hangman:
+  usage: hangman start|stop|status
+  description: |-
+    This will allow you to start or stop a game of hangman, and also to see
+    the status of your current game. If you use the "start" option, then a
+    new game of hangman will be started (if you are not currently in a game)
+    with a random word. Use the "guess" command to guess a letter in the word.
+
+help:
+  usage: help [<command>|commands|credits|nuts]
+  description: |-
+    This command will display the helpfile for any command given. If you
+    specify "commands" or omit the command then a list of all the commands
+    you have use of will be listed. You can also view various credits.
+
+history:
+  usage: history <user>
+  description: |-
+    This allows you to see the history list of the given user, detailing
+    promotions, demotions, muzzles, etc.
+
+home:
+  usage: home
+  description: |-
+    If you are on a remote site this will bring you back to your home site
+    without you having to wander back to the gateway. You will be placed in
+    the room on your home site that is linked to the remote service which
+    you were just on.
+
+ignall:
+  usage: ignall
+  description: |-
+    This allows you to ignore all of the conversations, tells, shouts, etc.
+    Acts as a toggle, so type it again to listen.
+
+ignbeeps:
+  usage: ignbeeps
+  description: This will allow you to ignore beeps. Acts as a toggle on or off.
+
+igngreets:
+  usage: igngreets
+  description: This will allow you to ignore all greets. Acts as a toggle on or off.
+
+ignlist:
+  usage: ignlist
+  description: |-
+    Shows a list of things you can ignore, and if you are currently ignoring
+    them or not.
+
+ignlogons:
+  usage: ignlogons
+  description: |-
+    This will allow you to ignore all logons and logoffs. Acts as a toggle
+    on or off.
+
+ignpics:
+  usage: ignpics
+  description: This will allow you to ignore pictures. Acts as a toggle on or off.
+
+ignshout:
+  usage: ignshout
+  description: This allows you to ignore any shouts. Acts as a toggle on or off.
+
+igntell:
+  usage: igntell
+  description: This allows you to ignore any tells. Acts as a toggle on or off.
+
+ignuser:
+  usage: ignuser [<user>]
+  description: |-
+    This allows you to ignore tells, pemotes, shouts, etc., from any one
+    user. If you omit the <user> then you will be shown a list of all users
+    you are currently ignoring. See "version" for the amount of users you
+    can ignore.
+
+ignwiz:
+  usage: ignwiz
+  description: |-
+    This will allow you to ignore all wiztells and wizemotes. Acts as a
+    toggle on or off.
+
+inmsg:
+  usage: inmsg [<text>]
+  description: |-
+    This sets the message that is displayed following your name when you
+    enter a room. i.e., if your name is Andy and you set it to "enters fast"
+    other people will see "Andy enters fast" when you enter a room. If you
+    omit the message it shows you your current message.
+
+invis:
+  usage: invis
+  description: |-
+    This will make you become invisible so that other users cannot see you
+    in the room or in the "who" list.
+
+invite:
+  usage: invite <user>
+  description: |-
+    This will allow a user of your choice to be invited into a private room
+    which you are currently in.
+
+join:
+  usage: join <user>
+  description: |-
+    Allows you to join <user> no matter what room they are currently
+    in--providing the room is currently public, or you have been invited in.
+
+kill:
+  usage: kill <user>
+  description: This will log off the given user from the talker.
+
+knock:
+  usage: knock <room>
+  description: |-
+    This sends a message to people in a private room letting them know that
+    you wish to enter. It is then up to them to invite you in.
+
+last:
+  usage: last [<user>]
+  description: |-
+    Shows you when a user was last logged on. If the <user> option is omitted
+    then a list of the last number of users to log on will be displayed.
+
+lban:
+  usage: lban sites|users|new|swears
+  description: |-
+    This will list all the sites, or all the users, or all new users from a
+    sites currently banned from logging in. Also lists the swear words that
+    are banned.
+
+listen:
+  usage: listen
+  description: |-
+    This command will allow you to hear the room conversation, shouts, etc,
+    if you were previously ignoring.
+
+lmail:
+  usage: lmail <level>|wizzes|all [<text>]
+  description: |-
+    This command allows mail to be sent to all the users of a specific level.
+    It can also be used to send mail to all of the staff (wizzes) and also to
+    all of the users who have an account. If the <text> is omitted then the
+    line editor will be used to input the mail message. This command should
+    only be used when there are a minimal amount of users on, as it may cause
+    the talker to lag if the mail is being sent to a large amount of people.
+
+logging:
+  usage: logging -l|-s|-r|-n|-e|-on|-off
+  description: |-
+    This allows you to toggle the logging functions. Using the -l option with
+    list the status of the logging function. The -s, -r, -n, and -e options
+    will toggle the system log, request log, netlinks log, and error log
+    (respectively). The -on option will turn all logging on, and -off will
+    turn everything off.
+
+look:
+  usage: look
+  description: |-
+    Shows the description of the current room, who is in it, how many messages
+    are on the board and the rooms access.
+
+macros:
+  usage: macros
+  description: |-
+    Displays a list of all the macros you currently have. See "help files"
+    for help on how to use macros.
+
+makeinvis:
+  usage: makeinvis <user>
+  description: Forces a user to become invisible if they are visible.
+
+makevis:
+  usage: makevis <user>
+  description: Forces a user to become visible if they are invisible.
+
+map:
+  usage: map
+  description: This will show you a map of the current area of the talker you are in.
+
+memcount:
+  usage: memcount
+  description: Allows you to see how much memory the talker objects are currently using.
+
+minlogin:
+  usage: minlogin -a|-n|<level>
+  description: |-
+    This sets the minimum login level of a user that can log in. This directly
+    affects the main port but only affects the wizport if it is set higher
+    than the wizport login level. If set to -a all login attempts on the
+    main port will be refused. If set to -n then anyone can log in and new
+    users can be created. If set to <level> no new accounts can be created
+    but users of level <level> and above can still log in.
+
+mode:
+  usage: mode
+  description: |-
+    This switches you between speech mode and command mode. In speech mode
+    everything you type is interpreted as speech unless it is preceded by
+    a dot. In command mode you get a standard command type or prompt and
+    everything is treated as a command, to talk you must explicitly use the
+    "say" command.
+
+money:
+  usage:
+  - money -l
+  - money -g <user> <amount>
+  - money -t <user> <amount>
+  description: |-
+    This command allows you to manage money. Using the -l option shows you
+    how much money all the only users have. The -g option allows you to give
+    money to users (without money being donated from your account). The -t
+    option allows you to take money from users (without money going into
+    your own account).
+
+monitor:
+  usage: monitor
+  description: |-
+    This will toggle on and off the ability to see a users name on an echo,
+    shout, shemote, bcast, etc., if that user is invis. This is a good way
+    to keep track of any people who abuse the "greet" and "echo" commands.
+
+move:
+  usage: move <user> [<room>]
+  description: |-
+    Moves a user directly to the chosen room. If the room is omitted the
+    user is moved to the same room as whoever invoked the command (no matter
+    if that room is fixed private or not). The user is not moved if he is
+    already in the chosen room.
+
+mutter:
+  usage: mutter <user> <text>
+  description: This will send the text to everyone in the room except the given user.
+
+muzzle:
+  usage: muzzle <user>
+  description: |-
+    Muzzles a user which prevents them speaking, shouting, emoting and
+    mailing other people. The muzzle levels are based upon the user level
+    of whoever muzzled the user. If an ARCH muzzles a user, for instance,
+    the user can be unmuzzled by any ARCH or GOD, if however he is muzzled
+    by a GOD then only another GOD can unmuzzle him.
+
+mybgone:
+  usage: mybgone <user>|all
+  description: |-
+    You can use this command to expel people from your personal room. You
+    can just move one person by using the <user> option, else if you supply
+    "all" then everyone in the room will be expelled.
+
+myclones:
+  usage: myclones
+  description: |-
+    This will show you the rooms on the system where you currently have
+    clones.
+
+mykey:
+  usage: mykey [<user>]
+  description: |-
+    This command allows you to give specific users access to your personal
+    room even though you may have it locked. If you omit the <user> attribute
+    then it will list all users you have given keys to. The <user> does not
+    have to be online for you to give them a key. This command also works
+    like a toggle, in that if you have given a user a key you use this
+    command again with their name to remove that key.
+
+mylock:
+  usage: mylock
+  description: |-
+    This enables you to lock your personal room to anyone else, stopping
+    them from entering. This works as a toggle, so that if you the room is
+    locked then you would use this command to unlock it. The personal rooms
+    function has to be active to use this command.
+
+myname:
+  usage: myname
+  description: |-
+    This enables you to rename your personal room so it has something other
+    than "(~$)" as the name. The personal rooms function has to be active
+    to use this command.
+
+mypaint:
+  usage: mypaint [<text>]
+  description: |-
+    With this you can set a new description for your personal room.
+    The personal rooms function has to be active to use this command.
+
+myroom:
+  usage: myroom [-d]
+  description: |-
+    This command allows you to move into your own personal room. If your
+    room does not exist then it will create one for you automatically. You
+    may set your own room description, topic and also have your own personal
+    message board. If the "-d" option is used then your room will be deleted.
+    The personal rooms function must be active to use this command.
+
+netdata:
+  usage: netdata
+  description: |-
+    This command shows whether any data is being received via the net
+    connections. It takes no arguments. The data in this case is either mail
+    or a message which is the passing of text (e.g., a room description)
+    to the remote user.
+
+netstat:
+  usage: netstat
+  description: This shows the current net link status.
+
+news:
+  usage: news
+  description: Allows you to read the news file (if there is one).
+
+nocopys:
+  usage: nocopys
+  description: |-
+    Allows you to reset your "copies to" so that you will send out no copies
+    on your next mail.
+
+nuke:
+  usage: nuke <user>
+  description: |-
+    This will enable you to delete the files of a given user. This can be used
+    if the user has been banned, or their user files have been corrupted, etc.
+
+outmsg:
+  usage: outmsg [<text>]
+  description: |-
+    This sets the message that is displayed following your name when you
+    leave a room. i.e., if your name is Andy and you set it to "leaves fast"
+    other people will see "Andy leaves fast" when you leave a room. If you
+    omit the message it shows you your current message.
+
+passwd:
+  usage: passwd <old-password> <new-password> [<user>]
+  description: |-
+    You can change your old password for a new password. If you are able
+    to use the <user> option then you do not need to know the user's old
+    password.
+
+pemote:
+  usage: pemote <user> <text>
+  aliases:
+  - <
+  - /
+  description: Allows you to send a private emote to the given user.
+
+people:
+  usage: people [key]
+  description: |-
+    This shows who is logged on and gives various stats for them. This will
+    also show a user's logon site, port and various other stats. If the
+    "key" option is used then information about the different login stages
+    will be displayed.
+
+picture:
+  usage: picture <picture>
+  description: Allows you to show a picture to everyone in the same room you are in.
+
+preview:
+  usage: preview [<picture>]
+  description: |-
+    This command will allow you to preview a picture before you tell it to a
+    user or the room you are currently in. If no picture name is given then
+    a list of all the pictures on file will be shown.
+
+private:
+  usage: private [<room>]
+  description: |-
+    This will set the room you are currently in to a private status, providing
+    it is not fixed and that there are enough users in it. If you are of
+    high enough level to use the <room> option then you are able to change
+    the status of the given room providing there are enough people in it or
+    it is not fixed.
+
+promote:
+  usage: promote <user> [<level>]
+  description: |-
+    Will promote a user to the next level up in the ranks list. You cannot
+    promote above the highest level, and you cannot promote anyone of the
+    same or higher level as you. You can also promote a user even if they
+    are not logged on. If the <level> option is used then the user will be
+    promoted directly to that given level, rather than the level above what
+    they currently are.
+
+prompt:
+  usage: prompt
+  description: |-
+    Toggles the prompt on and off. The prompt has the following layout:
+
+    <current system time, time on, name!+>
+
+    The + will only appear if you are invisible.
+
+    The ! will only appear if you are ignoring anything.
+
+ptell:
+  usage: ptell <user> <picture>
+  description: Allows you to show a picture to an individual user.
+
+public:
+  usage: public [<room>]
+  description: |-
+    This will set the room you are currently in to a public status, providing
+    that it is not a fixed room. If you are of high enough level to use the
+    <room> option then you can change any room to public, providing it is
+    not fixed.
+
+purge:
+  usage:
+  - purge -d
+  - purge -s <site>
+  - purge -t <days>
+  description: |-
+    This gives you a manual way of purging user files. If the "-d" option is
+    used then a purge will be conducted with the default time settings. If
+    the "-s" option is used then anyone from the <site> supplied will be
+    purged. If the "-t" option is used then anyone who last logged on more
+    that <days> ago will be purged.
+
+    A purge is automatically done when the talker is booted if the auto_purge
+    option is active, and also every time the default non-use time period
+    has expired (take taken from after boot-up time).
+
+    CAUTION: With a purge the system may be temporarily lagged.
+
+quit:
+  usage: quit
+  description: Quits your current session on the talker.
+
+ranks:
+  usage: ranks
+  description: |-
+    Displays the ranks and the commands per rank used on the talker. Your rank
+    will be displayed in highlights providing you have set colour to be on.
+
+rcountu:
+  usage: rcountu
+  description: |-
+    This command allows you to re-check the nodes in the complete linked list
+    of users to see if any should be added or removed, and also check the
+    recorded levels of users. This would mainly be used if you had manually
+    altered the user files, or added any file or deleted them.
+
+read:
+  usage: read [<room>] [<message>]
+  description: |-
+    This displays the message board of the given room, providing you have
+    access to that room (i.e., it is not fixed to private). If no room is
+    given it defaults to your current room. If you use the <message> option,
+    then you will read only that specific message number for the room given,
+    or the room you are in if no room name is supplied.
+
+reboot:
+  usage: reboot [<seconds>|cancel]
+  description: |-
+    This will reboot the talker, either immediately or after <seconds>
+    seconds. The cancel option will cancel any timed reboot.
+
+recaps:
+  usage: recaps
+  description: Toggles on and off the ability for users to be able to recap their name.
+
+recount:
+  usage: recount [motds]
+  description: |-
+    This allows the boards to be recounted in case they have been edited
+    manually and the count has an error. If the "motds" option is used the
+    pre- and post-login motds will be recounted.
+
+reload:
+  usage: reload
+  description: Reloads the bullets of your gun--used in the fighting game.
+
+reminder:
+  usage:
+  - (to view)
+  - reminder all | today | <day> [<month> [<year>]]
+  - (to manage)
+  - reminder set | del <reminder>
+  description: |-
+    This command allows you to set reminders. You will be notified of the
+    number of reminders you have for that day when logging in, and reminders
+    will also be signified on the calendar output. If the date for a reminder
+    has passed then the reminder will automatically be removed.
+
+resite:
+  usage: resite <user>|-a
+  description: |-
+    If you are running the ident daemon then this command will allow you
+    to get the site of the given user again. This is useful if the ident
+    daemon was not running at the time they logged in. If you use the -a
+    option then it will get the sites of all the users logged on.
+
+retire:
+  usage: retire <user>
+  description: |-
+    This allows you to retire a staff member from "active wiz duty", in that
+    it removes their name from the wizlist.
+
+revafk:
+  usage: revafk
+  description: |-
+    This will allow you to review any tells or pemotes you received whilst
+    being afk.
+
+revedit:
+  usage: revedit
+  description: |-
+    This will allow you to review any tells or pemotes you received whilst
+    using the line editor.
+
+review:
+  usage: review
+  description: |-
+    This will show the last few lines of conversation, emoting and echoes
+    that took place in the room which you are in.
+
+revshout:
+  usage: revshout
+  description: This reviews the past few shouts sent over the talker.
+
+revtell:
+  usage: revtell
+  description: This will allow you to review the last number of tells set to you.
+
+rloadrm:
+  usage: rloadrm -a|<room>
+  description: |-
+    Reload room descriptions from rooms.yaml without rebooting the talker.
+    Useful after editing rooms.yaml on disk to correct typos or refresh a
+    description. If the "-a" option is used then all room descriptions are
+    reloaded; otherwise just the description for the named room. Personal
+    rooms are skipped (their descriptions live elsewhere). Only descriptions
+    are refreshed -- runtime changes to topic, access, links, and netlinks
+    are preserved. If rooms.yaml is malformed the command reports the error
+    and leaves in-memory state untouched.
+
+rmadmin:
+  usage: rmadmin -l|-m|-u <user>|-d <user>
+  description: |-
+    This command is to aid management of personal rooms for admins. If you
+    use the "-l" option then it will list all personal rooms currently active
+    on the talker with some information about each room. If the "-m" option
+    is used then it will display the amount of memory the personal rooms is
+    currently using. If the "-u" option is used together with a name of a
+    user then it will unload that user's personal room from memory. If the
+    "-d" option is used with a name, then it will unload that user's personal
+    room from memory and delete all associated room files (message board,
+    room description, etc.).
+
+rmail:
+  usage: rmail [new|<message>]
+  description: |-
+    If the option "new" is used then you will read only those messages that
+    have been sent to you since you last checked your mailbox. If a message
+    number is given then you will be shown only that message, otherwise any
+    mail that you currently have in your mailbox. Message numbers can be
+    checked using the "from" command.
+
+rnet:
+  usage: rnet
+  description: |-
+    This shows the list of rooms and associated net connections linked
+    to them.
+
+rooms:
+  usage: rooms [-l]
+  description: |-
+    Displays a list of the rooms and their current topics. If the "-l" (ell)
+    option is used then any rooms that require you to be of a certain level
+    and above to enter will be displayed.
+
+rstat:
+  usage: rstat <room>
+  description: |-
+    Gives statistics of the service the given room is linked to providing
+    that room has an active netlink.
+
+rsug:
+  usage: rsug
+  description: Reads the suggestions board.
+
+rules:
+  usage: rules
+  description: Displays a list of rules that are currently enforced on the talker.
+
+samesite:
+  usage: samesite user|site [all]
+  description: |-
+    The will display the users with the same site as a give user or given
+    site. If you omit the "all" option then it will only check those users
+    currently logged on, else it will check through all the users. If you use
+    the "user" option, then you will be prompted for a user name to check
+    against, else if you use the "site" option you will be prompted for a
+    site string. You can use a full or partial site string, but no wildcards.
+
+save:
+  usage: save
+  description: This will save the userfiles of everyone who is currently logged on.
+
+say:
+  usage: say <text>
+  description: |-
+    This command is only needed when in COMMAND mode, since in SPEECH mode
+    everything you type that is not a command is interpreted as speech.
+
+sayto:
+  usage: sayto <user> <text>
+  aliases:
+  - '-'
+  description: |-
+    This is used to direct speech to someone in the same room as yourself.
+    The text will be seen by anyone in the room, though it will be displayed
+    such as: "(<user>) Andy says: ..."
+
+search:
+  usage: search <word> [<word>...]
+  description: |-
+    This will search for the words in the word list in all of the message
+    boards that you could possibly see. i.e., it wont show you anything from
+    boards that are in rooms fixed to private if you do not have access to
+    those rooms. The word search is done on an OR basis, ie if any of the
+    words are in a given message it will be shown as opposed to all of the
+    words having to be there.
+
+semote:
+  usage: semote <text>
+  aliases:
+  - '&'
+  - '!'
+  description: |-
+    Allows you to shout an emote to everyone logged on no matter what room
+    they are in.
+
+set:
+  usage: set [<attribute> [<property>]]
+  description: |-
+    Allows you to set certain attributes that will be shown when someone
+    uses the "ustat" command on you. By omitting the <attribute> you will
+    display the current settings of your attributes, and also a description
+    of what the attributes mean. Some attributes are a toggle between on
+    and off, and others require you entering a <property>. Use ".set show"
+    to show what attributes you are able to change via the set command. You
+    can also see detailed info by using ".help set show" for the list of
+    other help files for the set command.
+
+set_age:
+  usage: set age <age>
+  description: This allows you to set your age for others to see with the .ustat command.
+
+set_alert:
+  usage: set alert
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns
+    it on, if it is on, using this turns it off, and it will indicate as such.
+    This particular toggle will turn on or off whether or not you are alerted
+    when one of your friends in your friends list logs into the talker.
+
+set_autofwd:
+  usage: set autofwd
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    This particular toggle will turn on or off whether or not you have your
+    local mail forwarded to your email address.
+
+set_colour:
+  usage: set colour
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns
+    it on, if it is on, using this turns it off, and it will indicate as such.
+    This toggle will turn on or off the ability to see colours.
+
+set_command:
+  usage: set command
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    This toggle affects the help file (.help), by showing whether you see
+    the commands listed by level, or by functionality. Try both!
+
+set_email:
+  usage: set email [<email>]
+  description: |-
+    This setting takes your email address, and places it in your userfile for
+    use in local mail to email autoforwarding (if system allows), and will
+    show in the .ustat command depending on if you have also used ".set hide"
+    to hide your email address from other users.
+
+    Using this command alone will clear your email setting. Setting your
+    email will send you a short form letter to the set email address,
+    that will include a verification code to use with the .verify command.
+    Your email address MUST be verified with this code to be able to use
+    the forwarding if the talker allows.
+
+    Your email address is kept hidden by default. See ".help set hide"
+    for more details.
+
+set_gender:
+  usage: set gender m|f|n
+  description: |-
+    This attribute is used to set your gender, to "m" (male), "f" (female)
+    or "n" (neuter).
+
+set_hide:
+  usage: set hide
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    This will hide your email address from view (using the .ustat command)
+    to other users that are not part of the talker staff. This talker, by
+    default, does NOT show your email to other users that are not part of
+    the administrative staff.
+
+set_icq:
+  usage: set icq [<icq>]
+  description: |-
+    Use this attribute to set your ICQ User Identification Number to be shown
+    to other users. Using this command without entering a number will clear
+    the attribute.
+
+set_pager:
+  usage: set pager <lines>
+  description: |-
+    This attribute is used to set your pager length. It can be set to a
+    number between 15 and 99. Default page length is 23. The pager effects
+    any files viewed, such as textfiles, helpfiles, and any other text the
+    talker supplies.
+
+set_password:
+  usage: set password
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    Default will not show your password typed out during login. Setting this
+    toggle will allow you to see your password as you type it in at login.
+
+set_rdesc:
+  usage: set rdesc
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    This setting will turn off room descriptions as you move from room to
+    room, or when using the "look" command. Default setting is on.
+
+set_recap:
+  usage: set recap <recap>
+  description: |-
+    Use this setting to change the way your name looks. For example, if
+    your username is Doggiedog, and you would prefer it to be DoggieDog,
+    use this command to change its appearance.
+
+set_revbuf:
+  usage: set revbuff
+  description: |-
+    This attribute toggles (switches between two states) whether you see
+    the review buffer in ascending or descending order by date.
+
+set_room:
+  usage: set room
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns
+    it on, if it is on, using this turns it off, and it will indicate as such.
+    This setting changes where you will enter upon login. Default is the main
+    room. You can change to the room you left from if so desired, provided
+    that the room you left is public. If the room you left from when you
+    login is now private, you will be sent to the main room by default.
+
+set_show:
+  usage: set show
+  description: |-
+    This will show you a quick menu of what attributes can be changed.
+    Use ".help set <attribute>" to view help on these:
+
+    gender      age         email       www
+    hide        wrap        pager       colour
+    room        autofwd     password    rdesc
+    command     recap       icq         alert
+    revbuff
+
+set_wrap:
+  usage: set wrap
+  description: |-
+    This attribute is a toggle, meaning that if it is off, using this turns it
+    on, if it is on, using this turns it off, and it will indicate as such.
+    This will attempt to wrap all screen output to 80 columns if your client
+    is unable to do so.
+
+set_www:
+  usage: set www [<url>]
+  description: |-
+    Use this to enter your homepage address that is shown to other users
+    with the "ustat" command. Using this attribute with no address will
+    clear the current setting.
+
+setcmdlev:
+  usage: setcmdlev <command> <level>|norm
+  description: |-
+    With this command you can alter the level of a command for the time that
+    the talker is active. (i.e., if you reboot or shutdown the talker then
+    the command will revert back to its normal level). If you give the option
+    "norm" then you will revert the command back to its normal level. You
+    can only alter the levels of commands you have access to.
+
+sfrom:
+  usage: sfrom
+  description: |-
+    This shows you the suggestions posted without actually showing the
+    content of the messages.
+
+shackle:
+  usage: shackle <user>
+  description: This will stop a user from moving out of the room they are currently in.
+
+shoot:
+  usage: shoot <user>
+  description: |-
+    Attempts to shoot another user in the shooting game. This can only be
+    done from a specific room (see ".rooms level" for the room).
+
+shout:
+  usage: shout <message>
+  aliases:
+  - '['
+  description: This allows you to "shout" to the whole talker.
+
+show:
+  usage: show <text>
+  aliases:
+  - ''''
+  description: |-
+    This is used to show a person what to type. The text is preceded with
+    "Type --> " and it will be display to all the users in the room you
+    are in.
+
+shutdown:
+  usage: shutdown [<seconds>|cancel]
+  description: |-
+    This will shutdown the talker, either immediately or after <seconds>
+    seconds. The cancel option will cancel any timed shutdown.
+
+sing:
+  usage: sing [<text>]
+  description: |-
+    Displays the text enclosed in musical notes to the room you are currently
+    in. For example: Andy sings o/~ lalala o/~
+
+site:
+  usage: site <user>
+  description: |-
+    This shows you the internet address from which the given user is logging
+    in from.
+
+smail:
+  usage: smail <user>[@<service>] [<text>]
+  description: |-
+    Allows you to send mail to a user (possibly a remote talker via a netlink
+    service if your talker is currently connected to it). If you omit the
+    text then you will be put into the line editor and allowed to enter you
+    message that way. This is recommended if you have a lot you want to write.
+
+sos:
+  usage: sos <text>
+  description: |-
+    Use this to speak to any of the wizzes that are currently on. The usage
+    of this command should only be when you are very stuck, or if someone is
+    being abusive or harassing, etc, and you need to inform the wizzes of it.
+
+spodlist:
+  usage:
+  - spodlist
+  - spodlist <user>
+  - spodlist <rank>
+  description: |-
+    This command will allow you to see your position, or the position of any
+    other user, on the spod list. If you use the command without any options,
+    then it will show your position on the spod list. If you use it with
+    the <rank> option, then it will show whoever is in that position of the
+    spodlist. If you use the <user> option, then it will show the position
+    of that user.
+
+sreboot:
+  usage: sreboot [<seconds>|cancel]
+  description: |-
+    This will seamless reboot the talker, either immediately or after
+    <seconds> seconds. The cancel option will cancel any timed seamless
+    reboot.
+
+suggest:
+  usage: suggest [<text>]
+  description: |-
+    Allows you to suggest something that you think needs changing or adding
+    to the talker. The staff really DO look at this and take notice of it, so
+    please make yourself heard and shape the talker to make it a better place.
+
+suicide:
+  usage: suicide <password>
+  description: |-
+    This allows you to delete your own account, also wiping your profile
+    and any mail you may have.
+
+swban:
+  usage: swban
+  description: |-
+    This toggles a ban on swearing on and off or to a minimum level. If the
+    swear ban is off, then the user can say anything. If the swear ban is
+    set to minimum, then any swear words that the user says will be blanked
+    out with whatever word is hard coded into the talker code. If the swear
+    ban is set to off then the user will not be able to say anything if it
+    has a swear word in it.
+
+switch:
+  usage: switch [<room>]
+  description: |-
+    This allows you to swap places with one of your clones in the given room.
+    It saves you destroying the current clone, creating another in your
+    current room then moving yourself to the old clones room. If you only have
+    one clone active then you can omit the room name to switch with the clone.
+
+system:
+  usage: system -m|-n|-r|-u|-a
+  description: |-
+    This shows various system parameters. If you use the -m option, then you
+    will see memory information, -n you will see netlink information, -r will
+    give you room information and -u will give you use related information.
+    The -a option shows all information.
+
+tell:
+  usage: tell <user> <text>
+  aliases:
+  - '>'
+  description: |-
+    This allows you to speak privately to another user without having to
+    find a private room.
+
+terminal:
+  usage: terminal
+  description: Displays your terminal settings that the talker knows about.
+
+think:
+  usage: think [<text>]
+  description: |-
+    Displays the text enclosed in think bubbles to the room you are currently
+    in. For example: Andy thinks . o O ( therefor I am )
+
+time:
+  usage: time
+  description: |-
+    Displays the current system time of where the talker is running from,
+    and also the uptime of the talker and boot time of the talker.
+
+topic:
+  usage: topic <text>
+  description: You can set the topic of the room you are in to the text given.
+
+tpromote:
+  usage: tpromote <user> [<level>]
+  description: |-
+    Will promote a user temporarily to the next level up in the ranks
+    list. This promotion will only last as long as the user is logged
+    on. Once they log out they will be returned to their normal level. You
+    cannot promote above the highest level, and you cannot promote anyone
+    of the same or higher level as you. You can also tpromote a user even if
+    they are logged on. If the <level> option is used then the user will be
+    promoted directly to that given level, rather than the level above that
+    which they currently are.
+
+twiz:
+  usage: twiz [<level>] <text>
+  description: |-
+    This command allows the Wiz to tell to various Wiz levels though they
+    can only specifically tell to levels equal or less that of their own.
+    If no level is specified it defaults to WIZ which means all the Wiz
+    levels can hear it. Example of tell to all ARCHs: .twiz arch hiya!
+
+unarrest:
+  usage: unarrest <user>
+  description: |-
+    Resets the user's level to what it was before they were arrested and moves
+    them out of the jail to the main room (ie, the room you start off in).
+    The user does not have to be online to be unarrested. The unarrest is
+    level based, in that is an ARCH arrested someone then only an ARCH or
+    higher can unarrest them. The arresting level is displayed in the ustat.
+
+unban:
+  usage: unban site <site> | user <user> | new <site>
+  description: |-
+    This will remove a site, user, or new users from site ban if the ban is
+    currently set.
+
+uncall:
+  usage: uncall
+  description: Will reset your quick call so that it is unset.
+
+unfix:
+  usage: unfix [<room>]
+  description: |-
+    This will unfix a rooms access so that it can then be set to public or
+    private using the appropriate commands. If you omit the room, then you
+    will unfix the access of the room you are currently in.
+
+uninvite:
+  usage: uninvite <user>
+  description: |-
+    This will allow you to cancel the invitation for a user to join you in
+    a private room. You can only uninvite a user you have previously invited.
+
+unmuzzle:
+  usage: unmuzzle <user>
+  description: |-
+    Removes a muzzle from a user. This will only work if the user was muzzled
+    by someone of equal or lesser level that yourself.
+
+unretire:
+  usage: unretire <user>
+  description: |-
+    This command allows you to unretire a wiz, making their name show up
+    again on the wizlist.
+
+unshackle:
+  usage: unshackle <user>
+  description: |-
+    This will allow a user to move out of the room that they are currently
+    in if they are already shackled.
+
+ustat:
+  usage: ustat [<user>]
+  description: |-
+    Shows the attributes and details of the user. If you omit the user ustat
+    defaults to you.
+
+verify:
+  usage: verify <word>
+  description: |-
+    This will allow you verify that you have been sent an email from the
+    talker. You will be sent this when you set your email address using
+    the "set" command (providing you specify a correct email address).
+    Once you get the email you will have a verification code which you must
+    supply before you can have local mail forwarded to your email address.
+    Use the "set" command to turn on or off auto-forwarding. Use the "fmail"
+    command to manually forward select local mail.
+
+version:
+  usage: version
+  description: |-
+    Shows the current talker version, and also information on various settings
+    on the talker.
+
+viewlog:
+  usage: viewlog sys|net|req|err|<level> [<lines>]
+  description: |-
+    Shows various logs. If <lines> is specified then you will only view that
+    amount of lines from the end of the log. In doing this, you do not have
+    to page through the log.
+
+vis:
+  usage: vis
+  description: This will make you visible again if you are invisible.
+
+visit:
+  usage: visit <user>
+  description: |-
+    Allows you to move to another user's personal room, providing it already
+    exists and is not locked. The personal rooms function must be active to
+    use this command.
+
+wake:
+  usage: wake <user>
+  description: |-
+    This sends a message and a beeping noise to the users terminal hopefully
+    attracting their attention.
+
+who:
+  usage: who
+  aliases:
+  - '@'
+  description: |-
+    This shows a full list of people currently logged on to the talker,
+    including descriptions, areas, etc.
+
+wipe:
+  usage:
+  - wipe <message>
+  - wipe to <to-message>
+  - wipe from <from-message> to <to-message>
+  - wipe all
+  description: |-
+    This command allows you to delete messages from the board of the room
+    that you are in. You can delete specific single messages by supplying
+    just a number, or from the first message to a given number. You can
+    also delete from a certain message to another message, or you can delete
+    all the board. If a given number to delete to is higher than the actual
+    amount of message on the board, then all the messages will be deleted.
+    If you are in your personal room (if this function is currently active)
+    then you can wipe any message, regardless of who posted it.
+
+wizlist:
+  usage: wizlist
+  description: |-
+    Displays a list of the current staff members and shows which, if any,
+    are presently logged on.
+
+write:
+  usage: write [<text>]
+  description: |-
+    This writes a message on the board of the room you are in. If you omit
+    the text you are put into the line editor to enter your message in that.
+
+wrules:
+  usage: wrules
+  description: |-
+    Displays a list of rules for the admin that are currently enforced on
+    the talker.
+
+xcom:
+  usage: xcom <user> [<command>]
+  description: |-
+    This enables you to remove usage of a command from the <user> given that
+    they would normally have. If the <command> option is not used then it
+    will display any commands that the user has been removed access from. This
+    works as a toggle, so that if the <command> is not already listed for the
+    user then they will lose access to it else the access will be given back.

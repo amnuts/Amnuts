@@ -49,13 +49,14 @@ void accept_connection(int);
 char *resolve_ip(char *);
 #endif
 int socket_listen(const char *, const char *);
-void load_and_parse_config(void);
-void parse_init_section(void);
-void parse_rooms_section(void);
-void parse_topics_section(char *);
-#ifdef NETLINKS
-void parse_sites_section(void);
-#endif
+void yaml_check_migration_gate(void);
+void validate_config(void);
+void yaml_load_config(const char *path);
+void yaml_load_rooms(const char *path);
+int yaml_reload_descriptions(const char *path, const char *target,
+                             char *errbuf, size_t errbuf_size);
+void yaml_load_help(const char *path);
+const struct help_entry *help_lookup(const char *command);
 void init_signals(void);
 void sig_handler(int);
 void boot_exit(int)
@@ -120,6 +121,8 @@ void who(UR_OBJECT, int);
 void login_who(UR_OBJECT);
 void display_files(UR_OBJECT, int);
 void help(UR_OBJECT);
+void render_help_entry(UR_OBJECT user, const struct help_entry *entry,
+                       enum lvl_value level);
 void help_commands_level(UR_OBJECT);
 void help_commands_function(UR_OBJECT);
 void help_nuts_credits(UR_OBJECT);
@@ -446,6 +449,7 @@ int possibly_reboot(void);
  * functions in rooms.c
  */
 int is_personal_room(RM_OBJECT);
+void reload_room_description(UR_OBJECT);
 int is_fixed_room(RM_OBJECT);
 int is_private_room(RM_OBJECT);
 int is_my_room(UR_OBJECT, RM_OBJECT);
@@ -475,7 +479,6 @@ void rooms(UR_OBJECT, int, int);
 void clear_topic(UR_OBJECT);
 void join(UR_OBJECT);
 void set_topic(UR_OBJECT, char *);
-void reload_room_description(UR_OBJECT);
 void reset_access(RM_OBJECT);
 int has_room_access(UR_OBJECT, RM_OBJECT);
 int check_start_room(UR_OBJECT);
