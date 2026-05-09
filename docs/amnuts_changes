@@ -3,24 +3,28 @@
         Information on the changes between different version of Amnuts
 +------------------------------------------------------------------------------+
 
-WIP version - will sort out later!
------
-
-* Better handling of telnet opts - removed libtelnet workaround as it's not needed
-* Improved charecho support via telnet opt codes
-* Use NAWS to get terminal size
-* Updated `pager` command to include `auto` size and have `.help` and other paged commands use your terminal height correctly
-* Added the `terminal` command to see your current terminal size and telnet opt values
-
 2.5.0
 -----
 
-Added libtelnet vendor library to help with telnet negotiation
-Added workaround to libtelnet to be able to use the '%' symbol in speech :)
+New things:
 
-Updated the cmdcount command code to make it better
+* Added libtelnet vendor library to help with telnet negotiation
+* Use NAWS to get terminal size
+* Added a new `src/telnet.c` module that wraps socket I/O through libtelnet via new `write_sock`, `write_sock_with_size`, `write_telnet` and `write_telnet_with_size` helpers
+* Added `term_width`, `term_height`, `term_type` and `telnet` fields to the user struct so the talker tracks each user's terminal capabilities
+* Added the `terminal` command to see your current terminal size and telnet opt values
 
-Fixed display bug in the preview command
+Improved things:
+
+* Improved charecho support via telnet opt codes
+* Updated `pager` command to include `auto` size and have `.help` and other paged commands use your terminal height correctly
+* Updated the cmdcount command code to make it better
+* Fixed display bug in the preview command
+* Fixed segfault in netlinks when verification fails (also corrected the `nl_verification` prototype to take a pointer-to-pointer)
+* Fixed the `look` command which had been broken in a previous tweak
+* Switched compiler to clang and moved to the GNU C23 standard, with `-Wpedantic` and `-Wextra` enabled - fixed all warnings the new flags exposed
+* Made vendor and internal header includes explicit rather than relying on implicit search paths
+* Added a GitHub Actions workflow that compiles the talker on push so build breakages are caught automatically
 
 2.4.0
 -----

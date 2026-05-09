@@ -41,7 +41,7 @@
  * you can add and check against your own version number
  * but the Amnuts and NUTS must stay the same as listed below
  */
-#define AMNUTSVER   "2.4.0"
+#define AMNUTSVER   "2.5.0"
 #define NUTSVER     "3.3.3"
 #define USERVER     "0.3"
 #define TALKER_NAME "Your Talker's Name Here"
