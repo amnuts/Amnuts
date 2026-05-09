@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compile:
+    name: Compile (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    container: alpine:latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: no flags
+            flags: ""
+          - name: GAMES only
+            flags: "-DGAMES"
+          - name: WIZPORT only
+            flags: "-DWIZPORT"
+          - name: IDENTD only
+            flags: "-DIDENTD"
+          - name: MANDNS only
+            flags: "-DMANDNS"
+          - name: NETLINKS only
+            flags: "-DNETLINKS"
+          - name: all flags (default)
+            flags: "-DGAMES -DWIZPORT -DIDENTD -DMANDNS -DNETLINKS"
+
+    steps:
+      - name: Install build dependencies
+        run: apk add --no-cache build-base bash busybox-extras clang gdb lldb nodejs git
+
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Build
+        run: make build TALKER_FLAGS="${{ matrix.flags }}"
+
+      - name: Verify binaries
+        run: |
+          test -x ./amnutsTalker
+          test -x ./amnutsIdent
