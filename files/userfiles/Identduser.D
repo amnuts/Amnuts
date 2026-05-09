@@ -10,7 +10,7 @@ purging       1
 last_site     127.0.0.1 (no
 mail_verify   #UNSET
 description   is a newbie needing a desc.
-in_phrase     wanders in.
+in_phrase     wanders in
 out_phrase    wanders out
 email         #UNSET
 homepage      #UNSET
