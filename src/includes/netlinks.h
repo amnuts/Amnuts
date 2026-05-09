@@ -1,13 +1,11 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
                                  based on
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
-
  ***************************************************************************/
 
 #ifndef AMNUTS_NETLINKS_H

@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -19,7 +18,7 @@
 
         reboot.c
         Header file for PARIS By Arnaud Abelard [Arny].
-        This reboot system is a "nuts compatible" converted verion of the
+        This reboot system is a "nuts compatible" converted version of the
         phypors <phypor@benland.muc.edu> reboot system for EW-TOO systems
         by Arnaud Abelard
 

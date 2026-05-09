@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2024
-                        Last update: Sometime in 2024
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -8,7 +7,6 @@
 
    NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
  ***************************************************************************/
-
 
 #include "defines.h"
 #include "globals.h"
@@ -29,7 +27,6 @@ const telnet_telopt_t telopts[] = {
 };
 
 /***************************************************************************/
-
 
 int
 effective_pager(UR_OBJECT user)

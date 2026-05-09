@@ -1,3 +1,12 @@
+/****************************************************************************
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
+
+                   talker@amnuts.net - https://amnuts.net/
+
+                                 based on
+
+   NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
+ ***************************************************************************/
 
 #include "defines.h"
 #include "globals.h"
