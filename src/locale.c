@@ -41,6 +41,26 @@ locale_default_path(char *out, size_t outlen,
     return file_exists(out) ? 1 : 0;
 }
 
+int
+locale_path(UR_OBJECT user, char *out, size_t outlen,
+            const char *category, const char *name)
+{
+    int n;
+    /* Try user's locale if they have one set. */
+    if (user && user->locale[0]) {
+        n = snprintf(out, outlen, "%s/%s/%s/%s",
+                     LANGS_ROOT, user->locale, category, name);
+        if (n > 0 && (size_t) n < outlen && file_exists(out)) {
+            return 2;
+        }
+    }
+    /* Fall back to default locale. */
+    n = snprintf(out, outlen, "%s/%s/%s/%s",
+                 LANGS_ROOT, amsys->default_locale, category, name);
+    if (n < 0 || (size_t) n >= outlen) return 0;
+    return file_exists(out) ? 1 : 0;
+}
+
 static int
 is_valid_locale_dirname(const char *name)
 {

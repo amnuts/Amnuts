@@ -100,6 +100,7 @@ struct user_struct {
     char name[USER_NAME_LEN + 1];
     char desc[USER_DESC_LEN + 1];
     char pass[PASS_LEN + 1];
+    char locale[LOCALE_NAME_LEN];   /* "" => use default */
     char in_phrase[PHRASE_LEN + 1];
     char out_phrase[PHRASE_LEN + 1];
     char buff[BUFSIZE];
