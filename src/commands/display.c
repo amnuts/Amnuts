@@ -22,7 +22,7 @@
 void
 display_files(UR_OBJECT user, int admins)
 {
-    char filename[128];
+    char filename[160];
     int ret;
 
     if (word_count < 2) {

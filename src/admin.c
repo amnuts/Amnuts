@@ -125,7 +125,7 @@ start_ident(UR_OBJECT user)
 int
 site_banned(char *sbanned, int newban)
 {
-    char line[82], filename[80];
+    char line[82], filename[128];
     FILE *fp;
     int f;
 
@@ -176,7 +176,7 @@ login_port_flood(char *asite)
 int
 user_banned(char *name)
 {
-    char line[82], filename[80];
+    char line[82], filename[128];
     FILE *fp;
     int f;
 
@@ -201,7 +201,7 @@ user_banned(char *name)
 void
 auto_ban_site(char *asite)
 {
-    char filename[80];
+    char filename[128];
     FILE *fp;
     UR_OBJECT u, next;
 
@@ -241,7 +241,7 @@ void
 ban_site(UR_OBJECT user)
 {
     char bsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *fp;
 
     /* check for variations of wild card */
@@ -312,7 +312,7 @@ ban_site(UR_OBJECT user)
 void
 ban_user(UR_OBJECT user)
 {
-    char filename[80], name[USER_NAME_LEN + 1];
+    char filename[128], name[USER_NAME_LEN + 1];
     FILE *fp;
     UR_OBJECT u;
     UD_OBJECT entry;
@@ -385,7 +385,7 @@ void
 ban_new(UR_OBJECT user)
 {
     char bsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *fp;
 
     /* check for variations of wild card */
@@ -458,7 +458,7 @@ void
 unban_site(UR_OBJECT user)
 {
     char ubsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *infp, *outfp;
     int found, cnt, f;
 
@@ -506,7 +506,7 @@ unban_site(UR_OBJECT user)
 void
 unban_user(UR_OBJECT user)
 {
-    char filename[80], name[USER_NAME_LEN + 1];
+    char filename[128], name[USER_NAME_LEN + 1];
     FILE *infp, *outfp;
     int found, cnt, f;
 
@@ -558,7 +558,7 @@ void
 unban_new(UR_OBJECT user)
 {
     char ubsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *infp, *outfp;
     int found, cnt, f;
 
