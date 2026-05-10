@@ -6,6 +6,4 @@
 #define YAML_VERSION_PATCH  5
 #define YAML_VERSION_STRING "0.2.5"
 
-#define HAVE_CONFIG_H 1
-
 #endif
