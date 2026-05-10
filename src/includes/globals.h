@@ -88,6 +88,11 @@ struct reminder_struct {
     char msg[REMINDER_LEN];
 };
 
+struct locale_state {
+    char  names[64][LOCALE_NAME_LEN];   /* discovered locale names */
+    int   count;
+};
+
 /*
  * user variables - some are saved in the user file, and some are not
  */
@@ -397,6 +402,7 @@ struct system_struct {
     char default_warp[ROOM_NAME_LEN + 1];
     char default_jail[ROOM_NAME_LEN + 1];
     char default_locale[LOCALE_NAME_LEN];   /* directory name under LANGS_ROOT */
+    struct locale_state locales;
 #ifdef GAMES
     char default_bank[ROOM_NAME_LEN + 1];
     char default_shoot[ROOM_NAME_LEN + 1];
