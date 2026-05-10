@@ -66,6 +66,7 @@ main(int argc, char **argv)
 #endif
 
     load_and_parse_config();
+    locale_load_all();
 
     printf("Flood protection is %s.\n", offon[amsys->flood_protect]);
     if (amsys->personal_rooms) {
