@@ -88,3 +88,69 @@ Total: 51 call sites across 16 source files.
 - `src/amnuts.c:2402` and `src/amnuts.c:2404` contain the literal string "MOTDFILES" inside a `perror`/`write_syslog` message. The preprocessor does not expand macros inside string literals, so these are diagnostic text, not call sites. They should be left alone (or, optionally, retargeted as part of the eventual logging/i18n pass — out of scope for Phase 1).
 - Board files (`.B`) and room description files (`.R`) under `DATAFILES` are shared mutable state, not display content; they are routed to `locale_default_path(...)`. If a future phase decides to localise per-room descriptions, the `.R` reads at `src/amnuts.c:1226` and `src/commands/reload_room.c:39,91` are the lines to revisit.
 - The `RULESFILE` read at `src/amnuts.c:4558` happens while `user` exists but its locale may still be the default (the user is in the middle of registration). `locale_path(user, ...)` is still correct because the helper is expected to fall back to the default when the user's locale is unset.
+
+## Conversion pattern
+
+**Before — boot-time / global lookup (no user context):**
+
+```c
+sprintf(filename, "%s/%s", DATAFILES, confile);
+fp = fopen(filename, "r");
+if (!fp) { ... }
+```
+
+**After:**
+
+```c
+locale_default_path(filename, sizeof filename, DATAFILES, confile);
+fp = fopen(filename, "r");
+if (!fp) { ... }
+```
+
+**Before — per-user lookup (user struct in scope):**
+
+```c
+sprintf(filename, "%s/%s", HELPFILES, word[1]);
+more(user, user->socket, filename);
+```
+
+**After:**
+
+```c
+if (locale_path(user, filename, sizeof filename, HELPFILES, word[1])) {
+    more(user, user->socket, filename);
+} else {
+    write_user(user, "No such help file.\n");
+}
+```
+
+**Notes:**
+
+- The constant moves from being part of the `sprintf` format string to
+  being the `category` argument of `locale_*_path`.
+- The constants' string values flip from absolute to bare in Tasks 11–16
+  (one task per constant, in the same commit as that category's sweep).
+  But the *call shape* above works with either, because the helpers
+  always prepend `LANGS_ROOT/<locale>/`. Until the constant flips, the
+  helper produces a doubled path that won't resolve — so the talker is
+  bootable only when sweep + flip happen together for that category.
+- Pure existence checks (`stat(DATAFILES "/foo", ...)`) follow the same
+  pattern: call the resolver, then operate on the path it wrote.
+- For `opendir(DATAFILES)` style calls (rare — directory enumeration of
+  the category root itself, e.g. `count_motds` in `messages.c`), use:
+
+  ```c
+  char dir[PATH_MAX];
+  snprintf(dir, sizeof dir, "%s/%s/%s",
+           LANGS_ROOT, locale_default(), DATAFILES);
+  dirp = opendir(dir);
+  ```
+
+  Don't try to resolve via `locale_*_path` for these — the helpers resolve
+  files, not directories.
+- Server state files that live under `DATAFILES` (ban lists, board `.B`
+  files, suggestions board, hangman dictionary) are also routed through
+  `locale_default_path`. Reads always go to the default locale; writes
+  also land there. Phase 1 does not relocate these out of `langs/en_GB/`
+  even though they're server state rather than localisable content;
+  that's a future cleanup.
