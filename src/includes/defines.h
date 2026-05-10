@@ -59,6 +59,11 @@
 #define PICTFILES  BASE_STORAGE_DIR "/pictfiles"
 #define TEXTFILES  BASE_STORAGE_DIR "/textfiles"
 
+/* Localisation root — see docs/superpowers/specs/2026-05-10-localisation-design.md */
+#define LANGS_ROOT          BASE_STORAGE_DIR "/langs"
+#define DEFAULT_LOCALE_NAME "en_GB"
+#define LOCALE_NAME_LEN     16
+
 /* user directories */
 #define USERFILES     BASE_STORAGE_DIR "/userfiles"
 #define USERMAILS     "mail"

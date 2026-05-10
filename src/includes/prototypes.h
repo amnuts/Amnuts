@@ -273,6 +273,17 @@ void global_money(UR_OBJECT);
 
 
 /*
+ * functions in locale.c
+ */
+int  locale_load_all(void);
+int  locale_path(UR_OBJECT user, char *out, size_t outlen,
+                 const char *category, const char *name);
+int  locale_default_path(char *out, size_t outlen,
+                         const char *category, const char *name);
+const char *locale_default(void);
+
+
+/*
  * functions in messages.c
  */
 void count_suggestions(void);
