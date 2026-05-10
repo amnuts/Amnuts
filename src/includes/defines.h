@@ -62,7 +62,7 @@
 /* Translatable categories — temporarily absolute paths pointing at the
  * default-locale tree. Tasks 11-16 flip each one to a bare category name
  * as their call sites are converted to use locale_*_path. */
-#define ADMINFILES  LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/adminfiles"
+#define ADMINFILES  "adminfiles"
 #define DATAFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/datafiles"
 #define HELPFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/helpfiles"
 #define MISCFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/miscfiles"
