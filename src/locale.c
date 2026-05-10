@@ -44,8 +44,9 @@ locale_default_path(char *out, size_t outlen,
 static int
 is_valid_locale_dirname(const char *name)
 {
-    /* must be non-empty, no path separators, no leading dot */
-    if (!*name || *name == '.') return 0;
+    size_t len = strlen(name);
+    if (!len || len >= LOCALE_NAME_LEN) return 0;
+    if (*name == '.') return 0;
     for (const char *p = name; *p; ++p) {
         if (*p == '/' || *p == '\\') return 0;
     }
@@ -73,17 +74,21 @@ locale_load_all(void)
         if (!is_valid_locale_dirname(dp->d_name)) continue;
         snprintf(path, sizeof path, "%s/%s", LANGS_ROOT, dp->d_name);
         if (stat(path, &st) != 0 || !S_ISDIR(st.st_mode)) continue;
-        if (amsys->locales.count >= 64) {
-            fprintf(stderr, "Amnuts: more than 64 locales discovered — ignoring %s.\n",
-                    dp->d_name);
+
+        /* Track default-seen even if the cap is hit (otherwise the 65th-listed
+         * default would be falsely reported as missing). */
+        if (strcmp(dp->d_name, amsys->default_locale) == 0) {
+            default_seen = 1;
+        }
+
+        if (amsys->locales.count >= MAX_LOCALES) {
+            fprintf(stderr, "Amnuts: more than %d locales discovered — ignoring %s.\n",
+                    MAX_LOCALES, dp->d_name);
             continue;
         }
         strncpy(amsys->locales.names[amsys->locales.count],
                 dp->d_name, LOCALE_NAME_LEN - 1);
         amsys->locales.names[amsys->locales.count][LOCALE_NAME_LEN - 1] = '\0';
-        if (strcmp(dp->d_name, amsys->default_locale) == 0) {
-            default_seen = 1;
-        }
         amsys->locales.count++;
     }
     closedir(dirp);

@@ -89,7 +89,7 @@ struct reminder_struct {
 };
 
 struct locale_state {
-    char  names[64][LOCALE_NAME_LEN];   /* discovered locale names */
+    char  names[MAX_LOCALES][LOCALE_NAME_LEN];   /* discovered locale names */
     int   count;
 };
 

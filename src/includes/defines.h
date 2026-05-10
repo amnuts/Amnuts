@@ -63,6 +63,7 @@
 #define LANGS_ROOT          BASE_STORAGE_DIR "/langs"
 #define DEFAULT_LOCALE_NAME "en_GB"
 #define LOCALE_NAME_LEN     16
+#define MAX_LOCALES         64
 
 /* user directories */
 #define USERFILES     BASE_STORAGE_DIR "/userfiles"
