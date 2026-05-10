@@ -1033,7 +1033,7 @@ load_and_parse_config(void)
 #endif
 
     printf("Parsing config file \"%s\"...\n", confile);
-    sprintf(filename, "%s/%s", DATAFILES, confile);
+    locale_default_path(filename, sizeof filename, DATAFILES, confile);
     fp = fopen(filename, "r");
     if (!fp) {
         perror("Amnuts: Cannot open config file");
@@ -1224,7 +1224,9 @@ load_and_parse_config(void)
 
     /* Load room descriptions */
     for (rm1 = room_first; rm1; rm1 = rm1->next) {
-        sprintf(filename, "%s/%s.R", DATAFILES, rm1->name);
+        char rmfile[ROOM_NAME_LEN + 4];
+        snprintf(rmfile, sizeof rmfile, "%s.R", rm1->name);
+        locale_default_path(filename, sizeof filename, DATAFILES, rmfile);
         fp = fopen(filename, "r");
         if (!fp) {
             fprintf(stderr, "Amnuts: Cannot open description file for room %s.\n",
@@ -5704,7 +5706,11 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
                     "You do not need a map--where you are is where it is at!\n");
             return 0;
         }
-        sprintf(filename, "%s/%s.map", DATAFILES, user->room->map);
+        {
+            char mapfile[ROOM_NAME_LEN + 8];
+            snprintf(mapfile, sizeof mapfile, "%s.map", user->room->map);
+            locale_path(user, filename, sizeof filename, DATAFILES, mapfile);
+        }
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user,

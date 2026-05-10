@@ -63,7 +63,7 @@
  * default-locale tree. Tasks 11-16 flip each one to a bare category name
  * as their call sites are converted to use locale_*_path. */
 #define ADMINFILES  "adminfiles"
-#define DATAFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/datafiles"
+#define DATAFILES   "datafiles"
 #define HELPFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/helpfiles"
 #define MISCFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/miscfiles"
 #define MOTDFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/motds"

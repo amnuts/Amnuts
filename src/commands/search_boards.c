@@ -38,7 +38,9 @@ search_boards(UR_OBJECT user)
         if (is_personal_room(rm)) {
             sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, rm->owner);
         } else {
-            sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
+            char bfile[ROOM_NAME_LEN + 4];
+            snprintf(bfile, sizeof bfile, "%s.B", rm->name);
+            locale_default_path(filename, sizeof filename, DATAFILES, bfile);
         }
         fp = fopen(filename, "r");
         if (!fp) {

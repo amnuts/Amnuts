@@ -25,7 +25,7 @@ listbans(UR_OBJECT user)
     strtolower(word[1]);
     if (!strcmp(word[1], "sites")) {
         write_user(user, "\n~BB*** Banned sites and domains ***\n\n");
-        sprintf(filename, "%s/%s", DATAFILES, SITEBAN);
+        locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "There are no banned sites and domains.\n\n");
@@ -38,7 +38,7 @@ listbans(UR_OBJECT user)
     }
     if (!strcmp(word[1], "users")) {
         write_user(user, "\n~BB*** Banned users ***\n\n");
-        sprintf(filename, "%s/%s", DATAFILES, USERBAN);
+        locale_default_path(filename, sizeof filename, DATAFILES, USERBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "There are no banned users.\n\n");
@@ -68,7 +68,7 @@ listbans(UR_OBJECT user)
     if (strcmp(word[1], "new")) {
         write_user(user,
                 "\n~BB*** New users banned from sites and domains **\n\n");
-        sprintf(filename, "%s/%s", DATAFILES, NEWBAN);
+        locale_default_path(filename, sizeof filename, DATAFILES, NEWBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user,

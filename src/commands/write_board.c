@@ -69,7 +69,9 @@ write_board(UR_OBJECT user, char *inpstr)
     if (is_personal_room(user->room)) {
         sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, user->room->owner);
     } else {
-        sprintf(filename, "%s/%s.B", DATAFILES, user->room->name);
+        char bfile[ROOM_NAME_LEN + 4];
+        snprintf(bfile, sizeof bfile, "%s.B", user->room->name);
+        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
     }
     fp = fopen(filename, "a");
     if (!fp) {

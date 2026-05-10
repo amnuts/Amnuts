@@ -36,7 +36,11 @@ reload_room_description(UR_OBJECT user)
             if (is_personal_room(rm)) {
                 continue;
             }
-            sprintf(filename, "%s/%s.R", DATAFILES, rm->name);
+            {
+                char rmfile[ROOM_NAME_LEN + 4];
+                snprintf(rmfile, sizeof rmfile, "%s.R", rm->name);
+                locale_default_path(filename, sizeof filename, DATAFILES, rmfile);
+            }
             fp = fopen(filename, "r");
             if (!fp) {
                 vwrite_user(user,
@@ -88,7 +92,11 @@ reload_room_description(UR_OBJECT user)
                 "Sorry, but you cannot reload personal room descriptions.\n");
         return;
     }
-    sprintf(filename, "%s/%s.R", DATAFILES, rm->name);
+    {
+        char rmfile[ROOM_NAME_LEN + 4];
+        snprintf(rmfile, sizeof rmfile, "%s.R", rm->name);
+        locale_default_path(filename, sizeof filename, DATAFILES, rmfile);
+    }
     fp = fopen(filename, "r");
     if (!fp) {
         vwrite_user(user,
