@@ -48,22 +48,26 @@
 
 /* general directories */
 #define BASE_STORAGE_DIR "files"
-#define ADMINFILES BASE_STORAGE_DIR "/adminfiles"
-#define DATAFILES  BASE_STORAGE_DIR "/datafiles"
 #define DUMPFILES  BASE_STORAGE_DIR "/dumpfiles"
-#define HELPFILES  BASE_STORAGE_DIR "/helpfiles"
 #define LOGFILES   BASE_STORAGE_DIR "/logfiles"
 #define MAILSPOOL  BASE_STORAGE_DIR "/mailspool"
-#define MISCFILES  BASE_STORAGE_DIR "/miscfiles"
-#define MOTDFILES  BASE_STORAGE_DIR "/motds"
 #define PICTFILES  BASE_STORAGE_DIR "/pictfiles"
-#define TEXTFILES  BASE_STORAGE_DIR "/textfiles"
 
 /* Localisation root — see docs/superpowers/specs/2026-05-10-localisation-design.md */
 #define LANGS_ROOT          BASE_STORAGE_DIR "/langs"
 #define DEFAULT_LOCALE_NAME "en_GB"
 #define LOCALE_NAME_LEN     16
 #define MAX_LOCALES         64
+
+/* Translatable categories — temporarily absolute paths pointing at the
+ * default-locale tree. Tasks 11-16 flip each one to a bare category name
+ * as their call sites are converted to use locale_*_path. */
+#define ADMINFILES  LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/adminfiles"
+#define DATAFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/datafiles"
+#define HELPFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/helpfiles"
+#define MISCFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/miscfiles"
+#define MOTDFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/motds"
+#define TEXTFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/textfiles"
 
 /* user directories */
 #define USERFILES     BASE_STORAGE_DIR "/userfiles"
