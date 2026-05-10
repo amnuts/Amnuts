@@ -1290,11 +1290,11 @@ load_and_parse_config(void)
   ML_ENTRY((RESOLVE_IP,         "resolve_ip"        )) \
   ML_ENTRY((FLOOD_PROTECT,      "flood_protect"     )) \
   ML_ENTRY((BOOT_OFF_MIN,       "boot_off_min"      )) \
+  ML_ENTRY((DEFAULT_LANGUAGE,   "default_language"  )) \
   ML_ENTRY((DEF_WARP,           "default_warp"      )) \
   ML_ENTRY((DEF_JAIL,           "default_jail"      )) \
   ML_ENTRY((DEF_BANK,           "default_bank"      )) \
   ML_ENTRY((DEF_SHOOT,          "default_shoot"     )) \
-  ML_ENTRY((DEFAULT_LANGUAGE,   "default_language"  )) \
   ML_ENTRY((COUNT,              NULL                ))
 
 /*
@@ -1846,13 +1846,11 @@ parse_init_section(void)
 
     case INITOPT_DEFAULT_LANGUAGE:
         if (strlen(wrd[1]) >= LOCALE_NAME_LEN) {
-            fprintf(stderr,
-                    "Amnuts: default_language value too long on line %d (max %d chars).\n",
-                    config_line, LOCALE_NAME_LEN - 1);
+            fprintf(stderr, "Amnuts: %s too long on line %d.\n",
+                    *initopt, config_line);
             boot_exit(1);
         }
-        strncpy(amsys->default_locale, wrd[1], LOCALE_NAME_LEN - 1);
-        amsys->default_locale[LOCALE_NAME_LEN - 1] = '\0';
+        strcpy(amsys->default_locale, wrd[1]);
         break;
 
     default:
