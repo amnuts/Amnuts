@@ -75,7 +75,7 @@ files/
   langs/
     en_GB/
       strings.yml
-      datafiles/   helpfiles/   miscfiles/   motds/   textfiles/
+      adminfiles/  datafiles/   helpfiles/   miscfiles/   motds/   textfiles/
     de-DE/
       strings.yml          # may contain only a handful of keys
     cowboy/
@@ -225,22 +225,32 @@ realistic risk surface.
 
 ### 5.1 Re-purposed `defines.h` constants
 
+Six existing category constants change semantics from absolute paths
+under `BASE_STORAGE_DIR` to bare category names. The remaining
+`BASE_STORAGE_DIR`-prefixed constants (`DUMPFILES`, `LOGFILES`,
+`MAILSPOOL`, `PICTFILES`, `USERFILES`, and the `REBOOTING_DIR`-family)
+stay unchanged.
+
 ```c
 /* before */
-#define DATAFILES   "files/datafiles"
-#define HELPFILES   "files/helpfiles"
-#define MOTDS       "files/motds"
-#define TEXTFILES   "files/textfiles"
-#define MISCFILES   "files/miscfiles"
+#define BASE_STORAGE_DIR "files"
+#define ADMINFILES  BASE_STORAGE_DIR "/adminfiles"
+#define DATAFILES   BASE_STORAGE_DIR "/datafiles"
+#define HELPFILES   BASE_STORAGE_DIR "/helpfiles"
+#define MISCFILES   BASE_STORAGE_DIR "/miscfiles"
+#define MOTDFILES   BASE_STORAGE_DIR "/motds"
+#define TEXTFILES   BASE_STORAGE_DIR "/textfiles"
 
 /* after */
+#define BASE_STORAGE_DIR "files"
+#define LANGS_ROOT      BASE_STORAGE_DIR "/langs"
+
+#define ADMINFILES  "adminfiles"
 #define DATAFILES   "datafiles"
 #define HELPFILES   "helpfiles"
-#define MOTDS       "motds"
-#define TEXTFILES   "textfiles"
 #define MISCFILES   "miscfiles"
-
-#define LANGS_ROOT  "files/langs"
+#define MOTDFILES   "motds"
+#define TEXTFILES   "textfiles"
 ```
 
 Re-purposing forces every existing `sprintf(path, "%s/%s", DATAFILES, ...)`
@@ -266,8 +276,8 @@ int locale_default_path(char *out, size_t outlen,
 
 No server code writes to any of the relocated categories at runtime. There
 are no MOTD-edit or room-content-edit commands. Files in
-`langs/<locale>/datafiles|helpfiles|motds|textfiles|miscfiles/` are
-file-edited only. The implementation audit in Phase 1 confirms this; any
+`langs/<locale>/{adminfiles,datafiles,helpfiles,miscfiles,motds,textfiles}/`
+are file-edited only. The implementation audit in Phase 1 confirms this; any
 exception is relocated to a non-translated category, or writes to the
 default-locale path explicitly.
 
@@ -555,9 +565,10 @@ reset.
 Each phase ships independently; the talker keeps working at every step.
 
 - **Phase 1 — Mechanism 2 + directory move.** Vendor libyaml, relocate the
-  five categories under `files/langs/en_GB/`, re-purpose the `*_FILES`
-  constants, implement `locale_path` / `locale_default_path`, sweep every
-  path-building call site. After this phase the talker is byte-identical
+  six categories (`adminfiles`, `datafiles`, `helpfiles`, `miscfiles`,
+  `motds`, `textfiles`) under `files/langs/en_GB/`, re-purpose the matching
+  `*_FILES` constants, implement `locale_path` / `locale_default_path`,
+  sweep every path-building call site. After this phase the talker is byte-identical
   to before from a user's perspective; only file locations and
   path-building helpers have changed.
 - **Phase 2 — Catalog framework.** Implement catalog data structure, YAML
