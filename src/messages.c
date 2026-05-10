@@ -25,7 +25,7 @@ count_suggestions(void)
     FILE *fp;
     int valid;
 
-    sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
+    locale_default_path(filename, sizeof filename, MISCFILES, SUGBOARD);
     fp = fopen(filename, "r");
     if (!fp) {
         return;

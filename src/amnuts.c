@@ -4558,7 +4558,7 @@ login(UR_OBJECT user, char *inpstr)
             }
             strcpy(user->pass, crypt(passwd, crypt_salt));
             write_user(user, "\n");
-            sprintf(filename, "%s/%s", MISCFILES, RULESFILE);
+            locale_path(user, filename, sizeof filename, MISCFILES, RULESFILE);
             if (more(NULL, user->socket, filename)) {
                 write_user(user,
                         "\nBy typing your password in again you are accepting the above rules.\n");
@@ -5584,7 +5584,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         shutdown_com(user);
         break;
     case NEWS:
-        sprintf(filename, "%s/%s", MISCFILES, NEWSFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, NEWSFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "There is no news.\n");
@@ -5891,7 +5891,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         macros(user);
         break;
     case RULES:
-        sprintf(filename, "%s/%s", MISCFILES, RULESFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, RULESFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "\nThere are currrently no rules...\n");
@@ -6122,7 +6122,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         personal_room_bgone(user);
         break;
     case WIZRULES:
-        sprintf(filename, "%s/%s", MISCFILES, WIZRULESFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, WIZRULESFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "\nThere are currrently no admin rules...\n");
