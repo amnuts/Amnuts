@@ -21,7 +21,7 @@
 - `Makefile` — vendor block for libyaml; sources auto-picked by existing `wildcard`
 - `src/includes/defines.h` — re-purpose six constants from absolute to bare; add `LANGS_ROOT`
 - `src/includes/globals.h` — add `default_locale[16]` and `available_locales` to `system_struct`; add forward decl of `struct locale_state`
-- `src/includes/prototypes.h` — declare `locale_load_all`, `locale_discover`, `locale_path`, `locale_default_path`, `locale_set_user`, `locale_default`
+- `src/includes/prototypes.h` — declare `locale_load_all`, `locale_path`, `locale_default_path`, `locale_default`
 - `src/amnuts.c` — add `INITOPT_DEFAULT_LANGUAGE` to the config parser's `INIT_LIST` X-macro; call `locale_load_all` early in boot
 - 17 caller files identified at planning time (see Task 11): `admin.c`, `messages.c`, `games.c`, `amnuts.c`, `commands/delete_suggestions.c`, `commands/display.c`, `commands/help.c`, `commands/listbans.c`, `commands/read_board.c`, `commands/recount.c`, `commands/reload_room.c`, `commands/search_boards.c`, `commands/sfrom.c`, `commands/suggestions.c`, `commands/wipe_board.c`, `commands/write_board.c` — sweep every site that builds a path under one of the six relocated category constants
 

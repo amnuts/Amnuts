@@ -8,10 +8,6 @@
 
 #include <stddef.h>
 
-/* Opaque to callers; defined in locale.c */
-struct locale_catalog;
-struct locale_state;
-
 /* Forward decl — UR_OBJECT is a pointer typedef declared in globals.h */
 struct user_struct;
 
