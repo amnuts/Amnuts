@@ -80,7 +80,7 @@ help(UR_OBJECT user)
         return;
     }
     if (word_count < 3) {
-        sprintf(filename, "%s/%s", HELPFILES, com->name);
+        locale_path(user, filename, sizeof filename, HELPFILES, com->name);
     } else {
         if (com == command_table + SET) {
             const struct set_entry *attr, *a;
@@ -118,13 +118,15 @@ help(UR_OBJECT user)
                 return;
             }
             if (word_count < 4) {
-                sprintf(filename, "%s/%s_%s", HELPFILES, com->name, attr->type);
+                char helpname[WORD_LEN * 2 + 2];
+                snprintf(helpname, sizeof helpname, "%s_%s", com->name, attr->type);
+                locale_path(user, filename, sizeof filename, HELPFILES, helpname);
             } else {
-                sprintf(filename, "%s/%s", HELPFILES, com->name);
+                locale_path(user, filename, sizeof filename, HELPFILES, com->name);
             }
         } else {
             com = command_table + HELP;
-            sprintf(filename, "%s/%s", HELPFILES, com->name);
+            locale_path(user, filename, sizeof filename, HELPFILES, com->name);
         }
     }
     switch (more(user, user->socket, filename)) {

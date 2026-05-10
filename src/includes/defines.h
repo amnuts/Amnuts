@@ -64,7 +64,7 @@
  * as their call sites are converted to use locale_*_path. */
 #define ADMINFILES  "adminfiles"
 #define DATAFILES   "datafiles"
-#define HELPFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/helpfiles"
+#define HELPFILES   "helpfiles"
 #define MISCFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/miscfiles"
 #define MOTDFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/motds"
 #define TEXTFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/textfiles"
