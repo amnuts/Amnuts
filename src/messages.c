@@ -63,7 +63,8 @@ count_motds(int forcecnt)
     amsys->motd2_cnt = 0;
     for (i = 1; i <= 2; ++i) {
         /* open the directory file up */
-        sprintf(filename, "%s/motd%d", MOTDFILES, i);
+        snprintf(filename, sizeof filename, "%s/%s/%s/motd%d",
+                 LANGS_ROOT, locale_default(), MOTDFILES, i);
         dirp = opendir(filename);
         if (!dirp) {
             if (!forcecnt) {

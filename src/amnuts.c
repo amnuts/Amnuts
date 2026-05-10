@@ -820,7 +820,9 @@ accept_connection(int lsock)
     }
     /* get random motd1 and send  pre-login message */
     if (amsys->motd1_cnt) {
-        sprintf(motdname, "%s/motd1/motd%d", MOTDFILES, (get_motd_num(1)));
+        char motdsub[16];
+        snprintf(motdsub, sizeof motdsub, "motd1/motd%d", get_motd_num(1));
+        locale_default_path(motdname, sizeof motdname, MOTDFILES, motdsub);
         more(NULL, accept_sock, motdname);
     } else {
         sprintf(text,
@@ -4590,7 +4592,9 @@ login(UR_OBJECT user, char *inpstr)
             cls(user);
             /* If there is no motd2 files then do not display them */
             if (amsys->motd2_cnt) {
-                sprintf(motdname, "%s/motd2/motd%d", MOTDFILES, (get_motd_num(2)));
+                char motdsub[16];
+                snprintf(motdsub, sizeof motdsub, "motd2/motd%d", get_motd_num(2));
+                locale_path(user, motdname, sizeof motdname, MOTDFILES, motdsub);
                 more(user, user->socket, motdname);
             }
             write_user(user, "Press return to continue: ");
@@ -4629,7 +4633,9 @@ login(UR_OBJECT user, char *inpstr)
         cls(user);
         /* If there is no motd2 files then do not display them */
         if (amsys->motd2_cnt) {
-            sprintf(motdname, "%s/motd2/motd%d", MOTDFILES, (get_motd_num(2)));
+            char motdsub[16];
+            snprintf(motdsub, sizeof motdsub, "motd2/motd%d", get_motd_num(2));
+            locale_path(user, motdname, sizeof motdname, MOTDFILES, motdsub);
             more(user, user->socket, motdname);
         }
         write_user(user, "Press return to continue: ");
