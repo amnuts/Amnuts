@@ -396,6 +396,7 @@ struct system_struct {
     int flood_protect;
     char default_warp[ROOM_NAME_LEN + 1];
     char default_jail[ROOM_NAME_LEN + 1];
+    char default_locale[LOCALE_NAME_LEN];   /* directory name under LANGS_ROOT */
 #ifdef GAMES
     char default_bank[ROOM_NAME_LEN + 1];
     char default_shoot[ROOM_NAME_LEN + 1];
