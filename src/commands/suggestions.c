@@ -19,7 +19,7 @@
 void
 suggestions(UR_OBJECT user, char *inpstr)
 {
-    char filename[30], *c;
+    char filename[80], *c;
     FILE *fp;
     int cnt;
 
