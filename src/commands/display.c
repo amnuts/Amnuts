@@ -27,9 +27,9 @@ display_files(UR_OBJECT user, int admins)
 
     if (word_count < 2) {
         if (!admins) {
-            sprintf(filename, "%s/%s", TEXTFILES, SHOWFILES);
+            locale_path(user, filename, sizeof filename, TEXTFILES, SHOWFILES);
         } else {
-            sprintf(filename, "%s/%s/%s", TEXTFILES, ADMINFILES, SHOWFILES);
+            locale_path(user, filename, sizeof filename, TEXTFILES, ADMINFILES "/" SHOWFILES);
         }
         ret = more(user, user->socket, filename);
         if (!ret) {
@@ -56,9 +56,11 @@ display_files(UR_OBJECT user, int admins)
     }
     /* show the file */
     if (!admins) {
-        sprintf(filename, "%s/%s", TEXTFILES, word[1]);
+        locale_path(user, filename, sizeof filename, TEXTFILES, word[1]);
     } else {
-        sprintf(filename, "%s/%s/%s", TEXTFILES, ADMINFILES, word[1]);
+        char name[128];
+        snprintf(name, sizeof name, "%s/%s", ADMINFILES, word[1]);
+        locale_path(user, filename, sizeof filename, TEXTFILES, name);
     }
     ret = more(user, user->socket, filename);
     if (!ret) {

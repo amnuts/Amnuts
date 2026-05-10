@@ -67,7 +67,7 @@
 #define HELPFILES   "helpfiles"
 #define MISCFILES   "miscfiles"
 #define MOTDFILES   "motds"
-#define TEXTFILES   LANGS_ROOT "/" DEFAULT_LOCALE_NAME "/textfiles"
+#define TEXTFILES   "textfiles"
 
 /* user directories */
 #define USERFILES     BASE_STORAGE_DIR "/userfiles"
