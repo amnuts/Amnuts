@@ -1,6 +1,9 @@
 /****************************************************************************
    Amnuts localisation — file-path resolver and locale discovery.
    See docs/superpowers/specs/2026-05-10-localisation-design.md
+
+   Function declarations live in src/includes/prototypes.h (single source
+   of truth, per project convention).
  ***************************************************************************/
 
 #include <stdio.h>
@@ -11,9 +14,9 @@
 
 #include "defines.h"
 #include "globals.h"
-#include "locale.h"
 #include "prototypes.h"
 
+/* Return the configured default-locale name (NUL-terminated, owned). */
 const char *
 locale_default(void)
 {
@@ -27,6 +30,9 @@ file_exists(const char *path)
     return stat(path, &st) == 0;
 }
 
+/* Same as locale_path, but always resolves against the server default
+ * locale. Use for boot-time loaders, login banner display, and any
+ * "describes the world, not a person" lookup. */
 int
 locale_default_path(char *out, size_t outlen,
                     const char *category, const char *name)
@@ -41,6 +47,15 @@ locale_default_path(char *out, size_t outlen,
     return file_exists(out) ? 1 : 0;
 }
 
+/* Look up a category file in user's locale, falling back to the server
+ * default. Writes the resolved path to `out`. Returns:
+ *   2  found in user's locale
+ *   1  found in default locale (fallback used)
+ *   0  not found in either; `out` populated with the default-locale path
+ *
+ * `category` is a bare category name (e.g. "helpfiles"). `name` is the
+ * filename within that category. The composed path is
+ * "<LANGS_ROOT>/<locale>/<category>/<name>". */
 int
 locale_path(UR_OBJECT user, char *out, size_t outlen,
             const char *category, const char *name)
@@ -73,6 +88,10 @@ is_valid_locale_dirname(const char *name)
     return 1;
 }
 
+/* Discover locales under files/langs/ and validate the default. Called
+ * once at boot, after the config file has been parsed (so default_locale
+ * is known). Returns 0 on success; nonzero values are reserved for future
+ * use (in Phase 1, any failure is fatal and reported via boot_exit). */
 int
 locale_load_all(void)
 {
