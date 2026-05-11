@@ -3001,6 +3001,7 @@ load_user_details(UR_OBJECT user)
     get_xgcoms(user);
     read_user_reminders(user);
     load_flagged_users(user);
+    locale_resolve_catalog(user);
     return 1;
 }
 

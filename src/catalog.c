@@ -650,3 +650,32 @@ lang_level(int min_level, int notify_invis, int record_flag,
     }
     va_end(ap0);
 }
+
+/*
+ * Point user->catalog at the user's locale's catalog, falling back to
+ * default. If the user's named locale no longer exists (admin removed
+ * the directory between writes), clear user->locale and log it.
+ */
+void
+locale_resolve_catalog(UR_OBJECT user)
+{
+    if (!user) return;
+    if (*user->locale) {
+        struct locale_catalog *cat =
+            catalog_for_locale(&amsys->locales, user->locale);
+        if (cat) {
+            user->catalog = cat;
+            return;
+        }
+        /* User has a locale name that no longer exists. */
+        write_syslog(SYSLOG, 0,
+                     "[locale] user %s locale '%s' no longer available; resetting to default.\n",
+                     user->name, user->locale);
+        user->locale[0] = '\0';
+    }
+    if (amsys->locales.default_index >= 0) {
+        user->catalog = &amsys->locales.catalogs[amsys->locales.default_index];
+    } else {
+        user->catalog = NULL;
+    }
+}
