@@ -724,7 +724,8 @@ locale_list(UR_OBJECT user)
         if (!strcmp(cat->name, user->locale)) marker = '>';
         vwrite_user(user, " %c ~OL%-16.16s~RS  %s    %s",
                     marker, cat->name, display_name, display_desc);
-        if (display_desc[strlen(display_desc) - 1] != '\n') {
+        size_t dlen = strlen(display_desc);
+        if (dlen == 0 || display_desc[dlen - 1] != '\n') {
             write_user(user, "\n");
         }
     }
