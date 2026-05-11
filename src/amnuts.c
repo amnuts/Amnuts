@@ -2592,6 +2592,7 @@ record_last_logout(const char *name)
   ML_ENTRY((HOMEPAGE,      "homepage"    )) \
   ML_ENTRY((RECAP_NAME,    "recap_name"  )) \
   ML_ENTRY((GAME_SETTINGS, "games"       )) \
+  ML_ENTRY((LANGUAGE,      "language"    )) \
   ML_ENTRY((COUNT,         NULL          ))
 
 enum userdb_value {
@@ -2969,6 +2970,12 @@ load_user_details(UR_OBJECT user)
                 break;
             }
             break;
+        case USERDB_LANGUAGE:
+            if (wcnt >= 2) {
+                strncpy(user->locale, user_words[1], LOCALE_NAME_LEN - 1);
+                user->locale[LOCALE_NAME_LEN - 1] = '\0';
+            }
+            break;
         default:
             ++damaged;
             break;
@@ -3089,6 +3096,10 @@ save_user_details(UR_OBJECT user, int save_current)
             userfile_options[USERDB_GAME_SETTINGS], user->hits, user->misses,
             user->deaths, user->kills, user->bullets, user->hps, user->money,
             user->bank);
+    if (*user->locale) {
+        fprintf(fp, "%-13.13s %s\n", userfile_options[USERDB_LANGUAGE],
+                user->locale);
+    }
     fclose(fp);
     return 1;
 }
