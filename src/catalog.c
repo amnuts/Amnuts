@@ -626,11 +626,13 @@ lang_level(int min_level, int notify_invis, int record_flag,
         if (u->type == CLONE_TYPE) continue;
         if (u == exclude) continue;
         if (u->level < (enum lvl_value) min_level) continue;
-        if (!notify_invis && u->vis == 0 && u != exclude) {
-            /* If notify_invis is 0, hide the message from the invisible
-             * recipient — matches the existing vwrite_level semantics
-             * (cf. src/messages.c). Skip nothing for the visible case. */
-        }
+        /* TODO(Phase 5): notify_invis is currently a no-op. The first
+         * call site that needs the suppression must port the full
+         * vwrite_level semantics from src/messages.c — at that point
+         * insert a `continue;` (or equivalent gate) inside the body of
+         *   if (!notify_invis && u->vis == 0) { ... }
+         * to hide the message from the invisible recipient. */
+        (void) notify_invis;
 #ifdef NETLINKS
         if (!u->socket) continue;
 #endif
