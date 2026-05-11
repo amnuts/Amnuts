@@ -679,3 +679,54 @@ locale_resolve_catalog(UR_OBJECT user)
         user->catalog = NULL;
     }
 }
+
+
+int
+locale_set_user(UR_OBJECT user, const char *name)
+{
+    if (!user) return 0;
+
+    /* "default" or empty means "clear override". */
+    if (!name || !*name || !strcasecmp(name, "default")) {
+        user->locale[0] = '\0';
+        locale_resolve_catalog(user);
+        save_user_details(user, 1);
+        return 1;
+    }
+
+    /* Must be a discovered locale. */
+    struct locale_catalog *cat = catalog_for_locale(&amsys->locales, name);
+    if (!cat) {
+        return 0;
+    }
+    strncpy(user->locale, cat->name, LOCALE_NAME_LEN - 1);
+    user->locale[LOCALE_NAME_LEN - 1] = '\0';
+    user->catalog = cat;
+    save_user_details(user, 1);
+    return 1;
+}
+
+
+void
+locale_list(UR_OBJECT user)
+{
+    if (!user) return;
+
+    write_user(user, "\n~OL~FCAvailable languages:~RS\n\n");
+    for (int i = 0; i < amsys->locales.count; ++i) {
+        struct locale_catalog *cat = &amsys->locales.catalogs[i];
+        const struct lang_entry *nm = catalog_lookup(cat, "meta.name");
+        const struct lang_entry *ds = catalog_lookup(cat, "meta.description");
+        const char *display_name = nm ? nm->fmt : cat->name;
+        const char *display_desc = ds ? ds->fmt : "(no description)";
+        char marker = ' ';
+        if (cat->is_default)             marker = '*';
+        if (!strcmp(cat->name, user->locale)) marker = '>';
+        vwrite_user(user, " %c ~OL%-16.16s~RS  %s    %s",
+                    marker, cat->name, display_name, display_desc);
+        if (display_desc[strlen(display_desc) - 1] != '\n') {
+            write_user(user, "\n");
+        }
+    }
+    write_user(user, "\n~OL*~RS = server default, ~OL>~RS = your current setting\n\n");
+}
