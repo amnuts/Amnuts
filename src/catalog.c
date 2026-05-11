@@ -477,3 +477,109 @@ catalog_free_all(struct locale_state *st)
     free(st->catalogs);
     st->catalogs = NULL;
 }
+
+/* Rate-limit missing-key syslog noise to once per key per ~30s. We keep a
+ * tiny ring buffer rather than a hash; if a hot path is missing N keys,
+ * we'll see each at least once within the window. */
+#define MISSING_WARN_WINDOW 30
+#define MISSING_WARN_SLOTS  16
+
+static struct {
+    char     key[64];
+    time_t   last;
+} missing_warns[MISSING_WARN_SLOTS];
+
+static void
+catalog_warn_missing(const char *key)
+{
+    time_t now = time(NULL);
+    int    free_slot = -1;
+    int    oldest_slot = 0;
+    time_t oldest_time = missing_warns[0].last;
+
+    for (int i = 0; i < MISSING_WARN_SLOTS; ++i) {
+        if (!*missing_warns[i].key) {
+            if (free_slot < 0) free_slot = i;
+            continue;
+        }
+        if (!strcmp(missing_warns[i].key, key)) {
+            if (now - missing_warns[i].last < MISSING_WARN_WINDOW) return;
+            missing_warns[i].last = now;
+            write_syslog(SYSLOG, 0, "[locale] missing key: %s\n", key);
+            return;
+        }
+        if (missing_warns[i].last < oldest_time) {
+            oldest_time = missing_warns[i].last;
+            oldest_slot = i;
+        }
+    }
+    int slot = free_slot >= 0 ? free_slot : oldest_slot;
+    strncpy(missing_warns[slot].key, key, sizeof missing_warns[slot].key - 1);
+    missing_warns[slot].key[sizeof missing_warns[slot].key - 1] = '\0';
+    missing_warns[slot].last = now;
+    write_syslog(SYSLOG, 0, "[locale] missing key: %s\n", key);
+}
+
+static const struct locale_catalog *
+catalog_default(void)
+{
+    if (!amsys || !amsys->locales.catalogs) return NULL;
+    if (amsys->locales.default_index < 0) return NULL;
+    return &amsys->locales.catalogs[amsys->locales.default_index];
+}
+
+/* Resolve a key against (user_cat, default_cat). Returns the format string
+ * or NULL if missing in both. Logs missing-key the first time per window. */
+static const char *
+catalog_resolve(const struct locale_catalog *user_cat, const char *key)
+{
+    const struct lang_entry *e;
+    if (user_cat && (e = catalog_lookup(user_cat, key)) != NULL) {
+        return e->fmt;
+    }
+    const struct locale_catalog *def = catalog_default();
+    if (def && (e = catalog_lookup(def, key)) != NULL) {
+        return e->fmt;
+    }
+    catalog_warn_missing(key);
+    return NULL;
+}
+
+const char *
+lang(UR_OBJECT user, const char *key)
+{
+    return catalog_resolve(user ? user->catalog : NULL, key);
+}
+
+int
+lang_format(UR_OBJECT user, char *buf, size_t buflen,
+            const char *key, ...)
+{
+    const char *fmt = catalog_resolve(user ? user->catalog : NULL, key);
+    if (!fmt) {
+        return snprintf(buf, buflen, "[??? %s]\n", key);
+    }
+    va_list ap;
+    va_start(ap, key);
+    int n = vsnprintf(buf, buflen, fmt, ap);
+    va_end(ap);
+    return n;
+}
+
+void
+lang_user(UR_OBJECT user, const char *key, ...)
+{
+    if (!user) return;
+    const char *fmt = catalog_resolve(user->catalog, key);
+    char buf[ARR_SIZE * 2];
+    if (!fmt) {
+        snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        write_user(user, buf);
+        return;
+    }
+    va_list ap;
+    va_start(ap, key);
+    vsnprintf(buf, sizeof buf, fmt, ap);
+    va_end(ap);
+    write_user(user, buf);
+}
