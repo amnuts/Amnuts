@@ -226,10 +226,10 @@ catalog_log_drop(const char *locale_name, const char *key,
 }
 
 /*
- * Load one locale's strings.yml into `cat`. Sets cat->loaded_ok on success
- * (including the partial-success case where some keys were dropped).
- * Sets cat->loaded_ok = false only on top-level parse failure or missing
- * file, in which case the catalog stays empty and lookups fall back.
+ * Load one locale's strings.yml into `cat`. Always sets cat->loaded_ok = true
+ * on completion — including the missing-file and empty-file paths (the
+ * catalog stays empty and lookups fall back). Top-level parse failure
+ * (malformed YAML, wrong shape) is fatal via yaml_die → boot_exit.
  *
  * If `default_cat` is non-NULL, each successfully-parsed entry is validated
  * against the default's signature; mismatched entries are dropped + logged
@@ -375,11 +375,14 @@ catalog_load_one(struct locale_catalog *cat,
         yaml_event_delete(&val_ev);
     }
 
-    /* Drain to stream-end. */
-    do {
+    /* Drain to stream-end. yaml_event_delete() memsets the event to zero,
+     * so we must capture the type before deleting. */
+    for (;;) {
         yaml_next(path, &parser, &event);
+        yaml_event_type_t t = event.type;
         yaml_event_delete(&event);
-    } while (event.type != YAML_STREAM_END_EVENT);
+        if (t == YAML_STREAM_END_EVENT) break;
+    }
 
 done_ok:
     yaml_parser_delete(&parser);
