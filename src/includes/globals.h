@@ -11,6 +11,9 @@
 #ifndef AMNUTS_GLOBALS_H
 #define AMNUTS_GLOBALS_H
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "../vendors/libtelnet/libtelnet.h"
 
 #define ML_ENTRY(a) ML_EXPAND a
@@ -88,9 +91,37 @@ struct reminder_struct {
     char msg[REMINDER_LEN];
 };
 
+/* One entry in a locale's string catalog. Format strings and keys are
+ * strdup'd at load time and owned by the parent locale_catalog. */
+struct lang_entry {
+    char       *key;
+    char       *fmt;
+    uint8_t     arg_count;
+    char        arg_types[8];      /* per-position: 'd','s','x','c'; 0=unused */
+    struct lang_entry *next;       /* hash bucket chain */
+};
+
+/* Per-locale loaded catalog. Lives in amsys->locales.catalogs[i]. */
+struct locale_catalog {
+    char     name[LOCALE_NAME_LEN];
+    bool     is_default;
+    bool     loaded_ok;             /* false => dropped during load; do not use */
+    int      bucket_count;          /* always a power of two; see CATALOG_BUCKETS */
+    int      entry_count;           /* unique keys actually loaded */
+    struct lang_entry **buckets;    /* heap-allocated, bucket_count entries */
+};
+
 struct locale_state {
     char  names[MAX_LOCALES][LOCALE_NAME_LEN];   /* discovered locale names */
     int   count;
+
+    /* Catalog table, populated by catalog_load_all().
+     * `catalogs[i].name` mirrors `names[i]` for the same i. Entries with
+     * loaded_ok == false were either parse-failures or non-default locales
+     * with no strings.yml — lookups against them must fall back to default.
+     * `default_index` is the index of the default catalog (0..count-1). */
+    struct locale_catalog *catalogs;   /* heap; freed and replaced by langreload */
+    int                    default_index;
 };
 
 /*
@@ -103,6 +134,7 @@ struct user_struct {
     char in_phrase[PHRASE_LEN + 1];
     char out_phrase[PHRASE_LEN + 1];
     char locale[LOCALE_NAME_LEN];   /* "" => use default */
+    struct locale_catalog *catalog;  /* non-owning; refreshed at login + langreload */
     char buff[BUFSIZE];
     char site[MAXHOST]; /* XXX: Use NI_MAXHOST */
     char ipsite[MAXADDR]; /* XXX: Use NI_MAXHOST, INET_ADDRSTRLEN, INET6_ADDRSTRLEN */
