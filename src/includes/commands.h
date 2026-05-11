@@ -256,6 +256,7 @@
   ML_ENTRY((ICQ,       "icq",      "allows you to put in your ICQ number"                                  )) \
   ML_ENTRY((ALERT,     "alert",    "lets you know when someone in your friends list logs on (toggle)"      )) \
   ML_ENTRY((REVBUF,    "revbuf",   "lets you reverse the viewing of your review buffers (toggle)"          )) \
+  ML_ENTRY((LANG,      "lang",     "set the language/locale you'd like to use"                             )) \
   ML_ENTRY((COUNT,     NULL,       NULL                                                                    ))
 
 
