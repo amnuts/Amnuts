@@ -283,6 +283,40 @@ int  locale_default_path(char *out, size_t outlen,
 const char *locale_default(void);
 
 
+/* catalog.c */
+int   catalog_load_all(struct locale_state *st);
+void  catalog_free_all(struct locale_state *st);
+struct locale_catalog *catalog_for_locale(const struct locale_state *st,
+                                          const char *locale_name);
+const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
+                                        const char *key);
+
+/* lang_*() — render a catalog entry to one or more users.
+ * `key` resolution: user->catalog first, then amsys default catalog.
+ * Missing-in-both keys emit a visible "[??? key]\n" marker and rate-limit
+ * the warning to the system log. */
+const char *lang(UR_OBJECT user, const char *key);
+void  lang_user (UR_OBJECT user,  const char *key, ...);
+void  lang_room (RM_OBJECT room,  UR_OBJECT exclude, const char *key, ...);
+void  lang_level(int min_level, int notify_invis, int record_flag,
+                 UR_OBJECT exclude, const char *key, ...);
+int   lang_format(UR_OBJECT user, char *buf, size_t buflen,
+                  const char *key, ...);
+
+/* Lifecycle helpers reused by `set lang` and `langreload`. */
+int   locale_set_user(UR_OBJECT user, const char *name);
+void  locale_list    (UR_OBJECT user);
+void  locale_resolve_catalog(UR_OBJECT user);  /* set user->catalog from user->locale */
+
+
+/* yaml_util.c */
+struct yaml_parser_s;  /* opaque to most callers — actually yaml_parser_t */
+void yaml_die(const char *path, void *parser, const char *fmt, ...)
+    __attribute__((format(printf, 3, 4), noreturn));
+void yaml_next(const char *path, void *parser, void *event_out);
+const char *yaml_event_kind(int event_type);
+
+
 /*
  * functions in messages.c
  */
@@ -603,5 +637,11 @@ void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data)
  * functions in commands/
  */
 void show_terminal(UR_OBJECT);
+
+/* set_lang.c */
+void set_user_lang(UR_OBJECT user);
+
+/* langreload.c */
+void langreload(UR_OBJECT user);
 
 #endif
