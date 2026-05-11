@@ -583,3 +583,68 @@ lang_user(UR_OBJECT user, const char *key, ...)
     va_end(ap);
     write_user(user, buf);
 }
+
+void
+lang_room(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
+{
+    if (!room) return;
+
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        if (u->type == CLONE_TYPE) continue;
+        if (u == exclude) continue;
+        if (u->room != room) continue;
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+        const char *fmt = catalog_resolve(u->catalog, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+        write_user(u, buf);
+    }
+    va_end(ap0);
+}
+
+void
+lang_level(int min_level, int notify_invis, int record_flag,
+           UR_OBJECT exclude, const char *key, ...)
+{
+    (void) record_flag;   /* parameter parity with vwrite_level; not used today */
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        if (u->type == CLONE_TYPE) continue;
+        if (u == exclude) continue;
+        if (u->level < (enum lvl_value) min_level) continue;
+        if (!notify_invis && u->vis == 0 && u != exclude) {
+            /* If notify_invis is 0, hide the message from the invisible
+             * recipient — matches the existing vwrite_level semantics
+             * (cf. src/messages.c). Skip nothing for the visible case. */
+        }
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+        const char *fmt = catalog_resolve(u->catalog, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+        write_user(u, buf);
+    }
+    va_end(ap0);
+}
