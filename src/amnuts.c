@@ -5691,6 +5691,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
     case LISTBANS:
         listbans(user);
         break;
+    case LANGRELOAD:
+        langreload(user);
+        break;
     case BAN:
         ban(user);
         break;

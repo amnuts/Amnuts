@@ -4,11 +4,13 @@
  ***************************************************************************/
 
 #include <ctype.h>
+#include <dirent.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -730,4 +732,102 @@ locale_list(UR_OBJECT user)
         }
     }
     write_user(user, "\n~OL*~RS = server default, ~OL>~RS = your current setting\n\n");
+}
+
+
+/* One generation of grace: we keep the previous catalog table alive until
+ * the *next* langreload completes, so any in-flight lang_* function that
+ * captured an old user->catalog still reads valid memory. After the second
+ * reload the previous-previous becomes freeable. */
+static struct locale_state *prev_locales_held = NULL;
+
+static void
+locale_state_destroy(struct locale_state *st)
+{
+    if (!st) return;
+    catalog_free_all(st);
+    free(st);
+}
+
+/*
+ * Reload all catalogs. On success swaps amsys->locales atomically and
+ * re-resolves every connected user's catalog pointer. On failure leaves
+ * the live table untouched and reports the error.
+ *
+ * Returns: 0 on success, -1 on failure.
+ */
+int
+catalog_reload_all(void)
+{
+    struct locale_state *fresh = calloc(1, sizeof *fresh);
+    if (!fresh) return -1;
+
+    /* Discover locales into `fresh` — duplicates the small loop from
+     * locale_load_all() (in src/locale.c). Refactor opportunity if a
+     * third caller appears. */
+    DIR *dirp = opendir(LANGS_ROOT);
+    if (!dirp) {
+        free(fresh);
+        return -1;
+    }
+    struct dirent *dp;
+    int default_seen = 0;
+    while ((dp = readdir(dirp))) {
+        size_t len = strlen(dp->d_name);
+        if (!len || dp->d_name[0] == '.' || len >= LOCALE_NAME_LEN) continue;
+        if (strchr(dp->d_name, '/') || strchr(dp->d_name, '\\')) continue;
+        struct stat st;
+        char path[1024];
+        snprintf(path, sizeof path, "%s/%s", LANGS_ROOT, dp->d_name);
+        if (stat(path, &st) != 0 || !S_ISDIR(st.st_mode)) continue;
+        if (!strcmp(dp->d_name, amsys->default_locale)) default_seen = 1;
+        if (fresh->count >= MAX_LOCALES) continue;
+        strncpy(fresh->names[fresh->count], dp->d_name, LOCALE_NAME_LEN - 1);
+        fresh->names[fresh->count][LOCALE_NAME_LEN - 1] = '\0';
+        fresh->count++;
+    }
+    closedir(dirp);
+
+    if (!default_seen) {
+        free(fresh);
+        return -1;
+    }
+
+    if (catalog_load_all(fresh) != 0) {
+        catalog_free_all(fresh);
+        free(fresh);
+        return -1;
+    }
+
+    /* Atomic swap. */
+    struct locale_state old_state = amsys->locales;
+    amsys->locales = *fresh;
+    free(fresh);
+
+    /* Release the previous-previous generation, hold the previous. */
+    locale_state_destroy(prev_locales_held);
+    prev_locales_held = malloc(sizeof *prev_locales_held);
+    if (prev_locales_held) {
+        *prev_locales_held = old_state;
+    } else {
+        /* Out of memory holding the grace generation — free in place. */
+        catalog_free_all(&old_state);
+    }
+
+    /* Re-resolve every connected user's catalog pointer. */
+    int resets = 0;
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        if (u->type == CLONE_TYPE || u->type == REMOTE_TYPE) continue;
+        int had_locale = (u->locale[0] != '\0');
+        locale_resolve_catalog(u);
+        if (had_locale && !u->locale[0]) {
+            ++resets;
+            write_user(u,
+                "~OL~FY[ Language reset to server default — your previous setting is gone. ]~RS\n");
+        }
+    }
+    write_syslog(SYSLOG, 1,
+                 "[locale] langreload: %d catalog(s) reloaded, %d user(s) reset.\n",
+                 amsys->locales.count, resets);
+    return 0;
 }

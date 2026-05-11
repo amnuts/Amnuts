@@ -286,6 +286,7 @@ const char *locale_default(void);
 /* catalog.c */
 int   catalog_load_all(struct locale_state *st);
 void  catalog_free_all(struct locale_state *st);
+int   catalog_reload_all(void);
 struct locale_catalog *catalog_for_locale(const struct locale_state *st,
                                           const char *locale_name);
 const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,

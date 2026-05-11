@@ -81,6 +81,7 @@
   ML_ENTRY((PROMOTE,      "promote",    "",    WIZ,     ADMIN  )) \
   ML_ENTRY((DEMOTE,       "demote",     "",    WIZ,     ADMIN  )) \
   ML_ENTRY((LISTBANS,     "lban",       "",    WIZ,     ADMIN  )) \
+  ML_ENTRY((LANGRELOAD,   "langreload", "",    WIZ,     ADMIN  )) \
   ML_ENTRY((BAN,          "ban",        "",    ARCH,    ADMIN  )) \
   ML_ENTRY((UNBAN,        "unban",      "",    ARCH,    ADMIN  )) \
   ML_ENTRY((VIS,          "vis",        "",    ARCH,    USER   )) \
