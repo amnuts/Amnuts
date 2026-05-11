@@ -10,6 +10,7 @@
 #include <string.h>
 #include <strings.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "defines.h"
 #include "globals.h"
@@ -215,12 +216,228 @@ catalog_signature_compatible(const struct lang_entry *def,
     return 0;
 }
 
-/* Stubs filled in by later tasks. Defined here so the link still works. */
+static void
+catalog_log_drop(const char *locale_name, const char *key,
+                 const char *path, int line, int col, const char *why)
+{
+    write_syslog(SYSLOG | ERRLOG, 0,
+                 "[locale] %s/strings.yml: key '%s' dropped at %d:%d — %s (path %s)\n",
+                 locale_name, key ? key : "<top-level>", line, col, why, path);
+}
+
+/*
+ * Load one locale's strings.yml into `cat`. Sets cat->loaded_ok on success
+ * (including the partial-success case where some keys were dropped).
+ * Sets cat->loaded_ok = false only on top-level parse failure or missing
+ * file, in which case the catalog stays empty and lookups fall back.
+ *
+ * If `default_cat` is non-NULL, each successfully-parsed entry is validated
+ * against the default's signature; mismatched entries are dropped + logged
+ * but do not fail the whole locale.
+ */
+static void
+catalog_load_one(struct locale_catalog *cat,
+                 const struct locale_catalog *default_cat)
+{
+    char path[1024];
+    snprintf(path, sizeof path, "%s/%s/strings.yml",
+             LANGS_ROOT, cat->name);
+
+    FILE *fp = fopen(path, "r");
+    if (!fp) {
+        /* Missing strings.yml is allowed for non-default locales — the
+         * catalog stays empty and every lookup falls back to the default.
+         * For the default, the gate in catalog_load_all enforces presence. */
+        cat->bucket_count = CATALOG_BUCKETS;
+        cat->buckets = catalog_alloc_buckets(cat->bucket_count);
+        cat->loaded_ok = true;
+        return;
+    }
+
+    yaml_parser_t parser;
+    yaml_event_t  event;
+    yaml_parser_initialize(&parser);
+    yaml_parser_set_input_file(&parser, fp);
+
+    cat->bucket_count = CATALOG_BUCKETS;
+    cat->buckets = catalog_alloc_buckets(cat->bucket_count);
+
+    yaml_next(path, &parser, &event);
+    if (event.type != YAML_STREAM_START_EVENT) {
+        yaml_die(path, &parser, "expected stream-start, got %s",
+                 yaml_event_kind(event.type));
+    }
+    yaml_event_delete(&event);
+
+    yaml_next(path, &parser, &event);
+    if (event.type == YAML_STREAM_END_EVENT) {
+        /* empty file — same as missing. */
+        yaml_event_delete(&event);
+        goto done_ok;
+    }
+    if (event.type != YAML_DOCUMENT_START_EVENT) {
+        yaml_die(path, &parser, "expected document-start, got %s",
+                 yaml_event_kind(event.type));
+    }
+    yaml_event_delete(&event);
+
+    yaml_next(path, &parser, &event);
+    if (event.type != YAML_MAPPING_START_EVENT) {
+        yaml_die(path, &parser,
+                 "strings.yml top-level must be a mapping (got %s)",
+                 yaml_event_kind(event.type));
+    }
+    yaml_event_delete(&event);
+
+    for (;;) {
+        /* key */
+        yaml_event_t key_ev;
+        yaml_next(path, &parser, &key_ev);
+        if (key_ev.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&key_ev);
+            break;
+        }
+        if (key_ev.type != YAML_SCALAR_EVENT) {
+            yaml_die(path, &parser, "expected scalar key, got %s",
+                     yaml_event_kind(key_ev.type));
+        }
+
+        /* value — only scalars supported in Phase 2. */
+        yaml_event_t val_ev;
+        yaml_next(path, &parser, &val_ev);
+        if (val_ev.type != YAML_SCALAR_EVENT) {
+            yaml_die(path, &parser,
+                     "value for key '%s' must be a scalar string (got %s)",
+                     (const char *) key_ev.data.scalar.value,
+                     yaml_event_kind(val_ev.type));
+        }
+
+        const char *k = (const char *) key_ev.data.scalar.value;
+        const char *v = (const char *) val_ev.data.scalar.value;
+
+        /* Extract signature. */
+        struct lang_entry tmp;
+        memset(&tmp, 0, sizeof tmp);
+        const char *why = NULL;
+        if (catalog_extract_signature(v, &tmp.arg_count, tmp.arg_types, &why) < 0) {
+            catalog_log_drop(cat->name, k, path,
+                             (int) parser.mark.line + 1,
+                             (int) parser.mark.column + 1, why);
+            yaml_event_delete(&key_ev);
+            yaml_event_delete(&val_ev);
+            continue;
+        }
+
+        /* If non-default, validate against default. */
+        if (default_cat) {
+            const struct lang_entry *def = catalog_lookup(default_cat, k);
+            if (def) {
+                if (catalog_signature_compatible(def, &tmp, &why) < 0) {
+                    catalog_log_drop(cat->name, k, path,
+                                     (int) parser.mark.line + 1,
+                                     (int) parser.mark.column + 1, why);
+                    yaml_event_delete(&key_ev);
+                    yaml_event_delete(&val_ev);
+                    continue;
+                }
+            }
+        }
+
+        /* Reject duplicate keys: first wins, log the duplicate. */
+        if (catalog_lookup(cat, k)) {
+            catalog_log_drop(cat->name, k, path,
+                             (int) parser.mark.line + 1,
+                             (int) parser.mark.column + 1,
+                             "duplicate key (first definition kept)");
+            yaml_event_delete(&key_ev);
+            yaml_event_delete(&val_ev);
+            continue;
+        }
+
+        struct lang_entry *e = calloc(1, sizeof *e);
+        if (!e) {
+            fprintf(stderr, "Amnuts: out of memory loading catalog %s.\n",
+                    cat->name);
+            boot_exit(1);
+        }
+        e->key       = strdup(k);
+        e->fmt       = strdup(v);
+        e->arg_count = tmp.arg_count;
+        memcpy(e->arg_types, tmp.arg_types, sizeof tmp.arg_types);
+        if (!e->key || !e->fmt) {
+            fprintf(stderr, "Amnuts: out of memory loading catalog %s.\n",
+                    cat->name);
+            boot_exit(1);
+        }
+        catalog_insert(cat, e);
+
+        yaml_event_delete(&key_ev);
+        yaml_event_delete(&val_ev);
+    }
+
+    /* Drain to stream-end. */
+    do {
+        yaml_next(path, &parser, &event);
+        yaml_event_delete(&event);
+    } while (event.type != YAML_STREAM_END_EVENT);
+
+done_ok:
+    yaml_parser_delete(&parser);
+    fclose(fp);
+    cat->loaded_ok = true;
+}
+
 int
 catalog_load_all(struct locale_state *st)
 {
-    (void) st;
-    /* Task 6 fills this in. */
+    if (!st || st->count <= 0) return 0;
+
+    st->catalogs = calloc((size_t) st->count, sizeof *st->catalogs);
+    if (!st->catalogs) {
+        fprintf(stderr, "Amnuts: out of memory allocating catalog array.\n");
+        boot_exit(1);
+    }
+    st->default_index = -1;
+
+    /* Mirror names[] into catalogs[].name; mark the default. */
+    for (int i = 0; i < st->count; ++i) {
+        strncpy(st->catalogs[i].name, st->names[i],
+                LOCALE_NAME_LEN - 1);
+        st->catalogs[i].name[LOCALE_NAME_LEN - 1] = '\0';
+        if (!strcmp(st->catalogs[i].name, amsys->default_locale)) {
+            st->catalogs[i].is_default = true;
+            st->default_index = i;
+        }
+    }
+    if (st->default_index < 0) {
+        fprintf(stderr, "Amnuts: default locale '%s' missing from catalog table.\n",
+                amsys->default_locale);
+        boot_exit(1);
+    }
+
+    /* Load default first so non-defaults can validate against it. */
+    catalog_load_one(&st->catalogs[st->default_index], NULL);
+
+    /* Default's strings.yml MUST exist and parse; otherwise hard-fail. */
+    if (!st->catalogs[st->default_index].loaded_ok
+        || st->catalogs[st->default_index].entry_count == 0) {
+        char path[1024];
+        snprintf(path, sizeof path, "%s/%s/strings.yml",
+                 LANGS_ROOT, amsys->default_locale);
+        if (access(path, R_OK) != 0) {
+            fprintf(stderr,
+                    "Amnuts: default locale '%s' has no readable strings.yml at %s.\n",
+                    amsys->default_locale, path);
+            boot_exit(1);
+        }
+        /* File exists but is empty — that's allowed for the meta-only ship state. */
+    }
+
+    /* Load non-defaults. */
+    for (int i = 0; i < st->count; ++i) {
+        if (i == st->default_index) continue;
+        catalog_load_one(&st->catalogs[i], &st->catalogs[st->default_index]);
+    }
     return 0;
 }
 

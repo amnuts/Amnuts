@@ -140,5 +140,11 @@ locale_load_all(void)
     }
     printf("Localisation: discovered %d locale(s); default = %s.\n",
            amsys->locales.count, amsys->default_locale);
+    if (catalog_load_all(&amsys->locales) != 0) {
+        fprintf(stderr, "Amnuts: catalog load failed; aborting.\n");
+        boot_exit(1);
+    }
+    printf("Localisation: catalog loaded (%d locale(s)).\n",
+           amsys->locales.count);
     return 0;
 }
