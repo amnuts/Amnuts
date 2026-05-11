@@ -1,0 +1,14 @@
+# Amnuts default locale — British English.
+# See docs/superpowers/specs/2026-05-10-localisation-design.md §4 for
+# format rules. Keys are dot-namespaced; values are printf format strings
+# using POSIX positional specifiers (%1$s, %2$d). The default locale is
+# the canonical source of format signatures — every other locale's
+# translation of a key MUST match this one's argument count and types.
+
+# Locale metadata, used by `set lang` listings.
+meta.name:        "British English"
+meta.description: "The default tongue."
+
+# A smoke-test key proves the catalog round-trip works.
+# Phase 2 has no other code-side consumers; Phase 4 starts adding real ones.
+ping.greeting:    "Hello, %1$s. Catalog is working.\n"
