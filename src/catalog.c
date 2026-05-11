@@ -220,9 +220,17 @@ static void
 catalog_log_drop(const char *locale_name, const char *key,
                  const char *path, int line, int col, const char *why)
 {
+    /* write_syslog uses vsprintf into a bounded global buffer, so truncate
+     * the YAML-supplied key into a fixed stack buffer before formatting. */
+    char kbuf[64];
+    if (key) {
+        snprintf(kbuf, sizeof kbuf, "%s", key);
+    } else {
+        kbuf[0] = '\0';
+    }
     write_syslog(SYSLOG | ERRLOG, 0,
                  "[locale] %s/strings.yml: key '%s' dropped at %d:%d — %s (path %s)\n",
-                 locale_name, key ? key : "<top-level>", line, col, why, path);
+                 locale_name, key ? kbuf : "<top-level>", line, col, why, path);
 }
 
 /*
@@ -364,6 +372,7 @@ catalog_load_one(struct locale_catalog *cat,
         e->fmt       = strdup(v);
         e->arg_count = tmp.arg_count;
         memcpy(e->arg_types, tmp.arg_types, sizeof tmp.arg_types);
+        /* On OOM we call boot_exit; the OS reclaims any partial alloc. */
         if (!e->key || !e->fmt) {
             fprintf(stderr, "Amnuts: out of memory loading catalog %s.\n",
                     cat->name);
@@ -421,9 +430,10 @@ catalog_load_all(struct locale_state *st)
     /* Load default first so non-defaults can validate against it. */
     catalog_load_one(&st->catalogs[st->default_index], NULL);
 
-    /* Default's strings.yml MUST exist and parse; otherwise hard-fail. */
-    if (!st->catalogs[st->default_index].loaded_ok
-        || st->catalogs[st->default_index].entry_count == 0) {
+    /* catalog_load_one always sets loaded_ok = true on non-fatal completion
+     * (fatal parse failures call boot_exit), so an empty catalog is the only
+     * remaining signal that the default's strings.yml is missing or empty. */
+    if (st->catalogs[st->default_index].entry_count == 0) {
         char path[1024];
         snprintf(path, sizeof path, "%s/%s/strings.yml",
                  LANGS_ROOT, amsys->default_locale);
