@@ -106,7 +106,7 @@ struct locale_catalog {
     char     name[LOCALE_NAME_LEN];
     bool     is_default;
     bool     loaded_ok;             /* false => dropped during load; do not use */
-    int      bucket_count;          /* always a power of two; see CATALOG_BUCKETS */
+    int      bucket_count;          /* always a power of two */
     int      entry_count;           /* unique keys actually loaded */
     struct lang_entry **buckets;    /* heap-allocated, bucket_count entries */
 };
@@ -119,9 +119,10 @@ struct locale_state {
      * `catalogs[i].name` mirrors `names[i]` for the same i. Entries with
      * loaded_ok == false were either parse-failures or non-default locales
      * with no strings.yml — lookups against them must fall back to default.
-     * `default_index` is the index of the default catalog (0..count-1). */
+     * `default_index` is the index of the default catalog (0..count-1);
+     * it is -1 until catalog_load_all() succeeds. */
     struct locale_catalog *catalogs;   /* heap; freed and replaced by langreload */
-    int                    default_index;
+    int                    default_index;  /* -1 until catalog_load_all() succeeds */
 };
 
 /*
