@@ -620,6 +620,15 @@ void
 lang_level(int min_level, int notify_invis, int record_flag,
            UR_OBJECT exclude, const char *key, ...)
 {
+    static int warned_notify_invis = 0;
+    if (notify_invis == 0 && !warned_notify_invis) {
+        warned_notify_invis = 1;
+        write_syslog(SYSLOG | ERRLOG, 0,
+                     "[locale] lang_level called with notify_invis=0 but the "
+                     "suppression is not yet implemented; full vwrite_level "
+                     "semantics must be ported before this call site can rely "
+                     "on it. (Warning emitted once per process.)\n");
+    }
     (void) record_flag;   /* parameter parity with vwrite_level; not used today */
     va_list ap0;
     va_start(ap0, key);
@@ -700,6 +709,16 @@ locale_set_user(UR_OBJECT user, const char *name)
     struct locale_catalog *cat = catalog_for_locale(&amsys->locales, name);
     if (!cat) {
         return 0;
+    }
+    /* If the caller named the server default explicitly, treat it as a
+     * clear-override so the listing shows '*' (default) rather than '>'
+     * shadowing it — the user wanted the default, not a pinned override
+     * that happens to match the default's current value. */
+    if (cat->is_default) {
+        user->locale[0] = '\0';
+        locale_resolve_catalog(user);
+        save_user_details(user, 1);
+        return 1;
     }
     strncpy(user->locale, cat->name, LOCALE_NAME_LEN - 1);
     user->locale[LOCALE_NAME_LEN - 1] = '\0';

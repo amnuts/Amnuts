@@ -296,6 +296,13 @@ const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
  * `key` resolution: user->catalog first, then amsys default catalog.
  * Missing-in-both keys emit a visible "[??? key]\n" marker and rate-limit
  * the warning to the system log. */
+
+/* Returns the catalog format string for `key`, or NULL if missing in both
+ * user's locale and the default catalog. The returned pointer is owned by
+ * the catalog and only valid for IMMEDIATE use (e.g. inline as the format
+ * argument to vwrite_user). Storing the pointer across a function call is
+ * unsafe: a subsequent langreload may invalidate it. For anything beyond
+ * "render right now," use lang_format or lang_user. */
 const char *lang(UR_OBJECT user, const char *key);
 void  lang_user (UR_OBJECT user,  const char *key, ...);
 void  lang_room (RM_OBJECT room,  UR_OBJECT exclude, const char *key, ...);

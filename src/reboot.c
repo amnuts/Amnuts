@@ -722,6 +722,11 @@ retrieve_users(void)
         }
         /* flagged users */
         load_flagged_users(u);
+        /* user->catalog was serialised from the previous process and now
+         * points at freed memory in this address space; load_user_details
+         * (which would otherwise resolve it) is not on the reboot path, so
+         * re-resolve it here before any lang_* call can dereference it. */
+        locale_resolve_catalog(u);
         /* review buffer */
         sprintf(filename, "%s/%s.review", REBOOTING_DIR, u->name);
         pf = fopen(filename, "r");

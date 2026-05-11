@@ -97,7 +97,7 @@ struct lang_entry {
     char       *key;
     char       *fmt;
     uint8_t     arg_count;
-    char        arg_types[8];      /* per-position: 'd','s','x','c'; 0=unused */
+    char        arg_types[8];      /* per-position: 'd','s','c'; 0=unused */
     struct lang_entry *next;       /* hash bucket chain */
 };
 
