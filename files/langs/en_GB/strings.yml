@@ -363,12 +363,6 @@ help.credits.nuts.body:           "~BM             ~BB             ~BC          
 # cafk — clear the AFK review buffer.
 cafk.cleared:                     "Your AFK review buffer has now been cleared.\n"
 
-# cls — clear the screen. The first key is flooded 6x for clients that
-# ignore ANSI escapes; the second is the ANSI clear-screen sequence
-# (ESC `[2J`). Both ship as opaque catalog values.
-cls.newline_flood:                "\n\n\n\n\n\n\n\n\n\n"
-cls.escape_seq:                   "\x1B[2J"
-
 # home — return from a netlinked remote system to the home talker.
 # home.room_arrival is a vwrite_room_except equivalent (now lang_room):
 # %1$s = user recap, %2$s = the user's in_phrase.

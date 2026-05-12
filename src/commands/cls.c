@@ -22,8 +22,8 @@ cls(UR_OBJECT user)
     int i;
     /* For clients that don't support telnet clear screen escape character, we flood them with new lines... */
     for (i = 0; i < 6; ++i) {
-        lang_user(user, "cls.newline_flood");
+        write_user(user, "\n\n\n\n\n\n\n\n\n\n");
     }
     /* ...and for the others, here's The Real Thing (TM) */
-    lang_user(user, "cls.escape_seq");
+    write_user(user, "\x1B[2J");
 }
