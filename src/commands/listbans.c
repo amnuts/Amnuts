@@ -64,13 +64,14 @@ listbans(UR_OBJECT user)
     if (!strcmp(word[1], "swears")) {
         lang_user(user, "listbans.swears.header");
         for (i = 0; swear_words[i]; ++i) {
-            lang_user(user, "listbans.swears.row", swear_words[i]);
+            write_user(user, swear_words[i]);
+            write_user(user, "\n");
         }
         if (!i) {
             lang_user(user, "listbans.swears.empty");
         }
         if (amsys->ban_swearing) {
-            lang_user(user, "listbans.swears.trailer_on");
+            write_user(user, "\n");
         } else {
             lang_user(user, "listbans.swears.trailer_off");
         }

@@ -6561,15 +6561,15 @@ check_macros(UR_OBJECT user, char *inpstr)
 /*
  * Set list of users that you ignore.
  *
- * Phase 4: every server-authored literal lives in show_igusers.* in
+ * Translatable prose (show_igusers.title, show_igusers.none) lives in
  * files/langs/en_GB/strings.yml; the |...| frame is drawn through the
  * Phase 3 box_open/box_line/box_close builders. Row body is assembled
- * by concatenating show_igusers.name_cell, which holds the per-name
- * cell format (leading space + 24-col-padded name) — the cell's leading
- * space serves as both inter-cell separator and the left rail's inset.
- * box_line's ALIGN_LEFT pad then fills the row out to the box's 76
- * inner columns, producing a byte-identical stream to the pre-conversion
- * sprintf("| %-24s %-24s %-24s |\n", ...) chain on en_GB.
+ * by inlining the per-name cell format (leading space + 24-col-padded
+ * name) — the cell's leading space serves as both inter-cell separator
+ * and the left rail's inset. box_line's ALIGN_LEFT pad then fills the
+ * row out to the box's 76 inner columns, producing a byte-identical
+ * stream to the pre-conversion sprintf("| %-24s %-24s %-24s |\n", ...)
+ * chain on en_GB.
  */
 void
 show_igusers(UR_OBJECT user)
@@ -6595,8 +6595,7 @@ show_igusers(UR_OBJECT user)
                 }
             }
             snprintf(namebuf, sizeof namebuf, "%-24s", fu->name);
-            lang_format(user, cell, sizeof cell,
-                        "show_igusers.name_cell", namebuf);
+            snprintf(cell, sizeof cell, " %s", namebuf);
             strcat(text2, cell);
             if (++cnt >= 3) {
                 if (box) box_line(box, "%s", text2);

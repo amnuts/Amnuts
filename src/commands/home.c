@@ -30,7 +30,7 @@ home(UR_OBJECT user)
             user->netlink->service);
     release_nl(user);
     if (user->vis) {
-        lang_room(user->room, user, "home.room_arrival", user->recap,
+        vwrite_room_except(user->room, user, "%s~RS %s\n", user->recap,
                 user->in_phrase);
     } else {
         write_room_except(user->room, invisenter, user);

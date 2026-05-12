@@ -28,12 +28,11 @@
  * layout deliberately overruns the 78-col frame (a paired row is
  * 86 visible cols between the rails; an orphan first half is padded
  * to 82). Reproducing that byte-identically through box_line would
- * mean lying about the inner width per row, so the row pieces ship
- * as opaque catalog values that we concatenate and hand to write_user
- * directly. Names and level labels are pre-padded with snprintf so
- * the catalog signatures stay a plain %s pair (width-via-arg
- * specifiers, e.g. %-*s, do not survive the catalog signature
- * validator — wizlist pilot lesson).
+ * mean lying about the inner width per row, so the row pieces are
+ * assembled inline and handed to write_user directly. The left/right
+ * rail bytes are pulled from ui.box.body.{lside,rside} so themed
+ * locales still re-skin the rails consistently. Names and level
+ * labels are pre-padded with snprintf.
  */
 void
 grep_users(UR_OBJECT user)
@@ -92,14 +91,18 @@ grep_users(UR_OBJECT user)
             snprintf(level_padded, sizeof level_padded, "%-20s",
                      user_level[entry->level].name);
             if (!x) {
-                lang_format(user, row_part, sizeof row_part,
-                            "grepusers.row_first",
-                            name_padded, level_padded);
+                const char *lside = lang(user, "ui.box.body.lside");
+                if (!lside) lside = "|";
+                snprintf(row_part, sizeof row_part,
+                         "%s %s  ~FC%s~RS   ",
+                         lside, name_padded, level_padded);
                 strcpy(row_buf, row_part);
             } else {
-                lang_format(user, row_part, sizeof row_part,
-                            "grepusers.row_second",
-                            name_padded, level_padded);
+                const char *rside = lang(user, "ui.box.body.rside");
+                if (!rside) rside = "|";
+                snprintf(row_part, sizeof row_part,
+                         "   %s  ~FC%s~RS %s\n",
+                         name_padded, level_padded, rside);
                 strcat(row_buf, row_part);
                 write_user(user, row_buf);
                 *row_buf = '\0';
@@ -109,8 +112,11 @@ grep_users(UR_OBJECT user)
         }
     }
     if (x) {
-        const char *pad = lang(user, "grepusers.row_orphan_pad");
-        if (!pad) pad = "                                      |\n";
+        const char *rside = lang(user, "ui.box.body.rside");
+        if (!rside) rside = "|";
+        char pad[64];
+        snprintf(pad, sizeof pad,
+                 "                                      %s\n", rside);
         strcat(row_buf, pad);
         write_user(user, row_buf);
     }

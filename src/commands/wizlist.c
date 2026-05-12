@@ -47,8 +47,7 @@ wiz_list(UR_OBJECT user)
         count = 0;
         inlist = 0;
         snprintf(lvl_padded, sizeof lvl_padded, "%-10s", user_level[lvl].name);
-        lang_format(user, text, sizeof text, "wizlist.level_prefix",
-                    clrs[lvl % 4], lvl_padded);
+        snprintf(text, sizeof text, "~OL%s%s~RS : ", clrs[lvl % 4], lvl_padded);
         for (entry = first_user_entry; entry; entry = entry->next) {
             if (entry->level < WIZ) {
                 continue;
@@ -58,15 +57,13 @@ wiz_list(UR_OBJECT user)
             }
             if (entry->level == lvl) {
                 if (count > 3) {
-                    const char *ind = lang(user, "wizlist.wrap_indent");
-                    if (!ind) ind = "\n             ";
-                    strcat(text2, ind);
+                    strcat(text2, "\n             ");
                     count = 0;
                 }
                 snprintf(name_padded, sizeof name_padded, "%-*s",
                          USER_NAME_LEN, entry->name);
-                lang_format(user, temp, sizeof temp, "wizlist.name_cell",
-                            clrs[rand() % 7], name_padded);
+                snprintf(temp, sizeof temp, "~OL%s%s~RS  ",
+                         clrs[rand() % 7], name_padded);
                 strcat(text2, temp);
                 ++count;
                 inlist = 1;
@@ -93,8 +90,8 @@ wiz_list(UR_OBJECT user)
             inlist = 0;
             snprintf(lvl_padded, sizeof lvl_padded, "%-10s",
                      user_level[lvl].name);
-            lang_format(user, text, sizeof text, "wizlist.level_prefix",
-                        clrs[lvl % 4], lvl_padded);
+            snprintf(text, sizeof text, "~OL%s%s~RS : ",
+                     clrs[lvl % 4], lvl_padded);
             for (entry = first_user_entry; entry; entry = entry->next) {
                 if (entry->level < WIZ) {
                     continue;
@@ -104,15 +101,13 @@ wiz_list(UR_OBJECT user)
                 }
                 if (entry->level == lvl) {
                     if (count > 3) {
-                        const char *ind = lang(user, "wizlist.wrap_indent");
-                        if (!ind) ind = "\n             ";
-                        strcat(text2, ind);
+                        strcat(text2, "\n             ");
                         count = 0;
                     }
                     snprintf(name_padded, sizeof name_padded, "%-*s",
                              USER_NAME_LEN, entry->name);
-                    lang_format(user, temp, sizeof temp, "wizlist.name_cell",
-                                clrs[rand() % 7], name_padded);
+                    snprintf(temp, sizeof temp, "~OL%s%s~RS  ",
+                             clrs[rand() % 7], name_padded);
                     strcat(text2, temp);
                     ++count;
                     inlist = 1;
@@ -142,13 +137,11 @@ wiz_list(UR_OBJECT user)
                     continue;
                 } else {
                     if (u->vis) {
-                        lang_format(user, text2, sizeof text2,
-                                    "wizlist.row.online_vis",
-                                    u->recap, u->desc);
+                        snprintf(text2, sizeof text2, "  %s~RS %s~RS",
+                                 u->recap, u->desc);
                     } else {
-                        lang_format(user, text2, sizeof text2,
-                                    "wizlist.row.online_invis",
-                                    u->recap, u->desc);
+                        snprintf(text2, sizeof text2, "* %s~RS %s~RS",
+                                 u->recap, u->desc);
                     }
                     linecnt = 43 + teslen(text2, 43);
                     rnamecnt = 15 + teslen(u->room->show_name, 15);
@@ -156,10 +149,10 @@ wiz_list(UR_OBJECT user)
                              linecnt, linecnt, text2);
                     snprintf(rname_padded, sizeof rname_padded, "%-*.*s",
                              rnamecnt, rnamecnt, u->room->show_name);
-                    lang_user(user, "wizlist.row.online_line",
-                              text2_padded, rname_padded,
-                              user_level[u->level].alias,
-                              user_level[u->level].name);
+                    vwrite_user(user, "%s~RS : %s~RS : (%1.1s) %s\n",
+                                text2_padded, rname_padded,
+                                user_level[u->level].alias,
+                                user_level[u->level].name);
                 }
             }
             ++count;

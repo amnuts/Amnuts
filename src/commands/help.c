@@ -351,7 +351,7 @@ help_nuts_credits(UR_OBJECT user)
 void
 help_amnuts_credits(UR_OBJECT user)
 {
-    lang_user(user, "help.credits.amnuts.header_bar");
+    write_user(user, "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
     lang_user(user, "help.credits.amnuts.version", AMNUTSVER);
     lang_user(user, "help.credits.amnuts.body");
 }
