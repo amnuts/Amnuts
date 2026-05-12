@@ -294,6 +294,10 @@ const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
 
 /* uibuilders.c — see src/includes/uibuilders.h for opaque types. */
 int visible_strlen(const char *s);
+int align_into(char *out, size_t outlen,
+               enum align_value align, int width,
+               const char *fmt, ...)
+    __attribute__((format(printf, 5, 6)));
 
 /* lang_*() — render a catalog entry to one or more users.
  * `key` resolution: user->catalog first, then amsys default catalog.
