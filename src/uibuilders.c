@@ -128,3 +128,110 @@ align_into(char *out, size_t outlen,
     *o = '\0';
     return trim_visible + pad_total;
 }
+
+/*
+ * Fill `out` with the byte sequence `pattern` repeated until `out` covers
+ * exactly `cols` visible columns. Pattern bytes are emitted verbatim;
+ * colour escapes inside the pattern pass through transparently. Truncation
+ * within the pattern is by visible columns.
+ *
+ * Returns the number of bytes written (excluding NUL terminator).
+ */
+static size_t
+fill_pattern(char *out, size_t outlen, const char *pattern, int cols)
+{
+    size_t written = 0;
+    int    visible = 0;
+    int    pat_visible = visible_strlen(pattern);
+    if (pat_visible <= 0 || cols <= 0 || !pattern || !*pattern) {
+        if (outlen) out[0] = '\0';
+        return 0;
+    }
+    while (visible < cols) {
+        const char *p = pattern;
+        while (*p && visible < cols) {
+            if (*p == '~' && p[1] && p[2]
+                && isalnum((unsigned char) p[1])
+                && isalnum((unsigned char) p[2])) {
+                if (written + 3 >= outlen) goto done;
+                out[written++] = p[0];
+                out[written++] = p[1];
+                out[written++] = p[2];
+                p += 3;
+                continue;
+            }
+            if (written + 1 >= outlen) goto done;
+            out[written++] = *p++;
+            ++visible;
+        }
+    }
+done:
+    if (written < outlen) out[written] = '\0';
+    else if (outlen)      out[outlen - 1] = '\0';
+    return written;
+}
+
+void
+rule(UR_OBJECT user, int width, const char *label_fmt, ...)
+{
+    if (!user || width <= 0) return;
+
+    const char *lcap = lang(user, "ui.rule.lcap");
+    const char *rcap = lang(user, "ui.rule.rcap");
+    const char *fill = lang(user, "ui.rule.fill");
+    const char *lpad = lang(user, "ui.rule.label_lpad");
+    if (!lcap) lcap = "";
+    if (!rcap) rcap = "";
+    if (!fill || !*fill) fill = "-";
+    int label_lpad = lpad ? atoi(lpad) : 6;
+    if (label_lpad < 0) label_lpad = 0;
+
+    int cap_visible = visible_strlen(lcap) + visible_strlen(rcap);
+    int inner = width - cap_visible;
+    if (inner < 0) inner = 0;
+
+    char rendered_label[ARR_SIZE];
+    rendered_label[0] = '\0';
+    int label_visible = 0;
+    if (label_fmt && *label_fmt) {
+        va_list ap;
+        va_start(ap, label_fmt);
+        vsnprintf(rendered_label, sizeof rendered_label, label_fmt, ap);
+        va_end(ap);
+        label_visible = visible_strlen(rendered_label);
+    }
+
+    char out[ARR_SIZE * 2];
+    size_t pos = 0;
+    pos += snprintf(out + pos, sizeof out - pos, "%s", lcap);
+    if (label_visible > 0) {
+        int used_visible = 0;
+        int lp = label_lpad;
+        if (lp > inner) lp = inner;
+        pos += fill_pattern(out + pos, sizeof out - pos, fill, lp);
+        used_visible += lp;
+        if (used_visible + 1 <= inner) {
+            out[pos++] = ' '; ++used_visible;
+        }
+        if (used_visible + label_visible <= inner) {
+            size_t lblen = strlen(rendered_label);
+            if (pos + lblen < sizeof out) {
+                memcpy(out + pos, rendered_label, lblen);
+                pos += lblen;
+                used_visible += label_visible;
+            }
+        }
+        if (used_visible + 1 <= inner) {
+            out[pos++] = ' '; ++used_visible;
+        }
+        int remainder = inner - used_visible;
+        if (remainder > 0) {
+            pos += fill_pattern(out + pos, sizeof out - pos, fill, remainder);
+        }
+    } else {
+        pos += fill_pattern(out + pos, sizeof out - pos, fill, inner);
+    }
+    pos += snprintf(out + pos, sizeof out - pos, "%s\n", rcap);
+
+    write_user(user, out);
+}

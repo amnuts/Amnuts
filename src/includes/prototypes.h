@@ -300,6 +300,7 @@ int align_into(char *out, size_t outlen,
                enum align_value align, int width,
                const char *fmt, ...)
     __attribute__((format(printf, 5, 6)));
+void rule(UR_OBJECT user, int width, const char *label_fmt, ...);
 
 /* lang_*() — render a catalog entry to one or more users.
  * `key` resolution: user->catalog first, then amsys default catalog.
