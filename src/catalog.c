@@ -616,37 +616,62 @@ lang_room(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
     va_end(ap0);
 }
 
+/*
+ * Per-locale equivalent of vwrite_level (src/amnuts.c). Renders `key`
+ * with each recipient's own catalog before delivery; otherwise faithfully
+ * mirrors write_level's behaviour so Phase 5 migrations from
+ *   vwrite_level(lvl, above, dorecord, sender, fmt, ...)
+ * to
+ *   lang_level(lvl, above, dorecord, sender, key, ...)
+ * are observationally equivalent.
+ *
+ * Parameter names are historical: the signature was frozen in Phase 2
+ * with second/third params spelled `notify_invis` / `record_flag`, but
+ * they map 1:1 onto vwrite_level's `above` / `dorecord` arguments.
+ *   - notify_invis == 1 (above=true)  → recipients with level >= min_level
+ *   - notify_invis == 0 (above=false) → recipients with level <= min_level
+ *   - record_flag (RECORD/NORECORD) → write_user diversions to
+ *     record_afk/record_edit, plus a record_tell on successful delivery.
+ *
+ * `exclude` plays the dual role vwrite_level's `user` parameter does: it is
+ * both the "sender" (used for ignore-list/level checks and as the `from`
+ * for record_* entries) and the recipient to skip.
+ */
 void
 lang_level(int min_level, int notify_invis, int record_flag,
            UR_OBJECT exclude, const char *key, ...)
 {
-    static int warned_notify_invis = 0;
-    if (notify_invis == 0 && !warned_notify_invis) {
-        warned_notify_invis = 1;
-        write_syslog(SYSLOG | ERRLOG, 0,
-                     "[locale] lang_level called with notify_invis=0 but the "
-                     "suppression is not yet implemented; full vwrite_level "
-                     "semantics must be ported before this call site can rely "
-                     "on it. (Warning emitted once per process.)\n");
-    }
-    (void) record_flag;   /* parameter parity with vwrite_level; not used today */
     va_list ap0;
     va_start(ap0, key);
 
     for (UR_OBJECT u = user_first; u; u = u->next) {
-        if (u->type == CLONE_TYPE) continue;
+        /* Recipient on the sender's ignore list — skip unless sender is GOD.
+         * check_igusers tolerates a NULL second arg (returns 0), so the
+         * short-circuit also handles the exclude == NULL case. */
+        if (check_igusers(u, exclude) && exclude && exclude->level < GOD) {
+            continue;
+        }
+        /* Per-recipient ignore toggles for wiz-channel chatter / logons. */
+        if ((u->ignwiz && (com_num == WIZSHOUT || com_num == WIZEMOTE))
+                || (u->ignlogons && logon_flag)) {
+            continue;
+        }
         if (u == exclude) continue;
-        if (u->level < (enum lvl_value) min_level) continue;
-        /* TODO(Phase 5): notify_invis is currently a no-op. The first
-         * call site that needs the suppression must port the full
-         * vwrite_level semantics from src/messages.c — at that point
-         * insert a `continue;` (or equivalent gate) inside the body of
-         *   if (!notify_invis && u->vis == 0) { ... }
-         * to hide the message from the invisible recipient. */
-        (void) notify_invis;
+        if (u->login) continue;
+        if (u->type == CLONE_TYPE) continue;
+
+        /* Direction: notify_invis carries vwrite_level's `above` flag. */
+        if (notify_invis) {
+            if (u->level < (enum lvl_value) min_level) continue;
+        } else {
+            if (u->level > (enum lvl_value) min_level) continue;
+        }
+
 #ifdef NETLINKS
         if (!u->socket) continue;
 #endif
+
+        /* Render in the recipient's locale. */
         const char *fmt = catalog_resolve(u->catalog, key);
         char buf[ARR_SIZE * 2];
         if (!fmt) {
@@ -657,7 +682,28 @@ lang_level(int min_level, int notify_invis, int record_flag,
             vsnprintf(buf, sizeof buf, fmt, apc);
             va_end(apc);
         }
-        write_user(u, buf);
+
+        /* AFK and line-editor recipients get the text diverted to their
+         * review buffer (when record_flag is set) instead of seeing it
+         * inline. Mirrors write_level exactly. */
+        if (u->afk) {
+            if (record_flag) {
+                record_afk(exclude, u, buf);
+            }
+            continue;
+        }
+        if (u->malloc_start) {
+            if (record_flag) {
+                record_edit(exclude, u, buf);
+            }
+            continue;
+        }
+        if (!u->ignall) {
+            write_user(u, buf);
+        }
+        if (record_flag) {
+            record_tell(exclude, u, buf);
+        }
     }
     va_end(ap0);
 }
