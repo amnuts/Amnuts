@@ -292,6 +292,9 @@ struct locale_catalog *catalog_for_locale(const struct locale_state *st,
 const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
                                         const char *key);
 
+/* uibuilders.c — see src/includes/uibuilders.h for opaque types. */
+int visible_strlen(const char *s);
+
 /* lang_*() — render a catalog entry to one or more users.
  * `key` resolution: user->catalog first, then amsys default catalog.
  * Missing-in-both keys emit a visible "[??? key]\n" marker and rate-limit
