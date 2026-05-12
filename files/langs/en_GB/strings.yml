@@ -78,3 +78,15 @@ wizlist.row.online_line:          "%1$s~RS : %2$s~RS : (%3$1.1s) %4$s\n"
 # Trailers.
 wizlist.invisible_count:          "Number of the wiz invisible to you : %1$d\n"
 wizlist.no_wizzes_on:             "Sorry, no wizzes are on at the moment...\n"
+
+# show_igusers — list of users you are currently ignoring. Rendered via the
+# Phase 3 box_open/box_line/box_close pipeline at a total width of 78 visible
+# columns (inner = 76 once the |…| side rails are subtracted). The title and
+# the per-row body content both rely on box_line's ALIGN_LEFT padding to
+# fill the inner span, so the leading space inside show_igusers.title is
+# load-bearing — it preserves the byte-identical "| <content>" inset of the
+# original sprintf chain. show_igusers.name_cell is concatenated up to three
+# times per row to build the body before it is handed to box_line.
+show_igusers.title:               " ~OL~FCYou are currently ignoring the following people~RS"
+show_igusers.name_cell:           " %1$s"
+show_igusers.none:                "You are not ignoring any users.\n"

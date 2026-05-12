@@ -6559,58 +6559,60 @@ check_macros(UR_OBJECT user, char *inpstr)
 }
 
 /*
- * Set list of users that you ignore
+ * Set list of users that you ignore.
+ *
+ * Phase 4: every server-authored literal lives in show_igusers.* in
+ * files/langs/en_GB/strings.yml; the |...| frame is drawn through the
+ * Phase 3 box_open/box_line/box_close builders. Row body is assembled
+ * by concatenating show_igusers.name_cell, which holds the per-name
+ * cell format (leading space + 24-col-padded name) — the cell's leading
+ * space serves as both inter-cell separator and the left rail's inset.
+ * box_line's ALIGN_LEFT pad then fills the row out to the box's 76
+ * inner columns, producing a byte-identical stream to the pre-conversion
+ * sprintf("| %-24s %-24s %-24s |\n", ...) chain on en_GB.
  */
 void
 show_igusers(UR_OBJECT user)
 {
     char text2[ARR_SIZE];
+    char cell[64];
+    char namebuf[32];
     FU_OBJECT fu;
+    BOX box = NULL;
     int found = 0, cnt = 0;
 
     *text2 = '\0';
     for (fu = user->fu_first; fu; fu = fu->next) {
         if (fu->flags & fufIGNORE) {
             if (!found++) {
-                write_user(user,
-                        "+----------------------------------------------------------------------------+\n");
-                write_user(user,
-                        "| ~OL~FCYou are currently ignoring the following people~RS                            |\n");
-                write_user(user,
-                        "+----------------------------------------------------------------------------+\n");
+                box = box_open(user, 78, NULL);
+                if (box) {
+                    char titlebuf[ARR_SIZE];
+                    lang_format(user, titlebuf, sizeof titlebuf,
+                                "show_igusers.title");
+                    box_line(box, "%s", titlebuf);
+                    box_separator(box);
+                }
             }
-            switch (++cnt) {
-            case 1:
-                sprintf(text, "| %-24s", fu->name);
-                strcat(text2, text);
-                break;
-            case 2:
-                sprintf(text, " %-24s", fu->name);
-                strcat(text2, text);
-                break;
-            default:
-                sprintf(text, " %-24s |\n", fu->name);
-                strcat(text2, text);
-                write_user(user, text2);
+            snprintf(namebuf, sizeof namebuf, "%-24s", fu->name);
+            lang_format(user, cell, sizeof cell,
+                        "show_igusers.name_cell", namebuf);
+            strcat(text2, cell);
+            if (++cnt >= 3) {
+                if (box) box_line(box, "%s", text2);
                 cnt = 0;
                 *text2 = '\0';
-                break;
             }
         }
     }
     if (!found) {
-        write_user(user, "You are not ignoring any users.\n");
+        lang_user(user, "show_igusers.none");
         return;
     }
-    if (cnt == 1) {
-        strcat(text2, "                                                   |\n");
-        write_user(user, text2);
-    } else if (cnt == 2) {
-        strcat(text2, "                          |\n");
-        write_user(user, text2);
+    if (cnt > 0 && box) {
+        box_line(box, "%s", text2);
     }
-    write_user(user,
-            "+----------------------------------------------------------------------------+\n");
+    if (box) box_close(box);
 }
 
 /*

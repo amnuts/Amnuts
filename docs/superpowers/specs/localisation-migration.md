@@ -174,7 +174,7 @@ Phase 4: frame-heavy commands. Phase 5: every other command in `src/commands/`.
 | Command         | File                              | Status   | Notes |
 |-----------------|-----------------------------------|----------|-------|
 | wizlist         | src/commands/wizlist.c            | converted (Phase 3 pilot) | |
-| show_igusers    | src/commands/show_igusers.c       | pending  | Phase 4 |
+| show_igusers    | src/amnuts.c (function)           | converted (2026-05-12) | Frame via box_open/box_line/box_close; inner = 76 cols. show_igusers.title carries a load-bearing leading space; rows concatenate show_igusers.name_cell up to three times before each box_line emission. |
 | grepusers       | src/commands/grepusers.c          | pending  | Phase 4 |
 | listbans        | src/commands/listbans.c           | pending  | Phase 4 |
 | system          | (locate via semble)               | pending  | Phase 4 |
