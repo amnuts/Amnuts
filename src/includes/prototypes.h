@@ -292,12 +292,13 @@ struct locale_catalog *catalog_for_locale(const struct locale_state *st,
 const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
                                         const char *key);
 
-/* uibuilders.c — see src/includes/uibuilders.h for opaque types and
- * enum align_value, included here so prototypes.h is self-contained. */
+/* uibuilders.c — see src/includes/uibuilders.h for opaque BOX/TABLE
+ * typedefs. ALIGN_LEFT / ALIGN_CENTRE / ALIGN_RIGHT are macros in
+ * defines.h shared with the existing align_string function. */
 #include "uibuilders.h"
 int visible_strlen(const char *s);
 int align_into(char *out, size_t outlen,
-               enum align_value align, int width,
+               int align, int width,
                const char *fmt, ...)
     __attribute__((format(printf, 5, 6)));
 void rule(UR_OBJECT user, int width, const char *label_fmt, ...);

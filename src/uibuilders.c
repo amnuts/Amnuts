@@ -63,7 +63,7 @@ visible_strlen(const char *s)
  */
 int
 align_into(char *out, size_t outlen,
-           enum align_value align, int width,
+           int align, int width,
            const char *fmt, ...)
 {
     char rendered[ARR_SIZE * 2];
