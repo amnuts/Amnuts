@@ -155,3 +155,121 @@ listbans.swears.trailer_off:      "\n(Swearing ban is currently off)\n\n"
 listbans.new.header:              "\n~BB*** New users banned from sites and domains **\n\n"
 listbans.new.empty:               "There are no sites and domains where new users have been banned.\n\n"
 listbans.usage:                   "Usage: lban sites|users|new|swears\n"
+
+# system — the `system` admin command. The most prose-heavy of the Phase 4
+# commands: five sections (header, users, netlinks, rooms, memory) chained
+# together when `-a` is given, or shown individually for `-u`/`-n`/`-r`/`-m`.
+# Each section is a 78-col frame (total) with '|' side rails (inner = 76
+# visible cols). Within a section, the title sits between a top `+---+`
+# frame and an *inner* `|---|` separator (note: `|` caps, not `+`, so this
+# cannot be reproduced via box_separator — it ships here as opaque
+# system.inner_sep and is written direct via write_user).
+#
+# Between sub-sections inside one frame, and between sections under `-a`,
+# the boundary is `+---+`, which is what box_separator emits — so those
+# boundaries flow through the Phase 3 box pipeline normally. The final
+# close at the end of each independent invocation (or after the full -a
+# chain) is a `+---+` from box_close followed by an extra "\n".
+#
+# Every label is baked into the row's format string so a themed locale can
+# rewrite both the wording and (within reason) the column geometry. The
+# server passes only the dynamic values; the inline literal columns of
+# whitespace and labels are catalog data. Each row's body, once filled,
+# is exactly 76 visible cols — box_line then pads/truncates to 76 (a no-op
+# for these rows) and adds the '|' rails. Format widths use POSIX
+# positional specifiers; numeric widths/precisions survive the catalog
+# signature validator (only width-via-arg, e.g. `%-*s`, does not).
+#
+# Quirks preserved:
+#  - The memory section's "total" row mixes a megabyte value and a byte
+#    count. The validator rejects `%f`, so the C side pre-formats the Mb
+#    string with snprintf and passes it as `%s` here (system.row.mem_total).
+#  - The "port info" header has 8 NETLINKS x IDENTD x WIZPORT variants;
+#    each ships as a pair of keys (label header + value row). When IDENTD
+#    is compiled but amsys->ident_state is false, the non-IDENTD variants
+#    are used.
+
+system.inner_sep:                 "|----------------------------------------------------------------------------|\n"
+
+# Section title row. %1$s = caller-padded text (74 visible cols).
+system.title.header:              " ~OL~FC%1$-74.74s~RS "
+system.title.text.header:         "System Details for %1$s (Amnuts version %2$s)"
+system.title.users:               " ~OL~FCSystem Details - Users~RS                                                    "
+system.title.netlinks:            " ~OL~FCSystem Details - Netlinks~RS                                                 "
+system.title.rooms:               " ~OL~FCSystem Details - Rooms~RS                                                    "
+system.title.memory:              " ~OL~FCSystem Details - Memory Object Allocation~RS                                 "
+
+# Port info header rows. Eight variants gated by NETLINKS / IDENTD-state /
+# WIZPORT. The "label" row is the column header; the "value" row supplies
+# the actual values. Each row is exactly 76 visible cols.
+system.ports.label.nl_id_wp:      " talker pid      identd pid      main port      wiz port      netlinks port"
+system.ports.value.nl_id_wp:      "   %1$-5u           %2$-5u           %3$-5.5s         %4$-5.5s            %5$-5.5s    "
+system.ports.label.nl_id:         " talker pid      identd pid      main port      netlinks port              "
+system.ports.value.nl_id:         "   %1$-5u           %2$-5u           %3$-5.5s         %4$-5.5s                     "
+system.ports.label.nl_wp:         " talker pid           main port            wiz port           netlinks port"
+system.ports.value.nl_wp:         "   %1$-5u               %2$-5.5s                %3$-5.5s                 %4$-5.5s    "
+system.ports.label.nl:            " talker pid           main port            netlinks port                   "
+system.ports.value.nl:            "   %1$-5u               %2$-5.5s                %3$-5.5s                          "
+system.ports.label.id_wp:         " talker pid            identd pid             main port            wiz port"
+system.ports.value.id_wp:         "   %1$-5u                  %2$-5u                 %3$-5.5s                %4$-5.5s "
+system.ports.label.id:            " talker pid            identd pid             main port                    "
+system.ports.value.id:            "   %1$-5u                  %2$-5u                 %3$-5.5s                      "
+system.ports.label.wp:            " talker pid                       main port                        wiz port"
+system.ports.value.wp:            "   %1$-5u                            %2$-5.5s                           %3$-5.5s  "
+system.ports.label.plain:         " talker pid                       main port                                "
+system.ports.value.plain:         "   %1$-5u                            %2$-5.5s                                  "
+
+# Section A — general / stats rows.
+system.row.booted:                " talker booted     : %1$-54.54s "
+system.row.uptime:                " uptime            : %1$-54.54s "
+system.row.logging_flood:         " system logging    : %1$-6.6s                flood protection  : %2$-10.10s   "
+system.row.sigterms_crash:        " ignoring sigterms : %1$-6.6s                crash action      : %2$-10.10s   "
+system.row.heartbeat_resolve:     " heartbeat         : %1$-20.20s  resolving IP      : %2$-10.10s   "
+system.row.swear_ban:             " swear ban         : %1$-54.54s "
+system.row.for_other_options:     " For other options, see: system -m, -n, -r, -u, -a"
+
+# Section U — user stats. The level-count row uses ` : ` (space-colon-space)
+# like Section A; every other Section U row uses `: ` (no leading space) —
+# preserved exactly from the originals (the labels are padded to N visible
+# cols inline so the colon lands at column N+1, matching `%-N.Ns:` in the
+# pre-conversion format strings).
+system.row.users_at_level:        " users at level %1$-8.8s : %2$-5d                                           "
+system.row.online_max:            " online now              : %1$-5d       max allowed online      : %2$-5d     "
+system.row.new_returning:         " new this boot           : %1$-5d       returning this boot     : %2$-5d     "
+system.row.clones_max:            " clones now on           : %1$-5d       max allowed clones      : %2$-5d     "
+system.row.idle_timeouts:         " login idle time out     : %1$-10.10s  user idle time out      : %2$-10.10s "
+system.row.timeout_maxlevel_afks: " time out maxlevel       : %1$-10.10s  time out afks           : %2$-10.10s "
+system.row.minlogin:              " current minlogin level  : %1$-10.10s  min login disconnect    : %2$-10.10s "
+system.row.newbie_prompt_colour:  " newbie prompt default   : %1$-10.10s  newbie colour default   : %2$-10.10s "
+system.row.newbie_echo:           " newbie charecho default : %1$-10.10s  echoing password default: %2$-10.10s "
+system.row.recaps_forwarding:     " name recaps allowed     : %1$-10.10s  smail auto-forwarding   : %2$-10.10s "
+system.row.autopurge:             " autopurge on            : %1$-4s  next autopurge : %2$-25s "
+system.row.purge_lengths:         " purge length (newbies)  : %1$-10.10s  purge length (users)    : %2$-10.10s "
+system.row.wizport_level:         " wizport min login level : %1$-10.10s                                       "
+
+# Section N — netlinks. The `total_netlinks` row uses `%45s` to pad with
+# an opaque whitespace stripe; the C side passes a single space and printf
+# right-aligns it within the 45-col field.
+system.row.total_netlinks:        " total netlinks       : %1$5d %2$45s "
+system.row.idle_keepalive:        " idle time out        : %1$5d secs     keepalive interval   : %2$5d secs   "
+system.row.accept_live:           " accepting connects   : %1$5d          live connects        : %2$5d        "
+system.row.incoming_outgoing:     " incoming connections : %1$5d          outgoing connections : %2$5d        "
+system.row.rem_user_levels:       " remote user maxlevel : %1$-13.13s  remote user deflevel : %2$-13.13s "
+system.row.netlink_memory:        " netlink structure    : %1$5d bytes    total memory         : %2$5d bytes  "
+system.row.netlinks_not_compiled: " Netlinks are not currently compiled into the talker."
+
+# Section R — rooms.
+system.row.gatecrash_private:     " gatecrash level : %1$-15.15s      min private count   : %2$5d        "
+system.row.mesg_life_check:       " message life    : %1$-15.15s      message check time  : %2$.2d:%3$.2d         "
+system.row.rooms_count:           " personal rooms  : %1$5d                total rooms         : %2$5d        "
+system.row.rooms_memory:          " room structure  : %1$7d bytes        total memory        : %2$7d bytes"
+
+# Section M — memory. Each "object" row reports count, struct size, and
+# total bytes; the trailing summary row reports total memory both in Mb
+# (pre-formatted to a string by the C side because the catalog signature
+# validator rejects %f) and as a byte count.
+system.row.mem_object:            " %1$-16.16s: %2$8d * %3$8d bytes = %4$8d total bytes        "
+system.row.mem_total:             " total           : %1$12s Mb             %2$8d total bytes        "
+
+# Generic / fallback.
+system.usage:                     "Usage: system [-m|-n|-r|-u|-a]\n"
