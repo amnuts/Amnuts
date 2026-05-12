@@ -4,7 +4,7 @@
 |-------|--------|-------|
 | 1 — file-path mechanism + directory move | converted (2026-05-10) | All six relocated categories swept; libyaml vendored; locale_load_all wired into boot. Talker bootable at every commit. |
 | 2 — catalog framework | converted (2026-05-11) | string catalog + lang_* API + set lang (USER) + langreload (WIZ); en_GB/strings.yml ships with meta.* and one smoke-test key; no in-source call sites use lang_* yet |
-| 3 — UI builders | pending | rule/box/table + ui.* keys in strings.yml |
+| 3 — UI builders | converted (2026-05-12) | visible_strlen / align_into / rule / box_* / table_*; ui.* keys in en_GB and cowboy test locale; wizlist pilot converted |
 | 4 — frame-heavy commands | pending | wizlist, show_igusers, grepusers, listbans, system, parts of help |
 | 5 — bulk inline-string conversion | pending | per-command sub-ledger below |
 | 6 — first non-default locale | pending | translator's work, not a code phase |
@@ -65,6 +65,36 @@ to land these commits is Windows with no clang/make/Docker. The user should:
 No code outside `src/catalog.c`, `src/commands/{set_lang,langreload}.c`,
 the `set` dispatch, and the user-file save/load uses `lang_*` yet. Phase 4
 starts the actual sweep, beginning with `wizlist`.
+
+## Phase 3 verification
+
+The Phase 3 sweep landed `src/uibuilders.c` + `src/includes/uibuilders.h`
+(visible_strlen, align_into, rule, full box_* family, full table_* family
+with cell wrap), added the canonical `ui.*` keys to en_GB/strings.yml,
+shipped a `cowboy` test locale that overrides only `meta.*` + `ui.*`, and
+converted `wizlist` as the end-to-end pilot.
+
+End-to-end runtime verification deferred — Windows dev host. The user
+should, on Linux/macOS:
+
+1. `make build` — clean compile under `-Wall -Wextra -Wpedantic`.
+2. Boot the talker. Expected startup lines:
+   - `Localisation: discovered 3 locale(s); default = en_GB.` (en_GB +
+     fallback_test + cowboy)
+   - `Localisation: catalog loaded (3 locale(s)).`
+3. Telnet in as a wizard. Run `.wizlist`. On en_GB the output should be
+   byte-identical to the pre-Phase-3 wizlist (compare against the same
+   commit on a peer machine that hasn't pulled, if available; otherwise
+   eyeball).
+4. `set lang cowboy`, then `.wizlist` again. The `+----- ... -----+`
+   section dividers should now look like `-={*----- ... -----*}=-`
+   because the `wizlist.frame.*` keys are catalog values that themers
+   can re-skin (and the cowboy locale's `ui.box.*` overrides shift any
+   future `box_open`-based command that lands in Phase 4).
+5. Pick any catalog string containing colour escapes and run
+   `set lang cowboy` / `set lang default` rapidly — the body should
+   never go truncated or misaligned, because every padding/wrap
+   calculation routes through `visible_strlen`.
 
 ## Wizlist (Phase 3 pilot)
 
