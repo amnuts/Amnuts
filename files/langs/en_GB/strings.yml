@@ -90,3 +90,37 @@ wizlist.no_wizzes_on:             "Sorry, no wizzes are on at the moment...\n"
 show_igusers.title:               " ~OL~FCYou are currently ignoring the following people~RS"
 show_igusers.name_cell:           " %1$s"
 show_igusers.none:                "You are not ignoring any users.\n"
+
+# grepusers — search the user database for names matching a glob-style
+# pattern. The frame is drawn via the Phase 3 box_* pipeline at a total
+# width of 78 visible columns (inner = 76 once the |…| side rails are
+# subtracted). The title and the empty-state message both rely on
+# box_line's ALIGN_LEFT padding to fill the inner 76 cols, so their
+# load-bearing leading space preserves the byte-identical "| <content>"
+# inset of the pre-conversion sprintf chain.
+#
+# The per-match body rows are NOT rendered through box_line because the
+# original layout deliberately overruns the frame: two halves are
+# concatenated for a paired row (43 + 43 = 86 visible cols between the
+# outer rails, wider than the frame), and a dangling first half is
+# padded out to 82 visible cols by grepusers.row_orphan_pad. Reproducing
+# this byte-identically through box_line would mean lying about the
+# inner width per row, so these row pieces ship as opaque catalog values
+# the C side concatenates and hands to write_user directly. A themed
+# locale can re-skin the pre/post spacing here, but cannot shift the
+# columns without also touching the C row assembly.
+#
+# %1$s in the row keys is the USER_NAME_LEN-padded name; %2$s is the
+# 20-col-padded level name. Pre-padding is done in C with snprintf so
+# the catalog signature stays a plain %s pair (width-via-arg specifiers
+# do not survive the catalog signature validator).
+grepusers.usage:                  "Usage: grepu <pattern>\n"
+grepusers.bad_double_star:        "You cannot have ** in your pattern.\n"
+grepusers.bad_question_star:      "You cannot have ?* in your pattern.\n"
+grepusers.bad_star_question:      "You cannot have *? in your pattern.\n"
+grepusers.title:                  " ~FC~OLUser grep for pattern:~RS ~OL%1$s~RS"
+grepusers.row_first:              "| %1$s  ~FC%2$s~RS   "
+grepusers.row_second:             "   %1$s  ~FC%2$s~RS |\n"
+grepusers.row_orphan_pad:         "                                      |\n"
+grepusers.empty_message:          " ~OL~FRNo users have that pattern~RS"
+grepusers.footer:                 " ~OL%1$d~RS user%2$s had the pattern ~OL%3$s~RS "
