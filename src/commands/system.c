@@ -27,9 +27,9 @@
  *
  *  1. After each section's title row, the original emits an *inner* `|---|`
  *     separator with `|` caps, not the `+---+` that box_separator produces.
- *     That separator therefore ships as the opaque catalog literal
- *     `system.inner_sep` and is written direct via write_user — it cannot
- *     reuse the Phase 3 separator primitive without changing bytes.
+ *     That divergence is now handled by the UI builder box_inner_separator(),
+ *     which uses the box's body rails as caps and the ui.box.sep.fill as
+ *     the fill, so a themed locale re-skins it via the ui.* keys.
  *
  *  2. Section A's "port info" header has 8 NETLINKS x IDENTD-state x
  *     WIZPORT variants; each ships as a (label, value) pair of keys.
@@ -65,22 +65,20 @@ system_section_open(BOX box, UR_OBJECT user)
 }
 
 /* Helper: emit the section's title row (with leading colour escapes baked
- * into the catalog) followed by the inner `|---|` divider. The divider is
- * a raw write_user because its `|` caps cannot be produced by
- * box_separator (which always emits `+` caps). The title keys passed
- * here are static strings (no positional args), so it is safe to hand
- * the lang() return pointer straight to box_line: vsnprintf copies the
- * bytes into the box's body buffer before any other catalog operation
- * runs. */
+ * into the catalog) followed by the inner `|---|` divider. The divider
+ * uses the box body rails as caps (not `+`), so it is rendered via the
+ * UI builder box_inner_separator() rather than box_separator. The title
+ * keys passed here are static strings (no positional args), so it is
+ * safe to hand the lang() return pointer straight to box_line: vsnprintf
+ * copies the bytes into the box's body buffer before any other catalog
+ * operation runs. */
 static void
 system_section_title(BOX box, UR_OBJECT user, const char *title_key)
 {
     const char *t = lang(user, title_key);
     if (!t) t = "";
     box_line(box, "%s", t);
-    const char *sep = lang(user, "system.inner_sep");
-    if (!sep) sep = "|----------------------------------------------------------------------------|\n";
-    write_user(user, sep);
+    box_inner_separator(box);
 }
 
 void
@@ -143,9 +141,7 @@ system_details(UR_OBJECT user)
         lang_format(user, title_body, sizeof title_body,
                     "system.title.header", title_padded);
         box_line(box, "%s", title_body);
-        const char *sep = lang(user, "system.inner_sep");
-        if (!sep) sep = "|----------------------------------------------------------------------------|\n";
-        write_user(user, sep);
+        box_inner_separator(box);
 
         /* Get uptime values. */
         strftime(bstr, 32, "%a %Y-%m-%d %H:%M:%S", localtime(&amsys->boot_time));

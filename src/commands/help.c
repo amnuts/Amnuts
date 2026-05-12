@@ -170,15 +170,16 @@ help_commands_level(UR_OBJECT user)
     CMD_OBJECT cmd;
 
     start_pager(user);
-    lang_user(user, "help.commands.frame_top");
+    write_user(user, "\n");
+    rule(user, 78, NULL);
     lang_user(user, "help.commands.tip_line1");
     lang_user(user, "help.commands.tip_line2");
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
                             lang(user, "help.commands.title"),
                             user_level[user->level].name));
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     total = 0;
     for (lvl = JAILED; lvl < NUM_LEVELS; lvl = (enum lvl_value) (lvl + 1)) {
         if (user->level < lvl) {
@@ -235,12 +236,12 @@ help_commands_level(UR_OBJECT user)
         }
         ++total;
     }
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_LEFT, 78, 1, "|",
                             lang(user, "help.commands.total"),
                             total, PLTEXT_S(total)));
-    lang_user(user, "help.commands.frame_bot");
+    rule(user, 78, NULL);
     stop_pager(user);
 }
 
@@ -255,15 +256,16 @@ help_commands_function(UR_OBJECT user)
     int cnt, total, function, found;
 
     start_pager(user);
-    lang_user(user, "help.commands.frame_top");
+    write_user(user, "\n");
+    rule(user, 78, NULL);
     lang_user(user, "help.commands.tip_line1");
     lang_user(user, "help.commands.tip_line2");
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
                             lang(user, "help.commands.title"),
                             user_level[user->level].name));
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     /* scroll through all the commands listing by function */
     total = 0;
     for (function = 0; command_types[function]; ++function) {
@@ -322,12 +324,12 @@ help_commands_function(UR_OBJECT user)
         }
         ++total;
     }
-    lang_user(user, "help.commands.frame_mid");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_LEFT, 78, 1, "|",
                             lang(user, "help.commands.total"),
                             total, PLTEXT_S(total)));
-    lang_user(user, "help.commands.frame_bot");
+    rule(user, 78, NULL);
     stop_pager(user);
 }
 

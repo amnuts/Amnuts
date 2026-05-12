@@ -17,14 +17,11 @@
  * Show the wizzes that are currently logged on, and get a list of names
  * from the lists saved.
  *
- * Phase 3 pilot of the catalog + lang_* + UI pipeline: every server-
- * authored literal in this command has been lifted into the wizlist.*
- * keys of files/langs/en_GB/strings.yml. The per-section frame lines
- * are stored as opaque catalog values rather than synthesised through
- * box_open/rule because the body content here is NOT framed by side
- * rails — it would not survive a table_row pass byte-identically. A
- * themed locale can still re-skin every section divider by overriding
- * the wizlist.frame.* keys.
+ * The per-section frame lines are synthesised by rule() from the
+ * ui.rule.* primitives; the catalog supplies only the section label
+ * text (wizlist.label.*). A themed locale re-skins the divider caps/
+ * fill by overriding the ui.* keys, with no command-specific overrides
+ * required.
  */
 void
 wiz_list(UR_OBJECT user)
@@ -43,7 +40,8 @@ wiz_list(UR_OBJECT user)
     enum lvl_value lvl;
 
     /* show this for everyone */
-    lang_user(user, "wizlist.frame.wiz_list");
+    rule(user, 78, lang(user, "wizlist.label.wiz_list"));
+    write_user(user, "\n");
     for (lvl = GOD; lvl >= WIZ; lvl = (enum lvl_value) (lvl - 1)) {
         *text2 = '\0';
         count = 0;
@@ -86,7 +84,9 @@ wiz_list(UR_OBJECT user)
 
     /* show this to just the wizzes */
     if (user->level >= WIZ) {
-        lang_user(user, "wizlist.frame.retired_wiz_list");
+        write_user(user, "\n");
+        rule(user, 78, lang(user, "wizlist.label.retired"));
+        write_user(user, "\n");
         for (lvl = GOD; lvl >= WIZ; lvl = (enum lvl_value) (lvl - 1)) {
             *text2 = '\0';
             count = 0;
@@ -129,7 +129,9 @@ wiz_list(UR_OBJECT user)
         }
     }
     /* show this to everyone */
-    lang_user(user, "wizlist.frame.those_currently_on");
+    write_user(user, "\n");
+    rule(user, 78, lang(user, "wizlist.label.currently_on"));
+    write_user(user, "\n");
     invis = 0;
     count = 0;
     for (u = user_first; u; u = u->next)
@@ -168,5 +170,6 @@ wiz_list(UR_OBJECT user)
     if (!count) {
         lang_user(user, "wizlist.no_wizzes_on");
     }
-    lang_user(user, "wizlist.frame.close");
+    write_user(user, "\n");
+    rule(user, 78, NULL);
 }

@@ -307,6 +307,7 @@ void box_line      (BOX b, const char *fmt, ...);
 void box_blank     (BOX b);
 void box_centered  (BOX b, const char *fmt, ...);
 void box_separator (BOX b);
+void box_inner_separator(BOX b);  /* uses body lside/rside as caps, sep fill */
 void box_close     (BOX b);
 
 TABLE table_open      (UR_OBJECT user, int total_width);

@@ -371,6 +371,30 @@ box_separator(BOX b)
     write_user(b->user, out);
 }
 
+/*
+ * Emit a separator that uses the box's body rails as caps and the
+ * ui.box.sep.fill as the fill. Visually `|---|` style instead of `+---+`.
+ * Use this when the separator must align vertically with body rows
+ * above/below (the `+` style breaks that alignment).
+ */
+void
+box_inner_separator(BOX b)
+{
+    if (!b) return;
+    const char *fill = lang(b->user, "ui.box.sep.fill");
+    if (!fill || !*fill) fill = "-";
+
+    int inner_cols = b->width - visible_strlen(b->lside) - visible_strlen(b->rside);
+    if (inner_cols < 0) inner_cols = 0;
+
+    char fillbuf[ARR_SIZE * 2];
+    fill_pattern(fillbuf, sizeof fillbuf, fill, inner_cols);
+
+    char out[ARR_SIZE * 2];
+    snprintf(out, sizeof out, "%s%s%s\n", b->lside, fillbuf, b->rside);
+    write_user(b->user, out);
+}
+
 void
 box_close(BOX b)
 {

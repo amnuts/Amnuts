@@ -8,7 +8,7 @@ meta.description: "Yee-haw frames; rest falls back to English."
 ui.rule.lcap:        "-={*"
 ui.rule.rcap:        "*}=-"
 ui.rule.fill:        "-"
-ui.rule.label_lpad:  "6"
+ui.rule.label_lpad:  "5"
 
 # Box edges with the same caps and a fat fill.
 ui.box.top.lcap:     "-={*"

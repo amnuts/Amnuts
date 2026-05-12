@@ -21,7 +21,7 @@ ping.greeting:    "Hello, %1$s. Catalog is working.\n"
 ui.rule.lcap:        "+"
 ui.rule.rcap:        "+"
 ui.rule.fill:        "-"
-ui.rule.label_lpad:  "6"      # visible columns of fill before " <label> "
+ui.rule.label_lpad:  "5"      # visible columns of fill before " <label> "
 
 # Box top/bottom edges and body sides.
 ui.box.top.lcap:     "+"
@@ -41,13 +41,13 @@ ui.box.sep.fill:     "-"
 # wizlist — first end-to-end consumer of the catalog + UI builders.
 # Body content (the per-level lists and the currently-on rows) is not
 # inside a |…| body box: the original output uses rule-style section
-# headers with un-railed content beneath. Each frame line therefore ships
-# as a single opaque value here, so a themed locale (e.g. cowboy) can
-# re-skin the section dividers wholesale.
-wizlist.frame.wiz_list:           "+----- ~FGWiz List~RS -------------------------------------------------------------+\n\n"
-wizlist.frame.retired_wiz_list:   "\n+----- ~FGRetired Wiz List~RS -----------------------------------------------------+\n\n"
-wizlist.frame.those_currently_on: "\n+----- ~FGThose currently on~RS ---------------------------------------------------+\n\n"
-wizlist.frame.close:              "\n+----------------------------------------------------------------------------+\n"
+# headers with un-railed content beneath. The frame appearance is now
+# synthesised by the UI builders' rule() call from ui.* primitives; a
+# themed locale re-skins the rule caps/fill there. The catalog supplies
+# only the section LABEL text below.
+wizlist.label.wiz_list:           "~FGWiz List~RS"
+wizlist.label.retired:            "~FGRetired Wiz List~RS"
+wizlist.label.currently_on:       "~FGThose currently on~RS"
 
 # Per-level row prefix: %1$s = level colour escape (e.g. ~FC), %2$s = level
 # name padded right to 10 visible columns by the caller.
@@ -161,9 +161,10 @@ listbans.usage:                   "Usage: lban sites|users|new|swears\n"
 # together when `-a` is given, or shown individually for `-u`/`-n`/`-r`/`-m`.
 # Each section is a 78-col frame (total) with '|' side rails (inner = 76
 # visible cols). Within a section, the title sits between a top `+---+`
-# frame and an *inner* `|---|` separator (note: `|` caps, not `+`, so this
-# cannot be reproduced via box_separator — it ships here as opaque
-# system.inner_sep and is written direct via write_user).
+# frame and an *inner* `|---|` separator — body-rail-capped, not `+`-capped,
+# so it cannot be produced via box_separator. The UI builder
+# box_inner_separator() synthesises it from ui.box.body.lside/rside (caps)
+# and ui.box.sep.fill, so a themed locale re-skins it via the ui.* keys.
 #
 # Between sub-sections inside one frame, and between sections under `-a`,
 # the boundary is `+---+`, which is what box_separator emits — so those
@@ -188,8 +189,6 @@ listbans.usage:                   "Usage: lban sites|users|new|swears\n"
 #    each ships as a pair of keys (label header + value row). When IDENTD
 #    is compiled but amsys->ident_state is false, the non-IDENTD variants
 #    are used.
-
-system.inner_sep:                 "|----------------------------------------------------------------------------|\n"
 
 # Section title row. %1$s = caller-padded text (74 visible cols).
 system.title.header:              " ~OL~FC%1$-74.74s~RS "
@@ -308,20 +307,14 @@ help.ambiguous_attribute:         "~FR~OLAttribute name is not unique. \"~FT%1$s
 # without paging). %1$s = level name (taken from user_level[com->level].name).
 help.level_line:                  "~OLLevel   :~RS %1$s and above\n"
 
-# Commands listing — frame + tip + title + footer. Shared by both the
-# level-grouped (`help` when cmd_type == 0) and function-grouped
-# (`help` when cmd_type == 1) screens.
-#
-# Each "rail" line is exactly 78 visible cols of `+---+`-bracketed dashes.
-# The tip lines are the inner-rail `|   |` versions. These four keys ship
-# as opaque catalog literals because the original layout uses align_string
-# with `"|"` as the marker — the rails are emitted verbatim, not via
-# box_open/box_close.
-help.commands.frame_top:          "\n+----------------------------------------------------------------------------+\n"
+# Commands listing — tip lines + title + footer. The bare `+---+` rails
+# that separate the frame regions are synthesised by rule(user, 78, NULL)
+# from the ui.rule.* primitives; the catalog supplies only the inner-rail
+# tip prose and the title/footer bodies that align_string then drops
+# inside `|…|` rails. A themed locale re-skins the rails via the ui.*
+# keys with no help-specific overrides.
 help.commands.tip_line1:          "| All commands start with a \".\" (when in ~FYspeech~RS mode) and can be abbreviated |\n"
 help.commands.tip_line2:          "| Remember, a \".\" by itself will repeat your last command or speech          |\n"
-help.commands.frame_mid:          "+----------------------------------------------------------------------------+\n"
-help.commands.frame_bot:          "+----------------------------------------------------------------------------+\n"
 
 # Title row body — handed to align_string as the format. %1$s = the level
 # name (user_level[user->level].name).
