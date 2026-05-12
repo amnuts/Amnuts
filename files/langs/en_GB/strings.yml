@@ -12,3 +12,28 @@ meta.description: "The default tongue."
 # A smoke-test key proves the catalog round-trip works.
 # Phase 2 has no other code-side consumers; Phase 4 starts adding real ones.
 ping.greeting:    "Hello, %1$s. Catalog is working.\n"
+
+# UI builders — frame primitives (see docs/superpowers/specs/2026-05-10-localisation-design.md §6).
+# These values are processed as opaque byte sequences by the UI builders,
+# NOT as printf format strings. Keep them free of % specifiers.
+
+# Horizontal section rule (no side rails). Used for between-section dividers.
+ui.rule.lcap:        "+"
+ui.rule.rcap:        "+"
+ui.rule.fill:        "-"
+ui.rule.label_lpad:  "6"      # visible columns of fill before " <label> "
+
+# Box top/bottom edges and body sides.
+ui.box.top.lcap:     "+"
+ui.box.top.rcap:     "+"
+ui.box.top.fill:     "-"
+ui.box.bot.lcap:     "+"
+ui.box.bot.rcap:     "+"
+ui.box.bot.fill:     "-"
+ui.box.body.lside:   "|"
+ui.box.body.rside:   "|"
+
+# Internal box separator (between header and rows, between row groups).
+ui.box.sep.lcap:     "+"
+ui.box.sep.rcap:     "+"
+ui.box.sep.fill:     "-"
