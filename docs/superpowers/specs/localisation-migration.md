@@ -7,7 +7,7 @@
 | 3 — UI builders | converted (2026-05-12) | visible_strlen / align_into / rule / box_* / table_*; ui.* keys in en_GB and cowboy test locale; wizlist pilot converted |
 | 4 — frame-heavy commands | converted (2026-05-12) | wizlist (Phase 3 pilot), show_igusers, grepusers, listbans, system, help — all framed output via box_*/table_* or opaque catalog frame literals; strings in en_GB/strings.yml |
 | 5 — bulk inline-string conversion | in progress (2026-05-12; framework + tooling shipped, sweep batches landing per command file) | per-command sub-ledger below |
-| 6 — first non-default locale | pending | translator's work, not a code phase |
+| 6 — first non-default locale | demonstration (2026-05-12) | `fr` partial locale shipped as a working example; full coverage is a translator's job |
 
 ## Phase 1 verification
 
@@ -248,6 +248,38 @@ Already landed in Phase 5 alongside the tooling (commit 95c15d6):
   closed (commit e238fd2) — the parameters now mirror `vwrite_level`'s
   `above` / `dorecord` behaviour from `src/messages.c`. The Phase 2
   one-shot warning syslog is removed.
+
+## Phase 6 (demonstration)
+
+Phase 6 is the first non-default locale. The design spec §9.1 declares
+it "translator's job, not a code phase" — there is no implementation
+to land beyond the act of writing translated strings. This repo ships
+one **demonstration** locale (`files/langs/fr/strings.yml`) as proof
+the runbook in `docs/superpowers/plans/2026-05-11-localisation-phase6.md`
+works end to end:
+
+- `meta.name` / `meta.description` set the French display name.
+- The Phase 2 smoke-test key (`ping.greeting`) is translated.
+- A representative subset of Phase 5 batch-1 keys is translated
+  (`cafk.*`, `home.*`, `muzzle.*`, `unmuzzle.*`, `revafk.*`, `revclr.*`,
+  `suicide.*`, `wake.*`). The intentionally NOT-translated keys
+  exercise the per-key fallback to en_GB.
+- Validated by `python tools/locale/check.py files/langs/fr/strings.yml`
+  → `OK: files/langs/fr/strings.yml validates clean.`
+
+The shipped `fr` locale is partial and demonstration-grade — it is
+not a production French translation. A real translator picks up from
+here, fills in the gaps, and re-runs `check.py` before pushing. The
+talker's catalog framework handles partial locales without complaint.
+
+### Shipped non-default locales
+
+| Locale         | Coverage           | Notes                                  |
+|----------------|--------------------|----------------------------------------|
+| en_GB          | full (default)     | canonical source of format signatures  |
+| cowboy         | meta + ui.* only   | Phase 3 frame-theme test fixture       |
+| fallback_test  | one motd override  | Phase 1 fallback test fixture          |
+| fr             | partial (~30 keys) | Phase 6 demonstration                   |
 
 ## Per-command sweep ledger (Phases 4 + 5)
 
