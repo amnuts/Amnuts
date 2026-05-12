@@ -273,3 +273,91 @@ system.row.mem_total:             " total           : %1$12s Mb             %2$8
 
 # Generic / fallback.
 system.usage:                     "Usage: system [-m|-n|-r|-u|-a]\n"
+
+# help — Phase 4 conversion. Scope covers only the framing parts of the
+# command: the unknown-topic / ambiguous-match messages, the commands-list
+# screens (level-grouped and function-grouped), and the two credits screens
+# (Amnuts + NUTS). The per-topic file path (more()-paged content under
+# files/langs/<locale>/helpfiles/) is OUT OF SCOPE — that path is already
+# locale-aware from Phase 1 and is not lifted into the catalog.
+#
+# The commands-list screens keep the existing align_string() pipeline rather
+# than switching to box_open/box_line: align_string already produces the
+# byte stream the original sprintf chain emits (including the |…| rails),
+# and pass-through via lang(user, "key") as the format argument is the
+# safer byte-identical conversion. A themed locale can re-skin the inner
+# content of each row but cannot move the column geometry of the rails
+# without also touching the C side.
+#
+# The credits screens are flat (no rails) — every server-authored line
+# ships as one catalog value. Bodies are long enough to be inconvenient as
+# 13-key sequences but short enough that a single double-quoted scalar is
+# still readable. The version-line keys carry the only positional arg
+# (%1$s = NUTSVER / AMNUTSVER).
+
+# Unknown / ambiguous topic messages. The "Sorry, there is no help on that
+# topic.\n" string appears at three sites in help() — the bare-arg unknown
+# case, the attribute-unknown case under `help set <attr>`, and the
+# more()-returned-0 case after a paged read found nothing. All three reuse
+# the same key.
+help.unknown:                     "Sorry, there is no help on that topic.\n"
+help.ambiguous_command:           "~FR~OLCommand name is not unique. \"~FC%1$s~RS~OL~FR\" also matches:\n\n"
+help.ambiguous_attribute:         "~FR~OLAttribute name is not unique. \"~FT%1$s~RS~OL~FR\" also matches:\n"
+
+# Trailing "Level   :" line shown when more() returns 2 (end-of-file
+# without paging). %1$s = level name (taken from user_level[com->level].name).
+help.level_line:                  "~OLLevel   :~RS %1$s and above\n"
+
+# Commands listing — frame + tip + title + footer. Shared by both the
+# level-grouped (`help` when cmd_type == 0) and function-grouped
+# (`help` when cmd_type == 1) screens.
+#
+# Each "rail" line is exactly 78 visible cols of `+---+`-bracketed dashes.
+# The tip lines are the inner-rail `|   |` versions. These four keys ship
+# as opaque catalog literals because the original layout uses align_string
+# with `"|"` as the marker — the rails are emitted verbatim, not via
+# box_open/box_close.
+help.commands.frame_top:          "\n+----------------------------------------------------------------------------+\n"
+help.commands.tip_line1:          "| All commands start with a \".\" (when in ~FYspeech~RS mode) and can be abbreviated |\n"
+help.commands.tip_line2:          "| Remember, a \".\" by itself will repeat your last command or speech          |\n"
+help.commands.frame_mid:          "+----------------------------------------------------------------------------+\n"
+help.commands.frame_bot:          "+----------------------------------------------------------------------------+\n"
+
+# Title row body — handed to align_string as the format. %1$s = the level
+# name (user_level[user->level].name).
+help.commands.title:              "  Commands available to you (level ~OL%1$s~RS) "
+
+# Per-row pieces. The "level prefix" is the leading "X) " marker that
+# starts a level-grouped row; the "function header" is the standalone
+# header row emitted before each function group. %1$s = the level letter
+# or function name; %-1.1s in the level prefix is preserved via the
+# numeric width/precision (the catalog signature validator accepts those).
+help.commands.level_prefix:       "  ~FG~OL%1$-1.1s)~RS ~FC"
+help.commands.function_header:    "  ~OL~FG%1$s~RS "
+
+# Per-cell command name pieces. Two variants per screen reflecting the
+# two branches inside the loop (has_xcom or not). The level-grouped
+# screen has an extra "highlight" segment between the name and the alias
+# (either ~FC or empty); that segment is supplied by the C side as %2$s.
+# %1$s = command name, %2$s = highlight escape ("~FC" or ""), %3$s = alias.
+help.commands.row.level_xcom:     "~FR%1$s~RS%2$s %3$s"
+help.commands.row.level_plain:    "%1$s %2$s"
+help.commands.row.function_xcom:  "~FR%1$s~RS %2$s"
+help.commands.row.function_plain: "%1$s %2$s"
+
+# Footer — total command count, with PLTEXT_S pluralisation supplied as %2$s.
+help.commands.total:              "  There is a total of ~OL%1$d~RS command%2$s that you can use "
+
+# Credits screens. Each screen is composed of three pieces: a header line
+# (or top colour bar), a version line (the only one carrying a %1$s arg),
+# and a body block that bundles the remaining static lines into one
+# catalog value. The body strings are long but contain no positional
+# specifiers — they remain plain `%s`-less scalars from the signature
+# validator's point of view.
+help.credits.amnuts.header_bar:   "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
+help.credits.amnuts.version:      "~OL~FCAmnuts version %1$s~RS, Copyright (C) Andrew Collington, 2003\n"
+help.credits.amnuts.body:         "Brought to you by the Amnuts Development Group (Andy, Ardant and Uzume)\n\nAmnuts stands for ~OLA~RSndy's ~OLM~RSodified ~OLNUTS~RS, a Unix talker server written in C.\n\nMany thanks to everyone who has helped out with Amnuts.  Special thanks go to\nArdant, Uzume, Arny (of Paris fame), Silver (of PG+ fame), and anyone else who\nhas contributed at all to the development of Amnuts.\n\nIf you are interested, you can purchase Amnuts t-shirts, mugs, mousemats, and\nmore, from http://www.cafepress.com/amnuts/\n\nWe hope you enjoy the talker!\n\n   -- The Amnuts Development Group\n\n(for NUTS credits, see \".help nuts\")\n\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
+
+help.credits.nuts.header:         "\n~BB*** NUTS Credits :) (for Amnuts credits, see \".help credits\") ***\n\n"
+help.credits.nuts.version:        "~BRNUTS version %1$s, Copyright (C) Neil Robertson 1996.\n\n"
+help.credits.nuts.body:           "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \nNUTS stands for Neil's Unix Talk Server, a program which started out as a\nuniversity project in autumn 1992 and has progressed from thereon. In no\nparticular order thanks go to the following people who helped me develop or\ndebug this code in one way or another over the years:\n   ~FCDarren Seryck, Steve Guest, Dave Temple, Satish Bedi, Tim Bernhardt,\n   ~FCKien Tran, Jesse Walton, Pak Chan, Scott MacKenzie and Bryan McPhail.\nAlso thanks must go to anyone else who has emailed me with ideas and/or bug\nreports and all the people who have used NUTS over the intervening years.\nI know I have said this before but this time I really mean it--this is the final\nversion of NUTS 3. In a few years NUTS 4 may spring forth but in the meantime\nthat, as they say, is that. :)\n\nIf you wish to email me my address is \"~FGneil@ogham.demon.co.uk~RS\" and should\nremain so for the forseeable future.\n\nNeil Robertson - November 1996.\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
