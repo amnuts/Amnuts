@@ -235,3 +235,161 @@ rule(UR_OBJECT user, int width, const char *label_fmt, ...)
 
     write_user(user, out);
 }
+
+struct box_struct {
+    UR_OBJECT user;
+    int       width;        /* total visible cols including sides */
+    int       inner;        /* width - visible_strlen(lside) - visible_strlen(rside) */
+    char      lside[16];
+    char      rside[16];
+};
+
+BOX
+box_open(UR_OBJECT user, int width, const char *title_fmt, ...)
+{
+    if (!user || width <= 0) return NULL;
+    struct box_struct *b = calloc(1, sizeof *b);
+    if (!b) return NULL;
+    b->user  = user;
+    b->width = width;
+
+    const char *l = lang(user, "ui.box.body.lside");
+    const char *r = lang(user, "ui.box.body.rside");
+    if (!l) l = "|";
+    if (!r) r = "|";
+    strncpy(b->lside, l, sizeof b->lside - 1);
+    strncpy(b->rside, r, sizeof b->rside - 1);
+    b->inner = width - visible_strlen(b->lside) - visible_strlen(b->rside);
+    if (b->inner < 0) b->inner = 0;
+
+    const char *lcap = lang(user, "ui.box.top.lcap");
+    const char *rcap = lang(user, "ui.box.top.rcap");
+    const char *fill = lang(user, "ui.box.top.fill");
+    if (!lcap) lcap = "+";
+    if (!rcap) rcap = "+";
+    if (!fill || !*fill) fill = "-";
+
+    int inner_cols = width - visible_strlen(lcap) - visible_strlen(rcap);
+    if (inner_cols < 0) inner_cols = 0;
+
+    char rendered_title[ARR_SIZE];
+    rendered_title[0] = '\0';
+    int title_visible = 0;
+    if (title_fmt && *title_fmt) {
+        va_list ap;
+        va_start(ap, title_fmt);
+        vsnprintf(rendered_title, sizeof rendered_title, title_fmt, ap);
+        va_end(ap);
+        title_visible = visible_strlen(rendered_title);
+    }
+
+    char out[ARR_SIZE * 2];
+    size_t pos = 0;
+    pos += snprintf(out + pos, sizeof out - pos, "%s", lcap);
+    if (title_visible > 0 && title_visible + 4 <= inner_cols) {
+        int lpad = 5;
+        pos += fill_pattern(out + pos, sizeof out - pos, fill, lpad);
+        out[pos++] = ' ';
+        size_t tlen = strlen(rendered_title);
+        if (pos + tlen < sizeof out) {
+            memcpy(out + pos, rendered_title, tlen);
+            pos += tlen;
+        }
+        out[pos++] = ' ';
+        int rem = inner_cols - lpad - 1 - title_visible - 1;
+        if (rem > 0) pos += fill_pattern(out + pos, sizeof out - pos, fill, rem);
+    } else {
+        pos += fill_pattern(out + pos, sizeof out - pos, fill, inner_cols);
+    }
+    pos += snprintf(out + pos, sizeof out - pos, "%s\n", rcap);
+    write_user(user, out);
+    return b;
+}
+
+void
+box_line(BOX b, const char *fmt, ...)
+{
+    if (!b) return;
+    char body[ARR_SIZE * 2];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(body, sizeof body, fmt, ap);
+    va_end(ap);
+
+    char padded[ARR_SIZE * 2];
+    align_into(padded, sizeof padded, ALIGN_LEFT, b->inner, "%s", body);
+
+    char out[ARR_SIZE * 2];
+    snprintf(out, sizeof out, "%s%s%s\n", b->lside, padded, b->rside);
+    write_user(b->user, out);
+}
+
+void
+box_centered(BOX b, const char *fmt, ...)
+{
+    if (!b) return;
+    char body[ARR_SIZE * 2];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(body, sizeof body, fmt, ap);
+    va_end(ap);
+
+    char padded[ARR_SIZE * 2];
+    align_into(padded, sizeof padded, ALIGN_CENTRE, b->inner, "%s", body);
+
+    char out[ARR_SIZE * 2];
+    snprintf(out, sizeof out, "%s%s%s\n", b->lside, padded, b->rside);
+    write_user(b->user, out);
+}
+
+void
+box_blank(BOX b)
+{
+    if (!b) return;
+    box_line(b, "");
+}
+
+void
+box_separator(BOX b)
+{
+    if (!b) return;
+    const char *lcap = lang(b->user, "ui.box.sep.lcap");
+    const char *rcap = lang(b->user, "ui.box.sep.rcap");
+    const char *fill = lang(b->user, "ui.box.sep.fill");
+    if (!lcap) lcap = "+";
+    if (!rcap) rcap = "+";
+    if (!fill || !*fill) fill = "-";
+
+    int inner_cols = b->width - visible_strlen(lcap) - visible_strlen(rcap);
+    if (inner_cols < 0) inner_cols = 0;
+
+    char fillbuf[ARR_SIZE * 2];
+    fill_pattern(fillbuf, sizeof fillbuf, fill, inner_cols);
+
+    char out[ARR_SIZE * 2];
+    snprintf(out, sizeof out, "%s%s%s\n", lcap, fillbuf, rcap);
+    write_user(b->user, out);
+}
+
+void
+box_close(BOX b)
+{
+    if (!b) return;
+    const char *lcap = lang(b->user, "ui.box.bot.lcap");
+    const char *rcap = lang(b->user, "ui.box.bot.rcap");
+    const char *fill = lang(b->user, "ui.box.bot.fill");
+    if (!lcap) lcap = "+";
+    if (!rcap) rcap = "+";
+    if (!fill || !*fill) fill = "-";
+
+    int inner_cols = b->width - visible_strlen(lcap) - visible_strlen(rcap);
+    if (inner_cols < 0) inner_cols = 0;
+
+    char fillbuf[ARR_SIZE * 2];
+    fill_pattern(fillbuf, sizeof fillbuf, fill, inner_cols);
+
+    char out[ARR_SIZE * 2];
+    snprintf(out, sizeof out, "%s%s%s\n", lcap, fillbuf, rcap);
+    write_user(b->user, out);
+    free(b);
+}

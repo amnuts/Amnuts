@@ -301,6 +301,12 @@ int align_into(char *out, size_t outlen,
                const char *fmt, ...)
     __attribute__((format(printf, 5, 6)));
 void rule(UR_OBJECT user, int width, const char *label_fmt, ...);
+BOX  box_open      (UR_OBJECT user, int width, const char *title_fmt, ...);
+void box_line      (BOX b, const char *fmt, ...);
+void box_blank     (BOX b);
+void box_centered  (BOX b, const char *fmt, ...);
+void box_separator (BOX b);
+void box_close     (BOX b);
 
 /* lang_*() — render a catalog entry to one or more users.
  * `key` resolution: user->catalog first, then amsys default catalog.
