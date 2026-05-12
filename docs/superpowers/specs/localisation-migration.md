@@ -5,7 +5,7 @@
 | 1 — file-path mechanism + directory move | converted (2026-05-10) | All six relocated categories swept; libyaml vendored; locale_load_all wired into boot. Talker bootable at every commit. |
 | 2 — catalog framework | converted (2026-05-11) | string catalog + lang_* API + set lang (USER) + langreload (WIZ); en_GB/strings.yml ships with meta.* and one smoke-test key; no in-source call sites use lang_* yet |
 | 3 — UI builders | converted (2026-05-12) | visible_strlen / align_into / rule / box_* / table_*; ui.* keys in en_GB and cowboy test locale; wizlist pilot converted |
-| 4 — frame-heavy commands | pending | wizlist, show_igusers, grepusers, listbans, system, parts of help |
+| 4 — frame-heavy commands | converted (2026-05-12) | wizlist (Phase 3 pilot), show_igusers, grepusers, listbans, system, help — all framed output via box_*/table_* or opaque catalog frame literals; strings in en_GB/strings.yml |
 | 5 — bulk inline-string conversion | pending | per-command sub-ledger below |
 | 6 — first non-default locale | pending | translator's work, not a code phase |
 
@@ -122,6 +122,47 @@ Notes on the pilot conversion:
   is handed to the catalog format string as a plain `%s`; the catalog
   signature framework rejects `%*` specifiers, and this two-stage
   approach keeps the rendered bytes identical.
+
+## Phase 4 verification
+
+The Phase 4 sweep converted the five frame-heavy commands listed in the
+spec, each in its own commit on top of the Phase 3 pilot:
+
+- `show_igusers` (in `src/amnuts.c`, not `src/commands/`) — `box_open`+
+  `box_line` with `|…|` rails, three name cells per row preserving the
+  `%-24s` byte-stream verbatim.
+- `grepusers` — hybrid: outer frame and footer via `box_*`, per-match
+  pair rows via opaque catalog literals (the original deliberately
+  overruns the 78-col frame with 86-col pair content; preserved
+  byte-equivalent rather than "fixed").
+- `listbans` — every subcommand (`sites`, `users`, `new`, `swears`)
+  via opaque frame literals plus per-content `lang_user` calls;
+  `more()` paths into `langs/<locale>/datafiles/` untouched (Phase 1
+  already made those locale-aware).
+- `system` (in `src/commands/system.c`) — 57 catalog keys across
+  six sections (general, port info, users, netlinks, rooms, memory);
+  byte-equivalent verified via an offline positional-printf-aware
+  comparison harness across every format path including the
+  asymmetric ` : ` vs `: ` spacing in the original.
+- `help` — used the lower-risk approach: existing `align_string()`
+  calls were retained and fed `lang(user, "key")` as the format
+  argument; the per-topic `more()` file-paging path is unchanged.
+
+End-to-end runtime verification deferred to a Linux/macOS host (Windows
+dev box). Smoke checks the user should run after a clean build:
+
+1. `.show_igusers` (alone) and as a wiz: `.show_igusers <other_user>`.
+2. `.grepusers <pattern>` with a known match.
+3. `.lban sites` / `.lban users` / `.lban new` / `.lban swears` /
+   `.lban` (no arg, which deliberately falls into the new-bans branch
+   per the preserved quirk).
+4. `.system` and `.system -a` — verify every section header, every
+   stat row, the asymmetric colon-spacing, and the inner `|---|`
+   separators (note: NOT `+---+`).
+5. `.help`, `.help commands`, `.help credits`, `.help nuts`, `.help
+   <topic>`, `.help nonsense`.
+6. `set lang cowboy`, then re-run all of the above. Frames via `box_*`
+   pick up the cowboy theme; opaque frame literals stay in English.
 
 ## Per-command conversion pattern (Phase 4 + 5)
 
