@@ -6,7 +6,7 @@
 | 2 — catalog framework | converted (2026-05-11) | string catalog + lang_* API + set lang (USER) + langreload (WIZ); en_GB/strings.yml ships with meta.* and one smoke-test key; no in-source call sites use lang_* yet |
 | 3 — UI builders | converted (2026-05-12) | visible_strlen / align_into / rule / box_* / table_*; ui.* keys in en_GB and cowboy test locale; wizlist pilot converted |
 | 4 — frame-heavy commands | converted (2026-05-12) | wizlist (Phase 3 pilot), show_igusers, grepusers, listbans, system, help — all framed output via box_*/table_* or opaque catalog frame literals; strings in en_GB/strings.yml |
-| 5 — bulk inline-string conversion | pending | per-command sub-ledger below |
+| 5 — bulk inline-string conversion | in progress (2026-05-12; framework + tooling shipped, sweep batches landing per command file) | per-command sub-ledger below |
 | 6 — first non-default locale | pending | translator's work, not a code phase |
 
 ## Phase 1 verification
@@ -207,6 +207,47 @@ A conversion is "done" when:
 - On a themed locale (`cowboy`), the frames pick up the theme; the
   rest of the strings render unchanged (no themed translations yet
   outside `ui.*` and `meta.*`).
+
+## Phase 5 verification
+
+Phase 5 ships the catalog-translation tooling (`tools/locale/{extract,
+refs,check}.py`) and begins per-command sweep batches. The phase is
+deliberately open-ended — partial conversion is a feature, not a bug.
+A command that hasn't been swept yet keeps using `write_user` and is
+non-translatable until its conversion lands. Coverage grows commit by
+commit.
+
+Sweep tools the operator and translator depend on:
+
+1. `python tools/locale/extract.py src/commands/<file>.c` — suggests
+   catalog keys for a single command. Output is a YAML stub the
+   converter pastes into en_GB/strings.yml and edits.
+2. `python tools/locale/refs.py` — cross-checks `lang_*("key", …)`
+   calls in source against `en_GB/strings.yml`. Run before every
+   commit:
+   - `--missing-only` must be empty (a missing key means a converter
+     added a call but forgot to ship the key — guaranteed `[??? key]`
+     to en_GB users).
+   - Orphans (catalog keys with no caller) filtered to skip `ui.*` /
+     `meta.*` (consumed by builders and the locale listing rather than
+     by direct `lang_*` calls).
+3. `python tools/locale/check.py files/langs/<locale>/strings.yml` —
+   replicates the C-side format-signature validation; translators run
+   this before pushing.
+
+Per-command commits each tick the sweep ledger below. Phase 5 is
+"done" not when every site is converted but when coverage reaches an
+agreed threshold (target: 90%+ of user-facing strings) or when the
+project decides to ship.
+
+Already landed in Phase 5 alongside the tooling (commit 95c15d6):
+
+- 10 small commands swept in batch 1: `cafk`, `cls`, `home`, `muzzle`,
+  `revafk`, `revclr`, `set_desc`, `suicide`, `unmuzzle`, `wake`.
+- The `notify_invis` / `record_flag` semantic gap in `lang_level`
+  closed (commit e238fd2) — the parameters now mirror `vwrite_level`'s
+  `above` / `dorecord` behaviour from `src/messages.c`. The Phase 2
+  one-shot warning syslog is removed.
 
 ## Per-command sweep ledger (Phases 4 + 5)
 
