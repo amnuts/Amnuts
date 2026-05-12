@@ -22,15 +22,15 @@ void
 home(UR_OBJECT user)
 {
     if (user->room) {
-        write_user(user, "You are already on your home system.\n");
+        lang_user(user, "home.already_home");
         return;
     }
-    write_user(user, "~FB~OLYou traverse cyberspace...\n");
+    lang_user(user, "home.traverse");
     write_syslog(NETLOG, 1, "NETLINK: %s returned from %s.\n", user->name,
             user->netlink->service);
     release_nl(user);
     if (user->vis) {
-        vwrite_room_except(user->room, user, "%s~RS %s\n", user->recap,
+        lang_room(user->room, user, "home.room_arrival", user->recap,
                 user->in_phrase);
     } else {
         write_room_except(user->room, invisenter, user);

@@ -361,3 +361,84 @@ help.credits.amnuts.body:         "Brought to you by the Amnuts Development Grou
 help.credits.nuts.header:         "\n~BB*** NUTS Credits :) (for Amnuts credits, see \".help credits\") ***\n\n"
 help.credits.nuts.version:        "~BRNUTS version %1$s, Copyright (C) Neil Robertson 1996.\n\n"
 help.credits.nuts.body:           "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \nNUTS stands for Neil's Unix Talk Server, a program which started out as a\nuniversity project in autumn 1992 and has progressed from thereon. In no\nparticular order thanks go to the following people who helped me develop or\ndebug this code in one way or another over the years:\n   ~FCDarren Seryck, Steve Guest, Dave Temple, Satish Bedi, Tim Bernhardt,\n   ~FCKien Tran, Jesse Walton, Pak Chan, Scott MacKenzie and Bryan McPhail.\nAlso thanks must go to anyone else who has emailed me with ideas and/or bug\nreports and all the people who have used NUTS over the intervening years.\nI know I have said this before but this time I really mean it--this is the final\nversion of NUTS 3. In a few years NUTS 4 may spring forth but in the meantime\nthat, as they say, is that. :)\n\nIf you wish to email me my address is \"~FGneil@ogham.demon.co.uk~RS\" and should\nremain so for the forseeable future.\n\nNeil Robertson - November 1996.\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
+
+# ---------------------------------------------------------------------------
+# Phase 5 sweep — batch 1 (small commands; mostly admin and self-affecting).
+# Each block below covers one command file; conversions are byte-identical
+# on en_GB.
+
+# cafk — clear the AFK review buffer.
+cafk.cleared:                     "Your AFK review buffer has now been cleared.\n"
+
+# cls — clear the screen. The first key is flooded 6x for clients that
+# ignore ANSI escapes; the second is the ANSI clear-screen sequence
+# (ESC `[2J`). Both ship as opaque catalog values.
+cls.newline_flood:                "\n\n\n\n\n\n\n\n\n\n"
+cls.escape_seq:                   "\x1B[2J"
+
+# home — return from a netlinked remote system to the home talker.
+# home.room_arrival is a vwrite_room_except equivalent (now lang_room):
+# %1$s = user recap, %2$s = the user's in_phrase.
+home.already_home:                "You are already on your home system.\n"
+home.traverse:                    "~FB~OLYou traverse cyberspace...\n"
+home.room_arrival:                "%1$s~RS %2$s\n"
+
+# muzzle — admin command; silences a user until unmuzzled.
+# %1$s = target recap (muzzle.already) or bw_recap (muzzle.applied);
+# %2$s = level name applying the muzzle (muzzle.applied).
+muzzle.usage:                     "Usage: muzzle <user>\n"
+muzzle.self:                      "Trying to muzzle yourself is the ninth sign of madness.\n"
+muzzle.higher_level:              "You cannot muzzle a user of equal or higher level than yourself.\n"
+muzzle.already:                   "%1$s~RS is already muzzled.\n"
+muzzle.applied:                   "~FR~OL%1$s now has a muzzle of level: ~RS~OL%2$s.\n"
+
+# revafk — show the AFK review buffer.
+revafk.header:                    "\n~BB~FG*** Your AFK review buffer ***\n\n"
+revafk.empty:                     "AFK buffer is empty.\n"
+revafk.footer:                    "\n~BB~FG*** End ***\n\n"
+
+# revclr — clear the room's review buffer. revclr.room_notice is a
+# vwrite_room_except equivalent (now lang_room): %1$s = the acting user's
+# visible name (recap when visible, "A presence" when invisible).
+revclr.room_notice:               "%1$s~RS clears the review buffer.\n"
+revclr.self:                      "You clear the review buffer.\n"
+
+# set_desc — set the user's description string.
+# set_desc.current is shown when no arg is supplied; %1$s = current desc.
+set_desc.current:                 "Your current description is: %1$s\n"
+set_desc.disallowed:              "You cannot have that description.\n"
+set_desc.too_long:                "Description too long.\n"
+set_desc.set:                     "Description set.\n"
+
+# suicide — confirm-and-delete-own-account command. The prompt key
+# contains an embedded \a (bell) character preserved from the original
+# (\07 in C) and is followed by a y/n response handled by misc_op = 6.
+suicide.usage:                    "Usage: suicide <your password>\n"
+suicide.password_incorrect:       "Password incorrect.\n"
+suicide.confirm_prompt:           "\n\a~FR~OL~LI*** WARNING - This will delete your account! ***\n\nAre you sure about this (y|n)? "
+
+# unmuzzle — admin counterpart to muzzle.
+# %1$s = target recap; unmuzzle.higher_muzzle adds %2$s = current
+# muzzle-level name.
+unmuzzle.usage:                   "Usage: unmuzzle <user>\n"
+unmuzzle.self:                    "Trying to unmuzzle yourself is the tenth sign of madness.\n"
+unmuzzle.not_muzzled:             "%1$s~RS is not muzzled.\n"
+unmuzzle.higher_muzzle:           "%1$s~RS's muzzle is set to level %2$s, you do not have the power to remove it.\n"
+unmuzzle.applied:                 "~FG~OLYou remove %1$s~RS's muzzle.\n"
+
+# wake — page an idle user with a bell + emote.
+# wake.target_message: %1$s = optional \a bell (empty when target has
+# beeps disabled), %2$s = sender's visible name (recap or "A presence").
+# wake.ignoring_you / wake.ignoring_beeps / wake.target_offsite all take
+# %1$s = target recap.
+wake.muzzled:                     "You are muzzled, you cannot wake anyone.\n"
+wake.usage:                       "Usage: wake <user>\n"
+wake.self:                        "Trying to wake yourself up is the eighth sign of madness.\n"
+wake.ignoring_you:                "%1$s~RS is ignoring wakes from you.\n"
+wake.ignoring_beeps:              "%1$s~RS is ignoring wakes at the moment.\n"
+wake.target_afk:                  "You cannot wake someone who is AFK.\n"
+wake.target_editor:               "You cannot wake someone who is in the editor.\n"
+wake.target_ignall:               "You cannot wake someone who ignoring everything.\n"
+wake.target_offsite:              "%1$s~RS is offsite and would not be able to reply to you.\n"
+wake.target_message:              "\n%1$s~BR***~RS %2$s~RS ~BRsays~RS: ~OL~LI~BRHEY! WAKE UP!!!~RS ~BR***\n\n"
+wake.sent:                        "Wake up call sent.\n"
