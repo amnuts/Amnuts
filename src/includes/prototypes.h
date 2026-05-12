@@ -80,15 +80,20 @@ void write_telnet_with_size(telnet_t *t, const char *str, size_t length);
 void vwrite_user(UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_user(UR_OBJECT, const char *);
+/* write_user_lang: second arg is a catalog key, not a printf format —
+ * the actual format is looked up at runtime, so no __format__ attribute. */
+void write_user_lang(UR_OBJECT, const char *, ...);
 void vwrite_level(enum lvl_value, int, int, UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 5, 6)));
 void write_level(enum lvl_value, int, int, const char *, UR_OBJECT);
+void write_level_lang(enum lvl_value, int, int, UR_OBJECT, const char *, ...);
 void vwrite_room(RM_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_room(RM_OBJECT, const char *);
 void vwrite_room_except(RM_OBJECT, UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 3, 4)));
 void write_room_except(RM_OBJECT, const char *, UR_OBJECT);
+void write_room_lang(RM_OBJECT, UR_OBJECT, const char *, ...);
 void vwrite_room_except_both(RM_OBJECT, UR_OBJECT, UR_OBJECT,
         const char *, ...)
 __attribute__((__format__(__printf__, 4, 5)));
@@ -329,15 +334,9 @@ void  table_close     (TABLE t);
  * "render right now," use lang_format or write_user_lang. */
 const char *lang(UR_OBJECT user, const char *key);
 
-/* Catalog-keyed write functions, paralleling the existing write_user /
- * vwrite_user / vwrite_room_except / vwrite_level family. Each looks up
- * `key` in user's locale first, then the server default; emits a visible
- * "[??? key]\n" marker if missing in both, with a rate-limited syslog
- * warning. */
-void  write_user_lang (UR_OBJECT user,  const char *key, ...);
-void  write_room_lang (RM_OBJECT room,  UR_OBJECT exclude, const char *key, ...);
-void  write_level_lang(int min_level, int above, int dorecord,
-                       UR_OBJECT exclude, const char *key, ...);
+/* Catalog-keyed caller-buffer formatter. The write_*_lang siblings of this
+ * helper live with the rest of the write-family prototypes earlier in this
+ * header (next to write_user / write_level / write_room_except). */
 int   lang_format(UR_OBJECT user, char *buf, size_t buflen,
                   const char *key, ...);
 

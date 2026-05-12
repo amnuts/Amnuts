@@ -3727,6 +3727,30 @@ write_user(UR_OBJECT user, const char *str)
 
 }
 
+/*
+ * Catalog-keyed sibling of vwrite_user: look up `key` in the user's locale
+ * (with default fallback via lang()), format the variadic args against the
+ * resolved string, and deliver via write_user. Emits a visible "[??? key]\n"
+ * marker on miss (the rate-limited missing-key syslog comes from lang()).
+ */
+void
+write_user_lang(UR_OBJECT user, const char *key, ...)
+{
+    if (!user) return;
+    const char *fmt = lang(user, key);
+    char buf[ARR_SIZE * 2];
+    if (!fmt) {
+        snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        write_user(user, buf);
+        return;
+    }
+    va_list ap;
+    va_start(ap, key);
+    vsnprintf(buf, sizeof buf, fmt, ap);
+    va_end(ap);
+    write_user(user, buf);
+}
+
 void
 vwrite_level(enum lvl_value lvl, int above, int dorecord, UR_OBJECT user,
         const char *str, ...)
@@ -3782,6 +3806,95 @@ write_level(enum lvl_value lvl, int above, int dorecord, const char *str,
             }
         }
     }
+}
+
+/*
+ * Per-locale equivalent of vwrite_level. Renders `key` with each
+ * recipient's own catalog before delivery; otherwise faithfully mirrors
+ * write_level's behaviour so Phase 5 migrations from
+ *   vwrite_level(lvl, above, dorecord, sender, fmt, ...)
+ * to
+ *   write_level_lang(lvl, above, dorecord, sender, key, ...)
+ * are observationally equivalent.
+ *
+ *   - above == 1   → recipients with level >= lvl
+ *   - above == 0   → recipients with level <= lvl
+ *   - dorecord (RECORD/NORECORD) → write_user diversions to
+ *     record_afk/record_edit, plus a record_tell on successful delivery.
+ *
+ * `exclude` plays the dual role vwrite_level's `user` parameter does: it is
+ * both the "sender" (used for ignore-list/level checks and as the `from`
+ * for record_* entries) and the recipient to skip.
+ */
+void
+write_level_lang(enum lvl_value lvl, int above, int dorecord,
+                 UR_OBJECT exclude, const char *key, ...)
+{
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        /* Recipient on the sender's ignore list — skip unless sender is GOD.
+         * check_igusers tolerates a NULL second arg (returns 0), so the
+         * short-circuit also handles the exclude == NULL case. */
+        if (check_igusers(u, exclude) && exclude && exclude->level < GOD) {
+            continue;
+        }
+        /* Per-recipient ignore toggles for wiz-channel chatter / logons. */
+        if ((u->ignwiz && (com_num == WIZSHOUT || com_num == WIZEMOTE))
+                || (u->ignlogons && logon_flag)) {
+            continue;
+        }
+        if (u == exclude) continue;
+        if (u->login) continue;
+        if (u->type == CLONE_TYPE) continue;
+
+        /* Direction: `above` matches vwrite_level's `above` flag. */
+        if (above) {
+            if (u->level < lvl) continue;
+        } else {
+            if (u->level > lvl) continue;
+        }
+
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+
+        /* Render in the recipient's locale. */
+        const char *fmt = lang(u, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+
+        /* AFK and line-editor recipients get the text diverted to their
+         * review buffer (when `dorecord` is set) instead of seeing it
+         * inline. Mirrors write_level exactly. */
+        if (u->afk) {
+            if (dorecord) {
+                record_afk(exclude, u, buf);
+            }
+            continue;
+        }
+        if (u->malloc_start) {
+            if (dorecord) {
+                record_edit(exclude, u, buf);
+            }
+            continue;
+        }
+        if (!u->ignall) {
+            write_user(u, buf);
+        }
+        if (dorecord) {
+            record_tell(exclude, u, buf);
+        }
+    }
+    va_end(ap0);
 }
 
 /*
@@ -3871,6 +3984,44 @@ write_room_except(RM_OBJECT rm, const char *str, UR_OBJECT user)
             write_user(u, str);
         }
     }
+}
+
+/*
+ * Catalog-keyed sibling of vwrite_room_except: render `key` per-recipient
+ * using each user's own locale catalog (with default fallback via lang()),
+ * then deliver. Skips clones and the `exclude` user; respects NETLINKS
+ * socket gating like the rest of the per-recipient catalog write family.
+ * Emits "[??? key]\n" on miss; the rate-limited syslog warning is handled
+ * inside lang().
+ */
+void
+write_room_lang(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
+{
+    if (!room) return;
+
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        if (u->type == CLONE_TYPE) continue;
+        if (u == exclude) continue;
+        if (u->room != room) continue;
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+        const char *fmt = lang(u, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+        write_user(u, buf);
+    }
+    va_end(ap0);
 }
 
 /*
