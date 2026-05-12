@@ -123,6 +123,61 @@ Notes on the pilot conversion:
   signature framework rejects `%*` specifiers, and this two-stage
   approach keeps the rendered bytes identical.
 
-## Per-command sweep ledger (Phase 5)
+## Per-command conversion pattern (Phase 4 + 5)
 
-To be filled in as Phase 5 commands are converted to lang_user().
+Every command conversion follows the same six-step checklist. Phase 4
+commands are the frame-heavy ones (`show_igusers`, `grepusers`, `listbans`,
+`system`, `help`); Phase 5 is everything else.
+
+1. **Read** the existing command end to end. List every `write_user`,
+   `vwrite_user`, `write_room*`, `vwrite_level*` call that produces
+   server-authored output. (Skip `write_syslog` — those stay in C;
+   admin logs aren't translatable.)
+
+2. **Identify the frames.** Look for inline `+----+`, `|...|`, header
+   lines, separator lines. These become `box_open` / `box_separator` /
+   `table_*` / `rule` / `box_close` calls — OR, where the original
+   doesn't use side rails, opaque catalog frame literals (the
+   wizlist pilot's `wizlist.frame.*` pattern).
+
+3. **Mint catalog keys** in `<command>.<context>.<variant>` form.
+
+4. **Add the keys to `en_GB/strings.yml`** with EXACTLY the literal
+   that appeared in the C source (including `~OL` / `~FC` / `~RS`
+   escapes). En_GB is the source of truth; everything else
+   diff-matches against it.
+
+5. **Convert the C source.** Replace each output call with the
+   appropriate builder + `lang_user`. The byte-identical contract:
+   on en_GB the user must see exactly what they saw before. Use
+   `vwrite_user(user, lang(user, "key"), arg, …)` only as a single-line
+   pattern; never store `lang()`'s return across statements.
+   `%*` variable-width specifiers are not catalog-safe — pre-format
+   with `snprintf` locally and pass the result as a plain `%s` arg
+   to the catalog format (the wizlist pilot demonstrates this).
+
+6. **Update the sweep ledger.** Tick the command's row from `pending`
+   to `converted (YYYY-MM-DD)`.
+
+A conversion is "done" when:
+- `make build` is clean.
+- On en_GB the command's output before/after the commit is
+  byte-identical (compare with `script` + `diff`, or eyeball).
+- On a themed locale (`cowboy`), the frames pick up the theme; the
+  rest of the strings render unchanged (no themed translations yet
+  outside `ui.*` and `meta.*`).
+
+## Per-command sweep ledger (Phases 4 + 5)
+
+Phase 4: frame-heavy commands. Phase 5: every other command in `src/commands/`.
+
+| Command         | File                              | Status   | Notes |
+|-----------------|-----------------------------------|----------|-------|
+| wizlist         | src/commands/wizlist.c            | converted (Phase 3 pilot) | |
+| show_igusers    | src/commands/show_igusers.c       | pending  | Phase 4 |
+| grepusers       | src/commands/grepusers.c          | pending  | Phase 4 |
+| listbans        | src/commands/listbans.c           | pending  | Phase 4 |
+| system          | (locate via semble)               | pending  | Phase 4 |
+| help            | src/commands/help.c               | pending  | Phase 4 |
+
+(Phase 5 rows added as commands are swept in that phase.)
