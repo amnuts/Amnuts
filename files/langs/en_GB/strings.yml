@@ -124,3 +124,34 @@ grepusers.row_second:             "   %1$s  ~FC%2$s~RS |\n"
 grepusers.row_orphan_pad:         "                                      |\n"
 grepusers.empty_message:          " ~OL~FRNo users have that pattern~RS"
 grepusers.footer:                 " ~OL%1$d~RS user%2$s had the pattern ~OL%3$s~RS "
+
+# listbans — the `lban` WIZ command. Four subcommands (sites, users, swears,
+# new) each emit their own banner; three of those banners precede paged
+# file content via more() (untouched by Phase 4 — paged files are outside
+# the catalog surface and already go through the Phase 1 locale-aware
+# locale_default_path resolver). The "swears" subcommand renders an inline
+# list of swear_words[] entries instead.
+#
+# The original layout had no |…| body rails — just a "~BB*** … ***" header
+# and free-form body — so each banner ships here as an opaque catalog
+# value rather than being assembled through box_open. That preserves the
+# byte-identical en_GB contract while still letting a themed locale
+# re-skin the headers wholesale.
+#
+# Quirk preserved: the source code's "new" fallback is inverted
+# (`if (strcmp(word[1], "new"))` — i.e. it fires for any arg that is
+# NOT "new", including the no-arg case), so the usage key is reached
+# only when the user types `lban new` exactly. Translating it doesn't
+# fix that behaviour; we just keep the strings parallel.
+listbans.sites.header:            "\n~BB*** Banned sites and domains ***\n\n"
+listbans.sites.empty:             "There are no banned sites and domains.\n\n"
+listbans.users.header:            "\n~BB*** Banned users ***\n\n"
+listbans.users.empty:             "There are no banned users.\n\n"
+listbans.swears.header:           "\n~BB*** Banned swear words ***\n\n"
+listbans.swears.row:              "%1$s\n"
+listbans.swears.empty:            "There are no banned swear words.\n"
+listbans.swears.trailer_on:       "\n"
+listbans.swears.trailer_off:      "\n(Swearing ban is currently off)\n\n"
+listbans.new.header:              "\n~BB*** New users banned from sites and domains **\n\n"
+listbans.new.empty:               "There are no sites and domains where new users have been banned.\n\n"
+listbans.usage:                   "Usage: lban sites|users|new|swears\n"

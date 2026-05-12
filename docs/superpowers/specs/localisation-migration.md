@@ -176,7 +176,7 @@ Phase 4: frame-heavy commands. Phase 5: every other command in `src/commands/`.
 | wizlist         | src/commands/wizlist.c            | converted (Phase 3 pilot) | |
 | show_igusers    | src/amnuts.c (function)           | converted (2026-05-12) | Frame via box_open/box_line/box_close; inner = 76 cols. show_igusers.title carries a load-bearing leading space; rows concatenate show_igusers.name_cell up to three times before each box_line emission. |
 | grepusers       | src/commands/grepusers.c          | converted (2026-05-12) | Frame + title + empty-state + footer via box_open/box_line/box_separator/box_close (78 cols total, inner = 76). Per-match body rows are opaque catalog values written direct via write_user because the original layout overruns the frame (paired row = 86 vis cols, orphan first half padded to 82). Names and level labels pre-padded with snprintf so the row signatures stay plain `%s`. |
-| listbans        | src/commands/listbans.c           | pending  | Phase 4 |
+| listbans        | src/commands/listbans.c           | converted (2026-05-12) | Four subcommand banners (sites/users/swears/new) ship as opaque catalog frame literals — the original layout had no |…| body rails, so synthesising via box_open would shift bytes. Three subcommands page their bodies via more() against a locale-aware filename and are left untouched. Quirk preserved: the source's `if (strcmp(word[1], "new"))` is inverted, so the usage key only fires when the user types `lban new` exactly; any other unrecognised arg (or no arg) falls into the new-bans banner. |
 | system          | (locate via semble)               | pending  | Phase 4 |
 | help            | src/commands/help.c               | pending  | Phase 4 |
 
