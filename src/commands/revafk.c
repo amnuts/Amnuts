@@ -24,10 +24,10 @@ revafk(UR_OBJECT user)
 #endif
 
     start_pager(user);
-    lang_user(user, "revafk.header");
+    write_user_lang(user, "revafk.header");
     if (!review_buffer(user, rbfAFK)) {
-        lang_user(user, "revafk.empty");
+        write_user_lang(user, "revafk.empty");
     }
-    lang_user(user, "revafk.footer");
+    write_user_lang(user, "revafk.footer");
     stop_pager(user);
 }

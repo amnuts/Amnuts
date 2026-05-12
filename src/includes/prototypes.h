@@ -321,22 +321,23 @@ void  table_separator (TABLE t);
 void  table_row       (TABLE t, ...);
 void  table_close     (TABLE t);
 
-/* lang_*() — render a catalog entry to one or more users.
- * `key` resolution: user->catalog first, then amsys default catalog.
- * Missing-in-both keys emit a visible "[??? key]\n" marker and rate-limit
- * the warning to the system log. */
-
 /* Returns the catalog format string for `key`, or NULL if missing in both
  * user's locale and the default catalog. The returned pointer is owned by
  * the catalog and only valid for IMMEDIATE use (e.g. inline as the format
  * argument to vwrite_user). Storing the pointer across a function call is
  * unsafe: a subsequent langreload may invalidate it. For anything beyond
- * "render right now," use lang_format or lang_user. */
+ * "render right now," use lang_format or write_user_lang. */
 const char *lang(UR_OBJECT user, const char *key);
-void  lang_user (UR_OBJECT user,  const char *key, ...);
-void  lang_room (RM_OBJECT room,  UR_OBJECT exclude, const char *key, ...);
-void  lang_level(int min_level, int notify_invis, int record_flag,
-                 UR_OBJECT exclude, const char *key, ...);
+
+/* Catalog-keyed write functions, paralleling the existing write_user /
+ * vwrite_user / vwrite_room_except / vwrite_level family. Each looks up
+ * `key` in user's locale first, then the server default; emits a visible
+ * "[??? key]\n" marker if missing in both, with a rate-limited syslog
+ * warning. */
+void  write_user_lang (UR_OBJECT user,  const char *key, ...);
+void  write_room_lang (RM_OBJECT room,  UR_OBJECT exclude, const char *key, ...);
+void  write_level_lang(int min_level, int above, int dorecord,
+                       UR_OBJECT exclude, const char *key, ...);
 int   lang_format(UR_OBJECT user, char *buf, size_t buflen,
                   const char *key, ...);
 

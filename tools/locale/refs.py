@@ -18,7 +18,9 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 CATALOG   = os.path.join(REPO_ROOT, "files", "langs", "en_GB", "strings.yml")
 SRC_GLOB  = os.path.join(REPO_ROOT, "src")
 
-LANG_CALL = re.compile(r'\blang(?:_user|_room|_level|_format|)\s*\([^,)]*,\s*"([^"]+)"')
+LANG_CALL = re.compile(
+    r'\b(?:lang|lang_format|write_(?:user|room|level)_lang)\s*\([^,)]*,\s*"([^"]+)"'
+)
 
 
 def find_source_keys():

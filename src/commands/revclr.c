@@ -26,6 +26,6 @@ revclr(UR_OBJECT user)
 
     clear_revbuff(user->room);
     name = user->vis ? user->recap : invisname;
-    lang_room(user->room, user, "revclr.room_notice", name);
-    lang_user(user, "revclr.self");
+    write_room_lang(user->room, user, "revclr.room_notice", name);
+    write_user_lang(user, "revclr.self");
 }

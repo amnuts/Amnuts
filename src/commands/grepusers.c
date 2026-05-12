@@ -22,7 +22,7 @@
  * empty-state rows, and the trailing summary line are drawn through the
  * Phase 3 box_* pipeline (inner = 76 visible cols), and the four early-
  * exit messages (usage + three bad-pattern warnings) go through
- * lang_user.
+ * write_user_lang.
  *
  * The per-match body rows are NOT handed to box_line: the original
  * layout deliberately overruns the 78-col frame (a paired row is
@@ -49,19 +49,19 @@ grep_users(UR_OBJECT user)
     UD_OBJECT entry;
 
     if (word_count < 2) {
-        lang_user(user, "grepusers.usage");
+        write_user_lang(user, "grepusers.usage");
         return;
     }
     if (strstr(word[1], "**")) {
-        lang_user(user, "grepusers.bad_double_star");
+        write_user_lang(user, "grepusers.bad_double_star");
         return;
     }
     if (strstr(word[1], "?*")) {
-        lang_user(user, "grepusers.bad_question_star");
+        write_user_lang(user, "grepusers.bad_question_star");
         return;
     }
     if (strstr(word[1], "*?")) {
-        lang_user(user, "grepusers.bad_star_question");
+        write_user_lang(user, "grepusers.bad_star_question");
         return;
     }
     start_pager(user);

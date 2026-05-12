@@ -85,14 +85,14 @@ help(UR_OBJECT user)
     }
     if (found > 1) {
         strcat(text, found % 8 ? "\n\n" : "\n");
-        lang_user(user, "help.ambiguous_command", word[1]);
+        write_user_lang(user, "help.ambiguous_command", word[1]);
         write_user(user, text);
         *text = '\0';
         return;
     }
     *text = '\0';
     if (!found) {
-        lang_user(user, "help.unknown");
+        write_user_lang(user, "help.unknown");
         return;
     }
     if (word_count < 3) {
@@ -121,14 +121,14 @@ help(UR_OBJECT user)
             }
             if (found > 1) {
                 strcat(text, found % 8 ? "\n\n" : "\n");
-                lang_user(user, "help.ambiguous_attribute", word[2]);
+                write_user_lang(user, "help.ambiguous_attribute", word[2]);
                 write_user(user, text);
                 *text = '\0';
                 return;
             }
             *text = '\0';
             if (!found) {
-                lang_user(user, "help.unknown");
+                write_user_lang(user, "help.unknown");
                 return;
             }
             if (word_count < 4) {
@@ -145,14 +145,14 @@ help(UR_OBJECT user)
     }
     switch (more(user, user->socket, filename)) {
     case 0:
-        lang_user(user, "help.unknown");
+        write_user_lang(user, "help.unknown");
         break;
     case 1:
         user->misc_op = 2;
         break;
     case 2:
         /* FIXME: take into account xgcoms, command list dynamic level, etc. */
-        lang_user(user, "help.level_line", user_level[com->level].name);
+        write_user_lang(user, "help.level_line", user_level[com->level].name);
         break;
     }
 }
@@ -172,8 +172,8 @@ help_commands_level(UR_OBJECT user)
     start_pager(user);
     write_user(user, "\n");
     rule(user, 78, NULL);
-    lang_user(user, "help.commands.tip_line1");
-    lang_user(user, "help.commands.tip_line2");
+    write_user_lang(user, "help.commands.tip_line1");
+    write_user_lang(user, "help.commands.tip_line2");
     rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
@@ -258,8 +258,8 @@ help_commands_function(UR_OBJECT user)
     start_pager(user);
     write_user(user, "\n");
     rule(user, 78, NULL);
-    lang_user(user, "help.commands.tip_line1");
-    lang_user(user, "help.commands.tip_line2");
+    write_user_lang(user, "help.commands.tip_line1");
+    write_user_lang(user, "help.commands.tip_line2");
     rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
@@ -339,9 +339,9 @@ help_commands_function(UR_OBJECT user)
 void
 help_nuts_credits(UR_OBJECT user)
 {
-    lang_user(user, "help.credits.nuts.header");
-    lang_user(user, "help.credits.nuts.version", NUTSVER);
-    lang_user(user, "help.credits.nuts.body");
+    write_user_lang(user, "help.credits.nuts.header");
+    write_user_lang(user, "help.credits.nuts.version", NUTSVER);
+    write_user_lang(user, "help.credits.nuts.body");
 }
 
 /*
@@ -352,6 +352,6 @@ void
 help_amnuts_credits(UR_OBJECT user)
 {
     write_user(user, "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
-    lang_user(user, "help.credits.amnuts.version", AMNUTSVER);
-    lang_user(user, "help.credits.amnuts.body");
+    write_user_lang(user, "help.credits.amnuts.version", AMNUTSVER);
+    write_user_lang(user, "help.credits.amnuts.body");
 }

@@ -158,10 +158,10 @@ wiz_list(UR_OBJECT user)
             ++count;
         }
     if (invis) {
-        lang_user(user, "wizlist.invisible_count", invis);
+        write_user_lang(user, "wizlist.invisible_count", invis);
     }
     if (!count) {
-        lang_user(user, "wizlist.no_wizzes_on");
+        write_user_lang(user, "wizlist.no_wizzes_on");
     }
     write_user(user, "\n");
     rule(user, 78, NULL);

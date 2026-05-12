@@ -569,7 +569,7 @@ lang_format(UR_OBJECT user, char *buf, size_t buflen,
 }
 
 void
-lang_user(UR_OBJECT user, const char *key, ...)
+write_user_lang(UR_OBJECT user, const char *key, ...)
 {
     if (!user) return;
     const char *fmt = catalog_resolve(user->catalog, key);
@@ -587,7 +587,7 @@ lang_user(UR_OBJECT user, const char *key, ...)
 }
 
 void
-lang_room(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
+write_room_lang(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
 {
     if (!room) return;
 
@@ -622,15 +622,12 @@ lang_room(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
  * mirrors write_level's behaviour so Phase 5 migrations from
  *   vwrite_level(lvl, above, dorecord, sender, fmt, ...)
  * to
- *   lang_level(lvl, above, dorecord, sender, key, ...)
+ *   write_level_lang(lvl, above, dorecord, sender, key, ...)
  * are observationally equivalent.
  *
- * Parameter names are historical: the signature was frozen in Phase 2
- * with second/third params spelled `notify_invis` / `record_flag`, but
- * they map 1:1 onto vwrite_level's `above` / `dorecord` arguments.
- *   - notify_invis == 1 (above=true)  → recipients with level >= min_level
- *   - notify_invis == 0 (above=false) → recipients with level <= min_level
- *   - record_flag (RECORD/NORECORD) → write_user diversions to
+ *   - above == 1   → recipients with level >= min_level
+ *   - above == 0   → recipients with level <= min_level
+ *   - dorecord (RECORD/NORECORD) → write_user diversions to
  *     record_afk/record_edit, plus a record_tell on successful delivery.
  *
  * `exclude` plays the dual role vwrite_level's `user` parameter does: it is
@@ -638,8 +635,8 @@ lang_room(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
  * for record_* entries) and the recipient to skip.
  */
 void
-lang_level(int min_level, int notify_invis, int record_flag,
-           UR_OBJECT exclude, const char *key, ...)
+write_level_lang(int min_level, int above, int dorecord,
+                 UR_OBJECT exclude, const char *key, ...)
 {
     va_list ap0;
     va_start(ap0, key);
@@ -660,8 +657,8 @@ lang_level(int min_level, int notify_invis, int record_flag,
         if (u->login) continue;
         if (u->type == CLONE_TYPE) continue;
 
-        /* Direction: notify_invis carries vwrite_level's `above` flag. */
-        if (notify_invis) {
+        /* Direction: `above` matches vwrite_level's `above` flag. */
+        if (above) {
             if (u->level < (enum lvl_value) min_level) continue;
         } else {
             if (u->level > (enum lvl_value) min_level) continue;
@@ -684,16 +681,16 @@ lang_level(int min_level, int notify_invis, int record_flag,
         }
 
         /* AFK and line-editor recipients get the text diverted to their
-         * review buffer (when record_flag is set) instead of seeing it
+         * review buffer (when `dorecord` is set) instead of seeing it
          * inline. Mirrors write_level exactly. */
         if (u->afk) {
-            if (record_flag) {
+            if (dorecord) {
                 record_afk(exclude, u, buf);
             }
             continue;
         }
         if (u->malloc_start) {
-            if (record_flag) {
+            if (dorecord) {
                 record_edit(exclude, u, buf);
             }
             continue;
@@ -701,7 +698,7 @@ lang_level(int min_level, int notify_invis, int record_flag,
         if (!u->ignall) {
             write_user(u, buf);
         }
-        if (record_flag) {
+        if (dorecord) {
             record_tell(exclude, u, buf);
         }
     }

@@ -20,14 +20,14 @@ void
 suicide(UR_OBJECT user)
 {
     if (word_count < 2) {
-        lang_user(user, "suicide.usage");
+        write_user_lang(user, "suicide.usage");
         return;
     }
     if (strcmp(user->pass, crypt(word[1], user->pass))) {
-        lang_user(user, "suicide.password_incorrect");
+        write_user_lang(user, "suicide.password_incorrect");
         return;
     }
-    lang_user(user, "suicide.confirm_prompt");
+    write_user_lang(user, "suicide.confirm_prompt");
     user->misc_op = 6;
     no_prompt = 1;
 }

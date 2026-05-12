@@ -121,7 +121,7 @@ system_details(UR_OBJECT user)
         && strcasecmp("-n", word[1])
         && strcasecmp("-r", word[1])
         && strcasecmp("-m", word[1])) {
-        lang_user(user, "system.usage");
+        write_user_lang(user, "system.usage");
         return;
     }
 

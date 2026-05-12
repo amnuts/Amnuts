@@ -25,7 +25,7 @@ muzzle(UR_OBJECT user)
     int on;
 
     if (word_count < 2) {
-        lang_user(user, "muzzle.usage");
+        write_user_lang(user, "muzzle.usage");
         return;
     }
     u = retrieve_user(user, word[1]);
@@ -35,22 +35,22 @@ muzzle(UR_OBJECT user)
     on = retrieve_user_type == 1;
     /* error checks */
     if (u == user) {
-        lang_user(user, "muzzle.self");
+        write_user_lang(user, "muzzle.self");
         return;
     }
     if (u->level >= user->level) {
-        lang_user(user, "muzzle.higher_level");
+        write_user_lang(user, "muzzle.higher_level");
         done_retrieve(u);
         return;
     }
     if (u->muzzled >= user->level) {
-        lang_user(user, "muzzle.already", u->recap);
+        write_user_lang(user, "muzzle.already", u->recap);
         done_retrieve(u);
         return;
     }
     /* do the muzzle */
     u->muzzled = user->level;
-    lang_user(user, "muzzle.applied", u->bw_recap,
+    write_user_lang(user, "muzzle.applied", u->bw_recap,
             user_level[user->level].name);
     write_syslog(SYSLOG, 1, "%s muzzled %s (level %d).\n", user->name, u->name,
             user->level);

@@ -20,5 +20,5 @@ void
 clear_afk(UR_OBJECT user)
 {
     destruct_review_buffer_type(user, rbfAFK, 0);
-    lang_user(user, "cafk.cleared");
+    write_user_lang(user, "cafk.cleared");
 }

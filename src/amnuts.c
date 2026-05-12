@@ -6605,7 +6605,7 @@ show_igusers(UR_OBJECT user)
         }
     }
     if (!found) {
-        lang_user(user, "show_igusers.none");
+        write_user_lang(user, "show_igusers.none");
         return;
     }
     if (cnt > 0 && box) {

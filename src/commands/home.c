@@ -22,10 +22,10 @@ void
 home(UR_OBJECT user)
 {
     if (user->room) {
-        lang_user(user, "home.already_home");
+        write_user_lang(user, "home.already_home");
         return;
     }
-    lang_user(user, "home.traverse");
+    write_user_lang(user, "home.traverse");
     write_syslog(NETLOG, 1, "NETLINK: %s returned from %s.\n", user->name,
             user->netlink->service);
     release_nl(user);

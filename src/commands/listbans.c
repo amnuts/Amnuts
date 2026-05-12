@@ -36,11 +36,11 @@ listbans(UR_OBJECT user)
 
     strtolower(word[1]);
     if (!strcmp(word[1], "sites")) {
-        lang_user(user, "listbans.sites.header");
+        write_user_lang(user, "listbans.sites.header");
         locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
-            lang_user(user, "listbans.sites.empty");
+            write_user_lang(user, "listbans.sites.empty");
             return;
         case 1:
             user->misc_op = 2;
@@ -49,11 +49,11 @@ listbans(UR_OBJECT user)
         return;
     }
     if (!strcmp(word[1], "users")) {
-        lang_user(user, "listbans.users.header");
+        write_user_lang(user, "listbans.users.header");
         locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
-            lang_user(user, "listbans.users.empty");
+            write_user_lang(user, "listbans.users.empty");
             return;
         case 1:
             user->misc_op = 2;
@@ -62,27 +62,27 @@ listbans(UR_OBJECT user)
         return;
     }
     if (!strcmp(word[1], "swears")) {
-        lang_user(user, "listbans.swears.header");
+        write_user_lang(user, "listbans.swears.header");
         for (i = 0; swear_words[i]; ++i) {
             write_user(user, swear_words[i]);
             write_user(user, "\n");
         }
         if (!i) {
-            lang_user(user, "listbans.swears.empty");
+            write_user_lang(user, "listbans.swears.empty");
         }
         if (amsys->ban_swearing) {
             write_user(user, "\n");
         } else {
-            lang_user(user, "listbans.swears.trailer_off");
+            write_user_lang(user, "listbans.swears.trailer_off");
         }
         return;
     }
     if (strcmp(word[1], "new")) {
-        lang_user(user, "listbans.new.header");
+        write_user_lang(user, "listbans.new.header");
         locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
-            lang_user(user, "listbans.new.empty");
+            write_user_lang(user, "listbans.new.empty");
             return;
         case 1:
             user->misc_op = 2;
@@ -90,5 +90,5 @@ listbans(UR_OBJECT user)
         }
         return;
     }
-    lang_user(user, "listbans.usage");
+    write_user_lang(user, "listbans.usage");
 }

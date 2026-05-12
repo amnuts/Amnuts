@@ -23,7 +23,7 @@ unmuzzle(UR_OBJECT user)
     int on;
 
     if (word_count < 2) {
-        lang_user(user, "unmuzzle.usage");
+        write_user_lang(user, "unmuzzle.usage");
         return;
     }
     u = retrieve_user(user, word[1]);
@@ -33,25 +33,25 @@ unmuzzle(UR_OBJECT user)
     on = retrieve_user_type == 1;
     /* error checks */
     if (u == user) {
-        lang_user(user, "unmuzzle.self");
+        write_user_lang(user, "unmuzzle.self");
         done_retrieve(u);
         return;
     }
     /* FIXME: Use sentinel other JAILED */
     if (u->muzzled == JAILED) {
-        lang_user(user, "unmuzzle.not_muzzled", u->recap);
+        write_user_lang(user, "unmuzzle.not_muzzled", u->recap);
         done_retrieve(u);
         return;
     }
     if (u->muzzled > user->level) {
-        lang_user(user, "unmuzzle.higher_muzzle",
+        write_user_lang(user, "unmuzzle.higher_muzzle",
                 u->recap, user_level[u->muzzled].name);
         done_retrieve(u);
         return;
     }
     /* do the unmuzzle */
     u->muzzled = JAILED; /* FIXME: Use sentinel other JAILED */
-    lang_user(user, "unmuzzle.applied", u->recap);
+    write_user_lang(user, "unmuzzle.applied", u->recap);
     write_syslog(SYSLOG, 1, "%s unmuzzled %s.\n", user->name, u->name);
     add_history(u->name, 0, "~FGUnmuzzled~RS by %s, level %d (%s).\n",
             user->name, user->level, user_level[user->level].name);
