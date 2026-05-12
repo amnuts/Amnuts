@@ -40,7 +40,7 @@ search_boards(UR_OBJECT user)
         } else {
             char bfile[ROOM_NAME_LEN + 4];
             snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-            locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+            locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
         }
         fp = fopen(filename, "r");
         if (!fp) {

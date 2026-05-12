@@ -130,9 +130,9 @@ site_banned(char *sbanned, int newban)
     int f;
 
     if (newban) {
-        locale_default_path(filename, sizeof filename, DATAFILES, NEWBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     } else {
-        locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -180,7 +180,7 @@ user_banned(char *name)
     FILE *fp;
     int f;
 
-    locale_default_path(filename, sizeof filename, DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     fp = fopen(filename, "r");
     if (!fp) {
         return 0;
@@ -205,7 +205,7 @@ auto_ban_site(char *asite)
     FILE *fp;
     UR_OBJECT u, next;
 
-    locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     /* Write new ban to file */
     fp = fopen(filename, "a");
     if (!fp) {
@@ -273,7 +273,7 @@ ban_site(UR_OBJECT user)
                 "You cannot ban the machine that that program is running on.\n");
         return;
     }
-    locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     /* See if ban already set for given site */
     fp = fopen(filename, "r");
     if (fp) {
@@ -324,7 +324,7 @@ ban_user(UR_OBJECT user)
         return;
     }
     /* See if ban already set for given user */
-    locale_default_path(filename, sizeof filename, DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     fp = fopen(filename, "r");
     if (fp) {
         int f;
@@ -417,7 +417,7 @@ ban_new(UR_OBJECT user)
                 "You cannot ban the machine that that program is running on.\n");
         return;
     }
-    locale_default_path(filename, sizeof filename, DATAFILES, NEWBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     /* See if ban already set for given site */
     fp = fopen(filename, "r");
     if (fp) {
@@ -462,7 +462,7 @@ unban_site(UR_OBJECT user)
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user, "That site or domain is not currently banned.\n");
@@ -510,7 +510,7 @@ unban_user(UR_OBJECT user)
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    locale_default_path(filename, sizeof filename, DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user, "That user is not currently banned.\n");
@@ -562,7 +562,7 @@ unban_new(UR_OBJECT user)
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    locale_default_path(filename, sizeof filename, DATAFILES, NEWBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user,

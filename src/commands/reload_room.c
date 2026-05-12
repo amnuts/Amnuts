@@ -39,7 +39,7 @@ reload_room_description(UR_OBJECT user)
             {
                 char rmfile[ROOM_NAME_LEN + 4];
                 snprintf(rmfile, sizeof rmfile, "%s.R", rm->name);
-                locale_default_path(filename, sizeof filename, DATAFILES, rmfile);
+                locale_default_path(filename, sizeof filename, LOCATIONS, rmfile);
             }
             fp = fopen(filename, "r");
             if (!fp) {
@@ -95,7 +95,7 @@ reload_room_description(UR_OBJECT user)
     {
         char rmfile[ROOM_NAME_LEN + 4];
         snprintf(rmfile, sizeof rmfile, "%s.R", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, rmfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, rmfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {

@@ -63,11 +63,18 @@
  * default-locale tree. Tasks 11-16 flip each one to a bare category name
  * as their call sites are converted to use locale_*_path. */
 #define ADMINFILES  "adminfiles"
-#define DATAFILES   "datafiles"
 #define HELPFILES   "helpfiles"
 #define MISCFILES   "miscfiles"
 #define MOTDFILES   "motds"
 #define TEXTFILES   "textfiles"
+
+/* Locale-aware room data: descriptions (.R), maps (.map), boards (.B),
+ * banned-site lists, etc. Resolved through locale_path / locale_default_path. */
+#define LOCATIONS    "locations"
+
+/* Server config lives at files/datafiles/ (root-level, NOT locale-aware).
+ * Used by load_and_parse_config; no other consumers. */
+#define DATAFILES    BASE_STORAGE_DIR "/datafiles"
 
 /* user directories */
 #define USERFILES     BASE_STORAGE_DIR "/userfiles"

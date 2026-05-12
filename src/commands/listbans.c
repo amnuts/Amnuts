@@ -37,7 +37,7 @@ listbans(UR_OBJECT user)
     strtolower(word[1]);
     if (!strcmp(word[1], "sites")) {
         lang_user(user, "listbans.sites.header");
-        locale_default_path(filename, sizeof filename, DATAFILES, SITEBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             lang_user(user, "listbans.sites.empty");
@@ -50,7 +50,7 @@ listbans(UR_OBJECT user)
     }
     if (!strcmp(word[1], "users")) {
         lang_user(user, "listbans.users.header");
-        locale_default_path(filename, sizeof filename, DATAFILES, USERBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             lang_user(user, "listbans.users.empty");
@@ -78,7 +78,7 @@ listbans(UR_OBJECT user)
     }
     if (strcmp(word[1], "new")) {
         lang_user(user, "listbans.new.header");
-        locale_default_path(filename, sizeof filename, DATAFILES, NEWBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
         switch (more(user, user->socket, filename)) {
         case 0:
             lang_user(user, "listbans.new.empty");

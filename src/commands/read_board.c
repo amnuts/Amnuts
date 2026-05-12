@@ -60,7 +60,7 @@ read_board(UR_OBJECT user)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     user->filepos = 0;
     ret = more(user, user->socket, filename);

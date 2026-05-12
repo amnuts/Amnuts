@@ -71,7 +71,7 @@ write_board(UR_OBJECT user, char *inpstr)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", user->room->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "a");
     if (!fp) {

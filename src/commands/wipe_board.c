@@ -60,7 +60,7 @@ wipe_board(UR_OBJECT user)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     if (!rm->mesg_cnt) {
         write_user(user, "There are no messages on the room board.\n");

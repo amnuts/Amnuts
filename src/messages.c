@@ -757,7 +757,7 @@ read_board_specific(UR_OBJECT user, RM_OBJECT rm, int msg_number)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -838,7 +838,7 @@ check_board_wipe(UR_OBJECT user)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -914,7 +914,7 @@ board_from(UR_OBJECT user)
     } else {
         char bfile[ROOM_NAME_LEN + 4];
         snprintf(bfile, sizeof bfile, "%s.B", rm->name);
-        locale_default_path(filename, sizeof filename, DATAFILES, bfile);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {
