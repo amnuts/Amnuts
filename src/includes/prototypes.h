@@ -308,6 +308,17 @@ void box_centered  (BOX b, const char *fmt, ...);
 void box_separator (BOX b);
 void box_close     (BOX b);
 
+TABLE table_open      (UR_OBJECT user, int total_width);
+/* table_columns: declare N column widths in visible columns.
+ * Caller responsibility: sum(col_widths) + (n - 1) must equal the
+ * table's inner width (i.e. box.inner), because a single space
+ * separates adjacent columns. There is no auto-fitting. */
+void  table_columns   (TABLE t, int n, ...);
+void  table_header    (TABLE t, ...);
+void  table_separator (TABLE t);
+void  table_row       (TABLE t, ...);
+void  table_close     (TABLE t);
+
 /* lang_*() — render a catalog entry to one or more users.
  * `key` resolution: user->catalog first, then amsys default catalog.
  * Missing-in-both keys emit a visible "[??? key]\n" marker and rate-limit

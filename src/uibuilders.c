@@ -393,3 +393,233 @@ box_close(BOX b)
     write_user(b->user, out);
     free(b);
 }
+
+#define TABLE_MAX_COLUMNS 8
+
+struct table_struct {
+    BOX    box;
+    int    col_count;
+    int    col_widths[TABLE_MAX_COLUMNS];   /* visible cols per column */
+};
+
+/*
+ * Consume up to `width` visible columns from text starting at *pos.
+ * Word-wrap at whitespace when possible; hard-break inside a word
+ * otherwise. Append spaces so the output reaches exactly `width`
+ * visible columns. Update *pos past the bytes emitted, and past any
+ * trailing whitespace at the wrap point (so the next chunk does not
+ * begin with leading spaces left over from the wrap).
+ *
+ * Colour escapes (~XX) count as zero visible columns and are never
+ * bisected.
+ *
+ * Leading whitespace at *pos is NOT skipped: it is part of the cell's
+ * content. Whitespace is only "swallowed" at a wrap boundary inside
+ * the cell.
+ *
+ * Returns the visible width emitted (which equals `width` whenever
+ * `out` is large enough).
+ */
+static int
+wrap_chunk(char *out, size_t outlen, const char *text, size_t *pos, int width)
+{
+    if (!out || outlen == 0) return 0;
+    out[0] = '\0';
+    if (width <= 0 || !text || !pos) return 0;
+
+    size_t start    = *pos;
+    size_t i        = start;          /* current byte index into text */
+    int    visible  = 0;              /* visible cols consumed */
+
+    /* Last whitespace seen *after* some non-space content. Validity
+     * is tracked by `have_ws` (have_ws == 0 means the byte/visible
+     * fields are unset). */
+    size_t last_ws_byte    = 0;
+    int    last_ws_visible = 0;
+    int    have_ws         = 0;
+    int    seen_nonspace   = 0;
+
+    while (text[i] != '\0' && visible < width) {
+        /* Colour escape: consume 3 bytes, 0 visible columns. */
+        if (text[i] == '~' && text[i + 1] && text[i + 2]
+            && isalnum((unsigned char) text[i + 1])
+            && isalnum((unsigned char) text[i + 2])) {
+            i += 3;
+            continue;
+        }
+        if (text[i] == ' ') {
+            if (seen_nonspace) {
+                last_ws_byte    = i;
+                last_ws_visible = visible;
+                have_ws         = 1;
+            }
+        } else {
+            seen_nonspace = 1;
+        }
+        ++i;
+        ++visible;
+    }
+
+    size_t emit_end = i;          /* one past last byte to emit */
+    int    emit_visible = visible;
+    size_t advance_to   = i;      /* where to leave *pos */
+
+    if (visible >= width && text[i] != '\0' && text[i] != ' ' && have_ws) {
+        /* Column filled mid-word and we have a recorded wrap point:
+         * rewind to it and skip the run of whitespace at that point. */
+        emit_end     = last_ws_byte;
+        emit_visible = last_ws_visible;
+        advance_to   = last_ws_byte;
+        while (text[advance_to] == ' ') ++advance_to;
+    } else if (visible >= width && text[i] == ' ') {
+        /* Column filled exactly at a word boundary: emit what we have
+         * and step past the run of trailing whitespace so the next
+         * chunk does not start with leftover spaces. */
+        advance_to = i;
+        while (text[advance_to] == ' ') ++advance_to;
+    }
+    /* Else: end-of-input, or hard-break (no whitespace recorded), or
+     * column not yet full — emit_end already correct, advance_to == i. */
+
+    /* Copy bytes [start, emit_end) into out, then pad with spaces to
+     * reach `width` visible columns. Bail out cleanly if outlen is too
+     * tight to hold the result. */
+    size_t span = emit_end - start;
+    int    pad  = width - emit_visible;
+    if (pad < 0) pad = 0;
+
+    if (span + (size_t) pad + 1 > outlen) {
+        /* Not enough room — emit nothing rather than half. Caller's
+         * buffer is sized via ARR_SIZE; this branch is defensive. */
+        out[0] = '\0';
+        *pos = advance_to;
+        return 0;
+    }
+
+    memcpy(out, text + start, span);
+    for (int k = 0; k < pad; ++k) {
+        out[span + k] = ' ';
+    }
+    out[span + pad] = '\0';
+
+    *pos = advance_to;
+    return emit_visible + pad;
+}
+
+TABLE
+table_open(UR_OBJECT user, int total_width)
+{
+    if (!user || total_width <= 0) return NULL;
+    struct table_struct *t = calloc(1, sizeof *t);
+    if (!t) return NULL;
+    t->box = box_open(user, total_width, NULL);
+    if (!t->box) {
+        free(t);
+        return NULL;
+    }
+    return t;
+}
+
+void
+table_columns(TABLE t, int n, ...)
+{
+    if (!t || n <= 0 || n > TABLE_MAX_COLUMNS) return;
+    t->col_count = n;
+    va_list ap;
+    va_start(ap, n);
+    for (int i = 0; i < n; ++i) {
+        t->col_widths[i] = va_arg(ap, int);
+    }
+    va_end(ap);
+}
+
+void
+table_separator(TABLE t)
+{
+    if (!t) return;
+    box_separator(t->box);
+}
+
+void
+table_close(TABLE t)
+{
+    if (!t) return;
+    box_close(t->box);
+    free(t);
+}
+
+/*
+ * Emit one logical row's worth of body lines. Each cell is wrapped
+ * independently into its column width; we keep emitting lines until
+ * every cell has been fully consumed. Cells that finish early just
+ * contribute padded blanks on subsequent lines so the column edges
+ * stay aligned.
+ */
+static void
+table_emit_row(TABLE t, va_list cells_ap)
+{
+    if (!t || t->col_count == 0) return;
+
+    const char *cells[TABLE_MAX_COLUMNS];
+    size_t      positions[TABLE_MAX_COLUMNS];
+    for (int i = 0; i < t->col_count; ++i) {
+        cells[i] = va_arg(cells_ap, const char *);
+        if (!cells[i]) cells[i] = "";
+        positions[i] = 0;
+    }
+
+    /* First iteration always emits (handles the empty-cells case
+     * sensibly). Subsequent iterations only run if at least one cell
+     * had bytes remaining after the previous line was emitted. */
+    int first = 1;
+    for (;;) {
+        int any_remaining_before = 0;
+        for (int c = 0; c < t->col_count; ++c) {
+            if (cells[c][positions[c]] != '\0') {
+                any_remaining_before = 1;
+                break;
+            }
+        }
+        if (!first && !any_remaining_before) break;
+
+        char rowbuf[ARR_SIZE * 4];
+        size_t rowpos = 0;
+        for (int c = 0; c < t->col_count; ++c) {
+            char cell_chunk[ARR_SIZE];
+            wrap_chunk(cell_chunk, sizeof cell_chunk,
+                       cells[c], &positions[c], t->col_widths[c]);
+            size_t clen = strlen(cell_chunk);
+            if (rowpos + clen + 2 < sizeof rowbuf) {
+                memcpy(rowbuf + rowpos, cell_chunk, clen);
+                rowpos += clen;
+                if (c + 1 < t->col_count) {
+                    rowbuf[rowpos++] = ' ';
+                }
+            }
+        }
+        rowbuf[rowpos] = '\0';
+        box_line(t->box, "%s", rowbuf);
+        first = 0;
+    }
+}
+
+void
+table_header(TABLE t, ...)
+{
+    if (!t) return;
+    va_list ap;
+    va_start(ap, t);
+    table_emit_row(t, ap);
+    va_end(ap);
+    table_separator(t);
+}
+
+void
+table_row(TABLE t, ...)
+{
+    if (!t) return;
+    va_list ap;
+    va_start(ap, t);
+    table_emit_row(t, ap);
+    va_end(ap);
+}
