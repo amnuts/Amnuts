@@ -292,7 +292,9 @@ struct locale_catalog *catalog_for_locale(const struct locale_state *st,
 const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
                                         const char *key);
 
-/* uibuilders.c — see src/includes/uibuilders.h for opaque types. */
+/* uibuilders.c — see src/includes/uibuilders.h for opaque types and
+ * enum align_value, included here so prototypes.h is self-contained. */
+#include "uibuilders.h"
 int visible_strlen(const char *s);
 int align_into(char *out, size_t outlen,
                enum align_value align, int width,
