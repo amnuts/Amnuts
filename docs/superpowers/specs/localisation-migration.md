@@ -66,6 +66,33 @@ No code outside `src/catalog.c`, `src/commands/{set_lang,langreload}.c`,
 the `set` dispatch, and the user-file save/load uses `lang_*` yet. Phase 4
 starts the actual sweep, beginning with `wizlist`.
 
+## Wizlist (Phase 3 pilot)
+
+The Phase 3 plan introduces the per-command sweep ledger early so the
+end-to-end pilot has somewhere to land. Phase 5's wider sweep will
+extend this same table.
+
+| Command | File | Status |
+|---------|------|--------|
+| wizlist | src/commands/wizlist.c | converted (2026-05-12) — Phase 3 pilot |
+
+Notes on the pilot conversion:
+
+- Every server-authored literal in `wiz_list()` is now lifted into
+  `wizlist.*` keys in `files/langs/en_GB/strings.yml`. en_GB output is
+  byte-identical to the pre-conversion version.
+- The frame lines (`+----- title -----+`) are stored as opaque catalog
+  values rather than synthesised via `box_open` / `rule()`. The body
+  content beneath each frame in this command has no `|…|` side rails,
+  so a `table_open` pass would have shifted bytes. A themed locale can
+  still re-skin each section divider end-to-end by overriding the
+  `wizlist.frame.*` keys.
+- Variable-width formatting (`%-*.*s` with widths derived at runtime
+  from `teslen`) is performed locally with `snprintf` before the value
+  is handed to the catalog format string as a plain `%s`; the catalog
+  signature framework rejects `%*` specifiers, and this two-stage
+  approach keeps the rendered bytes identical.
+
 ## Per-command sweep ledger (Phase 5)
 
 To be filled in as Phase 5 commands are converted to lang_user().
