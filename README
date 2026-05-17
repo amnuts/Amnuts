@@ -3,34 +3,47 @@
               Introductory information for the Amnuts talker code
 +-----------------------------------------------------------------------------+
 
-Welcome to the Amnuts talker code!  Or, if you have already used Amnuts, then
-welcome back - it's good to still have you with us. :-)
+Welcome to the Amnuts talker code!
 
-It has been 20 years - yup, two whole decades - since this README was last
-updated, and, honestly, not much has changed in the world of Amnuts Talkers.
-The Golden Age of talkers has long past, though it's still awesome to see some
-die-hard fans still out there and keeping talkers alive (Marado's TalkerNode,
-for example).
+Or, if you have already used Amnuts, then welcome back - it's good to still
+have you with us. :-)
 
-As for Amnuts, as you're undoubtedly aware, it's now available from GitHub.
-You can get there from:
+It's been 30 years - 30 YEARS! - since Amnuts was first released to the public.
+Thanks to everyone who ever ran a talker, sent a patch, filed a bug, opened an
+issue, or just dropped by to see if the lights were still on.
+
+The lights are still on,
+
+And just to prove it, here's an update to the README. :-)  The Golden Age of
+talkers may have long past, but there are still some ride-and-die fans out
+there.  And tinkering around with Amnuts is still fun as it has a very
+special place in my heart.
+
+As you're undoubtedly aware, because you're reading this file, Amnuts code is
+hosted on GitHub.  You can get there from:
 
     https://amnuts.net/
  or https://github.com/amnuts/Amnuts
 
 You can submit issues and post up on the discussion board there.  Please feel
-free to fork and submit pull requests.
+free to fork and submit pull requests.  If you have any questions about how
+to run a talker, or make it feel like your own place, feel free to post up on
+the discussion board (https://github.com/amnuts/Amnuts/discussions).  If you
+have ideas about updates, have found a bug, or something like that, then you
+can open a new issue at https://github.com/amnuts/Amnuts/issues.  And if you
+have fixed or added something yourself and want to share it, then you can
+submit a pull request - that would be great!
 
 To get started with Amnuts you'll need either a linux environment or you can
 use docker.  For further details, see the docs/docker and and other related
 files in the docs directory.
 
-Lots of the documentation and files here haven't been updated for those same
-two decades, but hopefully one day they will be revived and revamped.  Until
-then, just head towards the wind and push on as best you can. ;-)
+Lots of the documentation and files here haven't been updated for decades,
+but hopefully one day they will be revived and revamped.  Until then, just
+head towards the wind and push on as best you can. ;-)
 
 Thanks for using Amnuts, and as you're here you must be interested in talkers,
-so thanks also for keeping those alive!  Enjoy!
+so thanks also for helping to keep them alive.  Enjoy!
 
                                                              Andrew Collington
                                                    The Amnuts Development Team
