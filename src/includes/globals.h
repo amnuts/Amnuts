@@ -331,6 +331,20 @@ struct command_struct {
 };
 
 /*
+ * help entry (parsed from files/datafiles/help.yaml). The help_table
+ * global is a flat array sorted by command name so help_lookup() can use
+ * bsearch().
+ */
+struct help_entry {
+    char *command;
+    char **usage;
+    int usage_count;
+    char **aliases;
+    int alias_count;
+    char *description;
+};
+
+/*
  * system structure
  */
 struct system_struct {
@@ -529,6 +543,8 @@ extern UD_OBJECT first_user_entry;
 extern UD_OBJECT last_user_entry;
 extern CMD_OBJECT first_command;
 extern CMD_OBJECT last_command;
+extern struct help_entry *help_table;
+extern int help_table_count;
 extern SYS_OBJECT amsys;
 extern char word[MAX_WORDS][WORD_LEN + 1];
 extern char wrd[8][81];
@@ -667,6 +683,8 @@ UD_OBJECT first_user_entry = NULL;
 UD_OBJECT last_user_entry = NULL;
 CMD_OBJECT first_command = NULL;
 CMD_OBJECT last_command = NULL;
+struct help_entry *help_table = NULL;
+int help_table_count = 0;
 SYS_OBJECT amsys = NULL;
 
 

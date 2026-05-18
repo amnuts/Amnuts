@@ -14,12 +14,56 @@
 #include "prototypes.h"
 
 /*
+ * Render a help entry through the user's output buffer. The level line is
+ * always emitted because we always have the full content available.
+ */
+void
+render_help_entry(UR_OBJECT user, const struct help_entry *entry,
+                  enum lvl_value level)
+{
+    int i;
+
+    vwrite_user(user, "~OLCommand :~RS %s\n", entry->command);
+
+    if (entry->usage_count == 1) {
+        vwrite_user(user, "~OLUsage   :~RS %s\n", entry->usage[0]);
+    } else if (entry->usage_count > 1) {
+        vwrite_user(user, "~OLUsage   :~RS %s\n", entry->usage[0]);
+        for (i = 1; i < entry->usage_count; ++i) {
+            vwrite_user(user, "~OL        :~RS %s\n", entry->usage[i]);
+        }
+    }
+
+    if (entry->alias_count > 0) {
+        write_user(user, "~OLAliases :~RS ");
+        for (i = 0; i < entry->alias_count; ++i) {
+            vwrite_user(user, "%s%s", entry->aliases[i],
+                    i + 1 < entry->alias_count ? ", " : "\n");
+        }
+    }
+
+    if (entry->description && *entry->description) {
+        write_user(user, "\n");
+        write_user(user, entry->description);
+        size_t dlen = strlen(entry->description);
+        if (dlen == 0 || entry->description[dlen - 1] != '\n') {
+            write_user(user, "\n");
+        }
+    }
+
+    /* FIXME: take into account xgcoms, command list dynamic level, etc.
+     * (Same FIXME existed in the legacy renderer -- kept to surface that
+     * dynamic level lookups still aren't reflected here.) */
+    vwrite_user(user, "~OLLevel   :~RS %s and above\n",
+                user_level[level].name);
+}
+
+/*
  * Show the list of commands, credits, and display the help files for the given command
  */
 void
 help(UR_OBJECT user)
 {
-    char filename[80];
     const struct cmd_entry *com, *c;
     size_t len;
     int found;
@@ -79,12 +123,10 @@ help(UR_OBJECT user)
         write_user(user, "Sorry, there is no help on that topic.\n");
         return;
     }
-    if (word_count < 3) {
-        sprintf(filename, "%s/%s", HELPFILES, com->name);
-    } else {
-        if (com == command_table + SET) {
+    {
+        const struct help_entry *entry = NULL;
+        if (word_count >= 3 && com == command_table + SET) {
             const struct set_entry *attr, *a;
-
             len = strlen(word[2]);
             attr = NULL;
             found = 0;
@@ -118,27 +160,31 @@ help(UR_OBJECT user)
                 return;
             }
             if (word_count < 4) {
-                sprintf(filename, "%s/%s_%s", HELPFILES, com->name, attr->type);
+                /* set <attr>: try the composite key first, fall back to set */
+                char composite[64];
+                snprintf(composite, sizeof composite, "%s_%s",
+                         com->name, attr->type);
+                entry = help_lookup(composite);
+                if (!entry) {
+                    entry = help_lookup(com->name);
+                }
             } else {
-                sprintf(filename, "%s/%s", HELPFILES, com->name);
+                entry = help_lookup(com->name);
             }
-        } else {
+        } else if (word_count >= 3) {
+            /* Generic case: word_count >= 3 but com != SET. Legacy code
+             * fell through to the help command's own help. Mirror that. */
             com = command_table + HELP;
-            sprintf(filename, "%s/%s", HELPFILES, com->name);
+            entry = help_lookup(com->name);
+        } else {
+            entry = help_lookup(com->name);
         }
-    }
-    switch (more(user, user->socket, filename)) {
-    case 0:
-        write_user(user, "Sorry, there is no help on that topic.\n");
-        break;
-    case 1:
-        user->misc_op = 2;
-        break;
-    case 2:
-        /* FIXME: take into account xgcoms, command list dynamic level, etc. */
-        vwrite_user(user, "~OLLevel   :~RS %s and above\n",
-                user_level[com->level].name);
-        break;
+
+        if (!entry) {
+            write_user(user, "Sorry, there is no help on that topic.\n");
+            return;
+        }
+        render_help_entry(user, entry, com->level);
     }
 }
 

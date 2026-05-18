@@ -1,5 +1,0 @@
-~OLCommand :~RS pemote
-~OLUsage   :~RS pemote <user> <text>
-~OLAliases :~RS < or /
-
-Allows you to send a private emote to the given user.

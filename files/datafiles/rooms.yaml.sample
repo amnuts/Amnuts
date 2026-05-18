@@ -1,0 +1,206 @@
+rooms:
+  reception:
+    map: general
+    label: re
+    links:
+        - car_park
+        - store_room
+        - main_office
+        - cupboard
+    access: PUB
+    topic: ~OLWELCOME!~RS
+    description: |
+      The sound of people hard at work fills the room.... Not this room,
+      obviously, but a room at a place similar to this, I'm sure.  Here you can
+      just hear the general chatter of the day, the shouts and laughter of
+      people doing generally bugger all.  Occasionally a phone will ring and
+      someone will grudgingly pick it up, but only after trying to get others to
+      answer it first.  All in all, you find this isn't a bad place to be.
+
+  car_park:
+    map: general
+    label: cp
+    links:
+        - reception
+    access: PUB
+    description: |
+      There is a wide expanse of concrete in front of you.  Somewhere in the
+      distant, just on the end of your range of vision, you see... yes, it's a
+      car.  You look up at the building behind you and wonder if it really needs
+      a car-park this big with the few people who actually work in there.
+
+  store_room:
+    map: general
+    label: s1
+    links:
+        - reception
+        - main_office
+        - back_store
+        - wizroom
+        - crate
+    description: |
+      The icicles hang down and your breath turns to frost in the air.  There is
+      much paper and booklets around here and the temptation to burn them and
+      make a nice roaring fire is almost overwhelming... after all, the
+      air-conditioning is out of bounds, so you have to stay warm somehow!
+
+  main_office:
+    map: general
+    label: mo
+    links:
+        - reception
+        - store_room
+        - library
+        - conference
+        - toilets
+        - directors
+    access: PUB
+    description: |
+      The room stretches out much like the car park.  You notice, however, that
+      there is a room in one corner made of glass which you correctly guess is
+      the bosses room, for only they could be paranoid enough to need to look
+      out all the time.  You hear friendly talking and look around to the other
+      people... playing computer games and reading newspapers.  You are happy to
+      witness such dedication to the art of schiving off work.
+
+  back_store:
+    map: general
+    label: s2
+    links:
+        - store_room
+        - toilets
+        - conference
+    description: |+
+      Thinking that no room could be colder than the store room you find
+      yourself in a mild state of shock.  The spiders are skiing down the snow,
+      the woodlice have been building snowmen and the flies are having a
+      friendly snow ball fight.  Cold does not describe it.  Cold and Messy
+      pretty much does though.
+
+  library:
+    map: general
+    label: li
+    links:
+        - main_office
+        - conference
+        - andys_computer
+    topic: Ssshhhhhh....
+    description: |
+      There is a slight hush on the air in this room.  You look around and
+      notice, much to your shock, someone hard at work filing.  Unable to
+      believe this you thrust your head through the door to the main office and
+      back again, just to check you're still in the same building.
+
+  conference:
+    map: general
+    label: cr
+    links:
+        - library
+        - main_office
+        - back_store
+    description: |
+      There is a musty smell here, and it is very cold.  You correctly guess
+      that not many people use this room.  It's very plain, very boring.  You
+      give up even looking at the room and fall asleep - well why not?  The boss
+      isn't here after all!
+
+  toilets:
+    map: general
+    label: to
+    links:
+        - main_office
+        - back_store
+    description: |
+      Cold, damp, and never flush.  Need anymore be said?
+
+  directors:
+    map: general
+    label: dr
+    links:
+        - main_office
+        - safe
+    access: PUB
+    topic: Let the slaughter begin!
+    description: |
+      There is blood on the walls, blood on the floors and the stale stench of
+      death.  You see carcasses on the floor and realize that there have been
+      many battles fought here.  Even through the stench you find your mind
+      wandering away, imagining how wonderful it would be to have there boss
+      here right now so that you can take your own shots at 'em.
+
+  safe:
+    map: general
+    label: sa
+    links:
+        - directors
+    access: PUB
+    netlink: ACCEPT
+    description: |
+      Where the money is kept...
+
+  wizroom:
+    map: general
+    label: wr
+    links:
+        - store_room
+    access: PRIV
+    description: |
+      The portal to the real world shimmers and vibrates.  The dark blue oval
+      shapes looks right at home here in the room, with it's strange containers
+      on dusty shelves.  On the heavy-set desk there are many weighty books
+      inscribed with a language not of this, or any earthly world.  Occasionally
+      one of the mysterious items in the jars gurgles or winks at you
+      coquettishly.  This makes you sick to your stomach, but you're glad for the
+      attention - even if it is from a... splodge, swimming around in it's own
+      mucus.
+
+  cupboard:
+    map: general
+    label: cu
+    links:
+        - reception
+    access: PRIV
+    description: |
+      It's dark in here and as you enter you're sure someone locks the door
+      behind you.  There is a faint sound of muffled laughter to be heard out
+      side of this room.  To add torture to the experience of being jailed in
+      the cupboard your boss has left you a 'to-do' list which they want
+      completed.  A small tape-recorder activates automatically every so often;
+      it's the boss, disturbing you and adding more items to your list just as
+      you're trying to work through them...
+
+  andys_computer:
+    map: general
+    label: ac
+    links:
+        - library
+    access: PRIV
+    topic: Thanks for using Amnuts :)
+    description: |
+      Walking behind Andy you notice that he is hard at work programming and
+      creating web pages.  He turns around and breathe a sigh of relief as he
+      notices you're not the boss.  A few quick taps on the keyboard and the
+      screen on his computer changes.  It's still a program and web page he's
+      working on, but that sure as hell doesn't look like anything relating to
+      what he's being paid for!
+
+  crate:
+    map: store
+    label: cra
+    links:
+        - store_room
+        - box
+    description: |
+      The create you now sit in is so big it feels like a complete room.  But
+      it's cold in here, and dark.  Oh, so dark...  You hear a noise and see
+      something out of the corner of your eye scuttle across the floor of the
+      crate.  Was that a rat?  No, just a very large spider!
+
+  box:
+    map: store
+    label: box
+    links:
+        - crate
+    description: |
+      This is a box.  It does box things, like.. hold stuff.  It's not big, it's
+      not clever, and it's not worth describing in detail.

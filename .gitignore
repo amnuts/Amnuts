@@ -13,3 +13,4 @@ amnutsIdent
 amnutsTalker
 supervisord.pid
 supervisord.log
+files/datafiles/*.yaml
