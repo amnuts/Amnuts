@@ -25,7 +25,7 @@ count_suggestions(void)
     FILE *fp;
     int valid;
 
-    sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
+    locale_default_path(filename, sizeof filename, MISCFILES, SUGBOARD);
     fp = fopen(filename, "r");
     if (!fp) {
         return;
@@ -63,7 +63,8 @@ count_motds(int forcecnt)
     amsys->motd2_cnt = 0;
     for (i = 1; i <= 2; ++i) {
         /* open the directory file up */
-        sprintf(filename, "%s/motd%d", MOTDFILES, i);
+        snprintf(filename, sizeof filename, "%s/%s/%s/motd%d",
+                 LANGS_ROOT, locale_default(), MOTDFILES, i);
         dirp = opendir(filename);
         if (!dirp) {
             if (!forcecnt) {
@@ -754,7 +755,9 @@ read_board_specific(UR_OBJECT user, RM_OBJECT rm, int msg_number)
     if (is_personal_room(rm)) {
         sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, rm->owner);
     } else {
-        sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
+        char bfile[ROOM_NAME_LEN + 4];
+        snprintf(bfile, sizeof bfile, "%s.B", rm->name);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -833,7 +836,9 @@ check_board_wipe(UR_OBJECT user)
     if (is_personal_room(rm)) {
         sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, rm->owner);
     } else {
-        sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
+        char bfile[ROOM_NAME_LEN + 4];
+        snprintf(bfile, sizeof bfile, "%s.B", rm->name);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -907,7 +912,9 @@ board_from(UR_OBJECT user)
     if (is_personal_room(rm)) {
         sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, rm->owner);
     } else {
-        sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
+        char bfile[ROOM_NAME_LEN + 4];
+        snprintf(bfile, sizeof bfile, "%s.B", rm->name);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     fp = fopen(filename, "r");
     if (!fp) {

@@ -66,6 +66,7 @@ main(int argc, char **argv)
 #endif
 
     load_and_parse_config();
+    locale_load_all();
 
     printf("Flood protection is %s.\n", offon[amsys->flood_protect]);
     if (amsys->personal_rooms) {
@@ -819,7 +820,9 @@ accept_connection(int lsock)
     }
     /* get random motd1 and send  pre-login message */
     if (amsys->motd1_cnt) {
-        sprintf(motdname, "%s/motd1/motd%d", MOTDFILES, (get_motd_num(1)));
+        char motdsub[16];
+        snprintf(motdsub, sizeof motdsub, "motd1/motd%d", get_motd_num(1));
+        locale_default_path(motdname, sizeof motdname, MOTDFILES, motdsub);
         more(NULL, accept_sock, motdname);
     } else {
         sprintf(text,
@@ -1032,7 +1035,7 @@ load_and_parse_config(void)
 #endif
 
     printf("Parsing config file \"%s\"...\n", confile);
-    sprintf(filename, "%s/%s", DATAFILES, confile);
+    snprintf(filename, sizeof filename, "%s/%s", DATAFILES, confile);
     fp = fopen(filename, "r");
     if (!fp) {
         perror("Amnuts: Cannot open config file");
@@ -1223,7 +1226,9 @@ load_and_parse_config(void)
 
     /* Load room descriptions */
     for (rm1 = room_first; rm1; rm1 = rm1->next) {
-        sprintf(filename, "%s/%s.R", DATAFILES, rm1->name);
+        char rmfile[ROOM_NAME_LEN + 4];
+        snprintf(rmfile, sizeof rmfile, "%s.R", rm1->name);
+        locale_default_path(filename, sizeof filename, LOCATIONS, rmfile);
         fp = fopen(filename, "r");
         if (!fp) {
             fprintf(stderr, "Amnuts: Cannot open description file for room %s.\n",
@@ -1290,6 +1295,7 @@ load_and_parse_config(void)
   ML_ENTRY((RESOLVE_IP,         "resolve_ip"        )) \
   ML_ENTRY((FLOOD_PROTECT,      "flood_protect"     )) \
   ML_ENTRY((BOOT_OFF_MIN,       "boot_off_min"      )) \
+  ML_ENTRY((DEFAULT_LANGUAGE,   "default_language"  )) \
   ML_ENTRY((DEF_WARP,           "default_warp"      )) \
   ML_ENTRY((DEF_JAIL,           "default_jail"      )) \
   ML_ENTRY((DEF_BANK,           "default_bank"      )) \
@@ -1841,6 +1847,15 @@ parse_init_section(void)
 #ifdef GAMES
         strcpy(amsys->default_shoot, wrd[1]);
 #endif
+        break;
+
+    case INITOPT_DEFAULT_LANGUAGE:
+        if (strlen(wrd[1]) >= LOCALE_NAME_LEN) {
+            fprintf(stderr, "Amnuts: %s too long on line %d.\n",
+                    *initopt, config_line);
+            boot_exit(1);
+        }
+        strcpy(amsys->default_locale, wrd[1]);
         break;
 
     default:
@@ -2577,6 +2592,7 @@ record_last_logout(const char *name)
   ML_ENTRY((HOMEPAGE,      "homepage"    )) \
   ML_ENTRY((RECAP_NAME,    "recap_name"  )) \
   ML_ENTRY((GAME_SETTINGS, "games"       )) \
+  ML_ENTRY((LANGUAGE,      "language"    )) \
   ML_ENTRY((COUNT,         NULL          ))
 
 enum userdb_value {
@@ -2954,6 +2970,12 @@ load_user_details(UR_OBJECT user)
                 break;
             }
             break;
+        case USERDB_LANGUAGE:
+            if (wcnt >= 2) {
+                strncpy(user->locale, user_words[1], LOCALE_NAME_LEN - 1);
+                user->locale[LOCALE_NAME_LEN - 1] = '\0';
+            }
+            break;
         default:
             ++damaged;
             break;
@@ -2979,6 +3001,7 @@ load_user_details(UR_OBJECT user)
     get_xgcoms(user);
     read_user_reminders(user);
     load_flagged_users(user);
+    locale_resolve_catalog(user);
     return 1;
 }
 
@@ -3074,6 +3097,10 @@ save_user_details(UR_OBJECT user, int save_current)
             userfile_options[USERDB_GAME_SETTINGS], user->hits, user->misses,
             user->deaths, user->kills, user->bullets, user->hps, user->money,
             user->bank);
+    if (*user->locale) {
+        fprintf(fp, "%-13.13s %s\n", userfile_options[USERDB_LANGUAGE],
+                user->locale);
+    }
     fclose(fp);
     return 1;
 }
@@ -3700,6 +3727,30 @@ write_user(UR_OBJECT user, const char *str)
 
 }
 
+/*
+ * Catalog-keyed sibling of vwrite_user: look up `key` in the user's locale
+ * (with default fallback via lang()), format the variadic args against the
+ * resolved string, and deliver via write_user. Emits a visible "[??? key]\n"
+ * marker on miss (the rate-limited missing-key syslog comes from lang()).
+ */
+void
+write_user_lang(UR_OBJECT user, const char *key, ...)
+{
+    if (!user) return;
+    const char *fmt = lang(user, key);
+    char buf[ARR_SIZE * 2];
+    if (!fmt) {
+        snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        write_user(user, buf);
+        return;
+    }
+    va_list ap;
+    va_start(ap, key);
+    vsnprintf(buf, sizeof buf, fmt, ap);
+    va_end(ap);
+    write_user(user, buf);
+}
+
 void
 vwrite_level(enum lvl_value lvl, int above, int dorecord, UR_OBJECT user,
         const char *str, ...)
@@ -3755,6 +3806,95 @@ write_level(enum lvl_value lvl, int above, int dorecord, const char *str,
             }
         }
     }
+}
+
+/*
+ * Per-locale equivalent of vwrite_level. Renders `key` with each
+ * recipient's own catalog before delivery; otherwise faithfully mirrors
+ * write_level's behaviour so Phase 5 migrations from
+ *   vwrite_level(lvl, above, dorecord, sender, fmt, ...)
+ * to
+ *   write_level_lang(lvl, above, dorecord, sender, key, ...)
+ * are observationally equivalent.
+ *
+ *   - above == 1   → recipients with level >= lvl
+ *   - above == 0   → recipients with level <= lvl
+ *   - dorecord (RECORD/NORECORD) → write_user diversions to
+ *     record_afk/record_edit, plus a record_tell on successful delivery.
+ *
+ * `exclude` plays the dual role vwrite_level's `user` parameter does: it is
+ * both the "sender" (used for ignore-list/level checks and as the `from`
+ * for record_* entries) and the recipient to skip.
+ */
+void
+write_level_lang(enum lvl_value lvl, int above, int dorecord,
+                 UR_OBJECT exclude, const char *key, ...)
+{
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        /* Recipient on the sender's ignore list — skip unless sender is GOD.
+         * check_igusers tolerates a NULL second arg (returns 0), so the
+         * short-circuit also handles the exclude == NULL case. */
+        if (check_igusers(u, exclude) && exclude && exclude->level < GOD) {
+            continue;
+        }
+        /* Per-recipient ignore toggles for wiz-channel chatter / logons. */
+        if ((u->ignwiz && (com_num == WIZSHOUT || com_num == WIZEMOTE))
+                || (u->ignlogons && logon_flag)) {
+            continue;
+        }
+        if (u == exclude) continue;
+        if (u->login) continue;
+        if (u->type == CLONE_TYPE) continue;
+
+        /* Direction: `above` matches vwrite_level's `above` flag. */
+        if (above) {
+            if (u->level < lvl) continue;
+        } else {
+            if (u->level > lvl) continue;
+        }
+
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+
+        /* Render in the recipient's locale. */
+        const char *fmt = lang(u, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+
+        /* AFK and line-editor recipients get the text diverted to their
+         * review buffer (when `dorecord` is set) instead of seeing it
+         * inline. Mirrors write_level exactly. */
+        if (u->afk) {
+            if (dorecord) {
+                record_afk(exclude, u, buf);
+            }
+            continue;
+        }
+        if (u->malloc_start) {
+            if (dorecord) {
+                record_edit(exclude, u, buf);
+            }
+            continue;
+        }
+        if (!u->ignall) {
+            write_user(u, buf);
+        }
+        if (dorecord) {
+            record_tell(exclude, u, buf);
+        }
+    }
+    va_end(ap0);
 }
 
 /*
@@ -3844,6 +3984,44 @@ write_room_except(RM_OBJECT rm, const char *str, UR_OBJECT user)
             write_user(u, str);
         }
     }
+}
+
+/*
+ * Catalog-keyed sibling of vwrite_room_except: render `key` per-recipient
+ * using each user's own locale catalog (with default fallback via lang()),
+ * then deliver. Skips clones and the `exclude` user; respects NETLINKS
+ * socket gating like the rest of the per-recipient catalog write family.
+ * Emits "[??? key]\n" on miss; the rate-limited syslog warning is handled
+ * inside lang().
+ */
+void
+write_room_lang(RM_OBJECT room, UR_OBJECT exclude, const char *key, ...)
+{
+    if (!room) return;
+
+    va_list ap0;
+    va_start(ap0, key);
+
+    for (UR_OBJECT u = user_first; u; u = u->next) {
+        if (u->type == CLONE_TYPE) continue;
+        if (u == exclude) continue;
+        if (u->room != room) continue;
+#ifdef NETLINKS
+        if (!u->socket) continue;
+#endif
+        const char *fmt = lang(u, key);
+        char buf[ARR_SIZE * 2];
+        if (!fmt) {
+            snprintf(buf, sizeof buf, "[??? %s]\n", key);
+        } else {
+            va_list apc;
+            va_copy(apc, ap0);
+            vsnprintf(buf, sizeof buf, fmt, apc);
+            va_end(apc);
+        }
+        write_user(u, buf);
+    }
+    va_end(ap0);
 }
 
 /*
@@ -4545,7 +4723,7 @@ login(UR_OBJECT user, char *inpstr)
             }
             strcpy(user->pass, crypt(passwd, crypt_salt));
             write_user(user, "\n");
-            sprintf(filename, "%s/%s", MISCFILES, RULESFILE);
+            locale_path(user, filename, sizeof filename, MISCFILES, RULESFILE);
             if (more(NULL, user->socket, filename)) {
                 write_user(user,
                         "\nBy typing your password in again you are accepting the above rules.\n");
@@ -4577,7 +4755,9 @@ login(UR_OBJECT user, char *inpstr)
             cls(user);
             /* If there is no motd2 files then do not display them */
             if (amsys->motd2_cnt) {
-                sprintf(motdname, "%s/motd2/motd%d", MOTDFILES, (get_motd_num(2)));
+                char motdsub[16];
+                snprintf(motdsub, sizeof motdsub, "motd2/motd%d", get_motd_num(2));
+                locale_path(user, motdname, sizeof motdname, MOTDFILES, motdsub);
                 more(user, user->socket, motdname);
             }
             write_user(user, "Press return to continue: ");
@@ -4616,7 +4796,9 @@ login(UR_OBJECT user, char *inpstr)
         cls(user);
         /* If there is no motd2 files then do not display them */
         if (amsys->motd2_cnt) {
-            sprintf(motdname, "%s/motd2/motd%d", MOTDFILES, (get_motd_num(2)));
+            char motdsub[16];
+            snprintf(motdsub, sizeof motdsub, "motd2/motd%d", get_motd_num(2));
+            locale_path(user, motdname, sizeof motdname, MOTDFILES, motdsub);
             more(user, user->socket, motdname);
         }
         write_user(user, "Press return to continue: ");
@@ -5571,7 +5753,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         shutdown_com(user);
         break;
     case NEWS:
-        sprintf(filename, "%s/%s", MISCFILES, NEWSFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, NEWSFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "There is no news.\n");
@@ -5660,6 +5842,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
     case LISTBANS:
         listbans(user);
         break;
+    case LANGRELOAD:
+        langreload(user);
+        break;
     case BAN:
         ban(user);
         break;
@@ -5693,7 +5878,11 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
                     "You do not need a map--where you are is where it is at!\n");
             return 0;
         }
-        sprintf(filename, "%s/%s.map", DATAFILES, user->room->map);
+        {
+            char mapfile[ROOM_NAME_LEN + 8];
+            snprintf(mapfile, sizeof mapfile, "%s.map", user->room->map);
+            locale_path(user, filename, sizeof filename, LOCATIONS, mapfile);
+        }
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user,
@@ -5874,7 +6063,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         macros(user);
         break;
     case RULES:
-        sprintf(filename, "%s/%s", MISCFILES, RULESFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, RULESFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "\nThere are currrently no rules...\n");
@@ -6105,7 +6294,7 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
         personal_room_bgone(user);
         break;
     case WIZRULES:
-        sprintf(filename, "%s/%s", MISCFILES, WIZRULESFILE);
+        locale_path(user, filename, sizeof filename, MISCFILES, WIZRULESFILE);
         switch (more(user, user->socket, filename)) {
         case 0:
             write_user(user, "\nThere are currrently no admin rules...\n");
@@ -6521,58 +6710,59 @@ check_macros(UR_OBJECT user, char *inpstr)
 }
 
 /*
- * Set list of users that you ignore
+ * Set list of users that you ignore.
+ *
+ * Translatable prose (show_igusers.title, show_igusers.none) lives in
+ * files/langs/en_GB/strings.yml; the |...| frame is drawn through the
+ * Phase 3 box_open/box_line/box_close builders. Row body is assembled
+ * by inlining the per-name cell format (leading space + 24-col-padded
+ * name) — the cell's leading space serves as both inter-cell separator
+ * and the left rail's inset. box_line's ALIGN_LEFT pad then fills the
+ * row out to the box's 76 inner columns, producing a byte-identical
+ * stream to the pre-conversion sprintf("| %-24s %-24s %-24s |\n", ...)
+ * chain on en_GB.
  */
 void
 show_igusers(UR_OBJECT user)
 {
     char text2[ARR_SIZE];
+    char cell[64];
+    char namebuf[32];
     FU_OBJECT fu;
+    BOX box = NULL;
     int found = 0, cnt = 0;
 
     *text2 = '\0';
     for (fu = user->fu_first; fu; fu = fu->next) {
         if (fu->flags & fufIGNORE) {
             if (!found++) {
-                write_user(user,
-                        "+----------------------------------------------------------------------------+\n");
-                write_user(user,
-                        "| ~OL~FCYou are currently ignoring the following people~RS                            |\n");
-                write_user(user,
-                        "+----------------------------------------------------------------------------+\n");
+                box = box_open(user, 78, NULL);
+                if (box) {
+                    char titlebuf[ARR_SIZE];
+                    lang_format(user, titlebuf, sizeof titlebuf,
+                                "show_igusers.title");
+                    box_line(box, "%s", titlebuf);
+                    box_separator(box);
+                }
             }
-            switch (++cnt) {
-            case 1:
-                sprintf(text, "| %-24s", fu->name);
-                strcat(text2, text);
-                break;
-            case 2:
-                sprintf(text, " %-24s", fu->name);
-                strcat(text2, text);
-                break;
-            default:
-                sprintf(text, " %-24s |\n", fu->name);
-                strcat(text2, text);
-                write_user(user, text2);
+            snprintf(namebuf, sizeof namebuf, "%-24s", fu->name);
+            snprintf(cell, sizeof cell, " %s", namebuf);
+            strcat(text2, cell);
+            if (++cnt >= 3) {
+                if (box) box_line(box, "%s", text2);
                 cnt = 0;
                 *text2 = '\0';
-                break;
             }
         }
     }
     if (!found) {
-        write_user(user, "You are not ignoring any users.\n");
+        write_user_lang(user, "show_igusers.none");
         return;
     }
-    if (cnt == 1) {
-        strcat(text2, "                                                   |\n");
-        write_user(user, text2);
-    } else if (cnt == 2) {
-        strcat(text2, "                          |\n");
-        write_user(user, text2);
+    if (cnt > 0 && box) {
+        box_line(box, "%s", text2);
     }
-    write_user(user,
-            "+----------------------------------------------------------------------------+\n");
+    if (box) box_close(box);
 }
 
 /*

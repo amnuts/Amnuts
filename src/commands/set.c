@@ -327,5 +327,8 @@ set_attributes(UR_OBJECT user)
             break;
         }
         return;
+    case SETLANG:
+        set_user_lang(user);
+        return;
     }
 }

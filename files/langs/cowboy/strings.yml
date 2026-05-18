@@ -1,0 +1,24 @@
+# Cowboy theme — overrides ui.* frame primitives. All other keys fall
+# back to en_GB.
+
+meta.name:        "Cowboy"
+meta.description: "Yee-haw frames; rest falls back to English."
+
+# Rule with distinctive caps.
+ui.rule.lcap:        "-={*"
+ui.rule.rcap:        "*}=-"
+ui.rule.fill:        "-"
+ui.rule.label_lpad:  "5"
+
+# Box edges with the same caps and a fat fill.
+ui.box.top.lcap:     "-={*"
+ui.box.top.rcap:     "*}=-"
+ui.box.top.fill:     "="
+ui.box.bot.lcap:     "-={*"
+ui.box.bot.rcap:     "*}=-"
+ui.box.bot.fill:     "="
+ui.box.body.lside:   "* "
+ui.box.body.rside:   " *"
+ui.box.sep.lcap:     "-={*"
+ui.box.sep.rcap:     "*}=-"
+ui.box.sep.fill:     "-"

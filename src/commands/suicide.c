@@ -20,15 +20,14 @@ void
 suicide(UR_OBJECT user)
 {
     if (word_count < 2) {
-        write_user(user, "Usage: suicide <your password>\n");
+        write_user_lang(user, "suicide.usage");
         return;
     }
     if (strcmp(user->pass, crypt(word[1], user->pass))) {
-        write_user(user, "Password incorrect.\n");
+        write_user_lang(user, "suicide.password_incorrect");
         return;
     }
-    write_user(user,
-            "\n\07~FR~OL~LI*** WARNING - This will delete your account! ***\n\nAre you sure about this (y|n)? ");
+    write_user_lang(user, "suicide.confirm_prompt");
     user->misc_op = 6;
     no_prompt = 1;
 }

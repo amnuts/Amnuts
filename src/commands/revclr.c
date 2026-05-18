@@ -26,7 +26,6 @@ revclr(UR_OBJECT user)
 
     clear_revbuff(user->room);
     name = user->vis ? user->recap : invisname;
-    vwrite_room_except(user->room, user, "%s~RS clears the review buffer.\n",
-            name);
-    write_user(user, "You clear the review buffer.\n");
+    write_room_lang(user->room, user, "revclr.room_notice", name);
+    write_user_lang(user, "revclr.self");
 }

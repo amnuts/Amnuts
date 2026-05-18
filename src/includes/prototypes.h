@@ -80,15 +80,20 @@ void write_telnet_with_size(telnet_t *t, const char *str, size_t length);
 void vwrite_user(UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_user(UR_OBJECT, const char *);
+/* write_user_lang: second arg is a catalog key, not a printf format —
+ * the actual format is looked up at runtime, so no __format__ attribute. */
+void write_user_lang(UR_OBJECT, const char *, ...);
 void vwrite_level(enum lvl_value, int, int, UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 5, 6)));
 void write_level(enum lvl_value, int, int, const char *, UR_OBJECT);
+void write_level_lang(enum lvl_value, int, int, UR_OBJECT, const char *, ...);
 void vwrite_room(RM_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 2, 3)));
 void write_room(RM_OBJECT, const char *);
 void vwrite_room_except(RM_OBJECT, UR_OBJECT, const char *, ...)
 __attribute__((__format__(__printf__, 3, 4)));
 void write_room_except(RM_OBJECT, const char *, UR_OBJECT);
+void write_room_lang(RM_OBJECT, UR_OBJECT, const char *, ...);
 void vwrite_room_except_both(RM_OBJECT, UR_OBJECT, UR_OBJECT,
         const char *, ...)
 __attribute__((__format__(__printf__, 4, 5)));
@@ -270,6 +275,83 @@ void show_money(UR_OBJECT);
 void check_credit_updates(void);
 void global_money(UR_OBJECT);
 #endif
+
+
+/*
+ * functions in locale.c
+ */
+int  locale_load_all(void);
+int  locale_path(UR_OBJECT user, char *out, size_t outlen,
+                 const char *category, const char *name);
+int  locale_default_path(char *out, size_t outlen,
+                         const char *category, const char *name);
+const char *locale_default(void);
+
+
+/* catalog.c */
+int   catalog_load_all(struct locale_state *st);
+void  catalog_free_all(struct locale_state *st);
+int   catalog_reload_all(void);
+struct locale_catalog *catalog_for_locale(const struct locale_state *st,
+                                          const char *locale_name);
+const struct lang_entry *catalog_lookup(const struct locale_catalog *cat,
+                                        const char *key);
+
+/* uibuilders.c — see src/includes/uibuilders.h for opaque BOX/TABLE
+ * typedefs. ALIGN_LEFT / ALIGN_CENTRE / ALIGN_RIGHT are macros in
+ * defines.h shared with the existing align_string function. */
+#include "uibuilders.h"
+int visible_strlen(const char *s);
+int align_into(char *out, size_t outlen,
+               int align, int width,
+               const char *fmt, ...)
+    __attribute__((format(printf, 5, 6)));
+void rule(UR_OBJECT user, int width, const char *label_fmt, ...);
+BOX  box_open      (UR_OBJECT user, int width, const char *title_fmt, ...);
+void box_line      (BOX b, const char *fmt, ...);
+void box_blank     (BOX b);
+void box_centered  (BOX b, const char *fmt, ...);
+void box_separator (BOX b);
+void box_inner_separator(BOX b);  /* uses body lside/rside as caps, sep fill */
+void box_close     (BOX b);
+
+TABLE table_open      (UR_OBJECT user, int total_width);
+/* table_columns: declare N column widths in visible columns.
+ * Caller responsibility: sum(col_widths) + (n - 1) must equal the
+ * table's inner width (i.e. box.inner), because a single space
+ * separates adjacent columns. There is no auto-fitting. */
+void  table_columns   (TABLE t, int n, ...);
+void  table_header    (TABLE t, ...);
+void  table_separator (TABLE t);
+void  table_row       (TABLE t, ...);
+void  table_close     (TABLE t);
+
+/* Returns the catalog format string for `key`, or NULL if missing in both
+ * user's locale and the default catalog. The returned pointer is owned by
+ * the catalog and only valid for IMMEDIATE use (e.g. inline as the format
+ * argument to vwrite_user). Storing the pointer across a function call is
+ * unsafe: a subsequent langreload may invalidate it. For anything beyond
+ * "render right now," use lang_format or write_user_lang. */
+const char *lang(UR_OBJECT user, const char *key);
+
+/* Catalog-keyed caller-buffer formatter. The write_*_lang siblings of this
+ * helper live with the rest of the write-family prototypes earlier in this
+ * header (next to write_user / write_level / write_room_except). */
+int   lang_format(UR_OBJECT user, char *buf, size_t buflen,
+                  const char *key, ...);
+
+/* Lifecycle helpers reused by `set lang` and `langreload`. */
+int   locale_set_user(UR_OBJECT user, const char *name);
+void  locale_list    (UR_OBJECT user);
+void  locale_resolve_catalog(UR_OBJECT user);  /* set user->catalog from user->locale */
+
+
+/* yaml_util.c */
+struct yaml_parser_s;  /* opaque to most callers — actually yaml_parser_t */
+void yaml_die(const char *path, void *parser, const char *fmt, ...)
+    __attribute__((format(printf, 3, 4), noreturn));
+void yaml_next(const char *path, void *parser, void *event_out);
+const char *yaml_event_kind(int event_type);
 
 
 /*
@@ -592,5 +674,11 @@ void telnet_event_handler(telnet_t *telnet, telnet_event_t *ev, void *user_data)
  * functions in commands/
  */
 void show_terminal(UR_OBJECT);
+
+/* set_lang.c */
+void set_user_lang(UR_OBJECT user);
+
+/* langreload.c */
+void langreload(UR_OBJECT user);
 
 #endif

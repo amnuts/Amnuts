@@ -28,7 +28,7 @@ suggestions_from(UR_OBJECT user)
         write_user(user, "There are currently no suggestions.\n");
         return;
     }
-    sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
+    locale_default_path(filename, sizeof filename, MISCFILES, SUGBOARD);
     fp = fopen(filename, "r");
     if (!fp) {
         write_user(user,

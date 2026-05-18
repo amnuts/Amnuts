@@ -2,6 +2,7 @@
 
 INIT:
 verification       amnutsabc
+default_language   en_GB
 mainport           2402
 wizport            2403
 linkport           2404

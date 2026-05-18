@@ -1,0 +1,392 @@
+# Amnuts default locale — British English.
+# See docs/superpowers/specs/2026-05-10-localisation-design.md §4 for
+# format rules. Keys are dot-namespaced; values are printf format strings
+# using POSIX positional specifiers (%1$s, %2$d). The default locale is
+# the canonical source of format signatures — every other locale's
+# translation of a key MUST match this one's argument count and types.
+
+# Locale metadata, used by `set lang` listings.
+meta.name:        "British English"
+meta.description: "The default tongue."
+
+# A smoke-test key proves the catalog round-trip works.
+# Phase 2 has no other code-side consumers; Phase 4 starts adding real ones.
+ping.greeting:    "Hello, %1$s. Catalog is working.\n"
+
+# UI builders — frame primitives (see docs/superpowers/specs/2026-05-10-localisation-design.md §6).
+# These values are processed as opaque byte sequences by the UI builders,
+# NOT as printf format strings. Keep them free of % specifiers.
+
+# Horizontal section rule (no side rails). Used for between-section dividers.
+ui.rule.lcap:        "+"
+ui.rule.rcap:        "+"
+ui.rule.fill:        "-"
+ui.rule.label_lpad:  "5"      # visible columns of fill before " <label> "
+
+# Box top/bottom edges and body sides.
+ui.box.top.lcap:     "+"
+ui.box.top.rcap:     "+"
+ui.box.top.fill:     "-"
+ui.box.bot.lcap:     "+"
+ui.box.bot.rcap:     "+"
+ui.box.bot.fill:     "-"
+ui.box.body.lside:   "|"
+ui.box.body.rside:   "|"
+
+# Internal box separator (between header and rows, between row groups).
+ui.box.sep.lcap:     "+"
+ui.box.sep.rcap:     "+"
+ui.box.sep.fill:     "-"
+
+# wizlist — first end-to-end consumer of the catalog + UI builders.
+# Body content (the per-level lists and the currently-on rows) is not
+# inside a |…| body box: the original output uses rule-style section
+# headers with un-railed content beneath. The frame appearance is now
+# synthesised by the UI builders' rule() call from ui.* primitives; a
+# themed locale re-skins the rule caps/fill there. The catalog supplies
+# only the section LABEL text below.
+wizlist.label.wiz_list:           "~FGWiz List~RS"
+wizlist.label.retired:            "~FGRetired Wiz List~RS"
+wizlist.label.currently_on:       "~FGThose currently on~RS"
+
+# Shown when no entries of a given level exist (or all are retired/unretired
+# depending on which section is being rendered).
+wizlist.none_listed:              "~FR[none listed]\n~RS"
+
+# Trailers.
+wizlist.invisible_count:          "Number of the wiz invisible to you : %1$d\n"
+wizlist.no_wizzes_on:             "Sorry, no wizzes are on at the moment...\n"
+
+# show_igusers — list of users you are currently ignoring. Rendered via the
+# Phase 3 box_open/box_line/box_close pipeline at a total width of 78 visible
+# columns (inner = 76 once the |…| side rails are subtracted). The title
+# relies on box_line's ALIGN_LEFT padding to fill the inner span, so its
+# leading space is load-bearing — it preserves the byte-identical
+# "| <content>" inset of the original sprintf chain. The per-row body is
+# assembled C-side by concatenating up to three " %-24s" cells before
+# handing the line to box_line.
+show_igusers.title:               " ~OL~FCYou are currently ignoring the following people~RS"
+show_igusers.none:                "You are not ignoring any users.\n"
+
+# grepusers — search the user database for names matching a glob-style
+# pattern. The frame is drawn via the Phase 3 box_* pipeline at a total
+# width of 78 visible columns (inner = 76 once the |…| side rails are
+# subtracted). The title and the empty-state message both rely on
+# box_line's ALIGN_LEFT padding to fill the inner 76 cols, so their
+# load-bearing leading space preserves the byte-identical "| <content>"
+# inset of the pre-conversion sprintf chain.
+#
+# The per-match body rows are NOT rendered through box_line because the
+# original layout deliberately overruns the frame: two halves are
+# concatenated for a paired row (43 + 43 = 86 visible cols between the
+# outer rails, wider than the frame), and a dangling first half is
+# padded out to 82 visible cols. The C side assembles each row inline
+# from the name/level pieces and pulls the outer rail bytes from
+# ui.box.body.{lside,rside} so themed locales still re-skin the rails
+# consistently.
+grepusers.usage:                  "Usage: grepu <pattern>\n"
+grepusers.bad_double_star:        "You cannot have ** in your pattern.\n"
+grepusers.bad_question_star:      "You cannot have ?* in your pattern.\n"
+grepusers.bad_star_question:      "You cannot have *? in your pattern.\n"
+grepusers.title:                  " ~FC~OLUser grep for pattern:~RS ~OL%1$s~RS"
+grepusers.empty_message:          " ~OL~FRNo users have that pattern~RS"
+grepusers.footer:                 " ~OL%1$d~RS user%2$s had the pattern ~OL%3$s~RS "
+
+# listbans — the `lban` WIZ command. Four subcommands (sites, users, swears,
+# new) each emit their own banner; three of those banners precede paged
+# file content via more() (untouched by Phase 4 — paged files are outside
+# the catalog surface and already go through the Phase 1 locale-aware
+# locale_default_path resolver). The "swears" subcommand renders an inline
+# list of swear_words[] entries instead.
+#
+# The original layout had no |…| body rails — just a "~BB*** … ***" header
+# and free-form body — so each banner ships here as an opaque catalog
+# value rather than being assembled through box_open. That preserves the
+# byte-identical en_GB contract while still letting a themed locale
+# re-skin the headers wholesale.
+#
+# Quirk preserved: the source code's "new" fallback is inverted
+# (`if (strcmp(word[1], "new"))` — i.e. it fires for any arg that is
+# NOT "new", including the no-arg case), so the usage key is reached
+# only when the user types `lban new` exactly. Translating it doesn't
+# fix that behaviour; we just keep the strings parallel.
+listbans.sites.header:            "\n~BB*** Banned sites and domains ***\n\n"
+listbans.sites.empty:             "There are no banned sites and domains.\n\n"
+listbans.users.header:            "\n~BB*** Banned users ***\n\n"
+listbans.users.empty:             "There are no banned users.\n\n"
+listbans.swears.header:           "\n~BB*** Banned swear words ***\n\n"
+listbans.swears.empty:            "There are no banned swear words.\n"
+listbans.swears.trailer_off:      "\n(Swearing ban is currently off)\n\n"
+listbans.new.header:              "\n~BB*** New users banned from sites and domains **\n\n"
+listbans.new.empty:               "There are no sites and domains where new users have been banned.\n\n"
+listbans.usage:                   "Usage: lban sites|users|new|swears\n"
+
+# system — the `system` admin command. The most prose-heavy of the Phase 4
+# commands: five sections (header, users, netlinks, rooms, memory) chained
+# together when `-a` is given, or shown individually for `-u`/`-n`/`-r`/`-m`.
+# Each section is a 78-col frame (total) with '|' side rails (inner = 76
+# visible cols). Within a section, the title sits between a top `+---+`
+# frame and an *inner* `|---|` separator — body-rail-capped, not `+`-capped,
+# so it cannot be produced via box_separator. The UI builder
+# box_inner_separator() synthesises it from ui.box.body.lside/rside (caps)
+# and ui.box.sep.fill, so a themed locale re-skins it via the ui.* keys.
+#
+# Between sub-sections inside one frame, and between sections under `-a`,
+# the boundary is `+---+`, which is what box_separator emits — so those
+# boundaries flow through the Phase 3 box pipeline normally. The final
+# close at the end of each independent invocation (or after the full -a
+# chain) is a `+---+` from box_close followed by an extra "\n".
+#
+# Every label is baked into the row's format string so a themed locale can
+# rewrite both the wording and (within reason) the column geometry. The
+# server passes only the dynamic values; the inline literal columns of
+# whitespace and labels are catalog data. Each row's body, once filled,
+# is exactly 76 visible cols — box_line then pads/truncates to 76 (a no-op
+# for these rows) and adds the '|' rails. Format widths use POSIX
+# positional specifiers; numeric widths/precisions survive the catalog
+# signature validator (only width-via-arg, e.g. `%-*s`, does not).
+#
+# Quirks preserved:
+#  - The memory section's "total" row mixes a megabyte value and a byte
+#    count. The validator rejects `%f`, so the C side pre-formats the Mb
+#    string with snprintf and passes it as `%s` here (system.row.mem_total).
+#  - The "port info" header has 8 NETLINKS x IDENTD x WIZPORT variants;
+#    each ships as a pair of keys (label header + value row). When IDENTD
+#    is compiled but amsys->ident_state is false, the non-IDENTD variants
+#    are used.
+
+# Section title row. %1$s = caller-padded text (74 visible cols).
+system.title.header:              " ~OL~FC%1$-74.74s~RS "
+system.title.text.header:         "System Details for %1$s (Amnuts version %2$s)"
+system.title.users:               " ~OL~FCSystem Details - Users~RS                                                    "
+system.title.netlinks:            " ~OL~FCSystem Details - Netlinks~RS                                                 "
+system.title.rooms:               " ~OL~FCSystem Details - Rooms~RS                                                    "
+system.title.memory:              " ~OL~FCSystem Details - Memory Object Allocation~RS                                 "
+
+# Port info header rows. Eight variants gated by NETLINKS / IDENTD-state /
+# WIZPORT. The "label" row is the column header; the "value" row supplies
+# the actual values. Each row is exactly 76 visible cols.
+system.ports.label.nl_id_wp:      " talker pid      identd pid      main port      wiz port      netlinks port"
+system.ports.value.nl_id_wp:      "   %1$-5u           %2$-5u           %3$-5.5s         %4$-5.5s            %5$-5.5s    "
+system.ports.label.nl_id:         " talker pid      identd pid      main port      netlinks port              "
+system.ports.value.nl_id:         "   %1$-5u           %2$-5u           %3$-5.5s         %4$-5.5s                     "
+system.ports.label.nl_wp:         " talker pid           main port            wiz port           netlinks port"
+system.ports.value.nl_wp:         "   %1$-5u               %2$-5.5s                %3$-5.5s                 %4$-5.5s    "
+system.ports.label.nl:            " talker pid           main port            netlinks port                   "
+system.ports.value.nl:            "   %1$-5u               %2$-5.5s                %3$-5.5s                          "
+system.ports.label.id_wp:         " talker pid            identd pid             main port            wiz port"
+system.ports.value.id_wp:         "   %1$-5u                  %2$-5u                 %3$-5.5s                %4$-5.5s "
+system.ports.label.id:            " talker pid            identd pid             main port                    "
+system.ports.value.id:            "   %1$-5u                  %2$-5u                 %3$-5.5s                      "
+system.ports.label.wp:            " talker pid                       main port                        wiz port"
+system.ports.value.wp:            "   %1$-5u                            %2$-5.5s                           %3$-5.5s  "
+system.ports.label.plain:         " talker pid                       main port                                "
+system.ports.value.plain:         "   %1$-5u                            %2$-5.5s                                  "
+
+# Section A — general / stats rows.
+system.row.booted:                " talker booted     : %1$-54.54s "
+system.row.uptime:                " uptime            : %1$-54.54s "
+system.row.logging_flood:         " system logging    : %1$-6.6s                flood protection  : %2$-10.10s   "
+system.row.sigterms_crash:        " ignoring sigterms : %1$-6.6s                crash action      : %2$-10.10s   "
+system.row.heartbeat_resolve:     " heartbeat         : %1$-20.20s  resolving IP      : %2$-10.10s   "
+system.row.swear_ban:             " swear ban         : %1$-54.54s "
+system.row.for_other_options:     " For other options, see: system -m, -n, -r, -u, -a"
+
+# Section U — user stats. The level-count row uses ` : ` (space-colon-space)
+# like Section A; every other Section U row uses `: ` (no leading space) —
+# preserved exactly from the originals (the labels are padded to N visible
+# cols inline so the colon lands at column N+1, matching `%-N.Ns:` in the
+# pre-conversion format strings).
+system.row.users_at_level:        " users at level %1$-8.8s : %2$-5d                                           "
+system.row.online_max:            " online now              : %1$-5d       max allowed online      : %2$-5d     "
+system.row.new_returning:         " new this boot           : %1$-5d       returning this boot     : %2$-5d     "
+system.row.clones_max:            " clones now on           : %1$-5d       max allowed clones      : %2$-5d     "
+system.row.idle_timeouts:         " login idle time out     : %1$-10.10s  user idle time out      : %2$-10.10s "
+system.row.timeout_maxlevel_afks: " time out maxlevel       : %1$-10.10s  time out afks           : %2$-10.10s "
+system.row.minlogin:              " current minlogin level  : %1$-10.10s  min login disconnect    : %2$-10.10s "
+system.row.newbie_prompt_colour:  " newbie prompt default   : %1$-10.10s  newbie colour default   : %2$-10.10s "
+system.row.newbie_echo:           " newbie charecho default : %1$-10.10s  echoing password default: %2$-10.10s "
+system.row.recaps_forwarding:     " name recaps allowed     : %1$-10.10s  smail auto-forwarding   : %2$-10.10s "
+system.row.autopurge:             " autopurge on            : %1$-4s  next autopurge : %2$-25s "
+system.row.purge_lengths:         " purge length (newbies)  : %1$-10.10s  purge length (users)    : %2$-10.10s "
+system.row.wizport_level:         " wizport min login level : %1$-10.10s                                       "
+
+# Section N — netlinks. The `total_netlinks` row uses `%45s` to pad with
+# an opaque whitespace stripe; the C side passes a single space and printf
+# right-aligns it within the 45-col field.
+system.row.total_netlinks:        " total netlinks       : %1$5d %2$45s "
+system.row.idle_keepalive:        " idle time out        : %1$5d secs     keepalive interval   : %2$5d secs   "
+system.row.accept_live:           " accepting connects   : %1$5d          live connects        : %2$5d        "
+system.row.incoming_outgoing:     " incoming connections : %1$5d          outgoing connections : %2$5d        "
+system.row.rem_user_levels:       " remote user maxlevel : %1$-13.13s  remote user deflevel : %2$-13.13s "
+system.row.netlink_memory:        " netlink structure    : %1$5d bytes    total memory         : %2$5d bytes  "
+system.row.netlinks_not_compiled: " Netlinks are not currently compiled into the talker."
+
+# Section R — rooms.
+system.row.gatecrash_private:     " gatecrash level : %1$-15.15s      min private count   : %2$5d        "
+system.row.mesg_life_check:       " message life    : %1$-15.15s      message check time  : %2$.2d:%3$.2d         "
+system.row.rooms_count:           " personal rooms  : %1$5d                total rooms         : %2$5d        "
+system.row.rooms_memory:          " room structure  : %1$7d bytes        total memory        : %2$7d bytes"
+
+# Section M — memory. Each "object" row reports count, struct size, and
+# total bytes; the trailing summary row reports total memory both in Mb
+# (pre-formatted to a string by the C side because the catalog signature
+# validator rejects %f) and as a byte count.
+system.row.mem_object:            " %1$-16.16s: %2$8d * %3$8d bytes = %4$8d total bytes        "
+system.row.mem_total:             " total           : %1$12s Mb             %2$8d total bytes        "
+
+# Generic / fallback.
+system.usage:                     "Usage: system [-m|-n|-r|-u|-a]\n"
+
+# help — Phase 4 conversion. Scope covers only the framing parts of the
+# command: the unknown-topic / ambiguous-match messages, the commands-list
+# screens (level-grouped and function-grouped), and the two credits screens
+# (Amnuts + NUTS). The per-topic file path (more()-paged content under
+# files/langs/<locale>/helpfiles/) is OUT OF SCOPE — that path is already
+# locale-aware from Phase 1 and is not lifted into the catalog.
+#
+# The commands-list screens keep the existing align_string() pipeline rather
+# than switching to box_open/box_line: align_string already produces the
+# byte stream the original sprintf chain emits (including the |…| rails),
+# and pass-through via lang(user, "key") as the format argument is the
+# safer byte-identical conversion. A themed locale can re-skin the inner
+# content of each row but cannot move the column geometry of the rails
+# without also touching the C side.
+#
+# The credits screens are flat (no rails) — every server-authored line
+# ships as one catalog value. Bodies are long enough to be inconvenient as
+# 13-key sequences but short enough that a single double-quoted scalar is
+# still readable. The version-line keys carry the only positional arg
+# (%1$s = NUTSVER / AMNUTSVER).
+
+# Unknown / ambiguous topic messages. The "Sorry, there is no help on that
+# topic.\n" string appears at three sites in help() — the bare-arg unknown
+# case, the attribute-unknown case under `help set <attr>`, and the
+# more()-returned-0 case after a paged read found nothing. All three reuse
+# the same key.
+help.unknown:                     "Sorry, there is no help on that topic.\n"
+help.ambiguous_command:           "~FR~OLCommand name is not unique. \"~FC%1$s~RS~OL~FR\" also matches:\n\n"
+help.ambiguous_attribute:         "~FR~OLAttribute name is not unique. \"~FT%1$s~RS~OL~FR\" also matches:\n"
+
+# Trailing "Level   :" line shown when more() returns 2 (end-of-file
+# without paging). %1$s = level name (taken from user_level[com->level].name).
+help.level_line:                  "~OLLevel   :~RS %1$s and above\n"
+
+# Commands listing — tip lines + title + footer. The bare `+---+` rails
+# that separate the frame regions are synthesised by rule(user, 78, NULL)
+# from the ui.rule.* primitives; the catalog supplies only the inner-rail
+# tip prose and the title/footer bodies that align_string then drops
+# inside `|…|` rails. A themed locale re-skins the rails via the ui.*
+# keys with no help-specific overrides.
+help.commands.tip_line1:          "| All commands start with a \".\" (when in ~FYspeech~RS mode) and can be abbreviated |\n"
+help.commands.tip_line2:          "| Remember, a \".\" by itself will repeat your last command or speech          |\n"
+
+# Title row body — handed to align_string as the format. %1$s = the level
+# name (user_level[user->level].name).
+help.commands.title:              "  Commands available to you (level ~OL%1$s~RS) "
+
+# Per-row pieces. The "level prefix" is the leading "X) " marker that
+# starts a level-grouped row; the "function header" is the standalone
+# header row emitted before each function group. %1$s = the level letter
+# or function name; %-1.1s in the level prefix is preserved via the
+# numeric width/precision (the catalog signature validator accepts those).
+help.commands.level_prefix:       "  ~FG~OL%1$-1.1s)~RS ~FC"
+help.commands.function_header:    "  ~OL~FG%1$s~RS "
+
+# Per-cell command name pieces. Two variants per screen reflecting the
+# two branches inside the loop (has_xcom or not). The level-grouped
+# screen has an extra "highlight" segment between the name and the alias
+# (either ~FC or empty); that segment is supplied by the C side as %2$s.
+# %1$s = command name, %2$s = highlight escape ("~FC" or ""), %3$s = alias.
+help.commands.row.level_xcom:     "~FR%1$s~RS%2$s %3$s"
+help.commands.row.level_plain:    "%1$s %2$s"
+help.commands.row.function_xcom:  "~FR%1$s~RS %2$s"
+help.commands.row.function_plain: "%1$s %2$s"
+
+# Footer — total command count, with PLTEXT_S pluralisation supplied as %2$s.
+help.commands.total:              "  There is a total of ~OL%1$d~RS command%2$s that you can use "
+
+# Credits screens. Each screen is composed of three pieces: a header line
+# (or top colour bar), a version line (the only one carrying a %1$s arg),
+# and a body block that bundles the remaining static lines into one
+# catalog value. The body strings are long but contain no positional
+# specifiers — they remain plain `%s`-less scalars from the signature
+# validator's point of view.
+help.credits.amnuts.version:      "~OL~FCAmnuts version %1$s~RS, Copyright (C) Andrew Collington, 2003\n"
+help.credits.amnuts.body:         "Brought to you by the Amnuts Development Group (Andy, Ardant and Uzume)\n\nAmnuts stands for ~OLA~RSndy's ~OLM~RSodified ~OLNUTS~RS, a Unix talker server written in C.\n\nMany thanks to everyone who has helped out with Amnuts.  Special thanks go to\nArdant, Uzume, Arny (of Paris fame), Silver (of PG+ fame), and anyone else who\nhas contributed at all to the development of Amnuts.\n\nIf you are interested, you can purchase Amnuts t-shirts, mugs, mousemats, and\nmore, from http://www.cafepress.com/amnuts/\n\nWe hope you enjoy the talker!\n\n   -- The Amnuts Development Group\n\n(for NUTS credits, see \".help nuts\")\n\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
+
+help.credits.nuts.header:         "\n~BB*** NUTS Credits :) (for Amnuts credits, see \".help credits\") ***\n\n"
+help.credits.nuts.version:        "~BRNUTS version %1$s, Copyright (C) Neil Robertson 1996.\n\n"
+help.credits.nuts.body:           "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \nNUTS stands for Neil's Unix Talk Server, a program which started out as a\nuniversity project in autumn 1992 and has progressed from thereon. In no\nparticular order thanks go to the following people who helped me develop or\ndebug this code in one way or another over the years:\n   ~FCDarren Seryck, Steve Guest, Dave Temple, Satish Bedi, Tim Bernhardt,\n   ~FCKien Tran, Jesse Walton, Pak Chan, Scott MacKenzie and Bryan McPhail.\nAlso thanks must go to anyone else who has emailed me with ideas and/or bug\nreports and all the people who have used NUTS over the intervening years.\nI know I have said this before but this time I really mean it--this is the final\nversion of NUTS 3. In a few years NUTS 4 may spring forth but in the meantime\nthat, as they say, is that. :)\n\nIf you wish to email me my address is \"~FGneil@ogham.demon.co.uk~RS\" and should\nremain so for the forseeable future.\n\nNeil Robertson - November 1996.\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n"
+
+# ---------------------------------------------------------------------------
+# Phase 5 sweep — batch 1 (small commands; mostly admin and self-affecting).
+# Each block below covers one command file; conversions are byte-identical
+# on en_GB.
+
+# cafk — clear the AFK review buffer.
+cafk.cleared:                     "Your AFK review buffer has now been cleared.\n"
+
+# home — return from a netlinked remote system to the home talker.
+home.already_home:                "You are already on your home system.\n"
+home.traverse:                    "~FB~OLYou traverse cyberspace...\n"
+
+# muzzle — admin command; silences a user until unmuzzled.
+# %1$s = target recap (muzzle.already) or bw_recap (muzzle.applied);
+# %2$s = level name applying the muzzle (muzzle.applied).
+muzzle.usage:                     "Usage: muzzle <user>\n"
+muzzle.self:                      "Trying to muzzle yourself is the ninth sign of madness.\n"
+muzzle.higher_level:              "You cannot muzzle a user of equal or higher level than yourself.\n"
+muzzle.already:                   "%1$s~RS is already muzzled.\n"
+muzzle.applied:                   "~FR~OL%1$s now has a muzzle of level: ~RS~OL%2$s.\n"
+
+# revafk — show the AFK review buffer.
+revafk.header:                    "\n~BB~FG*** Your AFK review buffer ***\n\n"
+revafk.empty:                     "AFK buffer is empty.\n"
+revafk.footer:                    "\n~BB~FG*** End ***\n\n"
+
+# revclr — clear the room's review buffer. revclr.room_notice is a
+# vwrite_room_except equivalent (now lang_room): %1$s = the acting user's
+# visible name (recap when visible, "A presence" when invisible).
+revclr.room_notice:               "%1$s~RS clears the review buffer.\n"
+revclr.self:                      "You clear the review buffer.\n"
+
+# set_desc — set the user's description string.
+# set_desc.current is shown when no arg is supplied; %1$s = current desc.
+set_desc.current:                 "Your current description is: %1$s\n"
+set_desc.disallowed:              "You cannot have that description.\n"
+set_desc.too_long:                "Description too long.\n"
+set_desc.set:                     "Description set.\n"
+
+# suicide — confirm-and-delete-own-account command. The prompt key
+# contains an embedded \a (bell) character preserved from the original
+# (\07 in C) and is followed by a y/n response handled by misc_op = 6.
+suicide.usage:                    "Usage: suicide <your password>\n"
+suicide.password_incorrect:       "Password incorrect.\n"
+suicide.confirm_prompt:           "\n\a~FR~OL~LI*** WARNING - This will delete your account! ***\n\nAre you sure about this (y|n)? "
+
+# unmuzzle — admin counterpart to muzzle.
+# %1$s = target recap; unmuzzle.higher_muzzle adds %2$s = current
+# muzzle-level name.
+unmuzzle.usage:                   "Usage: unmuzzle <user>\n"
+unmuzzle.self:                    "Trying to unmuzzle yourself is the tenth sign of madness.\n"
+unmuzzle.not_muzzled:             "%1$s~RS is not muzzled.\n"
+unmuzzle.higher_muzzle:           "%1$s~RS's muzzle is set to level %2$s, you do not have the power to remove it.\n"
+unmuzzle.applied:                 "~FG~OLYou remove %1$s~RS's muzzle.\n"
+
+# wake — page an idle user with a bell + emote.
+# wake.target_message: %1$s = optional \a bell (empty when target has
+# beeps disabled), %2$s = sender's visible name (recap or "A presence").
+# wake.ignoring_you / wake.ignoring_beeps / wake.target_offsite all take
+# %1$s = target recap.
+wake.muzzled:                     "You are muzzled, you cannot wake anyone.\n"
+wake.usage:                       "Usage: wake <user>\n"
+wake.self:                        "Trying to wake yourself up is the eighth sign of madness.\n"
+wake.ignoring_you:                "%1$s~RS is ignoring wakes from you.\n"
+wake.ignoring_beeps:              "%1$s~RS is ignoring wakes at the moment.\n"
+wake.target_afk:                  "You cannot wake someone who is AFK.\n"
+wake.target_editor:               "You cannot wake someone who is in the editor.\n"
+wake.target_ignall:               "You cannot wake someone who ignoring everything.\n"
+wake.target_offsite:              "%1$s~RS is offsite and would not be able to reply to you.\n"
+wake.target_message:              "\n%1$s~BR***~RS %2$s~RS ~BRsays~RS: ~OL~LI~BRHEY! WAKE UP!!!~RS ~BR***\n\n"
+wake.sent:                        "Wake up call sent.\n"

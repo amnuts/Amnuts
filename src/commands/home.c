@@ -22,10 +22,10 @@ void
 home(UR_OBJECT user)
 {
     if (user->room) {
-        write_user(user, "You are already on your home system.\n");
+        write_user_lang(user, "home.already_home");
         return;
     }
-    write_user(user, "~FB~OLYou traverse cyberspace...\n");
+    write_user_lang(user, "home.traverse");
     write_syslog(NETLOG, 1, "NETLINK: %s returned from %s.\n", user->name,
             user->netlink->service);
     release_nl(user);

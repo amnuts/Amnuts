@@ -58,7 +58,9 @@ wipe_board(UR_OBJECT user)
     if (is_personal_room(rm)) {
         sprintf(filename, "%s/%s/%s.B", USERFILES, USERROOMS, rm->owner);
     } else {
-        sprintf(filename, "%s/%s.B", DATAFILES, rm->name);
+        char bfile[ROOM_NAME_LEN + 4];
+        snprintf(bfile, sizeof bfile, "%s.B", rm->name);
+        locale_default_path(filename, sizeof filename, LOCATIONS, bfile);
     }
     if (!rm->mesg_cnt) {
         write_user(user, "There are no messages on the room board.\n");

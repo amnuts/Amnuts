@@ -125,14 +125,14 @@ start_ident(UR_OBJECT user)
 int
 site_banned(char *sbanned, int newban)
 {
-    char line[82], filename[80];
+    char line[82], filename[128];
     FILE *fp;
     int f;
 
     if (newban) {
-        sprintf(filename, "%s/%s", DATAFILES, NEWBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     } else {
-        sprintf(filename, "%s/%s", DATAFILES, SITEBAN);
+        locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     }
     fp = fopen(filename, "r");
     if (!fp) {
@@ -176,11 +176,11 @@ login_port_flood(char *asite)
 int
 user_banned(char *name)
 {
-    char line[82], filename[80];
+    char line[82], filename[128];
     FILE *fp;
     int f;
 
-    sprintf(filename, "%s/%s", DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     fp = fopen(filename, "r");
     if (!fp) {
         return 0;
@@ -201,11 +201,11 @@ user_banned(char *name)
 void
 auto_ban_site(char *asite)
 {
-    char filename[80];
+    char filename[128];
     FILE *fp;
     UR_OBJECT u, next;
 
-    sprintf(filename, "%s/%s", DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     /* Write new ban to file */
     fp = fopen(filename, "a");
     if (!fp) {
@@ -241,7 +241,7 @@ void
 ban_site(UR_OBJECT user)
 {
     char bsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *fp;
 
     /* check for variations of wild card */
@@ -273,7 +273,7 @@ ban_site(UR_OBJECT user)
                 "You cannot ban the machine that that program is running on.\n");
         return;
     }
-    sprintf(filename, "%s/%s", DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     /* See if ban already set for given site */
     fp = fopen(filename, "r");
     if (fp) {
@@ -312,7 +312,7 @@ ban_site(UR_OBJECT user)
 void
 ban_user(UR_OBJECT user)
 {
-    char filename[80], name[USER_NAME_LEN + 1];
+    char filename[128], name[USER_NAME_LEN + 1];
     FILE *fp;
     UR_OBJECT u;
     UD_OBJECT entry;
@@ -324,7 +324,7 @@ ban_user(UR_OBJECT user)
         return;
     }
     /* See if ban already set for given user */
-    sprintf(filename, "%s/%s", DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     fp = fopen(filename, "r");
     if (fp) {
         int f;
@@ -385,7 +385,7 @@ void
 ban_new(UR_OBJECT user)
 {
     char bsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *fp;
 
     /* check for variations of wild card */
@@ -417,7 +417,7 @@ ban_new(UR_OBJECT user)
                 "You cannot ban the machine that that program is running on.\n");
         return;
     }
-    sprintf(filename, "%s/%s", DATAFILES, NEWBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     /* See if ban already set for given site */
     fp = fopen(filename, "r");
     if (fp) {
@@ -458,11 +458,11 @@ void
 unban_site(UR_OBJECT user)
 {
     char ubsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    sprintf(filename, "%s/%s", DATAFILES, SITEBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, SITEBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user, "That site or domain is not currently banned.\n");
@@ -506,11 +506,11 @@ unban_site(UR_OBJECT user)
 void
 unban_user(UR_OBJECT user)
 {
-    char filename[80], name[USER_NAME_LEN + 1];
+    char filename[128], name[USER_NAME_LEN + 1];
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    sprintf(filename, "%s/%s", DATAFILES, USERBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, USERBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user, "That user is not currently banned.\n");
@@ -558,11 +558,11 @@ void
 unban_new(UR_OBJECT user)
 {
     char ubsite[80]; /* XXX: Use NI_MAXHOST */
-    char filename[80];
+    char filename[128];
     FILE *infp, *outfp;
     int found, cnt, f;
 
-    sprintf(filename, "%s/%s", DATAFILES, NEWBAN);
+    locale_default_path(filename, sizeof filename, LOCATIONS, NEWBAN);
     infp = fopen(filename, "r");
     if (!infp) {
         write_user(user,

@@ -97,6 +97,7 @@ create_system(void)
     amsys->stop_logins = 0;
     *amsys->default_warp = '\0';
     *amsys->default_jail = '\0';
+    strcpy(amsys->default_locale, DEFAULT_LOCALE_NAME);   /* may be overridden by config */
 #ifdef GAMES
     *amsys->default_bank = '\0';
     *amsys->default_shoot = '\0';

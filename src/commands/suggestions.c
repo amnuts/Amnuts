@@ -19,12 +19,12 @@
 void
 suggestions(UR_OBJECT user, char *inpstr)
 {
-    char filename[30], *c;
+    char filename[80], *c;
     FILE *fp;
     int cnt;
 
     if (com_num == RSUG) {
-        sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
+        locale_default_path(filename, sizeof filename, MISCFILES, SUGBOARD);
         write_user(user,
                 "~BB~FG*** The Suggestions board has the following ideas ***\n\n");
         switch (more(user, user->socket, filename)) {
@@ -60,7 +60,7 @@ suggestions(UR_OBJECT user, char *inpstr)
     } else {
         inpstr = user->malloc_start;
     }
-    sprintf(filename, "%s/%s", MISCFILES, SUGBOARD);
+    locale_default_path(filename, sizeof filename, MISCFILES, SUGBOARD);
     fp = fopen(filename, "a");
     if (!fp) {
         vwrite_user(user, "%s: cannot add suggestion.\n", syserror);

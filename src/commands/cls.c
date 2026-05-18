@@ -25,5 +25,5 @@ cls(UR_OBJECT user)
         write_user(user, "\n\n\n\n\n\n\n\n\n\n");
     }
     /* ...and for the others, here's The Real Thing (TM) */
-    write_user(user, "\x01B[2J");
+    write_user(user, "\x1B[2J");
 }

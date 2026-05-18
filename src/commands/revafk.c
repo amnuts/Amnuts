@@ -24,10 +24,10 @@ revafk(UR_OBJECT user)
 #endif
 
     start_pager(user);
-    write_user(user, "\n~BB~FG*** Your AFK review buffer ***\n\n");
+    write_user_lang(user, "revafk.header");
     if (!review_buffer(user, rbfAFK)) {
-        write_user(user, "AFK buffer is empty.\n");
+        write_user_lang(user, "revafk.empty");
     }
-    write_user(user, "\n~BB~FG*** End ***\n\n");
+    write_user_lang(user, "revafk.footer");
     stop_pager(user);
 }

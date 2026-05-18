@@ -14,7 +14,25 @@
 #include "prototypes.h"
 
 /*
- * Show the list of commands, credits, and display the help files for the given command
+ * Show the list of commands, credits, and display the help files for the
+ * given command.
+ *
+ * Phase 4 conversion: only the *framing* parts of the command are lifted
+ * into the catalog — the unknown-topic / ambiguous-match messages, the
+ * commands-list screens (level- and function-grouped), and the credits
+ * screens. The per-topic helpfile path (the `more()` call against
+ * files/langs/<locale>/helpfiles/<topic>) is OUT OF SCOPE: that path is
+ * already locale-aware from Phase 1 and is paged through the user's
+ * pager, so it is left untouched.
+ *
+ * The commands-list screens keep the existing align_string() pipeline.
+ * The plan picked approach (a) for help (catalog-supplied format string
+ * fed straight into align_string with `"|"` as the marker) because
+ * align_string already produces the byte stream the original sprintf
+ * chain emitted — switching to box_open/box_line would risk subtle
+ * padding differences at the rails. A themed locale can re-skin each
+ * row's inner content via the help.commands.* keys; the rail geometry
+ * itself is fixed by the C side.
  */
 void
 help(UR_OBJECT user)
@@ -67,20 +85,18 @@ help(UR_OBJECT user)
     }
     if (found > 1) {
         strcat(text, found % 8 ? "\n\n" : "\n");
-        vwrite_user(user,
-                "~FR~OLCommand name is not unique. \"~FC%s~RS~OL~FR\" also matches:\n\n",
-                word[1]);
+        write_user_lang(user, "help.ambiguous_command", word[1]);
         write_user(user, text);
         *text = '\0';
         return;
     }
     *text = '\0';
     if (!found) {
-        write_user(user, "Sorry, there is no help on that topic.\n");
+        write_user_lang(user, "help.unknown");
         return;
     }
     if (word_count < 3) {
-        sprintf(filename, "%s/%s", HELPFILES, com->name);
+        locale_path(user, filename, sizeof filename, HELPFILES, com->name);
     } else {
         if (com == command_table + SET) {
             const struct set_entry *attr, *a;
@@ -105,39 +121,38 @@ help(UR_OBJECT user)
             }
             if (found > 1) {
                 strcat(text, found % 8 ? "\n\n" : "\n");
-                vwrite_user(user,
-                        "~FR~OLAttribute name is not unique. \"~FT%s~RS~OL~FR\" also matches:\n",
-                        word[2]);
+                write_user_lang(user, "help.ambiguous_attribute", word[2]);
                 write_user(user, text);
                 *text = '\0';
                 return;
             }
             *text = '\0';
             if (!found) {
-                write_user(user, "Sorry, there is no help on that topic.\n");
+                write_user_lang(user, "help.unknown");
                 return;
             }
             if (word_count < 4) {
-                sprintf(filename, "%s/%s_%s", HELPFILES, com->name, attr->type);
+                char helpname[WORD_LEN * 2 + 2];
+                snprintf(helpname, sizeof helpname, "%s_%s", com->name, attr->type);
+                locale_path(user, filename, sizeof filename, HELPFILES, helpname);
             } else {
-                sprintf(filename, "%s/%s", HELPFILES, com->name);
+                locale_path(user, filename, sizeof filename, HELPFILES, com->name);
             }
         } else {
             com = command_table + HELP;
-            sprintf(filename, "%s/%s", HELPFILES, com->name);
+            locale_path(user, filename, sizeof filename, HELPFILES, com->name);
         }
     }
     switch (more(user, user->socket, filename)) {
     case 0:
-        write_user(user, "Sorry, there is no help on that topic.\n");
+        write_user_lang(user, "help.unknown");
         break;
     case 1:
         user->misc_op = 2;
         break;
     case 2:
         /* FIXME: take into account xgcoms, command list dynamic level, etc. */
-        vwrite_user(user, "~OLLevel   :~RS %s and above\n",
-                user_level[com->level].name);
+        write_user_lang(user, "help.level_line", user_level[com->level].name);
         break;
     }
 }
@@ -155,20 +170,16 @@ help_commands_level(UR_OBJECT user)
     CMD_OBJECT cmd;
 
     start_pager(user);
-    write_user(user,
-               "\n+----------------------------------------------------------------------------+\n");
-    write_user(user,
-               "| All commands start with a \".\" (when in ~FYspeech~RS mode) and can be abbreviated |\n");
-    write_user(user,
-               "| Remember, a \".\" by itself will repeat your last command or speech          |\n");
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    write_user(user, "\n");
+    rule(user, 78, NULL);
+    write_user_lang(user, "help.commands.tip_line1");
+    write_user_lang(user, "help.commands.tip_line2");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
-                            "  Commands available to you (level ~OL%s~RS) ",
+                            lang(user, "help.commands.title"),
                             user_level[user->level].name));
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     total = 0;
     for (lvl = JAILED; lvl < NUM_LEVELS; lvl = (enum lvl_value) (lvl + 1)) {
         if (user->level < lvl) {
@@ -176,7 +187,8 @@ help_commands_level(UR_OBJECT user)
         }
         cnt = 0;
         *text = '\0';
-        sprintf(text, "  ~FG~OL%-1.1s)~RS ~FC", user_level[lvl].name);
+        lang_format(user, text, sizeof text, "help.commands.level_prefix",
+                    user_level[lvl].name);
         highlight = 1;
         /* scroll through all commands, format and print */
         for (cmd = first_command; cmd; cmd = cmd->next) {
@@ -184,11 +196,18 @@ help_commands_level(UR_OBJECT user)
             if (cmd->level != lvl) {
                 continue;
             }
-            if (has_xcom(user, cmd->id)) {
-                temp1 = sdscatfmt(sdsempty(), "~FR%s~RS%s %s", cmd->name, highlight ? "~FC" : "",
-                                  cmd->alias);
-            } else {
-                temp1 = sdscatfmt(sdsempty(), "%s %s", cmd->name, cmd->alias);
+            {
+                char cell[ARR_SIZE];
+                if (has_xcom(user, cmd->id)) {
+                    lang_format(user, cell, sizeof cell,
+                                "help.commands.row.level_xcom",
+                                cmd->name, highlight ? "~FC" : "", cmd->alias);
+                } else {
+                    lang_format(user, cell, sizeof cell,
+                                "help.commands.row.level_plain",
+                                cmd->name, cmd->alias);
+                }
+                temp1 = sdscat(sdsempty(), cell);
             }
             if (++cnt == 5) {
                 strcat(text, temp1);
@@ -217,14 +236,12 @@ help_commands_level(UR_OBJECT user)
         }
         ++total;
     }
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_LEFT, 78, 1, "|",
-                            "  There is a total of ~OL%d~RS command%s that you can use ",
+                            lang(user, "help.commands.total"),
                             total, PLTEXT_S(total)));
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     stop_pager(user);
 }
 
@@ -239,20 +256,16 @@ help_commands_function(UR_OBJECT user)
     int cnt, total, function, found;
 
     start_pager(user);
-    write_user(user,
-               "\n+----------------------------------------------------------------------------+\n");
-    write_user(user,
-               "| All commands start with a \".\" (when in ~FYspeech~RS mode) and can be abbreviated |\n");
-    write_user(user,
-               "| Remember, a \".\" by itself will repeat your last command or speech          |\n");
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    write_user(user, "\n");
+    rule(user, 78, NULL);
+    write_user_lang(user, "help.commands.tip_line1");
+    write_user_lang(user, "help.commands.tip_line2");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_CENTRE, 78, 1, "|",
-                            "  Commands available to you (level ~OL%s~RS) ",
+                            lang(user, "help.commands.title"),
                             user_level[user->level].name));
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     /* scroll through all the commands listing by function */
     total = 0;
     for (function = 0; command_types[function]; ++function) {
@@ -267,14 +280,23 @@ help_commands_function(UR_OBJECT user)
             }
             if (!found++) {
                 write_user(user,
-                           align_string(ALIGN_LEFT, 78, 1, "|", "  ~OL~FG%s~RS ",
+                           align_string(ALIGN_LEFT, 78, 1, "|",
+                                        lang(user, "help.commands.function_header"),
                                         command_types[function]));
                 strcpy(text, "     ");
             }
-            if (has_xcom(user, cmd->id)) {
-                temp1 = sdscatfmt(sdsempty(), "~FR%s~RS %s", cmd->name, cmd->alias);
-            } else {
-                temp1 = sdscatfmt(sdsempty(), "%s %s", cmd->name, cmd->alias);
+            {
+                char cell[ARR_SIZE];
+                if (has_xcom(user, cmd->id)) {
+                    lang_format(user, cell, sizeof cell,
+                                "help.commands.row.function_xcom",
+                                cmd->name, cmd->alias);
+                } else {
+                    lang_format(user, cell, sizeof cell,
+                                "help.commands.row.function_plain",
+                                cmd->name, cmd->alias);
+                }
+                temp1 = sdscat(sdsempty(), cell);
             }
             if (++cnt == 5) {
                 strcat(text, temp1);
@@ -302,14 +324,12 @@ help_commands_function(UR_OBJECT user)
         }
         ++total;
     }
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     write_user(user,
                align_string(ALIGN_LEFT, 78, 1, "|",
-                            "  There is a total of ~OL%d~RS command%s that you can use ",
+                            lang(user, "help.commands.total"),
                             total, PLTEXT_S(total)));
-    write_user(user,
-               "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
     stop_pager(user);
 }
 
@@ -319,39 +339,9 @@ help_commands_function(UR_OBJECT user)
 void
 help_nuts_credits(UR_OBJECT user)
 {
-    write_user(user,
-               "\n~BB*** NUTS Credits :) (for Amnuts credits, see \".help credits\") ***\n\n");
-    vwrite_user(user,
-                "~BRNUTS version %s, Copyright (C) Neil Robertson 1996.\n\n",
-                NUTSVER);
-    write_user(user,
-               "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n");
-    write_user(user,
-               "NUTS stands for Neil's Unix Talk Server, a program which started out as a\n");
-    write_user(user,
-               "university project in autumn 1992 and has progressed from thereon. In no\n");
-    write_user(user,
-               "particular order thanks go to the following people who helped me develop or\n");
-    write_user(user, "debug this code in one way or another over the years:\n");
-    write_user(user,
-               "   ~FCDarren Seryck, Steve Guest, Dave Temple, Satish Bedi, Tim Bernhardt,\n");
-    write_user(user,
-               "   ~FCKien Tran, Jesse Walton, Pak Chan, Scott MacKenzie and Bryan McPhail.\n");
-    write_user(user,
-               "Also thanks must go to anyone else who has emailed me with ideas and/or bug\n");
-    write_user(user,
-               "reports and all the people who have used NUTS over the intervening years.\n");
-    write_user(user,
-               "I know I have said this before but this time I really mean it--this is the final\n");
-    write_user(user,
-               "version of NUTS 3. In a few years NUTS 4 may spring forth but in the meantime\n");
-    write_user(user, "that, as they say, is that. :)\n\n");
-    write_user(user,
-               "If you wish to email me my address is \"~FGneil@ogham.demon.co.uk~RS\" and should\n");
-    write_user(user,
-               "remain so for the forseeable future.\n\nNeil Robertson - November 1996.\n");
-    write_user(user,
-               "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
+    write_user_lang(user, "help.credits.nuts.header");
+    write_user_lang(user, "help.credits.nuts.version", NUTSVER);
+    write_user_lang(user, "help.credits.nuts.body");
 }
 
 /*
@@ -361,27 +351,7 @@ help_nuts_credits(UR_OBJECT user)
 void
 help_amnuts_credits(UR_OBJECT user)
 {
-    write_user(user,
-               "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
-    vwrite_user(user,
-                "~OL~FCAmnuts version %s~RS, Copyright (C) Andrew Collington, 2003\n",
-                AMNUTSVER);
-    write_user(user,
-               "Brought to you by the Amnuts Development Group (Andy, Ardant and Uzume)\n\n");
-    write_user(user,
-               "Amnuts stands for ~OLA~RSndy's ~OLM~RSodified ~OLNUTS~RS, a Unix talker server written in C.\n\n");
-    write_user(user,
-               "Many thanks to everyone who has helped out with Amnuts.  Special thanks go to\n");
-    write_user(user,
-               "Ardant, Uzume, Arny (of Paris fame), Silver (of PG+ fame), and anyone else who\n");
-    write_user(user,
-               "has contributed at all to the development of Amnuts.\n\n");
-    write_user(user,
-               "If you are interested, you can purchase Amnuts t-shirts, mugs, mousemats, and\n");
-    write_user(user,
-               "more, from http://www.cafepress.com/amnuts/\n\nWe hope you enjoy the talker!\n\n");
-    write_user(user,
-               "   -- The Amnuts Development Group\n\n(for NUTS credits, see \".help nuts\")\n");
-    write_user(user,
-               "\n~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
+    write_user(user, "~BM             ~BB             ~BC             ~BG             ~BY             ~BR             \n\n");
+    write_user_lang(user, "help.credits.amnuts.version", AMNUTSVER);
+    write_user_lang(user, "help.credits.amnuts.body");
 }

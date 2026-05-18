@@ -14,7 +14,14 @@
 #include "prototypes.h"
 
 /*
- * Show the wizzes that are currently logged on, and get a list of names from the lists saved
+ * Show the wizzes that are currently logged on, and get a list of names
+ * from the lists saved.
+ *
+ * The per-section frame lines are synthesised by rule() from the
+ * ui.rule.* primitives; the catalog supplies only the section label
+ * text (wizlist.label.*). A themed locale re-skins the divider caps/
+ * fill by overriding the ui.* keys, with no command-specific overrides
+ * required.
  */
 void
 wiz_list(UR_OBJECT user)
@@ -22,6 +29,10 @@ wiz_list(UR_OBJECT user)
     static const char *const clrs[] ={"~FC", "~FM", "~FG", "~FB", "~OL", "~FR", "~FY"};
     char text2[ARR_SIZE];
     char temp[ARR_SIZE];
+    char lvl_padded[16];
+    char name_padded[USER_NAME_LEN + 8];
+    char text2_padded[ARR_SIZE];
+    char rname_padded[ARR_SIZE];
     UR_OBJECT u;
     UD_OBJECT entry;
     int invis, count, inlist;
@@ -29,13 +40,14 @@ wiz_list(UR_OBJECT user)
     enum lvl_value lvl;
 
     /* show this for everyone */
-    write_user(user,
-            "+----- ~FGWiz List~RS -------------------------------------------------------------+\n\n");
+    rule(user, 78, lang(user, "wizlist.label.wiz_list"));
+    write_user(user, "\n");
     for (lvl = GOD; lvl >= WIZ; lvl = (enum lvl_value) (lvl - 1)) {
         *text2 = '\0';
         count = 0;
         inlist = 0;
-        sprintf(text, "~OL%s%-10s~RS : ", clrs[lvl % 4], user_level[lvl].name);
+        snprintf(lvl_padded, sizeof lvl_padded, "%-10s", user_level[lvl].name);
+        snprintf(text, sizeof text, "~OL%s%s~RS : ", clrs[lvl % 4], lvl_padded);
         for (entry = first_user_entry; entry; entry = entry->next) {
             if (entry->level < WIZ) {
                 continue;
@@ -48,15 +60,17 @@ wiz_list(UR_OBJECT user)
                     strcat(text2, "\n             ");
                     count = 0;
                 }
-                sprintf(temp, "~OL%s%-*s~RS  ", clrs[rand() % 7], USER_NAME_LEN,
-                        entry->name);
+                snprintf(name_padded, sizeof name_padded, "%-*s",
+                         USER_NAME_LEN, entry->name);
+                snprintf(temp, sizeof temp, "~OL%s%s~RS  ",
+                         clrs[rand() % 7], name_padded);
                 strcat(text2, temp);
                 ++count;
                 inlist = 1;
             }
         }
         if (!count && !inlist) {
-            sprintf(text2, "~FR[none listed]\n~RS");
+            lang_format(user, text2, sizeof text2, "wizlist.none_listed");
         }
         strcat(text, text2);
         write_user(user, text);
@@ -67,13 +81,17 @@ wiz_list(UR_OBJECT user)
 
     /* show this to just the wizzes */
     if (user->level >= WIZ) {
-        write_user(user,
-                "\n+----- ~FGRetired Wiz List~RS -----------------------------------------------------+\n\n");
+        write_user(user, "\n");
+        rule(user, 78, lang(user, "wizlist.label.retired"));
+        write_user(user, "\n");
         for (lvl = GOD; lvl >= WIZ; lvl = (enum lvl_value) (lvl - 1)) {
             *text2 = '\0';
             count = 0;
             inlist = 0;
-            sprintf(text, "~OL%s%-10s~RS : ", clrs[lvl % 4], user_level[lvl].name);
+            snprintf(lvl_padded, sizeof lvl_padded, "%-10s",
+                     user_level[lvl].name);
+            snprintf(text, sizeof text, "~OL%s%s~RS : ",
+                     clrs[lvl % 4], lvl_padded);
             for (entry = first_user_entry; entry; entry = entry->next) {
                 if (entry->level < WIZ) {
                     continue;
@@ -86,15 +104,17 @@ wiz_list(UR_OBJECT user)
                         strcat(text2, "\n             ");
                         count = 0;
                     }
-                    sprintf(temp, "~OL%s%-*s~RS  ", clrs[rand() % 7], USER_NAME_LEN,
-                            entry->name);
+                    snprintf(name_padded, sizeof name_padded, "%-*s",
+                             USER_NAME_LEN, entry->name);
+                    snprintf(temp, sizeof temp, "~OL%s%s~RS  ",
+                             clrs[rand() % 7], name_padded);
                     strcat(text2, temp);
                     ++count;
                     inlist = 1;
                 }
             }
             if (!count && !inlist) {
-                sprintf(text2, "~FR[none listed]\n~RS");
+                lang_format(user, text2, sizeof text2, "wizlist.none_listed");
             }
             strcat(text, text2);
             write_user(user, text);
@@ -104,8 +124,9 @@ wiz_list(UR_OBJECT user)
         }
     }
     /* show this to everyone */
-    write_user(user,
-            "\n+----- ~FGThose currently on~RS ---------------------------------------------------+\n\n");
+    write_user(user, "\n");
+    rule(user, 78, lang(user, "wizlist.label.currently_on"));
+    write_user(user, "\n");
     invis = 0;
     count = 0;
     for (u = user_first; u; u = u->next)
@@ -116,26 +137,32 @@ wiz_list(UR_OBJECT user)
                     continue;
                 } else {
                     if (u->vis) {
-                        sprintf(text2, "  %s~RS %s~RS", u->recap, u->desc);
+                        snprintf(text2, sizeof text2, "  %s~RS %s~RS",
+                                 u->recap, u->desc);
                     } else {
-                        sprintf(text2, "* %s~RS %s~RS", u->recap, u->desc);
+                        snprintf(text2, sizeof text2, "* %s~RS %s~RS",
+                                 u->recap, u->desc);
                     }
                     linecnt = 43 + teslen(text2, 43);
                     rnamecnt = 15 + teslen(u->room->show_name, 15);
-                    vwrite_user(user, "%-*.*s~RS : %-*.*s~RS : (%1.1s) %s\n", linecnt,
-                            linecnt, text2, rnamecnt, rnamecnt, u->room->show_name,
-                            user_level[u->level].alias, user_level[u->level].name);
+                    snprintf(text2_padded, sizeof text2_padded, "%-*.*s",
+                             linecnt, linecnt, text2);
+                    snprintf(rname_padded, sizeof rname_padded, "%-*.*s",
+                             rnamecnt, rnamecnt, u->room->show_name);
+                    vwrite_user(user, "%s~RS : %s~RS : (%1.1s) %s\n",
+                                text2_padded, rname_padded,
+                                user_level[u->level].alias,
+                                user_level[u->level].name);
                 }
             }
             ++count;
         }
     if (invis) {
-        vwrite_user(user, "Number of the wiz invisible to you : %d\n", invis);
+        write_user_lang(user, "wizlist.invisible_count", invis);
     }
     if (!count) {
-        write_user(user, "Sorry, no wizzes are on at the moment...\n");
+        write_user_lang(user, "wizlist.no_wizzes_on");
     }
     write_user(user, "\n");
-    write_user(user,
-            "+----------------------------------------------------------------------------+\n");
+    rule(user, 78, NULL);
 }

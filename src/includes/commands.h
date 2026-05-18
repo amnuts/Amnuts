@@ -81,6 +81,7 @@
   ML_ENTRY((PROMOTE,      "promote",    "",    WIZ,     ADMIN  )) \
   ML_ENTRY((DEMOTE,       "demote",     "",    WIZ,     ADMIN  )) \
   ML_ENTRY((LISTBANS,     "lban",       "",    WIZ,     ADMIN  )) \
+  ML_ENTRY((LANGRELOAD,   "langreload", "",    WIZ,     ADMIN  )) \
   ML_ENTRY((BAN,          "ban",        "",    ARCH,    ADMIN  )) \
   ML_ENTRY((UNBAN,        "unban",      "",    ARCH,    ADMIN  )) \
   ML_ENTRY((VIS,          "vis",        "",    ARCH,    USER   )) \
@@ -256,6 +257,7 @@
   ML_ENTRY((ICQ,       "icq",      "allows you to put in your ICQ number"                                  )) \
   ML_ENTRY((ALERT,     "alert",    "lets you know when someone in your friends list logs on (toggle)"      )) \
   ML_ENTRY((REVBUF,    "revbuf",   "lets you reverse the viewing of your review buffers (toggle)"          )) \
+  ML_ENTRY((LANG,      "lang",     "set the language/locale you'd like to use"                             )) \
   ML_ENTRY((COUNT,     NULL,       NULL                                                                    ))
 
 
