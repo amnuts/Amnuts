@@ -3,6 +3,37 @@
         Information on the changes between different version of Amnuts
 +------------------------------------------------------------------------------+
 
+2.5.0
+-----
+
+New things:
+
+* Added libtelnet vendor library to help with telnet negotiation
+* Use NAWS to get terminal size
+* Added a new `src/telnet.c` module that wraps socket I/O through libtelnet via new `write_sock`, `write_sock_with_size`, `write_telnet` and `write_telnet_with_size` helpers
+* Added `term_width`, `term_height`, `term_type` and `telnet` fields to the user struct so the talker tracks each user's terminal capabilities
+* Added the `terminal` command to see your current terminal size and telnet opt values
+
+Improved things:
+
+* Improved charecho support via telnet opt codes
+* Updated `pager` command to include `auto` size and have `.help` and other paged commands use your terminal height correctly
+* Updated the cmdcount command code to make it better
+* Fixed display bug in the preview command
+* Fixed segfault in netlinks when verification fails (also corrected the `nl_verification` prototype to take a pointer-to-pointer)
+* Fixed the `look` command which had been broken in a previous tweak
+* Switched compiler to clang and moved to the GNU C23 standard, with `-Wpedantic` and `-Wextra` enabled - fixed all warnings the new flags exposed
+* Made vendor and internal header includes explicit rather than relying on implicit search paths
+* Added a GitHub Actions workflow that compiles the talker on push so build breakages are caught automatically
+
+2.4.0
+-----
+
+Almost all of the commands have been moved to their own files, so a fair bit of reworking structure
+Added the SDS vendor library to start marking string copying/formatting/sizes a little safer, and made a start on that (long, long) journey
+A docker setup has been added for those who want to run or compile Amnuts in a container
+Various typos fixed
+Some docs updated
 
 2.3.0
 -----

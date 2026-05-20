@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -177,6 +176,8 @@ create_user(void)
         return user;
     }
     memset(user, 0, (sizeof *user));
+    user->term_width = 80;
+    user->term_height = 24;
     /* Append object into linked list. */
     if (!user_first) {
         user_first = user;
@@ -288,7 +289,7 @@ reset_user(UR_OBJECT user)
     user->wipe_to = 0;
     user->wipe_from = 0;
     user->wrap = 0;
-    user->pager = 23;
+    user->pager = 0;
     user->logons = 0;
     user->expire = 1;
     user->lroom = 0;
@@ -374,6 +375,9 @@ destruct_user(UR_OBJECT user)
     }
 
     if (user) {
+        if (user->telnet) {
+            telnet_free(user->telnet);
+        }
         memset(user, 0, (sizeof *user));
         free(user);
         user = NULL;

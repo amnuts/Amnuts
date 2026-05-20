@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -13,12 +12,13 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#include "telnet.h"
 
 /***************************************************************************
 
         reboot.c
         Header file for PARIS By Arnaud Abelard [Arny].
-        This reboot system is a "nuts compatible" converted verion of the
+        This reboot system is a "nuts compatible" converted version of the
         phypors <phypor@benland.muc.edu> reboot system for EW-TOO systems
         by Arnaud Abelard
 
@@ -188,6 +188,11 @@ build_loggedin_users_info(UR_OBJECT user)
             }
             return -1;
         }
+        /* telnet handle cannot survive re-exec; will be re-initialized */
+        if (u->telnet) {
+            telnet_free(u->telnet);
+            u->telnet = NULL;
+        }
         fwrite(u, (sizeof *u), 1, f);
         fclose(f);
     }
@@ -335,7 +340,7 @@ build_ident_info(void)
 void
 close_fds(void)
 {
-    int i, d = 0;
+    int i;
     UR_OBJECT u;
 
     /* FIXME: use sysconf(_SC_OPEN_MAX) */
@@ -366,9 +371,8 @@ close_fds(void)
         if (u) {
             continue;
         }
-        if (!close(i)) {
-            ++d;
-        }
+
+        close(i);
     }
 }
 
@@ -671,6 +675,8 @@ retrieve_users(void)
         if (!u) {
             continue;
         }
+        /* re-initialize telnet for the restored connection */
+        u->telnet = telnet_init(telopts, telnet_event_handler, 0, u);
         room = get_room_full(rmname);
         u->room = !room ? room_first : room;
         record_last_login(u->name);
@@ -702,7 +708,7 @@ retrieve_users(void)
             }
             fclose(pf);
             /* position */
-            pager = u->pager < MAX_LINES || u->pager > 999 ? 23 : u->pager;
+            pager = effective_pager(u);
             pager *= u->pm_currcount;
             for (t = u->pm_first; t->next; t = t->next) {
                 if (!pager--) {

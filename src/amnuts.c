@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -15,6 +14,7 @@
 #include "globals.h"
 #include "commands.h"
 #include "prototypes.h"
+#include "telnet.h"
 #undef __MAIN_FILE__
 #endif
 
@@ -29,7 +29,7 @@ main(int argc, char **argv)
     struct timeval timeout;
     time_t beat;
     int len;
-    char inpstr[ARR_SIZE], future[ARR_SIZE], *next_str, *curstr, *last_ptr;
+    char inpstr[ARR_SIZE];
 #ifdef IDENTD
     sds buffer;
     UR_OBJECT u;
@@ -372,154 +372,160 @@ main(int argc, char **argv)
                 disconnect_user(user);
                 continue;
             }
-            /* ignore control code replies */
-            if (*inpstr == '\xff') {
-                continue;
-            }
-            /*
-               Deal with input chars. If the following if test succeeds we
-               are dealing with a character mode client so call function.
-             */
-            if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
-                if (!get_charclient_line(user, inpstr, len)) {
-                    continue;
-                }
-            }
-            curstr = next_str = inpstr;
-            last_ptr = inpstr + len;
-            for (;;) {
-                curstr = next_str;
-                if (!curstr) {
-                    break;
-                }
-                strcpy(future, curstr);
-                terminate(future);
-                next_str = strlen(future) + curstr + 1;
-                while (*next_str == '\n' || *next_str == '\r') {
-                    ++next_str;
-                }
-                curstr = future;
-                if (next_str >= last_ptr - 2) {
-                    next_str = NULL;
-                }
-
-                no_prompt = 0;
-                force_listen = 0;
-                destructed = 0;
-                *user->buff = '\0';
-                user->buffpos = 0;
-                user->last_input = time(0);
-                if (user->login > 0) {
-                    login(user, curstr);
-                    continue;
-                }
-                /*
-                 * If a dot on its own then execute last inpstr unless its a
-                 * misc op or the user is on a remote site
-                 */
-                if (!user->misc_op) {
-                    if ((!strcmp(curstr, ".")) && *user->inpstr_old) {
-                        strcpy(curstr, user->inpstr_old);
-                        vwrite_user(user, "%s\n", curstr);
-                    }/* else save current one for next time */
-                    else {
-                        if (*curstr) {
-                            *user->inpstr_old = '\0';
-                            strncat(user->inpstr_old, curstr, REVIEW_LEN);
-                        }
-                    }
-                }
-                /* Main input check */
-                clear_words();
-                check_macros(user, curstr);
-                word_count = wordfind(curstr);
-                if (user->afk) {
-                    if (user->afk == 2) {
-                        if (!word_count) {
-                            if (user->command_mode) {
-                                prompt(user);
-                            }
-                            continue;
-                        }
-                        if (strcmp(user->pass, crypt(word[0], user->pass))) {
-                            write_user(user, "Incorrect password.\n");
-                            prompt(user);
-                            continue;
-                        }
-                        cls(user);
-                        write_user(user, "Session unlocked, you are no longer AFK.\n");
-                    } else {
-                        write_user(user, "You are no longer AFK.\n");
-                    }
-                    *user->afk_mesg = '\0';
-                    if (has_review(user, rbfAFK)) {
-                        write_user(user,
-                                "\nYou have some tells in your afk review buffer.  Use ~FCrevafk~RS to view them.\n\n");
-                    }
-                    if (user->vis) {
-                        vwrite_room_except(user->room, user,
-                                "%s~RS comes back from being AFK.\n",
-                                user->recap);
-                    }
-                    if (user->afk == 2) {
-                        user->afk = 0;
-                        prompt(user);
-                        continue;
-                    }
-                    user->afk = 0;
-                }
-                if (!word_count) {
-                    if (misc_ops(user, curstr)) {
-                        continue;
-                    }
-#ifdef NETLINKS
-                    action_nl(user, "", NULL);
-#endif
-                    if (user->command_mode) {
-                        prompt(user);
-                    }
-                    continue;
-                }
-                if (misc_ops(user, curstr)) {
-                    continue;
-                }
-                if (!word_count) {
-                    if (user->command_mode) {
-                        prompt(user);
-                    }
-                    continue;
-                }
-                com_num = COUNT;
-                exec_com(user, curstr, user->command_mode ? COUNT : SAY);
-                if (!destructed) {
-                    if (user->room) {
-                        prompt(user);
-                    } else {
-                        switch (com_num) {
-#ifdef NETLINKS
-                        case HOME:
-#endif
-                        case QUIT:
-                        case MODE:
-                        case PROMPT:
-                        case SUICIDE:
-                        case REBOOT:
-                        case SHUTDOWN:
-                            prompt(user);
-                            break;
-                        default: /* Not in enumerated values - Unknown command */
-                            break;
-                        }
-                    }
-                }
-
-            }
+            telnet_recv(user->telnet, inpstr, len);
         }
     }
     return 0; /* This does not seem to be possible */
 }
 
+void
+handle_user_input(UR_OBJECT user, char *inpstr, int len) {
+    char future[ARR_SIZE], *next_str, *curstr, *last_ptr;
+    /*
+       Deal with input chars. If the following if test succeeds we
+       are dealing with a character mode client so call function.
+     */
+    if (!iscntrl((int) inpstr[len - 1]) || user->buffpos) {
+        if (!get_charclient_line(user, inpstr, len)) {
+            return;
+        }
+    } else if (user->telnet) {
+        /* bare Enter with nothing buffered: echo the newline for
+           character-mode (SGA) telnet connections where the server
+           handles line feed regardless of charmode_echo state */
+        write_user(user, "\n");
+    }
 
+    curstr = next_str = inpstr;
+    last_ptr = inpstr + len;
+    for (;;) {
+        curstr = next_str;
+        if (!curstr) {
+            break;
+        }
+        strcpy(future, curstr);
+        terminate(future);
+        next_str = strlen(future) + curstr + 1;
+
+        while (*next_str == '\n' || *next_str == '\r') {
+            ++next_str;
+        }
+        curstr = future;
+        if (next_str >= last_ptr - 2) {
+            next_str = NULL;
+        }
+
+        no_prompt = 0;
+        force_listen = 0;
+        destructed = 0;
+        *user->buff = '\0';
+        user->buffpos = 0;
+        user->last_input = time(0);
+        if (user->login > 0) {
+            login(user, curstr);
+            return;
+        }
+        /*
+         * If a dot on its own then execute last inpstr unless its a
+         * misc op or the user is on a remote site
+         */
+        if (!user->misc_op) {
+            if ((!strcmp(curstr, ".")) && *user->inpstr_old) {
+                strcpy(curstr, user->inpstr_old);
+                vwrite_user(user, "%s\n", curstr);
+            }/* else save current one for next time */
+            else {
+                if (*curstr) {
+                    *user->inpstr_old = '\0';
+                    strncat(user->inpstr_old, curstr, REVIEW_LEN);
+                }
+            }
+        }
+        /* Main input check */
+        clear_words();
+        check_macros(user, curstr);
+        word_count = wordfind(curstr);
+        if (user->afk) {
+            if (user->afk == 2) {
+                if (!word_count) {
+                    if (user->command_mode) {
+                        prompt(user);
+                    }
+                    return;
+                }
+                if (strcmp(user->pass, crypt(word[0], user->pass)) != 0) {
+                    write_user(user, "Incorrect password.\n");
+                    prompt(user);
+                    return;
+                }
+                cls(user);
+                write_user(user, "Session unlocked, you are no longer AFK.\n");
+            } else {
+                write_user(user, "You are no longer AFK.\n");
+            }
+            *user->afk_mesg = '\0';
+            if (has_review(user, rbfAFK)) {
+                write_user(user,
+                           "\nYou have some tells in your afk review buffer.  Use ~FCrevafk~RS to view them.\n\n");
+            }
+            if (user->vis) {
+                vwrite_room_except(user->room, user,
+                                   "%s~RS comes back from being AFK.\n",
+                                   user->recap);
+            }
+            if (user->afk == 2) {
+                user->afk = 0;
+                prompt(user);
+                return;
+            }
+            user->afk = 0;
+        }
+        if (!word_count) {
+            if (misc_ops(user, curstr)) {
+                return;
+            }
+#ifdef NETLINKS
+            action_nl(user, "", NULL);
+#endif
+            if (user->command_mode) {
+                prompt(user);
+            }
+            return;
+        }
+        if (misc_ops(user, curstr)) {
+            return;
+        }
+        if (!word_count) {
+            if (user->command_mode) {
+                prompt(user);
+            }
+            return;
+        }
+        com_num = COUNT;
+        exec_com(user, curstr, user->command_mode ? COUNT : SAY);
+        if (!destructed) {
+            if (user->room) {
+                prompt(user);
+            } else {
+                switch (com_num) {
+#ifdef NETLINKS
+                    case HOME:
+#endif
+                    case QUIT:
+                    case MODE:
+                    case PROMPT:
+                    case SUICIDE:
+                    case REBOOT:
+                    case SHUTDOWN:
+                        prompt(user);
+                        break;
+                    default: /* Not in enumerated values - Unknown command */
+                        break;
+                }
+            }
+        }
+    }
+}
 
 /******************************************************************************
  General functions used by the talker
@@ -847,6 +853,7 @@ accept_connection(int lsock)
         return;
     }
     user->socket = accept_sock;
+    user->telnet = telnet_init(telopts, telnet_event_handler, 0, user);
     user->login = LOGIN_NAME;
     user->last_input = time(0);
 #ifdef WIZPORT
@@ -858,7 +865,20 @@ accept_connection(int lsock)
     strcpy(user->site, hostname);
     strcpy(user->ipsite, hostaddr);
     sprintf(user->site_port, "%d", ntohs(sa.sin_port));
-    echo_on(user);
+    /*
+     * Tell the client that we will handle echo (WILL ECHO). This disables
+     * the client's local echo and lets the server echo via charmode_echo.
+     * We set charmode_echo=1 for the login phase so get_charclient_line
+     * echoes typed characters back. Password entry is handled separately
+     * (get_charclient_line suppresses echo for LOGIN_PASSWD/LOGIN_CONFIRM).
+     * After login, connect_user syncs the ECHO state to the saved preference.
+     */
+    telnet_negotiate(user->telnet, TELNET_WILL, TELNET_TELOPT_ECHO);
+    user->charmode_echo = 1;
+    /* proactively request terminal size and type from the client so the
+       values are available by the time the user finishes authenticating */
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_NAWS);
+    telnet_negotiate(user->telnet, TELNET_DO, TELNET_TELOPT_TTYPE);
     write_user(user, "Give me a name: ");
     ++amsys->num_of_logins;
 #ifdef IDENTD
@@ -2135,8 +2155,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An illegal instruction has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An illegal instruction occurred!\n");
             abort();
             break;
         case 1:
@@ -2174,8 +2194,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - An arithmetic exception has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: An arithmetic exception occurred!\n");
             abort();
             break;
         case 1:
@@ -2213,8 +2233,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A segmentation fault has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A segmentation fault occurred!\n");
             abort();
             break;
         case 1:
@@ -2252,8 +2272,8 @@ sig_handler(int sig)
         switch (amsys->crash_action) {
         case 0:
             write_room(NULL,
-                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occured!\n\n");
-            write_syslog(SYSLOG, 1, "WARNING: A bus error occured!\n");
+                    "\n\n\07~OLSYSTEM:~FR~LI WARNING - A bus error has just occurred!\n\n");
+            write_syslog(SYSLOG, 1, "WARNING: A bus error occurred!\n");
             abort();
             break;
         case 1:
@@ -3516,12 +3536,37 @@ count_lines(char *filename)
  *****************************************************************************/
 
 /*
- * Write a NULL terminated string to a socket
+ * Write a NULL terminated string to a socket.
  */
 void
 write_sock(int s, const char *str)
 {
     send(s, str, strlen(str), 0);
+}
+
+void
+write_sock_with_size(int s, const char *str, size_t length) {
+    send(s, str, length, 0);
+}
+
+void
+write_sock_with_size_and_flags(int s, const char *str, size_t length, int flag) {
+    send(s, str, length, flag);
+}
+
+/*
+ * Write a string via libtelnet
+ */
+void
+write_telnet(telnet_t *t, const char *str)
+{
+    telnet_send(t, str, strlen(str));
+}
+
+void
+write_telnet_with_size(telnet_t *t, const char *str, size_t length)
+{
+    telnet_send(t, str, length);
 }
 
 /*
@@ -3566,7 +3611,7 @@ write_user(UR_OBJECT user, const char *str)
     if (user->universal_pager && !amsys->is_pager) {
         int pager;
 
-        pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+        pager = effective_pager(user);
         add_pm(user, str);
         if (user->pm_count == pager) {
             user->pm_current = user->pm_last;
@@ -3577,6 +3622,7 @@ write_user(UR_OBJECT user, const char *str)
             return;
         }
     }
+
     /* Process string and write to buffer */
     cnt = 0;
     buffpos = 0;
@@ -3584,7 +3630,11 @@ write_user(UR_OBJECT user, const char *str)
         /* Flush buffer if above high watermark;
          * 6 chars is max a single char can expand into */
         if (buffpos > OUT_BUFF_SIZE - 6) {
-            send(user->socket, buff, buffpos, 0);
+            if (user->telnet) {
+                write_telnet(user->telnet, buff, buffpos);
+            } else {
+                write_sock(user->socket, buff, buffpos);
+            }
             buffpos = 0;
         }
         if (*s == '\n') {
@@ -3626,19 +3676,28 @@ write_user(UR_OBJECT user, const char *str)
             }
         }
         buff[buffpos++] = *s;
-        if (user->wrap && ++cnt >= SCREEN_WRAP) {
+        if (user->wrap && ++cnt >= (size_t)effective_wrap(user)) {
             buff[buffpos++] = '\r';
             buff[buffpos++] = '\n';
             cnt = 0;
         }
     }
     if (buffpos) {
-        send(user->socket, buff, buffpos, 0);
+        if (user->telnet) {
+            write_telnet(user->telnet, buff, buffpos);
+        } else {
+            write_sock(user->socket, buff, buffpos, 0);
+        }
     }
     /* Reset terminal at end of string */
     if (user->colour) {
-        write_sock(user->socket, colour_codes[0].esc_code);
+        if (user->telnet) {
+            write_telnet(user->telnet, colour_codes[0].esc_code);
+        } else {
+            write_sock(user->socket, colour_codes[0].esc_code);
+        }
     }
+
 }
 
 void
@@ -4117,7 +4176,7 @@ more(UR_OBJECT user, int sock, const char *filename)
     } else {
         /* jump to reading posn in file */
         fseek(fp, user->filepos, 0);
-        pager = user->pager < MAX_LINES || user->pager > 99 ? 23 : user->pager;
+        pager = effective_pager(user);
     }
     --pager;
     *text = '\0';
@@ -4144,10 +4203,15 @@ more(UR_OBJECT user, int sock, const char *filename)
             continue;
         }
 #endif
+
         /* Process line from file */
         for (s = str; *s; ++s) {
             if (buffpos > OUT_BUFF_SIZE - (6 < USER_NAME_LEN ? USER_NAME_LEN : 6)) {
-                send(sock, buff, buffpos, 0);
+                if (user && user->telnet) {
+                    write_telnet(user->telnet, buff, buffpos);
+                } else {
+                    write_sock(sock, buff, buffpos, 0);
+                }
                 buffpos = 0;
             }
             if (*s == '\n') {
@@ -4197,7 +4261,7 @@ more(UR_OBJECT user, int sock, const char *filename)
                 }
             }
             buff[buffpos++] = *s;
-            if (user && user->wrap && ++cnt >= SCREEN_WRAP) {
+            if (user && user->wrap && ++cnt >= (size_t)effective_wrap(user)) {
                 buff[buffpos++] = '\r';
                 buff[buffpos++] = '\n';
                 cnt = 0;
@@ -4205,10 +4269,17 @@ more(UR_OBJECT user, int sock, const char *filename)
         }
         len = strlen(str);
         num_chars += len;
-        lines += len / SCREEN_WRAP + (len < SCREEN_WRAP);
+        {
+            int wrap = user ? effective_wrap(user) : SCREEN_WRAP;
+            lines += len / wrap + (len < wrap);
+        }
     }
     if (buffpos && sock != -1) {
-        send(sock, buff, buffpos, 0);
+        if (user && user->telnet) {
+            write_telnet(user->telnet, buff, buffpos);
+        } else {
+            write_sock(sock, buff, buffpos, 0);
+        }
     }
     /* if user is logging on dont page file */
     if (!user) {
@@ -4273,7 +4344,7 @@ more_users(UR_OBJECT user)
             /* skip to the position of the page in the user data */
             continue;
         }
-        if (lines++ >= user->pager) {
+        if (lines++ >= effective_pager(user)) {
             break;
         }
         ++user->user_page_pos;
@@ -4489,7 +4560,6 @@ login(UR_OBJECT user, char *inpstr)
                 attempts(user);
                 return;
             }
-            echo_on(user);
             ++amsys->logons_old;
 #ifdef IDENTD
             /* check for ident user ident */
@@ -4522,7 +4592,6 @@ login(UR_OBJECT user, char *inpstr)
             attempts(user);
             return;
         }
-        echo_on(user);
         strcpy(user->desc, "is a newbie");
         strcpy(user->in_phrase, "enters");
         strcpy(user->out_phrase, "goes");
@@ -4576,9 +4645,9 @@ attempts(UR_OBJECT user)
     }
     reset_user(user);
     user->login = LOGIN_NAME;
+    user->charmode_echo = 1;
     *user->pass = '\0';
     write_user(user, "Give me a name: ");
-    echo_on(user);
 }
 
 /*
@@ -4766,7 +4835,7 @@ connect_user(UR_OBJECT user)
             destruct_user(user);
             --amsys->num_of_logins;
 #ifdef NETLINKS
-            if (!action_nl(user, "look", NULL))
+            if (!action_nl(u, "look", NULL))
 #endif
             {
                 look(u);
@@ -4886,6 +4955,10 @@ connect_user(UR_OBJECT user)
                 "~OL~FY*   use the .accreq command--once you do all these you will be promoted    *\n");
         write_user(user,
                 "~OL~FY****************************************************************************\n\n");
+    }
+    /* sync telnet ECHO state with user's charecho preference */
+    if (!user->charmode_echo) {
+        telnet_negotiate(user->telnet, TELNET_WONT, TELNET_TELOPT_ECHO);
     }
     prompt(user);
     record_last_login(user->name);
@@ -6106,6 +6179,9 @@ exec_com(UR_OBJECT user, char *inpstr, enum cmd_value defaultcmd)
     case SPODLIST:
         show_spodlist(user);
         break;
+    case TERMINAL:
+        show_terminal(user);
+        break;
     default:
         write_user(user, "Command not executed.\n");
         break;
@@ -6244,7 +6320,11 @@ show_attributes(UR_OBJECT user)
                     onoff[user->colour]);
             break;
         case SETPAGER:
-            sprintf(text, "%d", user->pager);
+            if (user->pager) {
+                sprintf(text, "%d", user->pager);
+            } else {
+                sprintf(text, "auto (%d)", effective_pager(user));
+            }
             vwrite_user(user, "| %-10.10s : ~OL%-61.61s~RS |\n", setstr[i].type,
                     text);
             break;

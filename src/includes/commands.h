@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -233,6 +232,7 @@
   ML_GAMES((BANK,         "bank",       "",    USER,    GENERAL)) \
   ML_ENTRY((FLAGGED,      "flagged",    "",    USER,    GENERAL)) \
   ML_ENTRY((SPODLIST,     "spodlist",   "",    SUPER,   GENERAL)) \
+  ML_ENTRY((TERMINAL,     "terminal",   "",    NEW,     GENERAL)) \
   ML_ENTRY((COUNT,        NULL,         NULL,  GOD+1,   COUNT  ))
 
 

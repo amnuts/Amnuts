@@ -1,3 +1,12 @@
+/****************************************************************************
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
+
+                   talker@amnuts.net - https://amnuts.net/
+
+                                 based on
+
+   NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
+ ***************************************************************************/
 
 #include "defines.h"
 #include "globals.h"
@@ -147,15 +156,24 @@ set_attributes(UR_OBJECT user)
         return;
     case SETPAGER:
         if (word_count < 3) {
-            write_user(user, "Usage: set pager <length>\n");
+            write_user(user, "Usage: set pager <length>|auto\n");
+            return;
+        }
+        if (!strcasecmp(word[2], "auto")) {
+            user->pager = 0;
+            vwrite_user(user, "Pager set to auto (%d lines from terminal height)\n",
+                    effective_pager(user));
             return;
         }
         user->pager = atoi(word[2]);
         if (user->pager < MAX_LINES || user->pager > 99) {
             vwrite_user(user,
-                    "Pager can only be set between %d and 99 - setting to default\n",
+                    "Pager can only be set between %d and 99, or \"auto\"\n",
                     MAX_LINES);
-            user->pager = 23;
+            user->pager = 0;
+            vwrite_user(user, "Pager set to auto (%d lines from terminal height)\n",
+                    effective_pager(user));
+            return;
         }
         vwrite_user(user, "Pager length now set to: %d\n", user->pager);
         return;

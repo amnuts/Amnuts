@@ -1,0 +1,4 @@
+~OLCommand :~RS terminal
+~OLUsage   :~RS terminal
+
+Displays your terminal settings that the talker knows about.

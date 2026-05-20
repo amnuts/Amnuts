@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -11,6 +10,8 @@
 
 #ifndef AMNUTS_GLOBALS_H
 #define AMNUTS_GLOBALS_H
+
+#include "../vendors/libtelnet/libtelnet.h"
 
 #define ML_ENTRY(a) ML_EXPAND a
 
@@ -229,6 +230,10 @@ struct user_struct {
     int money;
     int bank;
     int inctime;
+    int term_width;
+    int term_height;
+    char term_type[64];
+    telnet_t *telnet;
 };
 
 /*

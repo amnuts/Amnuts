@@ -1,3 +1,13 @@
+/****************************************************************************
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
+
+                   talker@amnuts.net - https://amnuts.net/
+
+                                 based on
+
+   NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
+ ***************************************************************************/
+
 #include "defines.h"
 #include "globals.h"
 #include "commands.h"
@@ -71,7 +81,7 @@ create_account(UR_OBJECT user)
         strcpy(u->pass, crypt(word[2], crypt_salt));
         strcpy(u->recap, u->name);
         strcpy(u->desc, "is a newbie");
-        strcpy(u->in_phrase, "wanders in.");
+        strcpy(u->in_phrase, "wanders in");
         strcpy(u->out_phrase, "wanders out");
         strcpy(u->last_site, "created_account");
         strcpy(u->site, u->last_site);

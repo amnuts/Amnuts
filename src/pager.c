@@ -1,6 +1,5 @@
 /****************************************************************************
-             Amnuts - Copyright (C) Andrew Collington, 1996-2023
-                        Last update: Sometime in 2023
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
 
                    talker@amnuts.net - https://amnuts.net/
 
@@ -144,7 +143,7 @@ display_pm(UR_OBJECT user)
     if (!user->pm_first) {
         return -1;
     }
-    pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+    pager = effective_pager(user);
     i = 0;
     for (t = !user->pm_current ? user->pm_first : user->pm_current; t;
             t = t->next) {
@@ -177,7 +176,7 @@ rewind_pager(UR_OBJECT user, int backup)
     if (!user->pm_first) {
         return -1;
     }
-    pager = user->pager < MAX_LINES || user->pager > 999 ? 23 : user->pager;
+    pager = effective_pager(user);
     if (backup == 2) {
         user->pm_current = NULL;
         user->pm_currcount = 0;
@@ -206,6 +205,6 @@ write_apager(UR_OBJECT user)
     amsys->is_pager = 1;
     vwrite_user(user,
             "~OL~FG-=[%d/%d] (~RS~OLE~FG)xit, (~RS~OLR~FG)edisplay, (~RS~OLB~FG)ack, (~RS~OLT~FG)op, <return> to continue ]~RS ",
-            ++user->pm_currcount, (int) (user->pm_count / user->pager) + 1);
+            ++user->pm_currcount, (int) (user->pm_count / effective_pager(user)) + 1);
     amsys->is_pager = 0;
 }

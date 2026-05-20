@@ -1,3 +1,12 @@
+/****************************************************************************
+             Amnuts - Copyright (C) Andrew Collington, 1996-2026
+
+                   talker@amnuts.net - https://amnuts.net/
+
+                                 based on
+
+   NUTS version 3.3.3 (Triple Three :) - Copyright (C) Neil Robertson 1996
+ ***************************************************************************/
 
 #include "defines.h"
 #include "globals.h"
@@ -98,4 +107,3 @@ wipe_board(UR_OBJECT user)
     write_syslog(SYSLOG, 1, "%s wiped %d message%s from the board in the %s.\n",
             user->name, cnt, PLTEXT_S(cnt), rm->name);
 }
-

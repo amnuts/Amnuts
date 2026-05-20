@@ -638,66 +638,66 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
         }
 
         switch(*f) {
-            case '%':
-                next = *(f+1);
-                if (next == '\0') break;
-                f++;
-                switch(next) {
-                    case 's':
-                    case 'S':
-                        str = va_arg(ap,char*);
-                        l = (next == 's') ? strlen(str) : sdslen(str);
-                        if (sdsavail(s) < l) {
-                            s = sdsMakeRoomFor(s,l);
-                        }
-                        memcpy(s+i,str,l);
-                        sdsinclen(s,l);
-                        i += l;
-                        break;
-                    case 'i':
-                    case 'I':
-                        if (next == 'i')
-                            num = va_arg(ap,int);
-                        else
-                        num = va_arg(ap,long long);
-                        {
-                            char buf[SDS_LLSTR_SIZE];
-                            l = sdsll2str(buf,num);
-                            if (sdsavail(s) < l) {
-                                s = sdsMakeRoomFor(s,l);
-                            }
-                            memcpy(s+i,buf,l);
-                            sdsinclen(s,l);
-                            i += l;
-                        }
-                        break;
-                    case 'u':
-                    case 'U':
-                        if (next == 'u')
-                            unum = va_arg(ap,unsigned int);
-                        else
-                        unum = va_arg(ap,unsigned long long);
-                        {
-                            char buf[SDS_LLSTR_SIZE];
-                            l = sdsull2str(buf,unum);
-                            if (sdsavail(s) < l) {
-                                s = sdsMakeRoomFor(s,l);
-                            }
-                            memcpy(s+i,buf,l);
-                            sdsinclen(s,l);
-                            i += l;
-                        }
-                        break;
-                    default: /* Handle %% and generally %<unknown>. */
-                        s[i++] = next;
-                        sdsinclen(s,1);
-                        break;
+        case '%':
+            next = *(f+1);
+            if (next == '\0') break;
+            f++;
+            switch(next) {
+            case 's':
+            case 'S':
+                str = va_arg(ap,char*);
+                l = (next == 's') ? strlen(str) : sdslen(str);
+                if (sdsavail(s) < l) {
+                    s = sdsMakeRoomFor(s,l);
+                }
+                memcpy(s+i,str,l);
+                sdsinclen(s,l);
+                i += l;
+                break;
+            case 'i':
+            case 'I':
+                if (next == 'i')
+                    num = va_arg(ap,int);
+                else
+                    num = va_arg(ap,long long);
+                {
+                    char buf[SDS_LLSTR_SIZE];
+                    l = sdsll2str(buf,num);
+                    if (sdsavail(s) < l) {
+                        s = sdsMakeRoomFor(s,l);
+                    }
+                    memcpy(s+i,buf,l);
+                    sdsinclen(s,l);
+                    i += l;
                 }
                 break;
-            default:
-                s[i++] = *f;
+            case 'u':
+            case 'U':
+                if (next == 'u')
+                    unum = va_arg(ap,unsigned int);
+                else
+                    unum = va_arg(ap,unsigned long long);
+                {
+                    char buf[SDS_LLSTR_SIZE];
+                    l = sdsull2str(buf,unum);
+                    if (sdsavail(s) < l) {
+                        s = sdsMakeRoomFor(s,l);
+                    }
+                    memcpy(s+i,buf,l);
+                    sdsinclen(s,l);
+                    i += l;
+                }
+                break;
+            default: /* Handle %% and generally %<unknown>. */
+                s[i++] = next;
                 sdsinclen(s,1);
                 break;
+            }
+            break;
+        default:
+            s[i++] = *f;
+            sdsinclen(s,1);
+            break;
         }
         f++;
     }
@@ -871,7 +871,7 @@ sds *sdssplitlen(const char *s, ssize_t len, const char *sep, int seplen, int *c
     *count = elements;
     return tokens;
 
-    cleanup:
+cleanup:
     {
         int i;
         for (i = 0; i < elements; i++) sdsfree(tokens[i]);
@@ -899,21 +899,21 @@ sds sdscatrepr(sds s, const char *p, size_t len) {
     s = sdscatlen(s,"\"",1);
     while(len--) {
         switch(*p) {
-            case '\\':
-            case '"':
-                s = sdscatprintf(s,"\\%c",*p);
-                break;
-            case '\n': s = sdscatlen(s,"\\n",2); break;
-            case '\r': s = sdscatlen(s,"\\r",2); break;
-            case '\t': s = sdscatlen(s,"\\t",2); break;
-            case '\a': s = sdscatlen(s,"\\a",2); break;
-            case '\b': s = sdscatlen(s,"\\b",2); break;
-            default:
-                if (isprint(*p))
-                    s = sdscatprintf(s,"%c",*p);
-                else
-                    s = sdscatprintf(s,"\\x%02x",(unsigned char)*p);
-                break;
+        case '\\':
+        case '"':
+            s = sdscatprintf(s,"\\%c",*p);
+            break;
+        case '\n': s = sdscatlen(s,"\\n",2); break;
+        case '\r': s = sdscatlen(s,"\\r",2); break;
+        case '\t': s = sdscatlen(s,"\\t",2); break;
+        case '\a': s = sdscatlen(s,"\\a",2); break;
+        case '\b': s = sdscatlen(s,"\\b",2); break;
+        default:
+            if (isprint(*p))
+                s = sdscatprintf(s,"%c",*p);
+            else
+                s = sdscatprintf(s,"\\x%02x",(unsigned char)*p);
+            break;
         }
         p++;
     }
@@ -931,23 +931,23 @@ int is_hex_digit(char c) {
  * integer from 0 to 15 */
 int hex_digit_to_int(char c) {
     switch(c) {
-        case '0': return 0;
-        case '1': return 1;
-        case '2': return 2;
-        case '3': return 3;
-        case '4': return 4;
-        case '5': return 5;
-        case '6': return 6;
-        case '7': return 7;
-        case '8': return 8;
-        case '9': return 9;
-        case 'a': case 'A': return 10;
-        case 'b': case 'B': return 11;
-        case 'c': case 'C': return 12;
-        case 'd': case 'D': return 13;
-        case 'e': case 'E': return 14;
-        case 'f': case 'F': return 15;
-        default: return 0;
+    case '0': return 0;
+    case '1': return 1;
+    case '2': return 2;
+    case '3': return 3;
+    case '4': return 4;
+    case '5': return 5;
+    case '6': return 6;
+    case '7': return 7;
+    case '8': return 8;
+    case '9': return 9;
+    case 'a': case 'A': return 10;
+    case 'b': case 'B': return 11;
+    case 'c': case 'C': return 12;
+    case 'd': case 'D': return 13;
+    case 'e': case 'E': return 14;
+    case 'f': case 'F': return 15;
+    default: return 0;
     }
 }
 
@@ -989,13 +989,13 @@ sds *sdssplitargs(const char *line, int *argc) {
             while(!done) {
                 if (inq) {
                     if (*p == '\\' && *(p+1) == 'x' &&
-                        is_hex_digit(*(p+2)) &&
-                        is_hex_digit(*(p+3)))
+                                             is_hex_digit(*(p+2)) &&
+                                             is_hex_digit(*(p+3)))
                     {
                         unsigned char byte;
 
                         byte = (hex_digit_to_int(*(p+2))*16)+
-                               hex_digit_to_int(*(p+3));
+                                hex_digit_to_int(*(p+3));
                         current = sdscatlen(current,(char*)&byte,1);
                         p += 3;
                     } else if (*p == '\\' && *(p+1)) {
@@ -1003,12 +1003,12 @@ sds *sdssplitargs(const char *line, int *argc) {
 
                         p++;
                         switch(*p) {
-                            case 'n': c = '\n'; break;
-                            case 'r': c = '\r'; break;
-                            case 't': c = '\t'; break;
-                            case 'b': c = '\b'; break;
-                            case 'a': c = '\a'; break;
-                            default: c = *p; break;
+                        case 'n': c = '\n'; break;
+                        case 'r': c = '\r'; break;
+                        case 't': c = '\t'; break;
+                        case 'b': c = '\b'; break;
+                        case 'a': c = '\a'; break;
+                        default: c = *p; break;
                         }
                         current = sdscatlen(current,&c,1);
                     } else if (*p == '"') {
@@ -1039,22 +1039,22 @@ sds *sdssplitargs(const char *line, int *argc) {
                     }
                 } else {
                     switch(*p) {
-                        case ' ':
-                        case '\n':
-                        case '\r':
-                        case '\t':
-                        case '\0':
-                            done=1;
-                            break;
-                        case '"':
-                            inq=1;
-                            break;
-                        case '\'':
-                            insq=1;
-                            break;
-                        default:
-                            current = sdscatlen(current,p,1);
-                            break;
+                    case ' ':
+                    case '\n':
+                    case '\r':
+                    case '\t':
+                    case '\0':
+                        done=1;
+                        break;
+                    case '"':
+                        inq=1;
+                        break;
+                    case '\'':
+                        insq=1;
+                        break;
+                    default:
+                        current = sdscatlen(current,p,1);
+                        break;
                     }
                 }
                 if (*p) p++;
@@ -1071,7 +1071,7 @@ sds *sdssplitargs(const char *line, int *argc) {
         }
     }
 
-    err:
+err:
     while((*argc)--)
         sdsfree(vector[*argc]);
     s_free(vector);
